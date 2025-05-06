@@ -6,17 +6,15 @@ import android.widget.Button
 import androidx.activity.ComponentActivity
 import androidx.activity.enableEdgeToEdge
 
-
-class MainActivity : ComponentActivity() {
+class HandGesturesActivity : ComponentActivity() {
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         enableEdgeToEdge()
-        setContentView(R.layout.activity_main)
+        setContentView(R.layout.activity_gesture)
 
-        val goToButton = findViewById<Button>(R.id.goToButton)
-
-        goToButton.setOnClickListener {
-            val intent = Intent(this, HandGesturesActivity::class.java)
+        val goBackButton = findViewById<Button>(R.id.BackButton)
+        goBackButton.setOnClickListener {
+            val intent = Intent(this, MainActivity::class.java)
             startActivity(intent)
         }
     }
