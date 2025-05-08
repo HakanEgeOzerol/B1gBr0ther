@@ -18,6 +18,7 @@ import java.util.Locale
 
 class AudioRecognitionActivity : ComponentActivity() {
     private lateinit var statusTextView: TextView
+    private lateinit var transcriptTextView: TextView
 
     private var recognizer: SpeechRecognizer? = null
 
@@ -25,6 +26,7 @@ class AudioRecognitionActivity : ComponentActivity() {
     private var minDb = Float.MAX_VALUE
     private var maxDb = -Float.MAX_VALUE
     private var smoothedLevel = 0f
+
     private companion object {
         private const val SMOOTHING_FACTOR = 0.8f
     }
@@ -41,6 +43,7 @@ class AudioRecognitionActivity : ComponentActivity() {
         setContentView(R.layout.activity_audio_recognition)
 
         statusTextView = findViewById(R.id.statusTextView)
+        transcriptTextView = findViewById(R.id.transcriptTextView)
         findViewById<Button>(R.id.listenButton).setOnClickListener {
             checkPermissionAndStartRecognition()
         }
@@ -48,8 +51,7 @@ class AudioRecognitionActivity : ComponentActivity() {
 
     private fun checkPermissionAndStartRecognition() {
         if (ContextCompat.checkSelfPermission(
-                this,
-                Manifest.permission.RECORD_AUDIO
+                this, Manifest.permission.RECORD_AUDIO
             ) != PackageManager.PERMISSION_GRANTED
         ) {
             updateStatus("Please grant microphone permission")
@@ -116,22 +118,26 @@ class AudioRecognitionActivity : ComponentActivity() {
                 }
 
                 override fun onResults(results: Bundle?) {
-                    val spoken = results
-                        ?.getStringArrayList(SpeechRecognizer.RESULTS_RECOGNITION)
+                    val spoken = results?.getStringArrayList(SpeechRecognizer.RESULTS_RECOGNITION)
                         ?.firstOrNull().orEmpty()
+
                     val display = if (spoken.isNotEmpty()) spoken else "No speech detected"
-                    updateStatus("You said: $display")
+
+                    runOnUiThread {
+                        transcriptTextView.text = display
+                        updateStatus("Recognition complete")
+                    }
+
                     Toast.makeText(
-                        this@AudioRecognitionActivity,
-                        "Recognition complete",
-                        Toast.LENGTH_SHORT
+                        this@AudioRecognitionActivity, "Recognition complete", Toast.LENGTH_SHORT
                     ).show()
+
                     destroyRecognizer()
                 }
 
+
                 override fun onPartialResults(partial: Bundle?) {
-                    val text = partial
-                        ?.getStringArrayList(SpeechRecognizer.RESULTS_RECOGNITION)
+                    val text = partial?.getStringArrayList(SpeechRecognizer.RESULTS_RECOGNITION)
                         ?.firstOrNull().orEmpty()
                     if (text.isNotEmpty()) updateStatus("Partial: $text")
                 }
@@ -158,7 +164,9 @@ class AudioRecognitionActivity : ComponentActivity() {
 
             // configure and start
             val intent = Intent(RecognizerIntent.ACTION_RECOGNIZE_SPEECH).apply {
-                putExtra(RecognizerIntent.EXTRA_LANGUAGE_MODEL, RecognizerIntent.LANGUAGE_MODEL_FREE_FORM)
+                putExtra(
+                    RecognizerIntent.EXTRA_LANGUAGE_MODEL, RecognizerIntent.LANGUAGE_MODEL_FREE_FORM
+                )
                 putExtra(RecognizerIntent.EXTRA_LANGUAGE, Locale.getDefault())
                 putExtra(RecognizerIntent.EXTRA_PARTIAL_RESULTS, true)
                 putExtra(RecognizerIntent.EXTRA_MAX_RESULTS, 1)
