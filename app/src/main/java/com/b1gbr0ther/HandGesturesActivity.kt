@@ -11,11 +11,7 @@ import android.hardware.Sensor
 import android.hardware.SensorEvent
 import android.hardware.SensorEventListener
 import android.hardware.SensorManager
-import androidx.appcompat.app.AppCompatActivity
 import android.widget.Toast
-import java.util.*
-import kotlin.math.sqrt
-
 import java.util.*
 import kotlin.math.sqrt
 
@@ -24,18 +20,28 @@ class HandGesturesActivity : ComponentActivity() {
     private var currentAcceleration = 0f
     private var lastAcceleration = 0f
 
-    private var sensorManager = getSystemService(Context.SENSOR_SERVICE) as SensorManager
+    private var sensorManager: SensorManager? = null
+
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         enableEdgeToEdge()
         setContentView(R.layout.activity_gesture)
 
+        sensorManager = getSystemService(Context.SENSOR_SERVICE) as SensorManager
+
         val goBackButton = findViewById<Button>(R.id.BackButton)
         goBackButton.setOnClickListener {
             val intent = Intent(this, MainActivity::class.java)
             startActivity(intent)
         }
+
+        Objects.requireNonNull(sensorManager)!!.registerListener(sensorListener, sensorManager!!.getDefaultSensor(Sensor.TYPE_ACCELEROMETER), SensorManager.SENSOR_DELAY_NORMAL)
+
+        acceleration = 10f
+        currentAcceleration = SensorManager.GRAVITY_EARTH
+        lastAcceleration = SensorManager.GRAVITY_EARTH
+
     }
 
     private val sensorListener: SensorEventListener = object : SensorEventListener {
@@ -55,7 +61,7 @@ class HandGesturesActivity : ComponentActivity() {
 
             // Display a Toast message if
             // acceleration value is over 12
-            if (acceleration > 12) {
+            if (acceleration > 17) {
                 Toast.makeText(applicationContext, "Shake event detected", Toast.LENGTH_SHORT).show()
             }
         }
@@ -63,14 +69,14 @@ class HandGesturesActivity : ComponentActivity() {
     }
 
     override fun onResume() {
-        sensorManager.registerListener(sensorListener, sensorManager!!.getDefaultSensor(
+        sensorManager?.registerListener(sensorListener, sensorManager!!.getDefaultSensor(
             Sensor .TYPE_ACCELEROMETER), SensorManager.SENSOR_DELAY_NORMAL
         )
         super.onResume()
     }
 
     override fun onPause() {
-        sensorManager.unregisterListener(sensorListener)
+        sensorManager!!.unregisterListener(sensorListener)
         super.onPause()
     }
 }
