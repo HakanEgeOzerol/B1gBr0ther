@@ -11,4 +11,12 @@
         android:layout_height="wrap_content"
         android:text="Go to gestures" />
 
+    <Button
+        android:id="@+id/btnSpeak"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="Activate Voice"
+        android:layout_marginTop="24dp"/>
+
+
 </LinearLayout>
