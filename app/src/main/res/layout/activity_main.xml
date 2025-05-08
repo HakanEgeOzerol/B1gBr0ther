@@ -12,10 +12,10 @@
         android:text="Go to gestures" />
 
     <Button
-        android:id="@+id/btnSpeak"
+        android:id="@+id/audioRecognitionButton"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:text="Activate Voice"
+        android:text="Audio Recognition"
         android:layout_marginTop="24dp"/>
 
 
