@@ -24,12 +24,14 @@ class HandGesturesActivity : ComponentActivity() {
     private var currentAcceleration = 0f
     private var lastAcceleration = 0f
 
-    private var sensorManager = getSystemService(Context.SENSOR_SERVICE) as SensorManager
+    private lateinit var sensorManager: SensorManager
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         enableEdgeToEdge()
         setContentView(R.layout.activity_gesture)
+
+        sensorManager = getSystemService(Context.SENSOR_SERVICE) as SensorManager
 
         val goBackButton = findViewById<Button>(R.id.BackButton)
         goBackButton.setOnClickListener {
