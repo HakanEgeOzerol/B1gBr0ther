@@ -30,7 +30,7 @@ class ShakeDialogFragment : DialogFragment() {
         } ?: throw IllegalStateException("Activity cannot be null")
     }
 
-    public fun showDialog
+    //public fun showDialog
 }
 
 class OldXmlActivity : AppCompatActivity() {
