@@ -59,10 +59,11 @@ class HandGesturesActivity : ComponentActivity() {
             val delta: Float = currentAcceleration - lastAcceleration
             acceleration = acceleration * 0.9f + delta
 
-            // Display a Toast message if
-            // acceleration value is over 12
             if (acceleration > 17) {
                 Toast.makeText(applicationContext, "Shake event detected", Toast.LENGTH_SHORT).show()
+
+                val textInputFragment = ShakeDialogFragment()
+                val xmlCompatible = OldXmlActivity()
             }
         }
         override fun onAccuracyChanged(sensor: Sensor, accuracy: Int) {}
