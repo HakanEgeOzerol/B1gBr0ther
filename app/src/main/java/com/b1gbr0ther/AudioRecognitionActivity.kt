@@ -27,6 +27,8 @@ class AudioRecognitionActivity : ComponentActivity() {
     private var maxDb = -Float.MAX_VALUE
     private var smoothedLevel = 0f
 
+    private var lastStats: String = ""
+
     private companion object {
         private const val SMOOTHING_FACTOR = 0.8f
     }
@@ -106,6 +108,7 @@ class AudioRecognitionActivity : ComponentActivity() {
                         minDb,
                         maxDb
                     )
+                    lastStats = stats
                     updateStatus(stats)
                 }
 
@@ -173,6 +176,11 @@ class AudioRecognitionActivity : ComponentActivity() {
             }
             startListening(intent)
         }
+    }
+
+    private fun stopRecognition() {
+        updateStatus("Stopped listening.\nLast measurements:\n$lastStats")
+        destroyRecognizer()
     }
 
     private fun updateStatus(text: String) {
