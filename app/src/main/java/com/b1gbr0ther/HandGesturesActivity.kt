@@ -12,8 +12,19 @@ import android.hardware.SensorEvent
 import android.hardware.SensorEventListener
 import android.hardware.SensorManager
 import android.widget.Toast
+import androidx.compose.runtime.getValue
+import androidx.compose.runtime.mutableStateOf
+import androidx.compose.runtime.remember
+import androidx.compose.runtime.setValue
 import java.util.*
 import kotlin.math.sqrt
+
+import androidx.compose.ui.graphics.Color
+
+import android.app.Dialog
+import android.widget.EditText
+import android.widget.TextView
+import androidx.appcompat.app.AppCompatActivity
 
 class HandGesturesActivity : ComponentActivity() {
     private var acceleration = 0f
@@ -21,7 +32,6 @@ class HandGesturesActivity : ComponentActivity() {
     private var lastAcceleration = 0f
 
     private var sensorManager: SensorManager? = null
-
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -60,10 +70,7 @@ class HandGesturesActivity : ComponentActivity() {
             acceleration = acceleration * 0.9f + delta
 
             if (acceleration > 17) {
-                Toast.makeText(applicationContext, "Shake event detected", Toast.LENGTH_SHORT).show()
-
-                val textInputFragment = ShakeDialogFragment()
-                val xmlCompatible = OldXmlActivity()
+                showTaskDialog()
             }
         }
         override fun onAccuracyChanged(sensor: Sensor, accuracy: Int) {}
@@ -79,5 +86,30 @@ class HandGesturesActivity : ComponentActivity() {
     override fun onPause() {
         sensorManager!!.unregisterListener(sensorListener)
         super.onPause()
+    }
+
+    private fun showTaskDialog(){
+        // Create Dialog instance
+        val dialog = Dialog(this)
+        dialog.setContentView(R.layout.dialog_text_input)
+        dialog.setCancelable(true)
+
+        val textInput = dialog.findViewById<EditText>(R.id.TaskInput)
+        val cancelButton = dialog.findViewById<Button>(R.id.Cancel)
+        val submitTask = dialog.findViewById<Button>(R.id.SubmitTask)
+
+        submitTask.setOnClickListener{
+//            var textInput = textInput.text.toString()
+//            Do something with the input text
+            dialog.dismiss()
+        }
+
+        cancelButton.setOnClickListener{
+//            do something is dismissed
+
+            dialog.dismiss()
+        }
+
+        dialog.show()
     }
 }
