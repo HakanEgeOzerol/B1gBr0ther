@@ -11,20 +11,10 @@ import android.hardware.Sensor
 import android.hardware.SensorEvent
 import android.hardware.SensorEventListener
 import android.hardware.SensorManager
-import android.widget.Toast
-import androidx.compose.runtime.getValue
-import androidx.compose.runtime.mutableStateOf
-import androidx.compose.runtime.remember
-import androidx.compose.runtime.setValue
 import java.util.*
 import kotlin.math.sqrt
-
-import androidx.compose.ui.graphics.Color
-
 import android.app.Dialog
 import android.widget.EditText
-import android.widget.TextView
-import androidx.appcompat.app.AppCompatActivity
 
 class HandGesturesActivity : ComponentActivity() {
     private var acceleration = 0f
