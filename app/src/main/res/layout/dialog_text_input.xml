@@ -19,21 +19,21 @@
         android:layout_width="match_parent"
         android:layout_height="wrap_content">
 
-<!--        <Button-->
-<!--            android:id="@+id/Cancel"-->
-<!--            android:layout_width="wrap_content"-->
-<!--            android:layout_height="match_parent"-->
-<!--            android:background="@drawable/rounded_corners"-->
-<!--            android:layout_margin="4dp"-->
-<!--            android:text="Cancel">-->
-<!--        </Button>-->
-<!--        <Button-->
-<!--            android:id="@+id/SubmitTask"-->
-<!--            android:layout_width="wrap_content"-->
-<!--            android:layout_height="match_parent"-->
-<!--            android:background="@drawable/rounded_corners"-->
-<!--            android:layout_margin="4dp"-->
-<!--            android:text="Submit">-->
-<!--        </Button>-->
+        <Button
+            android:id="@+id/Cancel"
+            android:layout_width="wrap_content"
+            android:layout_height="match_parent"
+            android:background="@drawable/rounded_corners"
+            android:layout_margin="4dp"
+            android:text="Cancel">
+        </Button>
+        <Button
+            android:id="@+id/SubmitTask"
+            android:layout_width="wrap_content"
+            android:layout_height="match_parent"
+            android:background="@drawable/rounded_corners"
+            android:layout_margin="4dp"
+            android:text="Submit">
+        </Button>
     </LinearLayout>
 </LinearLayout>
