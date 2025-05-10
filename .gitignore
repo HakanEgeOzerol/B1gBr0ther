@@ -23,5 +23,44 @@
 hs_err_pid*
 replay_pid*
 
-# Kotlin Gradle plugin data, see https://kotlinlang.org/docs/whatsnew20.html#new-directory-for-kotlin-data-in-gradle-projects
-.kotlin/
+# Built application files
+*.apk
+*.ap_
+*.aab
+
+# Files for the ART/Dalvik VM
+*.dex
+
+# Java/Kotlin class files
+*.class
+
+# Generated files
+bin/
+build/
+gen/
+out/
+
+# Gradle cache
+.gradle/
+**/build/
+
+# Local configuration files (IDE-specific)
+.idea/
+*.iml
+*.iws
+*.ipr
+local.properties
+
+# OS-specific
+.DS_Store
+Thumbs.db
+
+# Keystore files (if using signing)
+*.jks
+
+# Log files
+*.log
+
+# Misc
+*.swp
+*.swo
