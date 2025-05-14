@@ -4,9 +4,12 @@ import android.Manifest
 import android.content.Intent
 import android.content.pm.PackageManager
 import android.os.Bundle
+import android.os.Handler
+import android.os.Looper
 import android.speech.RecognitionListener
 import android.speech.RecognizerIntent
 import android.speech.SpeechRecognizer
+import android.view.View
 import android.widget.Button
 import android.widget.TextView
 import android.widget.Toast
@@ -17,23 +20,19 @@ import androidx.core.content.ContextCompat
 import java.util.Locale
 
 class AudioRecognitionActivity : ComponentActivity() {
+
     private lateinit var statusTextView: TextView
     private lateinit var transcriptTextView: TextView
+    private lateinit var trackingStatusTextView: TextView
+    private lateinit var lastSessionTextView: TextView
 
+    private var lastSummary: TimeTracker.TrackingSummary? = null
     private var recognizer: SpeechRecognizer? = null
-
-    // Dynamic calibration and smoothing
-    private var minDb = Float.MAX_VALUE
-    private var maxDb = -Float.MAX_VALUE
-    private var smoothedLevel = 0f
-
-    private var lastStats: String = ""
-
-    private companion object {
-        private const val SMOOTHING_FACTOR = 0.8f
-    }
-
     private lateinit var commandHandler: VoiceCommandHandler
+    private val timeTracker = TimeTracker()
+
+    private val handler = Handler(Looper.getMainLooper())
+    private var liveTimerRunnable: Runnable? = null
 
     private val requestPermissionLauncher =
         registerForActivityResult(ActivityResultContracts.RequestPermission()) { granted ->
@@ -48,19 +47,57 @@ class AudioRecognitionActivity : ComponentActivity() {
 
         statusTextView = findViewById(R.id.statusTextView)
         transcriptTextView = findViewById(R.id.transcriptTextView)
+        trackingStatusTextView = findViewById(R.id.trackingStatusTextView)
+        lastSessionTextView = findViewById(R.id.lastSessionTextView)
 
         commandHandler = VoiceCommandHandler(this)
 
         findViewById<Button>(R.id.listenButton).setOnClickListener {
             checkPermissionAndStartRecognition()
         }
+
+        findViewById<Button>(R.id.statusButton).setOnClickListener {
+            updateTrackingStatus()
+
+            Toast.makeText(this, "Checking tracking status...", Toast.LENGTH_SHORT).show()
+
+            if (lastSummary != null) {
+                val summary = lastSummary!!
+                val text = """
+                    Last Session
+                    Total: ${formatTime(summary.totalTimeMillis)}
+                    Breaks: ${formatTime(summary.breakTimeMillis)}
+                    Work Time: ${formatTime(summary.effectiveTimeMillis)}
+                    Break #: ${summary.breakCount}
+                """.trimIndent()
+                lastSessionTextView.text = text
+                lastSessionTextView.visibility = View.VISIBLE
+            } else {
+                lastSessionTextView.text = "No previous sessions found."
+                lastSessionTextView.visibility = View.VISIBLE
+            }
+        }
+    }
+
+    override fun onPause() {
+        super.onPause()
+        if (timeTracker.isTracking()) stopLiveTimer()
+    }
+
+    override fun onResume() {
+        super.onResume()
+        if (timeTracker.isTracking()) startLiveTimer()
+    }
+
+    override fun onDestroy() {
+        super.onDestroy()
+        destroyRecognizer()
+        stopLiveTimer()
     }
 
     private fun checkPermissionAndStartRecognition() {
-        if (ContextCompat.checkSelfPermission(
-                this, Manifest.permission.RECORD_AUDIO
-            ) != PackageManager.PERMISSION_GRANTED
-        ) {
+        if (ContextCompat.checkSelfPermission(this, Manifest.permission.RECORD_AUDIO)
+            != PackageManager.PERMISSION_GRANTED) {
             updateStatus("Please grant microphone permission")
             requestPermissionLauncher.launch(Manifest.permission.RECORD_AUDIO)
         } else {
@@ -76,11 +113,6 @@ class AudioRecognitionActivity : ComponentActivity() {
             return
         }
 
-        // Reset calibration
-        minDb = Float.MAX_VALUE
-        maxDb = -Float.MAX_VALUE
-        smoothedLevel = 0f
-
         recognizer = SpeechRecognizer.createSpeechRecognizer(this).apply {
             setRecognitionListener(object : RecognitionListener {
                 override fun onReadyForSpeech(params: Bundle?) {
@@ -88,39 +120,11 @@ class AudioRecognitionActivity : ComponentActivity() {
                 }
 
                 override fun onBeginningOfSpeech() {
-                    // reset per phrase
-                    minDb = Float.MAX_VALUE
-                    maxDb = -Float.MAX_VALUE
-                    smoothedLevel = 0f
                     updateStatus("Speech started")
                 }
 
-                override fun onRmsChanged(rmsdB: Float) {
-                    // update calibration
-                    minDb = minOf(minDb, rmsdB)
-                    maxDb = maxOf(maxDb, rmsdB)
-                    // normalize
-                    val norm = ((rmsdB - minDb) / (maxDb - minDb)).coerceIn(0f, 1f)
-                    smoothedLevel = SMOOTHING_FACTOR * smoothedLevel + (1 - SMOOTHING_FACTOR) * norm
-                    val percent = (smoothedLevel * 100).toInt()
-
-                    // display multiple stats
-                    val stats = String.format(
-                        Locale.getDefault(),
-                        "Level: %d%%\nRaw: %.1f dB\nMin: %.1f dB\nMax: %.1f dB",
-                        percent,
-                        rmsdB,
-                        minDb,
-                        maxDb
-                    )
-                    lastStats = stats
-                    updateStatus(stats)
-                }
-
-                override fun onBufferReceived(buffer: ByteArray?) {
-                    // no processing needed here
-                }
-
+                override fun onRmsChanged(rmsdB: Float) {}
+                override fun onBufferReceived(buffer: ByteArray?) {}
                 override fun onEndOfSpeech() {
                     updateStatus("Speech ended")
                 }
@@ -128,20 +132,11 @@ class AudioRecognitionActivity : ComponentActivity() {
                 override fun onResults(results: Bundle?) {
                     val spoken = results?.getStringArrayList(SpeechRecognizer.RESULTS_RECOGNITION)
                         ?.firstOrNull().orEmpty()
-
                     transcriptTextView.text = spoken
 
-                    // ✅ Handle command
-                    val commandRecognized = commandHandler.handleCommand(spoken)
-
-                    if (!commandRecognized) {
-                        updateStatus("Unrecognized command: \"$spoken\"")
-                    } else {
-                        updateStatus("Command executed: \"$spoken\"")
-                    }
-
+                    val recognized = commandHandler.handleCommand(spoken)
+                    updateStatus(if (recognized) "Command executed: \"$spoken\"" else "Unrecognized command: \"$spoken\"")
                     Toast.makeText(this@AudioRecognitionActivity, "Recognition complete", Toast.LENGTH_SHORT).show()
-
                     destroyRecognizer()
                 }
 
@@ -165,28 +160,35 @@ class AudioRecognitionActivity : ComponentActivity() {
                         else -> "Unknown error: $error"
                     }
                     showError(msg)
-                    destroyRecognizer()
+
+                    if (error == SpeechRecognizer.ERROR_NO_MATCH || error == SpeechRecognizer.ERROR_SPEECH_TIMEOUT) {
+                        startAudioRecognition()
+                    } else {
+                        destroyRecognizer()
+                    }
                 }
 
                 override fun onEvent(eventType: Int, params: Bundle?) {}
             })
 
-            // configure and start
             val intent = Intent(RecognizerIntent.ACTION_RECOGNIZE_SPEECH).apply {
-                putExtra(
-                    RecognizerIntent.EXTRA_LANGUAGE_MODEL, RecognizerIntent.LANGUAGE_MODEL_FREE_FORM
-                )
+                putExtra(RecognizerIntent.EXTRA_LANGUAGE_MODEL, RecognizerIntent.LANGUAGE_MODEL_FREE_FORM)
                 putExtra(RecognizerIntent.EXTRA_LANGUAGE, Locale.getDefault())
                 putExtra(RecognizerIntent.EXTRA_PARTIAL_RESULTS, true)
                 putExtra(RecognizerIntent.EXTRA_MAX_RESULTS, 1)
             }
+
             startListening(intent)
         }
     }
 
-    private fun stopRecognition() {
-        updateStatus("Stopped listening.\nLast measurements:\n$lastStats")
-        destroyRecognizer()
+    private fun destroyRecognizer() {
+        recognizer?.apply {
+            stopListening()
+            cancel()
+            destroy()
+        }
+        recognizer = null
     }
 
     private fun updateStatus(text: String) {
@@ -200,33 +202,116 @@ class AudioRecognitionActivity : ComponentActivity() {
         }
     }
 
-    private fun destroyRecognizer() {
-        recognizer?.apply {
-            stopListening()
-            cancel()
-            destroy()
+    private fun startLiveTimer() {
+        liveTimerRunnable = object : Runnable {
+            override fun run() {
+                updateTrackingStatus()
+                handler.postDelayed(this, 1000L)
+            }
         }
-        recognizer = null
+        handler.post(liveTimerRunnable!!)
     }
 
-    override fun onDestroy() {
-        super.onDestroy()
-        destroyRecognizer()
+    private fun stopLiveTimer() {
+        liveTimerRunnable?.let { handler.removeCallbacks(it) }
     }
 
     fun startTracking() {
+        timeTracker.startTracking()
         Toast.makeText(this, "Tracking started", Toast.LENGTH_SHORT).show()
+        updateTrackingStatus()
+        startLiveTimer()
     }
 
     fun stopTracking() {
-        Toast.makeText(this, "Tracking stopped", Toast.LENGTH_SHORT).show()
+        val summary = timeTracker.stopTracking()
+        if (summary == null) {
+            Toast.makeText(this, "Tracking not active", Toast.LENGTH_SHORT).show()
+            return
+        }
+
+        val toastText = "Total: ${formatTime(summary.totalTimeMillis)}, " +
+                "Work Time: ${formatTime(summary.effectiveTimeMillis)}"
+        Toast.makeText(this, "Tracking stopped. $toastText", Toast.LENGTH_LONG).show()
+
+        lastSummary = summary
+        trackingStatusTextView.text = "No active tracking session."
+        stopLiveTimer()
     }
 
-    fun logBreak() {
-        Toast.makeText(this, "Break logged", Toast.LENGTH_SHORT).show()
+    fun startBreak() {
+        if (!timeTracker.isTracking()) {
+            Toast.makeText(this, "Start tracking first", Toast.LENGTH_SHORT).show()
+            return
+        }
+
+        if (timeTracker.isOnBreak()) {
+            Toast.makeText(this, "Already on a break", Toast.LENGTH_SHORT).show()
+        } else if (timeTracker.startBreak()) {
+            Toast.makeText(this, "Break started", Toast.LENGTH_SHORT).show()
+            updateTrackingStatus()
+        }
+    }
+
+    fun endBreak() {
+        if (!timeTracker.isTracking()) {
+            Toast.makeText(this, "Start tracking first", Toast.LENGTH_SHORT).show()
+            return
+        }
+
+        if (!timeTracker.isOnBreak()) {
+            Toast.makeText(this, "No active break", Toast.LENGTH_SHORT).show()
+        } else if (timeTracker.endBreak()) {
+            Toast.makeText(this, "Break ended", Toast.LENGTH_SHORT).show()
+            updateTrackingStatus()
+        }
     }
 
     fun showDashboard() {
-        Toast.makeText(this, "Would open dashboard (not yet implemented)", Toast.LENGTH_SHORT).show()
+        updateTrackingStatus()
+    }
+
+    private fun updateTrackingStatus() {
+        if (!timeTracker.isTracking()) {
+            trackingStatusTextView.text = "No active tracking session."
+            return
+        }
+
+        val currentDuration = timeTracker.getCurrentDuration()
+        val workTime = timeTracker.getCurrentEffectiveTime()
+        val breakTime = timeTracker.getTotalBreakTime()
+        val breakCount = timeTracker.getBreakCount()
+
+        val statusText = if (timeTracker.isOnBreak()) {
+            """
+            TRACKING (On break)
+            Duration: ${formatTime(currentDuration)}
+            Break time: ${formatTime(breakTime)}
+            Work Time: ${formatTime(workTime)}
+            Break #: $breakCount
+            """
+        } else {
+            """
+            TRACKING (Working)
+            Duration: ${formatTime(currentDuration)}
+            Break time: ${formatTime(breakTime)}
+            Work Time: ${formatTime(workTime)}
+            Break #: $breakCount
+            """
+        }
+
+        trackingStatusTextView.text = statusText.trimIndent()
+    }
+
+    private fun formatTime(millis: Long): String {
+        val totalSeconds = millis / 1000
+        val hours = totalSeconds / 3600
+        val minutes = (totalSeconds % 3600) / 60
+        val seconds = totalSeconds % 60
+
+        return if (hours > 0)
+            String.format("%02d:%02d:%02d", hours, minutes, seconds)
+        else
+            String.format("%02d:%02d", minutes, seconds)
     }
 }

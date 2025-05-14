@@ -42,11 +42,39 @@
         android:padding="10dp"
         android:layout_marginBottom="32dp" />
 
+    <TextView
+        android:id="@+id/trackingStatusTextView"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_margin="16dp"
+        android:background="#E0F7FA"
+        android:padding="8dp"
+        android:text="No active tracking session."
+        android:textSize="16sp" />
+
+    <TextView
+        android:id="@+id/lastSessionTextView"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="16dp"
+        android:background="#F3E5F5"
+        android:padding="8dp"
+        android:text=""
+        android:textSize="15sp"
+        android:textColor="#000000" />
+
     <Button
         android:id="@+id/listenButton"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:text="Start Listening"
         android:padding="16dp" />
+
+    <Button
+        android:id="@+id/statusButton"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_margin="16dp"
+        android:text="Check Tracking Status" />
 
 </LinearLayout>
