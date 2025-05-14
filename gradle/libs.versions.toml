@@ -1,12 +1,12 @@
 [versions]
 agp = "8.10.0"
 kotlin = "2.0.21"
-coreKtx = "1.16.0"
+coreKtx = "1.13.1" #This was downgraded cause comp issues. 1.14.0 was not running. Latest version allegedly
 junit = "4.13.2"
 junitVersion = "1.2.1"
-espressoCore = "3.6.1"
+espressoCore = "3.6.1" #This was not changed, but it is still a possible culprit
 lifecycleRuntimeKtx = "2.8.7"
-activityCompose = "1.10.1"
+activityCompose = "1.9.3" #This version was changed from defaul for compatibility issues (downgrade)
 composeBom = "2024.09.00"
 appcompat = "1.7.0"
 

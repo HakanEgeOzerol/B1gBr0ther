@@ -1,0 +1,39 @@
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:orientation="vertical"
+    android:layout_width="wrap_content"
+    android:layout_height="wrap_content"
+    android:background="#FFFFBB33">
+    <EditText
+        android:id="@+id/TaskInput"
+        android:inputType="text"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="4dp"
+        android:layout_marginLeft="4dp"
+        android:layout_marginRight="4dp"
+        android:layout_marginBottom="16dp"
+        android:fontFamily="sans-serif"
+        android:hint="Enter activity"/>
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content">
+
+        <Button
+            android:id="@+id/Cancel"
+            android:layout_width="wrap_content"
+            android:layout_height="match_parent"
+            android:background="@drawable/rounded_corners"
+            android:layout_margin="4dp"
+            android:text="Cancel">
+        </Button>
+        <Button
+            android:id="@+id/SubmitTask"
+            android:layout_width="wrap_content"
+            android:layout_height="match_parent"
+            android:background="@drawable/rounded_corners"
+            android:layout_margin="4dp"
+            android:text="Submit">
+        </Button>
+    </LinearLayout>
+</LinearLayout>

@@ -6,12 +6,12 @@ plugins {
 
 android {
     namespace = "com.b1gbr0ther"
-    compileSdk = 35
+    compileSdk = 34
 
     defaultConfig {
         applicationId = "com.b1gbr0ther"
-        minSdk = 35
-        targetSdk = 35
+        minSdk = 34
+        targetSdk = 34
         versionCode = 1
         versionName = "1.0"
 
@@ -27,6 +27,7 @@ android {
             )
         }
     }
+
     compileOptions {
         sourceCompatibility = JavaVersion.VERSION_11
         targetCompatibility = JavaVersion.VERSION_11

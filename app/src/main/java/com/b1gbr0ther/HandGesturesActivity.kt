@@ -11,20 +11,17 @@ import android.hardware.Sensor
 import android.hardware.SensorEvent
 import android.hardware.SensorEventListener
 import android.hardware.SensorManager
-import androidx.appcompat.app.AppCompatActivity
-import android.widget.Toast
 import java.util.*
 import kotlin.math.sqrt
-
-import java.util.*
-import kotlin.math.sqrt
+import android.app.Dialog
+import android.widget.EditText
 
 class HandGesturesActivity : ComponentActivity() {
     private var acceleration = 0f
     private var currentAcceleration = 0f
     private var lastAcceleration = 0f
 
-    private lateinit var sensorManager: SensorManager
+    private var sensorManager: SensorManager? = null
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -38,6 +35,13 @@ class HandGesturesActivity : ComponentActivity() {
             val intent = Intent(this, MainActivity::class.java)
             startActivity(intent)
         }
+
+        Objects.requireNonNull(sensorManager)!!.registerListener(sensorListener, sensorManager!!.getDefaultSensor(Sensor.TYPE_ACCELEROMETER), SensorManager.SENSOR_DELAY_NORMAL)
+
+        acceleration = 10f
+        currentAcceleration = SensorManager.GRAVITY_EARTH
+        lastAcceleration = SensorManager.GRAVITY_EARTH
+
     }
 
     private val sensorListener: SensorEventListener = object : SensorEventListener {
@@ -55,24 +59,47 @@ class HandGesturesActivity : ComponentActivity() {
             val delta: Float = currentAcceleration - lastAcceleration
             acceleration = acceleration * 0.9f + delta
 
-            // Display a Toast message if
-            // acceleration value is over 12
-            if (acceleration > 12) {
-                Toast.makeText(applicationContext, "Shake event detected", Toast.LENGTH_SHORT).show()
+            if (acceleration > 17) {
+                showTaskDialog()
             }
         }
         override fun onAccuracyChanged(sensor: Sensor, accuracy: Int) {}
     }
 
     override fun onResume() {
-        sensorManager.registerListener(sensorListener, sensorManager!!.getDefaultSensor(
+        sensorManager?.registerListener(sensorListener, sensorManager!!.getDefaultSensor(
             Sensor .TYPE_ACCELEROMETER), SensorManager.SENSOR_DELAY_NORMAL
         )
         super.onResume()
     }
 
     override fun onPause() {
-        sensorManager.unregisterListener(sensorListener)
+        sensorManager!!.unregisterListener(sensorListener)
         super.onPause()
+    }
+
+    private fun showTaskDialog(){
+        // Create Dialog instance
+        val dialog = Dialog(this)
+        dialog.setContentView(R.layout.dialog_text_input)
+        dialog.setCancelable(true)
+
+        val textInput = dialog.findViewById<EditText>(R.id.TaskInput)
+        val cancelButton = dialog.findViewById<Button>(R.id.Cancel)
+        val submitTask = dialog.findViewById<Button>(R.id.SubmitTask)
+
+        submitTask.setOnClickListener{
+//            var textInput = textInput.text.toString()
+//            Do something with the input text
+            dialog.dismiss()
+        }
+
+        cancelButton.setOnClickListener{
+//            do something is dismissed
+
+            dialog.dismiss()
+        }
+
+        dialog.show()
     }
 }
