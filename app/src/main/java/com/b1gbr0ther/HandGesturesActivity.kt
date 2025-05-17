@@ -23,6 +23,8 @@ class HandGesturesActivity : ComponentActivity() {
 
     private var sensorManager: SensorManager? = null
 
+    private var isDialogShown = false;
+
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         enableEdgeToEdge()
@@ -59,7 +61,8 @@ class HandGesturesActivity : ComponentActivity() {
             val delta: Float = currentAcceleration - lastAcceleration
             acceleration = acceleration * 0.9f + delta
 
-            if (acceleration > 17) {
+            if (acceleration > 17 && !isDialogShown) {
+                isDialogShown = true
                 showTaskDialog()
             }
         }
@@ -91,12 +94,14 @@ class HandGesturesActivity : ComponentActivity() {
         submitTask.setOnClickListener{
 //            var textInput = textInput.text.toString()
 //            Do something with the input text
+            isDialogShown = false
             dialog.dismiss()
         }
 
         cancelButton.setOnClickListener{
 //            do something is dismissed
 
+            isDialogShown = false
             dialog.dismiss()
         }
 
