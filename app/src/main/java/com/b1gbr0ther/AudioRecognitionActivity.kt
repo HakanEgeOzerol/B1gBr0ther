@@ -29,7 +29,7 @@ class AudioRecognitionActivity : ComponentActivity() {
     private var lastSummary: TimeTracker.TrackingSummary? = null
     private var recognizer: SpeechRecognizer? = null
     private lateinit var commandHandler: VoiceCommandHandler
-    private val timeTracker = TimeTracker()
+    private lateinit var timeTracker: TimeTracker
 
     private val handler = Handler(Looper.getMainLooper())
     private var liveTimerRunnable: Runnable? = null
@@ -50,6 +50,7 @@ class AudioRecognitionActivity : ComponentActivity() {
         trackingStatusTextView = findViewById(R.id.trackingStatusTextView)
         lastSessionTextView = findViewById(R.id.lastSessionTextView)
 
+        timeTracker = TimeTracker(this)
         commandHandler = VoiceCommandHandler(this)
 
         findViewById<Button>(R.id.listenButton).setOnClickListener {
@@ -58,7 +59,6 @@ class AudioRecognitionActivity : ComponentActivity() {
 
         findViewById<Button>(R.id.statusButton).setOnClickListener {
             updateTrackingStatus()
-
             Toast.makeText(this, "Checking tracking status...", Toast.LENGTH_SHORT).show()
 
             if (lastSummary != null) {
@@ -79,20 +79,28 @@ class AudioRecognitionActivity : ComponentActivity() {
         }
     }
 
-    override fun onPause() {
-        super.onPause()
-        if (timeTracker.isTracking()) stopLiveTimer()
-    }
-
     override fun onResume() {
         super.onResume()
-        if (timeTracker.isTracking()) startLiveTimer()
+
+        if (timeTracker.isTracking()) {
+            updateTrackingStatus()
+            startLiveTimer()
+            Toast.makeText(
+                this,
+                "Tracking session restored from ${formatTime(timeTracker.getCurrentDuration())} ago",
+                Toast.LENGTH_SHORT
+            ).show()
+        }
+    }
+
+    override fun onPause() {
+        super.onPause()
+        stopLiveTimer()
     }
 
     override fun onDestroy() {
         super.onDestroy()
         destroyRecognizer()
-        stopLiveTimer()
     }
 
     private fun checkPermissionAndStartRecognition() {
@@ -308,7 +316,6 @@ class AudioRecognitionActivity : ComponentActivity() {
         val hours = totalSeconds / 3600
         val minutes = (totalSeconds % 3600) / 60
         val seconds = totalSeconds % 60
-
         return if (hours > 0)
             String.format("%02d:%02d:%02d", hours, minutes, seconds)
         else
