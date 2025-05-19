@@ -14,6 +14,7 @@ class MainActivity : ComponentActivity() {
 
         val goToButton = findViewById<Button>(R.id.goToButton)
         val audioRecognitionButton = findViewById<Button>(R.id.audioRecognitionButton)
+        val btnDashboard = findViewById<Button>(R.id.btnDashboard)
 
         goToButton.setOnClickListener {
             val intent = Intent(this, HandGesturesActivity::class.java)
@@ -22,6 +23,11 @@ class MainActivity : ComponentActivity() {
 
         audioRecognitionButton.setOnClickListener {
             val intent = Intent(this, AudioRecognitionActivity::class.java)
+            startActivity(intent)
+        }
+
+        btnDashboard.setOnClickListener {
+            val intent = Intent(this, DashboardActivity::class.java)
             startActivity(intent)
         }
     }

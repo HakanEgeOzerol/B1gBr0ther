@@ -1,0 +1,60 @@
+<?xml version="1.0" encoding="utf-8"?>
+<androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:id="@+id/main"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:background="#A7ADC6"
+    tools:context=".DashboardActivity">
+
+    <Button
+        android:id="@+id/b1gBr0therButton"
+        android:layout_width="126dp"
+        android:layout_height="37dp"
+        android:background="@drawable/rounded_corners"
+        android:backgroundTint="#5F4B66"
+        android:paddingLeft="12dp"
+        android:paddingTop="0dp"
+        android:paddingEnd="12dp"
+        android:paddingBottom="0dp"
+        android:text="B1g Br0ther"
+        android:textAllCaps="false"
+        android:textColor="#C1A8B5"
+        android:textSize="16sp"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintHorizontal_bias="0.136"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent"
+        app:layout_constraintVertical_bias="0.042" />
+
+    <TextView
+        android:id="@+id/timer"
+        android:layout_width="185dp"
+        android:layout_height="185dp"
+        android:background="@drawable/circle"
+        android:backgroundTint="#5F4B66"
+        android:gravity="center"
+        android:text="00:00"
+        android:textColor="#C1A8B5"
+        android:textSize="45sp"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent" />
+
+    <TextView
+        android:id="@+id/currentTaskText"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="31dp"
+        android:text="Not Busy With A Task"
+        android:textColor="#000000"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintHorizontal_bias="0.498"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent"
+        app:layout_constraintVertical_bias="0.638" />
+</androidx.constraintlayout.widget.ConstraintLayout>
