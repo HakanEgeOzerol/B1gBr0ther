@@ -22,7 +22,7 @@ class MenuBar @JvmOverloads constructor(
 
         icons = listOf(
             findViewById(R.id.exportPageMenuButton),
-            findViewById(R.id.manualPageMenuButton),
+//            findViewById(R.id.manualPageMenuButton),
             findViewById(R.id.dashboardPageMenuButton),
             findViewById(R.id.timesheetPageMenuButton),
         )
@@ -55,10 +55,13 @@ class MenuBar @JvmOverloads constructor(
         val currentActivity = context as? android.app.Activity ?: return
 
         val target = when (index) {
+//            0 -> AudioRecognitionActivity::class.java //change this to actual EXPORT page
+//            1 -> AudioRecognitionActivity::class.java // change this to actual MANUAL page
+//            2 -> DashboardActivity::class.java
+//            3 -> AudioRecognitionActivity::class.java //change this to actual TIMESHEET page
             0 -> AudioRecognitionActivity::class.java //change this to actual EXPORT page
-            1 -> AudioRecognitionActivity::class.java // change this to actual MANUAL page
-            2 -> DashboardActivity::class.java
-            3 -> AudioRecognitionActivity::class.java //change this to actual TIMESHEET page
+            1 -> DashboardActivity::class.java
+            2 -> AudioRecognitionActivity::class.java //change this to actual TIMESHEET page
             else -> return
         }
 
