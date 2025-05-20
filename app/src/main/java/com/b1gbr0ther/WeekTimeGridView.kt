@@ -37,8 +37,8 @@ class WeekTimeGridView(context: Context, attrs: AttributeSet?) : View(context, a
 
         val padding = 80f
 
-        val hoursStart = 8f
-        val hoursEnd = 19f
+        val hoursStart = 0f
+        val hoursEnd = 24f
         val totalHours = hoursEnd - hoursStart
         val rowCount = 7
 
@@ -60,7 +60,7 @@ class WeekTimeGridView(context: Context, attrs: AttributeSet?) : View(context, a
         }
 
         //draw vertical lines
-        for (i in 0..totalHours.toInt()) {
+        for (i in 0..totalHours.toInt() step 2) {
             val x = startX + i * cellWidth
             canvas.drawLine(x, startY - 50f, x, bottomY + 50f, gridPaint)
         }

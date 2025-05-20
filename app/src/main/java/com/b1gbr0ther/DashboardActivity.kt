@@ -51,6 +51,7 @@ class DashboardActivity : AppCompatActivity() {
         //try to make another set of lighter vertical lines between the lines we already have
         //change text visual to reflect this, only show every 2 hours. This way we dont have to add extra lines
         //besides the lighter gray ones and can just rename the existing text
+        //also lock the days and time to the chart instead of the frame, so when a smaller phone uses app, it doesnt get botched
         val myWorkData = listOf(
             WorkBlock(0, 8f, 12f, false),
             WorkBlock(0, 12f, 13.5f, true),
@@ -60,6 +61,7 @@ class DashboardActivity : AppCompatActivity() {
             WorkBlock(4, 8f, 15f, false),
             WorkBlock(5, 14f, 16.5f, false),
             WorkBlock(6, 9f, 13.5f, false),
+            WorkBlock(6, 23f, 23.99f, false),
         )
         //^^this is dummy data, replace this with data gathered from the database once the connection is there
 
