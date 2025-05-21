@@ -84,7 +84,7 @@ class HandGesturesActivity : ComponentActivity() {
     private fun showTaskDialog(){
         // Create Dialog instance
         val dialog = Dialog(this)
-        dialog.setContentView(R.layout.dialog_text_input)
+        dialog.setContentView(R.layout.gesture_dialog_text_input)
         dialog.setCancelable(true)
 
         val textInput = dialog.findViewById<EditText>(R.id.TaskInput)
