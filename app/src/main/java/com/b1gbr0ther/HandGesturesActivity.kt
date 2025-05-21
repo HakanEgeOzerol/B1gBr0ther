@@ -15,6 +15,7 @@ import java.util.*
 import kotlin.math.sqrt
 import android.app.Dialog
 import android.widget.EditText
+import java.time.LocalDateTime
 
 class HandGesturesActivity : ComponentActivity() {
     private var acceleration = 0f
@@ -95,10 +96,24 @@ class HandGesturesActivity : ComponentActivity() {
 
         startTracking.setOnClickListener{
             var name = textInput.text.toString()
-            var hoursSubmitted = hours.text.toString()
-            var minutesSubmitted = minutes.text.toString()
+            var hoursSubmitted = (hours.text.toString()).toLong()
+            var minutesSubmitted = (minutes.text.toString()).toLong()
 
-            
+            var estimatedCompletion = LocalDateTime.now()
+
+            var startTime = LocalDateTime.now()
+
+            if (hoursSubmitted >= 0){
+                estimatedCompletion = estimatedCompletion.plusHours(hoursSubmitted)
+                if (minutesSubmitted >= 0){
+                    estimatedCompletion = estimatedCompletion.plusMinutes(minutesSubmitted)
+                }
+            }
+            else{
+                estimatedCompletion.plusHours(3)//default for task time
+            }
+
+
 //            Do something with the input text
             isDialogShown = false
             dialog.dismiss()
