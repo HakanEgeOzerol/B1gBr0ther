@@ -56,4 +56,8 @@ class Task constructor(private var taskName: String,
     fun getIsBreak(): Boolean? {
         return this.isBreak
     }
+
+    fun getTimeDif(){
+//        TO DO
+    }
 }

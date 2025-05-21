@@ -15,7 +15,10 @@ import java.util.*
 import kotlin.math.sqrt
 import android.app.Dialog
 import android.widget.EditText
+import android.widget.TextView
+import java.time.Instant
 import java.time.LocalDateTime
+import java.time.Period
 
 class HandGesturesActivity : ComponentActivity() {
     private var acceleration = 0f
@@ -64,9 +67,14 @@ class HandGesturesActivity : ComponentActivity() {
             val delta: Float = currentAcceleration - lastAcceleration
             acceleration = acceleration * 0.9f + delta
 
-            if (acceleration > 17 && !isDialogShown) {
+
+            if (acceleration > 17 && !isDialogShown && ::lastTask.isInitialized) {
                 isDialogShown = true
-                showTaskDialog()
+                createExistingTaskDialog()
+            }
+            else if (acceleration > 17 && !isDialogShown && !::lastTask.isInitialized){
+                isDialogShown = true
+                createInputTaskDialog()
             }
         }
         override fun onAccuracyChanged(sensor: Sensor, accuracy: Int) {}
@@ -84,7 +92,7 @@ class HandGesturesActivity : ComponentActivity() {
         super.onPause()
     }
 
-    private fun showTaskDialog(){
+    private fun createInputTaskDialog(){
         // Create Dialog instance
         val dialog = Dialog(this)
         dialog.setContentView(R.layout.gesture_dialog_text_input)
@@ -115,7 +123,7 @@ class HandGesturesActivity : ComponentActivity() {
                 estimatedCompletion.plusHours(3)//default for task time
             }
 
-            this.lastTask = Task(name, startTime, estimatedCompletion)
+            this.lastTask = Task(name, startTime, estimatedCompletion)//This creates the task
 //            Do something with the input text
             isDialogShown = false
             dialog.dismiss()
@@ -129,5 +137,31 @@ class HandGesturesActivity : ComponentActivity() {
         }
 
         dialog.show()
+    }
+
+    private fun createExistingTaskDialog(){
+        val dialog = Dialog(this)
+        dialog.setContentView(R.layout.gesture_dialog_existing_task)
+        dialog.setCancelable(true)
+
+        val dynamicTime = dialog.findViewById<TextView>(R.id.existing_remaining_time)
+        val hourDif = getLastTask().getEndTime().hour - LocalDateTime.now().hour
+        val minDif = getLastTask().getEndTime().minute - LocalDateTime.now().minute
+
+        val message = "$hourDif hours and $minDif minutes"
+
+        dynamicTime.text =message
+
+        val okButton = dialog.findViewById<Button>(R.id.existing_ok)
+        okButton.setOnClickListener{
+            isDialogShown = false
+            dialog.dismiss()
+        }
+
+        dialog.show()
+    }
+
+    fun getLastTask(): Task {
+        return this.lastTask
     }
 }
