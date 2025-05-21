@@ -33,6 +33,8 @@ class AudioRecognitionActivity : ComponentActivity() {
         private const val SMOOTHING_FACTOR = 0.8f
     }
 
+    private lateinit var commandHandler: VoiceCommandHandler
+
     private val requestPermissionLauncher =
         registerForActivityResult(ActivityResultContracts.RequestPermission()) { granted ->
             if (granted) startAudioRecognition()
@@ -46,6 +48,9 @@ class AudioRecognitionActivity : ComponentActivity() {
 
         statusTextView = findViewById(R.id.statusTextView)
         transcriptTextView = findViewById(R.id.transcriptTextView)
+
+        commandHandler = VoiceCommandHandler(this)
+
         findViewById<Button>(R.id.listenButton).setOnClickListener {
             checkPermissionAndStartRecognition()
         }
@@ -124,20 +129,21 @@ class AudioRecognitionActivity : ComponentActivity() {
                     val spoken = results?.getStringArrayList(SpeechRecognizer.RESULTS_RECOGNITION)
                         ?.firstOrNull().orEmpty()
 
-                    val display = if (spoken.isNotEmpty()) spoken else "No speech detected"
+                    transcriptTextView.text = spoken
 
-                    runOnUiThread {
-                        transcriptTextView.text = display
-                        updateStatus("Recognition complete")
+                    // ✅ Handle command
+                    val commandRecognized = commandHandler.handleCommand(spoken)
+
+                    if (!commandRecognized) {
+                        updateStatus("Unrecognized command: \"$spoken\"")
+                    } else {
+                        updateStatus("Command executed: \"$spoken\"")
                     }
 
-                    Toast.makeText(
-                        this@AudioRecognitionActivity, "Recognition complete", Toast.LENGTH_SHORT
-                    ).show()
+                    Toast.makeText(this@AudioRecognitionActivity, "Recognition complete", Toast.LENGTH_SHORT).show()
 
                     destroyRecognizer()
                 }
-
 
                 override fun onPartialResults(partial: Bundle?) {
                     val text = partial?.getStringArrayList(SpeechRecognizer.RESULTS_RECOGNITION)
@@ -206,5 +212,21 @@ class AudioRecognitionActivity : ComponentActivity() {
     override fun onDestroy() {
         super.onDestroy()
         destroyRecognizer()
+    }
+
+    fun startTracking() {
+        Toast.makeText(this, "Tracking started", Toast.LENGTH_SHORT).show()
+    }
+
+    fun stopTracking() {
+        Toast.makeText(this, "Tracking stopped", Toast.LENGTH_SHORT).show()
+    }
+
+    fun logBreak() {
+        Toast.makeText(this, "Break logged", Toast.LENGTH_SHORT).show()
+    }
+
+    fun showDashboard() {
+        Toast.makeText(this, "Would open dashboard (not yet implemented)", Toast.LENGTH_SHORT).show()
     }
 }

@@ -15,6 +15,7 @@ import java.util.*
 import kotlin.math.sqrt
 import android.app.Dialog
 import android.widget.EditText
+import java.time.LocalDateTime
 
 class HandGesturesActivity : ComponentActivity() {
     private var acceleration = 0f
@@ -22,6 +23,10 @@ class HandGesturesActivity : ComponentActivity() {
     private var lastAcceleration = 0f
 
     private var sensorManager: SensorManager? = null
+
+    private var isDialogShown = false
+
+    private lateinit var lastTask: Task
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -59,7 +64,8 @@ class HandGesturesActivity : ComponentActivity() {
             val delta: Float = currentAcceleration - lastAcceleration
             acceleration = acceleration * 0.9f + delta
 
-            if (acceleration > 17) {
+            if (acceleration > 17 && !isDialogShown) {
+                isDialogShown = true
                 showTaskDialog()
             }
         }
@@ -81,22 +87,44 @@ class HandGesturesActivity : ComponentActivity() {
     private fun showTaskDialog(){
         // Create Dialog instance
         val dialog = Dialog(this)
-        dialog.setContentView(R.layout.dialog_text_input)
+        dialog.setContentView(R.layout.gesture_dialog_text_input)
         dialog.setCancelable(true)
 
         val textInput = dialog.findViewById<EditText>(R.id.TaskInput)
         val cancelButton = dialog.findViewById<Button>(R.id.Cancel)
-        val submitTask = dialog.findViewById<Button>(R.id.SubmitTask)
+        val startTracking = dialog.findViewById<Button>(R.id.SubmitTask)
+        val hours = dialog.findViewById<EditText>(R.id.HourInput)
+        val minutes = dialog.findViewById<EditText>(R.id.MinuteInput)
 
-        submitTask.setOnClickListener{
-//            var textInput = textInput.text.toString()
+        startTracking.setOnClickListener{
+            var name = textInput.text.toString()
+            var hoursSubmitted = (hours.text.toString()).toLong()
+            var minutesSubmitted = (minutes.text.toString()).toLong()
+
+            var estimatedCompletion = LocalDateTime.now()
+
+            var startTime = LocalDateTime.now()
+
+            if (hoursSubmitted >= 0){
+                estimatedCompletion = estimatedCompletion.plusHours(hoursSubmitted)
+                if (minutesSubmitted >= 0){
+                    estimatedCompletion = estimatedCompletion.plusMinutes(minutesSubmitted)
+                }
+            }
+            else{
+                estimatedCompletion.plusHours(3)//default for task time
+            }
+
+            this.lastTask = Task(name, startTime, estimatedCompletion)
 //            Do something with the input text
+            isDialogShown = false
             dialog.dismiss()
         }
 
         cancelButton.setOnClickListener{
 //            do something is dismissed
 
+            isDialogShown = false
             dialog.dismiss()
         }
 
