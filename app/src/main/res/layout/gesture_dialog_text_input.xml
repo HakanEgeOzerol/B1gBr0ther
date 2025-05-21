@@ -2,7 +2,8 @@
     android:orientation="vertical"
     android:layout_width="wrap_content"
     android:layout_height="wrap_content"
-    android:background="#FFFFBB33">
+    android:background="#FFFFBB33"
+    android:padding="4dp">
 
     <EditText
         android:id="@+id/TaskInput"
@@ -43,23 +44,29 @@
 
     <LinearLayout
         android:layout_width="match_parent"
-        android:layout_height="wrap_content">
+        android:layout_height="wrap_content"
+        android:weightSum="2">
 
         <Button
             android:id="@+id/Cancel"
-            android:layout_width="wrap_content"
-            android:layout_height="match_parent"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
             android:background="@drawable/rounded_corners"
             android:layout_margin="4dp"
+            android:layout_weight="1"
+            android:textAlignment="center"
             android:text="Cancel">
         </Button>
         <Button
             android:id="@+id/SubmitTask"
-            android:layout_width="wrap_content"
-            android:layout_height="match_parent"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
             android:background="@drawable/rounded_corners"
+            android:padding="4dp"
             android:layout_margin="4dp"
-            android:text="Submit">
+            android:layout_weight="1"
+            android:textAlignment="center"
+            android:text="Start">
         </Button>
     </LinearLayout>
 </LinearLayout>

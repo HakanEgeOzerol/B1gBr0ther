@@ -89,10 +89,16 @@ class HandGesturesActivity : ComponentActivity() {
 
         val textInput = dialog.findViewById<EditText>(R.id.TaskInput)
         val cancelButton = dialog.findViewById<Button>(R.id.Cancel)
-        val submitTask = dialog.findViewById<Button>(R.id.SubmitTask)
+        val startTracking = dialog.findViewById<Button>(R.id.SubmitTask)
+        val hours = dialog.findViewById<EditText>(R.id.HourInput)
+        val minutes = dialog.findViewById<EditText>(R.id.MinuteInput)
 
-        submitTask.setOnClickListener{
-//            var textInput = textInput.text.toString()
+        startTracking.setOnClickListener{
+            var name = textInput.text.toString()
+            var hoursSubmitted = hours.text.toString()
+            var minutesSubmitted = minutes.text.toString()
+
+            
 //            Do something with the input text
             isDialogShown = false
             dialog.dismiss()
