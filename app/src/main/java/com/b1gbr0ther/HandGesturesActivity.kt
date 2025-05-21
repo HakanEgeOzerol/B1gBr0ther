@@ -24,7 +24,9 @@ class HandGesturesActivity : ComponentActivity() {
 
     private var sensorManager: SensorManager? = null
 
-    private var isDialogShown = false;
+    private var isDialogShown = false
+
+    private lateinit var lastTask: Task
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -113,7 +115,7 @@ class HandGesturesActivity : ComponentActivity() {
                 estimatedCompletion.plusHours(3)//default for task time
             }
 
-
+            this.lastTask = Task(name, startTime, estimatedCompletion)
 //            Do something with the input text
             isDialogShown = false
             dialog.dismiss()
