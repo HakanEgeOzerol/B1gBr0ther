@@ -39,7 +39,6 @@ class DashboardActivity : AppCompatActivity() {
 
         val menu = findViewById<MenuBar>(R.id.menuBar)
         menu.setActivePage(1) // 0 is for export, 1 is for Dashboard, 2 is for calender/timesheet
-
         //makes sure nothing gets drawn behind the top notification/wifi bar nor the android nav bar at the bottom
         ViewCompat.setOnApplyWindowInsetsListener(findViewById(R.id.main)) { v, insets ->
             val systemBars = insets.getInsets(WindowInsetsCompat.Type.systemBars())

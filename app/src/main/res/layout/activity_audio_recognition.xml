@@ -8,8 +8,8 @@
     tools:context=".AudioRecognitionActivity">
 
     <Button
-        android:id="@+id/b1gBr0therButton"
-        android:layout_width="126dp"
+        android:id="@+id/titleButton"
+        android:layout_width="170dp"
         android:layout_height="37dp"
         android:background="@drawable/rounded_corners"
         android:backgroundTint="#5F4B66"
@@ -17,155 +17,159 @@
         android:paddingTop="0dp"
         android:paddingEnd="12dp"
         android:paddingBottom="0dp"
-        android:text="B1g Br0ther"
+        android:text="Voice Recognition"
         android:textAllCaps="false"
         android:textColor="#C1A8B5"
         android:textSize="16sp"
-        app:layout_constraintTop_toTopOf="parent"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintHorizontal_bias="0.136"
-        android:layout_marginTop="20dp"
-        android:layout_marginStart="20dp" />
-
-    <Button
-        android:id="@+id/manualOverlayButton"
-        android:layout_width="37dp"
-        android:layout_height="37dp"
-        android:background="@drawable/manual_icon"
-        android:backgroundTint="#5F4B66"
-        android:clickable="true"
-        app:layout_constraintTop_toTopOf="@+id/b1gBr0therButton"
+        app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
-        android:layout_marginEnd="20dp" />
-
-    <!-- Main card container -->
-    <androidx.constraintlayout.widget.ConstraintLayout
-        android:id="@+id/cardContainer"
-        android:layout_width="0dp"
-        android:layout_height="wrap_content"
-        android:background="@drawable/less_rounded_corners"
-        android:backgroundTint="#8797AF"
-        android:padding="20dp"
-        android:layout_marginHorizontal="20dp"
-        android:layout_marginTop="20dp"
-        app:layout_constraintTop_toBottomOf="@+id/b1gBr0therButton"
+        app:layout_constraintHorizontal_bias="0.136"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintEnd_toEndOf="parent">
+        app:layout_constraintTop_toTopOf="parent"
+        app:layout_constraintVertical_bias="0.042" />
 
-        <TextView
-            android:id="@+id/titleTextView"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:text="Audio Recognition"
-            android:textSize="24sp"
-            android:textStyle="bold"
-            android:textColor="#5F4B66"
-            app:layout_constraintTop_toTopOf="parent"
-            app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintEnd_toEndOf="parent" />
+    <androidx.cardview.widget.CardView
+        android:id="@+id/transcriptCard"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_marginStart="24dp"
+        android:layout_marginTop="90dp"
+        android:layout_marginEnd="24dp"
+        app:cardBackgroundColor="#8797AF"
+        app:cardCornerRadius="16dp"
+        app:cardElevation="4dp"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent">
 
         <TextView
             android:id="@+id/transcriptTextView"
-            android:layout_width="0dp"
+            android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:minHeight="48dp"
             android:gravity="center"
+            android:minHeight="80dp"
+            android:padding="16dp"
             android:text="Press the button to start listening"
-            android:textSize="18sp"
-            android:textColor="#C1A8B5"
-            android:background="@drawable/less_rounded_corners"
-            android:backgroundTint="#5F4B66"
-            android:padding="8dp"
-            app:layout_constraintTop_toBottomOf="@id/titleTextView"
-            app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintEnd_toEndOf="parent"
-            android:layout_marginTop="16dp" />
+            android:textColor="#000000"
+            android:textSize="18sp" />
+    </androidx.cardview.widget.CardView>
+
+    <androidx.cardview.widget.CardView
+        android:id="@+id/statusCard"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_marginStart="24dp"
+        android:layout_marginTop="16dp"
+        android:layout_marginEnd="24dp"
+        app:cardBackgroundColor="#8797AF"
+        app:cardCornerRadius="16dp"
+        app:cardElevation="4dp"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/transcriptCard">
 
         <TextView
             android:id="@+id/statusTextView"
-            android:layout_width="0dp"
+            android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:minHeight="36dp"
             android:gravity="center"
+            android:minHeight="60dp"
+            android:padding="16dp"
             android:text="Audio stats will appear here"
-            android:textSize="14sp"
-            android:textColor="#C1A8B5"
-            android:background="@drawable/less_rounded_corners"
-            android:backgroundTint="#5F4B66"
-            android:padding="8dp"
-            app:layout_constraintTop_toBottomOf="@id/transcriptTextView"
-            app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintEnd_toEndOf="parent"
-            android:layout_marginTop="16dp" />
+            android:textColor="#000000"
+            android:textSize="14sp" />
+    </androidx.cardview.widget.CardView>
+
+    <androidx.cardview.widget.CardView
+        android:id="@+id/trackingStatusCard"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_marginStart="24dp"
+        android:layout_marginTop="16dp"
+        android:layout_marginEnd="24dp"
+        app:cardBackgroundColor="#8797AF"
+        app:cardCornerRadius="16dp"
+        app:cardElevation="4dp"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/statusCard">
 
         <TextView
             android:id="@+id/trackingStatusTextView"
-            android:layout_width="0dp"
+            android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:gravity="center"
+            android:padding="16dp"
             android:text="No active tracking session."
-            android:textSize="16sp"
-            android:textColor="#C1A8B5"
-            android:padding="8dp"
-            app:layout_constraintTop_toBottomOf="@id/statusTextView"
-            app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintEnd_toEndOf="parent"
-            android:layout_marginTop="16dp" />
+            android:textColor="#000000"
+            android:textSize="16sp" />
+    </androidx.cardview.widget.CardView>
+
+    <androidx.cardview.widget.CardView
+        android:id="@+id/sessionCard"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_marginStart="24dp"
+        android:layout_marginTop="16dp"
+        android:layout_marginEnd="24dp"
+        app:cardBackgroundColor="#8797AF"
+        app:cardCornerRadius="16dp"
+        app:cardElevation="4dp"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/trackingStatusCard">
 
         <TextView
             android:id="@+id/lastSessionTextView"
-            android:layout_width="0dp"
+            android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:gravity="center"
+            android:padding="16dp"
             android:text=""
-            android:textSize="15sp"
-            android:textColor="#C1A8B5"
-            android:padding="8dp"
-            app:layout_constraintTop_toBottomOf="@id/trackingStatusTextView"
-            app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintEnd_toEndOf="parent"
-            android:layout_marginTop="8dp" />
+            android:textColor="#000000"
+            android:textSize="15sp" />
+    </androidx.cardview.widget.CardView>
 
-        <Button
-            android:id="@+id/listenButton"
-            android:layout_width="0dp"
-            android:layout_height="wrap_content"
-            android:text="START LISTENING"
-            android:textColor="#C1A8B5"
-            android:background="@drawable/rounded_corners"
-            android:backgroundTint="#5F4B66"
-            android:padding="12dp"
-            app:layout_constraintTop_toBottomOf="@id/lastSessionTextView"
-            app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintEnd_toEndOf="parent"
-            android:layout_marginTop="24dp" />
+    <Button
+        android:id="@+id/statusButton"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="16dp"
+        android:layout_marginBottom="16dp"
+        android:background="@drawable/rounded_corners"
+        android:backgroundTint="#5F4B66"
+        android:padding="12dp"
+        android:text="CHECK TRACKING STATUS"
+        android:textColor="#C1A8B5"
+        app:layout_constraintBottom_toTopOf="@+id/listenButton"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/sessionCard" />
 
-        <Button
-            android:id="@+id/statusButton"
-            android:layout_width="0dp"
-            android:layout_height="wrap_content"
-            android:text="CHECK TRACKING STATUS"
-            android:textColor="#C1A8B5"
-            android:background="@drawable/rounded_corners"
-            android:backgroundTint="#5F4B66"
-            android:padding="12dp"
-            app:layout_constraintTop_toBottomOf="@id/listenButton"
-            app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintEnd_toEndOf="parent"
-            app:layout_constraintBottom_toBottomOf="parent"
-            android:layout_marginTop="16dp" />
-    </androidx.constraintlayout.widget.ConstraintLayout>
+    <Button
+        android:id="@+id/listenButton"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="8dp"
+        android:layout_marginBottom="64dp"
+        android:background="@drawable/rounded_corners"
+        android:backgroundTint="#5F4B66"
+        android:padding="12dp"
+        android:text="Start Listening"
+        android:textColor="#C1A8B5"
+        app:layout_constraintBottom_toTopOf="@+id/menuBar"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/statusButton" />
 
     <com.b1gbr0ther.MenuBar
         android:id="@+id/menuBar"
         android:layout_width="0dp"
-        android:layout_height="70dp"
+        android:layout_height="wrap_content"
         android:layout_marginStart="24dp"
         android:layout_marginEnd="24dp"
         android:layout_marginBottom="16dp"
-        android:visibility="visible"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintHorizontal_bias="0.0"
         app:layout_constraintStart_toStartOf="parent" />
 
 </androidx.constraintlayout.widget.ConstraintLayout>
