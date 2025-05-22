@@ -30,6 +30,10 @@
             android:theme="@style/Theme.B1gBr0ther" />
         <activity android:name=".HandGesturesActivity" />
         <activity android:name=".AudioRecognitionActivity" />
+        <activity 
+            android:name=".ExportPage"
+            android:exported="false"
+            android:theme="@style/Theme.AppCompat.Light.NoActionBar" />
     </application>
 
 </manifest>
