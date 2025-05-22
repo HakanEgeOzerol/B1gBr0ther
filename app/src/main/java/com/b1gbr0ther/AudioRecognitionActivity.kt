@@ -84,11 +84,6 @@ class AudioRecognitionActivity : ComponentActivity() {
                 lastSessionTextView.visibility = View.VISIBLE
             }
         }
-
-        findViewById<Button>(R.id.manualOverlayButton).setOnClickListener {
-            // TODO: Implement manual overlay functionality
-            Toast.makeText(this, "Manual overlay coming soon!", Toast.LENGTH_SHORT).show()
-        }
     }
 
     override fun onResume() {
