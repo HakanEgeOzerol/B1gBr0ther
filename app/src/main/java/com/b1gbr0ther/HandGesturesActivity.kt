@@ -16,9 +16,7 @@ import kotlin.math.sqrt
 import android.app.Dialog
 import android.widget.EditText
 import android.widget.TextView
-import java.time.Instant
 import java.time.LocalDateTime
-import java.time.Period
 
 class HandGesturesActivity : ComponentActivity() {
     private var acceleration = 0f
