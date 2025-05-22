@@ -38,7 +38,7 @@ class DashboardActivity : AppCompatActivity() {
         setContentView(R.layout.activity_dashboard)
 
         val menu = findViewById<MenuBar>(R.id.menuBar)
-        menu.setActivePage(2) // 2 is for Dashboard
+        menu.setActivePage(1) // 0 is for export, 1 is for Dashboard, 2 is for calender/timesheet
 
         //makes sure nothing gets drawn behind the top notification/wifi bar nor the android nav bar at the bottom
         ViewCompat.setOnApplyWindowInsetsListener(findViewById(R.id.main)) { v, insets ->
@@ -49,12 +49,8 @@ class DashboardActivity : AppCompatActivity() {
 
         val chart = findViewById<WeekTimeGridView>(R.id.weekGrid)
 
-        //Change it so 0 = 24:00 and 23 = 23:00
-        //try to make another set of lighter vertical lines between the lines we already have
-        //change text visual to reflect this, only show every 2 hours. This way we dont have to add extra lines
-        //besides the lighter gray ones and can just rename the existing text
-        //also lock the days and time to the chart instead of the frame, so when a smaller phone uses app, it doesnt get botched
-        val myWorkData = listOf(
+        //0f = 24:00, 11f = 11:00, 23 = 23:00
+         val myWorkData = listOf(
             WorkBlock(0, 8f, 12f, false),
             WorkBlock(0, 12f, 13.5f, true),
             WorkBlock(0, 13.5f, 17.5f, false),
