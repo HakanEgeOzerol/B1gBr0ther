@@ -1,1 +1,4 @@
 /build
+
+# Vosk model files (large, downloaded by Gradle task)
+src/main/assets/model/
