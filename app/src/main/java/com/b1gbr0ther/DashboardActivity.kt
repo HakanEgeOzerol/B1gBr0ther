@@ -81,5 +81,10 @@ class DashboardActivity : AppCompatActivity() {
             val intent = Intent(this, DatabaseTestActivity::class.java)
             startActivity(intent)
         }
+
+        findViewById<Button>(R.id.b1gBr0therButton).setOnClickListener {
+            val intent = Intent(this, HandGesturesActivity::class.java)
+            startActivity(intent)
+        }
     }
 }
