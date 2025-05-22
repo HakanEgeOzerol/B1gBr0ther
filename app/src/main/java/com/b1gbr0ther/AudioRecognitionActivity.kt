@@ -25,6 +25,7 @@ class AudioRecognitionActivity : ComponentActivity() {
     private lateinit var transcriptTextView: TextView
     private lateinit var trackingStatusTextView: TextView
     private lateinit var lastSessionTextView: TextView
+    private lateinit var menuBar: MenuBar
 
     private var lastSummary: TimeTracker.TrackingSummary? = null
     private var recognizer: SpeechRecognizer? = null
@@ -44,6 +45,9 @@ class AudioRecognitionActivity : ComponentActivity() {
         super.onCreate(savedInstanceState)
         enableEdgeToEdge()
         setContentView(R.layout.activity_audio_recognition)
+
+        menuBar = findViewById(R.id.menuBar)
+        menuBar.setActivePage(2) // Set timesheet page as active
 
         statusTextView = findViewById(R.id.statusTextView)
         transcriptTextView = findViewById(R.id.transcriptTextView)
@@ -77,10 +81,16 @@ class AudioRecognitionActivity : ComponentActivity() {
                 lastSessionTextView.visibility = View.VISIBLE
             }
         }
+
+        findViewById<Button>(R.id.manualOverlayButton).setOnClickListener {
+            // TODO: Implement manual overlay functionality
+            Toast.makeText(this, "Manual overlay coming soon!", Toast.LENGTH_SHORT).show()
+        }
     }
 
     override fun onResume() {
         super.onResume()
+        menuBar.setActivePage(2) // Ensure correct menu item is highlighted
 
         if (timeTracker.isTracking()) {
             updateTrackingStatus()
