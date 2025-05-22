@@ -5,6 +5,7 @@
     <uses-permission android:name="android.permission.RECORD_AUDIO" />
 
     <application
+        android:name=".B1gBr0therApplication"
         android:allowBackup="true"
         android:dataExtractionRules="@xml/data_extraction_rules"
         android:fullBackupContent="@xml/backup_rules"
@@ -30,6 +31,16 @@
             android:theme="@style/Theme.B1gBr0ther" />
         <activity android:name=".HandGesturesActivity" />
         <activity android:name=".AudioRecognitionActivity" />
+        <activity 
+            android:name=".DatabaseTestActivity"
+            android:label="DB Test"
+            android:exported="true"
+            android:theme="@style/Theme.AppCompat.Light.NoActionBar">
+            <intent-filter>
+                <action android:name="android.intent.action.VIEW" />
+                <category android:name="android.intent.category.DEFAULT" />
+            </intent-filter>
+        </activity>
     </application>
 
 </manifest>

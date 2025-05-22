@@ -1,8 +1,10 @@
 package com.b1gbr0ther
 
+import android.content.Intent
 import android.os.Bundle
 import android.os.Handler
 import android.os.Looper
+import android.widget.Button
 import android.widget.TextView
 import androidx.activity.enableEdgeToEdge
 import androidx.appcompat.app.AppCompatActivity
@@ -78,5 +80,10 @@ class DashboardActivity : AppCompatActivity() {
 
         handler.post(timerRunnable)
 
+        // Set up click listener for database test button
+        findViewById<Button>(R.id.btnDatabaseTest).setOnClickListener {
+            val intent = Intent(this, DatabaseTestActivity::class.java)
+            startActivity(intent)
+        }
     }
 }
