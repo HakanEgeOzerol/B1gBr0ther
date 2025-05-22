@@ -32,6 +32,10 @@
         <activity android:name=".HandGesturesActivity" />
         <activity android:name=".AudioRecognitionActivity" />
         <activity 
+            android:name=".ExportPage"
+            android:exported="false"
+            android:theme="@style/Theme.AppCompat.Light.NoActionBar" />
+        <activity
             android:name=".DatabaseTestActivity"
             android:label="DB Test"
             android:exported="true"
