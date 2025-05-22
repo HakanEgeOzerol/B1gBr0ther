@@ -17,7 +17,11 @@ import androidx.activity.ComponentActivity
 import androidx.activity.enableEdgeToEdge
 import androidx.activity.result.contract.ActivityResultContracts
 import androidx.core.content.ContextCompat
+import com.b1gbr0ther.data.database.DatabaseManager
+import java.time.LocalDateTime
+import java.time.ZoneOffset
 import java.util.Locale
+import kotlin.math.floor
 
 class AudioRecognitionActivity : ComponentActivity() {
 
@@ -35,6 +39,8 @@ class AudioRecognitionActivity : ComponentActivity() {
     private val handler = Handler(Looper.getMainLooper())
     private var liveTimerRunnable: Runnable? = null
 
+    private lateinit var databaseManager: DatabaseManager
+
     private val requestPermissionLauncher =
         registerForActivityResult(ActivityResultContracts.RequestPermission()) { granted ->
             if (granted) startAudioRecognition()
@@ -48,6 +54,9 @@ class AudioRecognitionActivity : ComponentActivity() {
 
         menuBar = findViewById(R.id.menuBar)
         menuBar.setActivePage(2) // Set timesheet page as active
+
+        // Initialize the database manager
+        databaseManager = (application as B1gBr0therApplication).databaseManager
 
         statusTextView = findViewById(R.id.statusTextView)
         transcriptTextView = findViewById(R.id.transcriptTextView)
@@ -253,6 +262,19 @@ class AudioRecognitionActivity : ComponentActivity() {
         lastSummary = summary
         trackingStatusTextView.text = "No active tracking session."
         stopLiveTimer()
+
+        val hoursElapsed = (floor((summary.effectiveTimeMillis/1000/60).toDouble())).toLong()
+        val minutesElapsed = ((summary.effectiveTimeMillis/1000/60).toDouble().mod(60.0)).toLong()//Compare seconds to seconds
+
+
+        var startTime = LocalDateTime.now().minusHours(hoursElapsed)//Increase accuracy
+        startTime = startTime.minusMinutes(minutesElapsed)
+
+        val audioTask = Task("Audio task", startTime, LocalDateTime.now(), false, true, false)
+
+        databaseManager.createAppTask(audioTask){
+            taskId -> Toast.makeText(this, "Task saved to database with ID: $taskId", Toast.LENGTH_SHORT).show()
+        }
     }
 
     fun startBreak() {

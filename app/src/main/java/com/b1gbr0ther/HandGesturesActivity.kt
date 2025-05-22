@@ -17,9 +17,7 @@ import android.app.Dialog
 import android.widget.EditText
 import android.widget.TextView
 import android.widget.Toast
-import java.time.Instant
 import java.time.LocalDateTime
-import java.time.Period
 import com.b1gbr0ther.data.database.DatabaseManager
 
 class HandGesturesActivity : ComponentActivity() {
