@@ -17,18 +17,17 @@
         <activity
             android:name=".DashboardActivity"
             android:theme="@style/Theme.AppCompat.Light.NoActionBar"
-            android:exported="false" />
-        <activity
-            android:name=".MainActivity"
             android:exported="true"
-            android:label="@string/app_name"
-            android:theme="@style/Theme.B1gBr0ther">
+            android:label="@string/app_name">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
-
                 <category android:name="android.intent.category.LAUNCHER" />
             </intent-filter>
         </activity>
+        <activity
+            android:name=".MainActivity"
+            android:exported="false"
+            android:theme="@style/Theme.B1gBr0ther" />
         <activity android:name=".HandGesturesActivity" />
         <activity android:name=".AudioRecognitionActivity" />
     </application>
