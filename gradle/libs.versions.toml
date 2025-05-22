@@ -1,5 +1,5 @@
 [versions]
-agp = "8.10.0"
+agp = "8.9.2" 
 kotlin = "2.0.21"
 coreKtx = "1.13.1" #This was downgraded cause comp issues. 1.14.0 was not running. Latest version allegedly
 junit = "4.13.2"
@@ -9,6 +9,11 @@ lifecycleRuntimeKtx = "2.8.7"
 activityCompose = "1.9.3" #This version was changed from defaul for compatibility issues (downgrade)
 composeBom = "2024.09.00"
 appcompat = "1.7.0"
+material = "1.10.0"
+activity = "1.8.0"
+constraintlayout = "2.1.4"
+room = "2.6.1"
+kotlinxCoroutines = "1.7.3"
 
 [libraries]
 androidx-core-ktx = { group = "androidx.core", name = "core-ktx", version.ref = "coreKtx" }
@@ -26,6 +31,13 @@ androidx-ui-test-manifest = { group = "androidx.compose.ui", name = "ui-test-man
 androidx-ui-test-junit4 = { group = "androidx.compose.ui", name = "ui-test-junit4" }
 androidx-material3 = { group = "androidx.compose.material3", name = "material3" }
 androidx-appcompat = { group = "androidx.appcompat", name = "appcompat", version.ref = "appcompat" }
+material = { group = "com.google.android.material", name = "material", version.ref = "material" }
+androidx-activity = { group = "androidx.activity", name = "activity", version.ref = "activity" }
+androidx-constraintlayout = { group = "androidx.constraintlayout", name = "constraintlayout", version.ref = "constraintlayout" }
+androidx-room-runtime = { group = "androidx.room", name = "room-runtime", version.ref = "room" }
+androidx-room-ktx = { group = "androidx.room", name = "room-ktx", version.ref = "room" }
+androidx-room-compiler = { group = "androidx.room", name = "room-compiler", version.ref = "room" }
+kotlinx-coroutines-android = { group = "org.jetbrains.kotlinx", name = "kotlinx-coroutines-android", version.ref = "kotlinxCoroutines" }
 
 [plugins]
 android-application = { id = "com.android.application", version.ref = "agp" }
