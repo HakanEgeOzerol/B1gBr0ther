@@ -27,7 +27,7 @@ class DashboardActivity : AppCompatActivity() {
         TimeTracker.getInstance(applicationContext)
 
         val menu = findViewById<MenuBar>(R.id.menuBar)
-        menu.setActivePage(2) // 2 is for Dashboard
+        menu.setActivePage(1) // 1 is for Dashboard
 
         // Makes sure nothing gets drawn behind the top notification/wifi bar nor the android nav bar at the bottom
         ViewCompat.setOnApplyWindowInsetsListener(findViewById(R.id.main)) { v, insets ->

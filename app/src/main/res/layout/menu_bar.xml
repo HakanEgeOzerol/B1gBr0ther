@@ -3,7 +3,7 @@
     xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
-    android:layout_height="match_parent"
+    android:layout_height="wrap_content"
     android:background="@drawable/rounded_corners"
     android:backgroundTint="#5F4B66">
 
@@ -15,18 +15,8 @@
 <!--        android:backgroundTint="#805A6D"-->
 <!--        tools:layout_editor_absoluteX="251dp" />-->
 
-    <View
-        android:id="@+id/selectedPage"
-        android:layout_width="43dp"
-        android:layout_height="43dp"
-        android:background="@drawable/circle"
-        android:backgroundTint="#805A6D"
-        android:translationZ="-1dp"
-        app:layout_constraintStart_toStartOf="@id/exportPageMenuButton"
-        app:layout_constraintTop_toTopOf="@id/exportPageMenuButton" />
 
-
-<!--    <View-->
+    <!--    <View-->
 <!--        android:id="@+id/highlightCircle"-->
 <!--        android:layout_width="64dp"-->
 <!--        android:layout_height="64dp"-->
@@ -70,7 +60,7 @@
         app:layout_constraintVertical_bias="0.0">
 
         <ImageView
-            android:id="@+id/imageView"
+            android:id="@+id/imageView2"
             android:layout_width="30dp"
             android:layout_height="35dp"
             android:layout_gravity="center"
@@ -100,4 +90,13 @@
             app:srcCompat="@drawable/timesheet_icon" />
     </FrameLayout>
 
+    <View
+        android:id="@+id/selectedPage"
+        android:layout_width="43dp"
+        android:layout_height="43dp"
+        android:background="@drawable/circle"
+        android:backgroundTint="#805A6D"
+        android:translationZ="-1dp"
+        app:layout_constraintStart_toStartOf="@id/exportPageMenuButton"
+        app:layout_constraintTop_toTopOf="@id/exportPageMenuButton" />
 </androidx.constraintlayout.widget.ConstraintLayout>

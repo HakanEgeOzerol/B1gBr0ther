@@ -30,7 +30,8 @@
             </intent-filter>
         </activity>
         <activity android:name=".HandGesturesActivity" />
-        <activity android:name=".AudioRecognitionActivity" />
+        <activity android:name=".AudioRecognitionActivity"
+            android:theme="@style/Theme.AppCompat.Light.NoActionBar"/>
     </application>
 
 </manifest>

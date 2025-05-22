@@ -53,6 +53,9 @@ class AudioRecognitionActivity : ComponentActivity() {
         timeTracker = TimeTracker.getInstance(this)
         commandHandler = VoiceCommandHandler(this)
 
+        val menu = findViewById<MenuBar>(R.id.menuBar)
+        menu.setActivePage(1) // 1 is for Dashboard
+
         findViewById<Button>(R.id.listenButton).setOnClickListener {
             checkPermissionAndStartRecognition()
         }

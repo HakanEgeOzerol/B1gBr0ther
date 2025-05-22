@@ -25,6 +25,7 @@ class MenuBar @JvmOverloads constructor(
 //            findViewById(R.id.manualPageMenuButton),
             findViewById(R.id.dashboardPageMenuButton),
             findViewById(R.id.timesheetPageMenuButton),
+//            findViewById(R.id.audioRecognitionButton),
         )
 
         setupClicks()
