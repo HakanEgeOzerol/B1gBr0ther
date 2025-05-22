@@ -64,3 +64,12 @@ Thumbs.db
 # Misc
 *.swp
 *.swo
+
+# Vs Code
+.vscode/
+
+# Gradle wrapper JAR (should be re-generated or downloaded by setup)
+gradle/wrapper/gradle-wrapper.jar
+
+# Vosk model files (large, downloaded by Gradle task)
+app/src/main/assets/model/

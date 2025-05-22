@@ -2,6 +2,12 @@ plugins {
     alias(libs.plugins.android.application)
     alias(libs.plugins.kotlin.android)
     alias(libs.plugins.kotlin.compose)
+    kotlin("kapt")
+}
+
+kapt {
+    correctErrorTypes = true
+    useBuildCache = true
 }
 
 android {
@@ -54,6 +60,14 @@ dependencies {
     implementation(libs.material)
     implementation(libs.androidx.activity)
     implementation(libs.androidx.constraintlayout)
+    implementation("com.alphacephei:vosk-android:0.3.47")
+    // Room Database dependencies
+    implementation(libs.androidx.room.runtime)
+    implementation(libs.androidx.room.ktx)
+    kapt(libs.androidx.room.compiler)
+    // Coroutines
+    implementation(libs.kotlinx.coroutines.android)
+    
     testImplementation(libs.junit)
     androidTestImplementation(libs.androidx.junit)
     androidTestImplementation(libs.androidx.espresso.core)
@@ -61,4 +75,22 @@ dependencies {
     androidTestImplementation(libs.androidx.ui.test.junit4)
     debugImplementation(libs.androidx.ui.tooling)
     debugImplementation(libs.androidx.ui.test.manifest)
+}
+
+// Task to download the Vosk model automatically
+tasks.register("downloadVoskModel") {
+    val zipUrl = "https://alphacephei.com/vosk/models/vosk-model-small-en-us-0.15.zip"
+    val output = File(buildDir, "model.zip")
+    val assetsDir = File(projectDir, "src/main/assets/model")
+
+    doLast {
+        println("Downloading Vosk model...")
+        ant.invokeMethod("get", mapOf("src" to zipUrl, "dest" to output, "verbose" to true))
+        println("Unzipping model...")
+        copy {
+            from(zipTree(output))
+            into(assetsDir)
+        }
+        println("Vosk model downloaded and unzipped to src/main/assets/model")
+    }
 }
