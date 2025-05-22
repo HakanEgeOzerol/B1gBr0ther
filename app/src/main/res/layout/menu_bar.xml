@@ -1,0 +1,103 @@
+<?xml version="1.0" encoding="utf-8"?>
+<androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:background="@drawable/rounded_corners"
+    android:backgroundTint="#5F4B66">
+
+<!--    <View-->
+<!--        android:id="@+id/selectedPage"-->
+<!--        android:layout_width="70dp"-->
+<!--        android:layout_height="70dp"-->
+<!--        android:background="@drawable/circle"-->
+<!--        android:backgroundTint="#805A6D"-->
+<!--        tools:layout_editor_absoluteX="251dp" />-->
+
+    <View
+        android:id="@+id/selectedPage"
+        android:layout_width="43dp"
+        android:layout_height="43dp"
+        android:background="@drawable/circle"
+        android:backgroundTint="#805A6D"
+        android:translationZ="-1dp"
+        app:layout_constraintStart_toStartOf="@id/exportPageMenuButton"
+        app:layout_constraintTop_toTopOf="@id/exportPageMenuButton" />
+
+
+<!--    <View-->
+<!--        android:id="@+id/highlightCircle"-->
+<!--        android:layout_width="64dp"-->
+<!--        android:layout_height="64dp"-->
+<!--        android:background="@drawable/circle_highlight"-->
+<!--        android:translationZ="-1dp"-->
+<!--        app:layout_constraintStart_toStartOf="@id/exportPageMenuButton"-->
+<!--        app:layout_constraintTop_toTopOf="@id/exportPageMenuButton" />-->
+
+    <FrameLayout
+        android:id="@+id/exportPageMenuButton"
+        android:layout_width="43dp"
+        android:layout_height="43dp"
+        android:clickable="true"
+        android:foreground="?attr/selectableItemBackground"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintHorizontal_bias="0.135"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent"
+        app:layout_constraintVertical_bias="1.0">
+
+        <ImageView
+            android:id="@+id/imageView3"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            app:srcCompat="@drawable/export_icon" />
+
+    </FrameLayout>
+
+    <FrameLayout
+        android:id="@+id/dashboardPageMenuButton"
+        android:layout_width="43dp"
+        android:layout_height="43dp"
+        android:clickable="true"
+        android:foreground="?attr/selectableItemBackground"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintHorizontal_bias="0.5"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent"
+        app:layout_constraintVertical_bias="0.0">
+
+        <ImageView
+            android:id="@+id/imageView"
+            android:layout_width="30dp"
+            android:layout_height="35dp"
+            android:layout_gravity="center"
+            android:layout_marginBottom="1dp"
+            app:srcCompat="@drawable/dasboard_icon" />
+
+    </FrameLayout>
+
+    <FrameLayout
+        android:id="@+id/timesheetPageMenuButton"
+        android:layout_width="43dp"
+        android:layout_height="43dp"
+        android:clickable="true"
+        android:foreground="?attr/selectableItemBackground"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintHorizontal_bias="0.865"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent"
+        app:layout_constraintVertical_bias="1.0">
+
+        <ImageView
+            android:id="@+id/imageView4"
+            android:layout_width="40dp"
+            android:layout_height="match_parent"
+            android:layout_gravity="bottom|center"
+            app:srcCompat="@drawable/timesheet_icon" />
+    </FrameLayout>
+
+</androidx.constraintlayout.widget.ConstraintLayout>

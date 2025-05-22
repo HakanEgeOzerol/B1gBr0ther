@@ -29,7 +29,7 @@ class AudioRecognitionActivity : ComponentActivity() {
     private var lastSummary: TimeTracker.TrackingSummary? = null
     private var recognizer: SpeechRecognizer? = null
     private lateinit var commandHandler: VoiceCommandHandler
-    private lateinit var timeTracker: TimeTracker
+    private lateinit var timeTracker: TimeTrackerInterface
 
     private val handler = Handler(Looper.getMainLooper())
     private var liveTimerRunnable: Runnable? = null
@@ -50,7 +50,7 @@ class AudioRecognitionActivity : ComponentActivity() {
         trackingStatusTextView = findViewById(R.id.trackingStatusTextView)
         lastSessionTextView = findViewById(R.id.lastSessionTextView)
 
-        timeTracker = TimeTracker(this)
+        timeTracker = TimeTracker.getInstance(this)
         commandHandler = VoiceCommandHandler(this)
 
         findViewById<Button>(R.id.listenButton).setOnClickListener {

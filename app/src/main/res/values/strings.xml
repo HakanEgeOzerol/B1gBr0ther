@@ -1,3 +1,8 @@
 <resources>
     <string name="app_name">B1gBr0ther</string>
+    <string name="status_working">Working</string>
+    <string name="status_on_break">On Break</string>
+    <string name="status_not_tracking">Not Busy With A Task</string>
+    <string name="tracking_started">Tracking started</string>
+    <string name="tracking_stopped">Tracking stopped</string>
 </resources>
