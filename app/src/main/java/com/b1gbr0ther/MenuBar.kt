@@ -22,7 +22,6 @@ class MenuBar @JvmOverloads constructor(
 
         icons = listOf(
             findViewById(R.id.exportPageMenuButton),
-            findViewById(R.id.manualPageMenuButton),
             findViewById(R.id.dashboardPageMenuButton),
             findViewById(R.id.timesheetPageMenuButton),
         )
@@ -56,9 +55,8 @@ class MenuBar @JvmOverloads constructor(
 
         val target = when (index) {
             0 -> ExportPage::class.java            // export icon
-            1 -> ManualPage::class.java            // manual icon
-            2 -> DashboardActivity::class.java     // dashboard icon
-            3 -> AudioRecognitionActivity::class.java // timesheet icon
+            1 -> DashboardActivity::class.java     // dashboard icon
+            2 -> AudioRecognitionActivity::class.java // timesheet icon
             else -> return
         }
 

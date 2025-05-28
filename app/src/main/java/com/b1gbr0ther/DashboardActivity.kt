@@ -44,7 +44,7 @@ class DashboardActivity : AppCompatActivity() {
         currentTaskText = findViewById(R.id.currentTaskText)
 
         val menu = findViewById<MenuBar>(R.id.menuBar)
-        menu.setActivePage(2)
+        menu.setActivePage(1)
         ViewCompat.setOnApplyWindowInsetsListener(findViewById(R.id.main)) { v, insets ->
             val systemBars = insets.getInsets(WindowInsetsCompat.Type.systemBars())
             v.setPadding(systemBars.left, systemBars.top, systemBars.right, systemBars.bottom)

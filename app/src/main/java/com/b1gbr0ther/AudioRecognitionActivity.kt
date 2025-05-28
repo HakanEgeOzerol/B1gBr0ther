@@ -54,7 +54,7 @@ class AudioRecognitionActivity : AppCompatActivity() {
         setContentView(R.layout.activity_audio_recognition)
 
         menuBar = findViewById(R.id.menuBar)
-        menuBar.setActivePage(3)
+        menuBar.setActivePage(2)
 
         // Initialize the database manager
         databaseManager = (application as B1gBr0therApplication).databaseManager
@@ -79,7 +79,7 @@ class AudioRecognitionActivity : AppCompatActivity() {
     override fun onResume() {
         super.onResume()
 
-        menuBar.setActivePage(3)
+        menuBar.setActivePage(2)
 
         if (timeTracker.isTracking()) {
             updateTrackingStatus()

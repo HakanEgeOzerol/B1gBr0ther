@@ -1,6 +1,7 @@
-<androidx.constraintlayout.widget.ConstraintLayout
-    xmlns:android="http://schemas.android.com/apk/res/android"
+<?xml version="1.0" encoding="utf-8"?>
+<androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="wrap_content"
     android:background="@drawable/rounded_corners"
@@ -9,78 +10,72 @@
 
     <FrameLayout
         android:id="@+id/exportPageMenuButton"
-        android:layout_width="0dp"
+        android:layout_width="43dp"
         android:layout_height="43dp"
         android:clickable="true"
-        app:layout_constraintTop_toTopOf="parent"
         app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintHorizontal_bias="0.135"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintEnd_toStartOf="@+id/manualPageMenuButton">
-
-        <ImageView
-            android:layout_width="match_parent"
-            android:layout_height="match_parent"
-            android:padding="8dp"
-            android:src="@drawable/export_icon"
-            android:tint="#FFFFFF"/>
-
-    </FrameLayout>
-
-    <FrameLayout
-        android:id="@+id/manualPageMenuButton"
-        android:layout_width="0dp"
-        android:layout_height="43dp"
-        android:clickable="true"
         app:layout_constraintTop_toTopOf="parent"
-        app:layout_constraintBottom_toBottomOf="parent"
-        app:layout_constraintStart_toEndOf="@id/exportPageMenuButton"
-        app:layout_constraintEnd_toStartOf="@id/dashboardPageMenuButton">
+        app:layout_constraintVertical_bias="0.5">
 
         <ImageView
+            android:id="@+id/imageView3"
             android:layout_width="match_parent"
             android:layout_height="match_parent"
             android:padding="8dp"
-            android:src="@drawable/manual_icon"
-            android:tint="#FFFFFF"/>
+            android:tint="#FFFFFF"
+            app:srcCompat="@drawable/export_icon"
+            app:tint="#FFFFFF" />
 
     </FrameLayout>
 
     <FrameLayout
         android:id="@+id/dashboardPageMenuButton"
-        android:layout_width="0dp"
+        android:layout_width="43dp"
         android:layout_height="43dp"
         android:clickable="true"
-        app:layout_constraintTop_toTopOf="parent"
         app:layout_constraintBottom_toBottomOf="parent"
-        app:layout_constraintStart_toEndOf="@id/manualPageMenuButton"
-        app:layout_constraintEnd_toStartOf="@id/timesheetPageMenuButton">
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintHorizontal_bias="0.5"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent"
+        app:layout_constraintVertical_bias="0.5">
 
         <ImageView
-            android:layout_width="match_parent"
-            android:layout_height="match_parent"
+            android:id="@+id/imageView2"
+            android:layout_width="30dp"
+            android:layout_height="35dp"
+            android:layout_gravity="center"
             android:padding="8dp"
-            android:src="@drawable/dasboard_icon"
-            android:tint="#FFFFFF"/>
+            android:tint="#FFFFFF"
+            app:srcCompat="@drawable/dasboard_icon"
+            app:tint="#FFFFFF" />
 
     </FrameLayout>
 
     <FrameLayout
         android:id="@+id/timesheetPageMenuButton"
-        android:layout_width="0dp"
+        android:layout_width="43dp"
         android:layout_height="43dp"
         android:clickable="true"
-        app:layout_constraintTop_toTopOf="parent"
         app:layout_constraintBottom_toBottomOf="parent"
-        app:layout_constraintStart_toEndOf="@id/dashboardPageMenuButton"
-        app:layout_constraintEnd_toEndOf="parent">
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintHorizontal_bias="0.865"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent"
+        app:layout_constraintVertical_bias="0.5">
 
         <ImageView
+            android:id="@+id/imageView4"
             android:layout_width="match_parent"
             android:layout_height="match_parent"
+            android:layout_gravity="center"
             android:padding="8dp"
-            android:src="@drawable/timesheet_icon"
-            android:tint="#FFFFFF"/>
-
+            android:tint="#FFFFFF"
+            app:srcCompat="@drawable/timesheet_icon"
+            app:tint="#FFFFFF" />
     </FrameLayout>
 
     <View
@@ -90,9 +85,6 @@
         android:background="@drawable/circle"
         android:backgroundTint="#805A6D"
         android:translationZ="-1dp"
-        app:layout_constraintTop_toTopOf="parent"
-        app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintStart_toStartOf="@id/exportPageMenuButton"
-        app:layout_constraintEnd_toEndOf="@id/exportPageMenuButton" />
-
+        app:layout_constraintTop_toTopOf="@id/exportPageMenuButton" />
 </androidx.constraintlayout.widget.ConstraintLayout>
