@@ -16,14 +16,16 @@ class DashboardActivity : AppCompatActivity() {
     private val handler = Handler(Looper.getMainLooper())
     private lateinit var timerRunnable: Runnable
     private lateinit var currentTaskText: TextView
+    private lateinit var timeTracker: TimeTrackerInterface
 
+    // For mock timer when no tracking is active
+    private var mockStartTime = 0L
 
-    fun getCurrentWorkTime(): String {
-        // This is a temporary function. Replace this later on with the real stuff.
-        val mockSeconds = ((System.currentTimeMillis() / 1000) % 3600).toInt()
-        val minutes = mockSeconds / 60
-        val seconds = mockSeconds % 60
-        //Can also just make this hours, minutes. since you will prolly work on stuff for a long time
+    fun formatTimeFromMillis(millis: Long): String {
+        val totalSeconds = millis / 1000
+        val minutes = (totalSeconds / 60) % 60
+        val seconds = totalSeconds % 60
+        // Format as MM:SS - can be extended to include hours if needed
         return String.format("%02d:%02d", minutes, seconds)
     }
 
@@ -33,9 +35,16 @@ class DashboardActivity : AppCompatActivity() {
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
-        currentTaskText = findViewById(R.id.currentTaskText)
         enableEdgeToEdge()
         setContentView(R.layout.activity_dashboard)
+
+        // Initialize TimeTracker
+        timeTracker = TimeTracker.getInstance(this)
+
+        // Initialize mock timer start time
+        mockStartTime = System.currentTimeMillis()
+
+        currentTaskText = findViewById(R.id.currentTaskText)
 
         val menu = findViewById<MenuBar>(R.id.menuBar)
         menu.setActivePage(1) // 0 is for export, 1 is for Dashboard, 2 is for calender/timesheet
@@ -49,7 +58,7 @@ class DashboardActivity : AppCompatActivity() {
         val chart = findViewById<WeekTimeGridView>(R.id.weekGrid)
 
         //0f = 24:00, 11f = 11:00, 23 = 23:00
-         val myWorkData = listOf(
+        val myWorkData = listOf(
             WorkBlock(0, 8f, 12f, false),
             WorkBlock(0, 12f, 13.5f, true),
             WorkBlock(0, 13.5f, 17.5f, false),
@@ -68,7 +77,26 @@ class DashboardActivity : AppCompatActivity() {
 
         timerRunnable = object : Runnable {
             override fun run() {
-                timerText.text = getCurrentWorkTime()
+                if (timeTracker.isTracking()) {
+                    // If tracking is active, show the live duration from TimeTracker
+                    val currentDuration = timeTracker.getCurrentDuration()
+                    timerText.text = formatTimeFromMillis(currentDuration)
+
+                    // Update the current task status if not already showing active task
+                    if (currentTaskText.text == "Not Busy With A Task") {
+                        currentTaskText.text = "Active Tracking Session"
+                    }
+                } else {
+                    // If not tracking, show mock timer (time since activity started)
+                    val mockElapsedTime = System.currentTimeMillis() - mockStartTime
+                    timerText.text = formatTimeFromMillis(mockElapsedTime)
+
+                    // Reset task text if needed
+                    if (currentTaskText.text == "Active Tracking Session") {
+                        currentTaskText.text = "Not Busy With A Task"
+                    }
+                }
+
                 handler.postDelayed(this, 1000)
             }
         }
@@ -84,6 +112,20 @@ class DashboardActivity : AppCompatActivity() {
         findViewById<Button>(R.id.b1gBr0therButton).setOnClickListener {
             val intent = Intent(this, HandGesturesActivity::class.java)
             startActivity(intent)
+        }
+    }
+
+    override fun onResume() {
+        super.onResume()
+
+        if (timeTracker.isTracking()) {
+            // Refresh timer when returning to this activity with active tracking
+            val currentDuration = timeTracker.getCurrentDuration()
+            timerText.text = formatTimeFromMillis(currentDuration)
+            currentTaskText.text = "Active Tracking Session"
+        } else {
+            // If no tracking, reset mock timer on resume
+            mockStartTime = System.currentTimeMillis()
         }
     }
 }
