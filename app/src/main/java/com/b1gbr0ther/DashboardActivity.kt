@@ -25,7 +25,6 @@ class DashboardActivity : AppCompatActivity() {
         val totalSeconds = millis / 1000
         val minutes = (totalSeconds / 60) % 60
         val seconds = totalSeconds % 60
-        // Format as MM:SS - can be extended to include hours if needed
         return String.format("%02d:%02d", minutes, seconds)
     }
 
@@ -38,17 +37,14 @@ class DashboardActivity : AppCompatActivity() {
         enableEdgeToEdge()
         setContentView(R.layout.activity_dashboard)
 
-        // Initialize TimeTracker
         timeTracker = TimeTracker.getInstance(this)
 
-        // Initialize mock timer start time
         mockStartTime = System.currentTimeMillis()
 
         currentTaskText = findViewById(R.id.currentTaskText)
 
         val menu = findViewById<MenuBar>(R.id.menuBar)
-        menu.setActivePage(1) // 0 is for export, 1 is for Dashboard, 2 is for calender/timesheet
-        //makes sure nothing gets drawn behind the top notification/wifi bar nor the android nav bar at the bottom
+        menu.setActivePage(2)
         ViewCompat.setOnApplyWindowInsetsListener(findViewById(R.id.main)) { v, insets ->
             val systemBars = insets.getInsets(WindowInsetsCompat.Type.systemBars())
             v.setPadding(systemBars.left, systemBars.top, systemBars.right, systemBars.bottom)
