@@ -16,6 +16,7 @@ import android.widget.Toast
 import androidx.activity.ComponentActivity
 import androidx.activity.enableEdgeToEdge
 import androidx.activity.result.contract.ActivityResultContracts
+import androidx.appcompat.app.AppCompatActivity
 import androidx.core.content.ContextCompat
 import com.b1gbr0ther.data.database.DatabaseManager
 import java.time.LocalDateTime
@@ -23,7 +24,7 @@ import java.time.ZoneOffset
 import java.util.Locale
 import kotlin.math.floor
 
-class AudioRecognitionActivity : ComponentActivity() {
+class AudioRecognitionActivity : AppCompatActivity() {
 
     private lateinit var statusTextView: TextView
     private lateinit var transcriptTextView: TextView
@@ -53,7 +54,7 @@ class AudioRecognitionActivity : ComponentActivity() {
         setContentView(R.layout.activity_audio_recognition)
 
         menuBar = findViewById(R.id.menuBar)
-        menuBar.setActivePage(2) // Set timesheet page as active
+        menuBar.setActivePage(2)
 
         // Initialize the database manager
         databaseManager = (application as B1gBr0therApplication).databaseManager
@@ -66,38 +67,19 @@ class AudioRecognitionActivity : ComponentActivity() {
         timeTracker = TimeTracker.getInstance(this)
         commandHandler = VoiceCommandHandler(this)
 
-        val menu = findViewById<MenuBar>(R.id.menuBar)
-        menu.setActivePage(1) // 1 is for Dashboard
-
         findViewById<Button>(R.id.listenButton).setOnClickListener {
             checkPermissionAndStartRecognition()
         }
 
         findViewById<Button>(R.id.statusButton).setOnClickListener {
             updateTrackingStatus()
-            Toast.makeText(this, "Checking tracking status...", Toast.LENGTH_SHORT).show()
-
-            if (lastSummary != null) {
-                val summary = lastSummary!!
-                val text = """
-                    Last Session
-                    Total: ${formatTime(summary.totalTimeMillis)}
-                    Breaks: ${formatTime(summary.breakTimeMillis)}
-                    Work Time: ${formatTime(summary.effectiveTimeMillis)}
-                    Break #: ${summary.breakCount}
-                """.trimIndent()
-                lastSessionTextView.text = text
-                lastSessionTextView.visibility = View.VISIBLE
-            } else {
-                lastSessionTextView.text = "No previous sessions found."
-                lastSessionTextView.visibility = View.VISIBLE
-            }
         }
     }
 
     override fun onResume() {
         super.onResume()
-        menuBar.setActivePage(2) // Ensure correct menu item is highlighted
+
+        menuBar.setActivePage(2)
 
         if (timeTracker.isTracking()) {
             updateTrackingStatus()
@@ -273,7 +255,7 @@ class AudioRecognitionActivity : ComponentActivity() {
         val audioTask = Task("Audio task", startTime, LocalDateTime.now(), false, true, false)
 
         databaseManager.createAppTask(audioTask){
-            taskId -> Toast.makeText(this, "Task saved to database with ID: $taskId", Toast.LENGTH_SHORT).show()
+                taskId -> Toast.makeText(this, "Task saved to database with ID: $taskId", Toast.LENGTH_SHORT).show()
         }
     }
 
