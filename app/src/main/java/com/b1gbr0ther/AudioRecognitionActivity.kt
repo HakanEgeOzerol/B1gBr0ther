@@ -288,7 +288,8 @@ class AudioRecognitionActivity : AppCompatActivity() {
     }
 
     fun showDashboard() {
-        updateTrackingStatus()
+        val intent = Intent(this, DashboardActivity::class.java)
+        startActivity(intent)
     }
 
     private fun updateTrackingStatus() {
