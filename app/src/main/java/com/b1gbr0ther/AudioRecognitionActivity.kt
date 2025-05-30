@@ -292,6 +292,22 @@ class AudioRecognitionActivity : AppCompatActivity() {
         startActivity(intent)
     }
 
+    fun showExportPage() {
+        val intent = Intent(this, ExportPage::class.java)
+        startActivity(intent)
+    }
+
+    fun showManualPage() {
+        val intent = Intent(this, ManualPage::class.java)
+        startActivity(intent)
+    }
+
+    //Once timesheet page is available, un-comment this and link with voice
+    // fun showTimesheetPage() {
+    //     val intent = Intent(this, TimesheetActivity::class.java)
+    //     startActivity(intent)
+    // }
+
     private fun updateTrackingStatus() {
         if (!timeTracker.isTracking()) {
             trackingStatusTextView.text = "No active tracking session."

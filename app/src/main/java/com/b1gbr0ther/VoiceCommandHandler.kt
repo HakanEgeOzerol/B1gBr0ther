@@ -7,7 +7,10 @@ class VoiceCommandHandler(private val activity: AudioRecognitionActivity) {
         "stop tracking" to { activity.stopTracking() },
         "log break" to { activity.startBreak() },
         "end break" to { activity.endBreak() },
-        "show dashboard" to { activity.showDashboard() }
+        "show dashboard" to { activity.showDashboard() },
+        "show export" to { activity.showExportPage() },
+        "show manual" to { activity.showManualPage() },
+        // "show timesheet" to { activity.showTimesheetPage() } Remove comment once timesheet page is ready
     )
 
     fun handleCommand(spoken: String): Boolean {
