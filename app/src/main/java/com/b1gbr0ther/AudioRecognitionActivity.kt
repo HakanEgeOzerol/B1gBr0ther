@@ -23,6 +23,7 @@ import java.time.LocalDateTime
 import java.time.ZoneOffset
 import java.util.Locale
 import kotlin.math.floor
+import android.app.AlertDialog
 
 class AudioRecognitionActivity : AppCompatActivity() {
 
@@ -41,6 +42,11 @@ class AudioRecognitionActivity : AppCompatActivity() {
     private var liveTimerRunnable: Runnable? = null
 
     private lateinit var databaseManager: DatabaseManager
+
+    private val BLOW_THRESHOLD = 8.5f  // dB threshold for blow detection, change this if mic does not pick up blow
+    private val BLOW_COOLDOWN = 5000L   // 5 seconds cooldown to avoid spam
+    private var lastBlowDetectedTime = 0L
+    private var blowDetectionEnabled = true
 
     private val requestPermissionLauncher =
         registerForActivityResult(ActivityResultContracts.RequestPermission()) { granted ->
@@ -124,14 +130,30 @@ class AudioRecognitionActivity : AppCompatActivity() {
             setRecognitionListener(object : RecognitionListener {
                 override fun onReadyForSpeech(params: Bundle?) {
                     updateStatus("Ready for speech")
+                    blowDetectionEnabled = true
                 }
 
                 override fun onBeginningOfSpeech() {
                     updateStatus("Speech started")
                 }
 
-                override fun onRmsChanged(rmsdB: Float) {}
+                override fun onRmsChanged(rmsdB: Float) {
+                    if (blowDetectionEnabled && timeTracker.isTracking() && 
+                        rmsdB > BLOW_THRESHOLD && 
+                        System.currentTimeMillis() - lastBlowDetectedTime > BLOW_COOLDOWN) {
+                        
+                        lastBlowDetectedTime = System.currentTimeMillis()
+                        
+                        if (!timeTracker.isOnBreak()) {
+                            runOnUiThread {
+                                showSmokeBreakDialog()
+                            }
+                        }
+                    }
+                }
+
                 override fun onBufferReceived(buffer: ByteArray?) {}
+                
                 override fun onEndOfSpeech() {
                     updateStatus("Speech ended")
                 }
@@ -187,6 +209,18 @@ class AudioRecognitionActivity : AppCompatActivity() {
 
             startListening(intent)
         }
+    }
+
+    private fun showSmokeBreakDialog() {
+        AlertDialog.Builder(this)
+            .setTitle("Smoke Break Detected")
+            .setMessage("Enjoy your smoke break!")
+            .setPositiveButton("OK") { dialog, _ ->
+                dialog.dismiss()
+                startBreak()
+            }
+            .setCancelable(true)
+            .show()
     }
 
     private fun destroyRecognizer() {
