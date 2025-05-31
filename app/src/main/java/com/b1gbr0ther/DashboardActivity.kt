@@ -74,20 +74,16 @@ class DashboardActivity : AppCompatActivity() {
         timerRunnable = object : Runnable {
             override fun run() {
                 if (timeTracker.isTracking()) {
-                    // If tracking is active, show the live duration from TimeTracker
                     val currentDuration = timeTracker.getCurrentDuration()
                     timerText.text = formatTimeFromMillis(currentDuration)
 
-                    // Update the current task status if not already showing active task
                     if (currentTaskText.text == "Not Busy With A Task") {
                         currentTaskText.text = "Active Tracking Session"
                     }
                 } else {
-                    // If not tracking, show mock timer (time since activity started)
-                    val mockElapsedTime = System.currentTimeMillis() - mockStartTime
-                    timerText.text = formatTimeFromMillis(mockElapsedTime)
+                    val now = java.time.LocalTime.now()
+                    timerText.text = now.format(java.time.format.DateTimeFormatter.ofPattern("HH:mm"))
 
-                    // Reset task text if needed
                     if (currentTaskText.text == "Active Tracking Session") {
                         currentTaskText.text = "Not Busy With A Task"
                     }
@@ -99,7 +95,6 @@ class DashboardActivity : AppCompatActivity() {
 
         handler.post(timerRunnable)
 
-        // Set up click listener for database test button
         findViewById<Button>(R.id.btnDatabaseTest).setOnClickListener {
             val intent = Intent(this, DatabaseTestActivity::class.java)
             startActivity(intent)

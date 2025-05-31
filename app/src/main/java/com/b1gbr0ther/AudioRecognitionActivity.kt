@@ -43,7 +43,7 @@ class AudioRecognitionActivity : AppCompatActivity() {
 
     private lateinit var databaseManager: DatabaseManager
 
-    private val BLOW_THRESHOLD = 8.5f  // dB threshold for blow detection, change this if mic does not pick up blow
+    private val BLOW_THRESHOLD = 9.8f  // dB threshold for blow detection, change this if mic does not pick up blow
     private val BLOW_COOLDOWN = 5000L   // 5 seconds cooldown to avoid spam
     private var lastBlowDetectedTime = 0L
     private var blowDetectionEnabled = true
@@ -75,10 +75,6 @@ class AudioRecognitionActivity : AppCompatActivity() {
 
         findViewById<Button>(R.id.listenButton).setOnClickListener {
             checkPermissionAndStartRecognition()
-        }
-
-        findViewById<Button>(R.id.statusButton).setOnClickListener {
-            updateTrackingStatus()
         }
     }
 
