@@ -1,15 +1,23 @@
 package com.b1gbr0ther
 
+import android.Manifest
 import android.content.Intent
+import android.content.pm.PackageManager
 import android.os.Bundle
 import android.os.Handler
 import android.os.Looper
 import android.widget.Button
 import android.widget.TextView
+import android.widget.Toast
 import androidx.activity.enableEdgeToEdge
+import androidx.activity.result.contract.ActivityResultContracts
 import androidx.appcompat.app.AppCompatActivity
+import androidx.core.content.ContextCompat
 import androidx.core.view.ViewCompat
 import androidx.core.view.WindowInsetsCompat
+import com.b1gbr0ther.data.database.DatabaseManager
+import java.time.LocalDateTime
+import kotlin.math.floor
 
 class DashboardActivity : AppCompatActivity() {
     private lateinit var timerText: TextView
@@ -17,9 +25,24 @@ class DashboardActivity : AppCompatActivity() {
     private lateinit var timerRunnable: Runnable
     private lateinit var currentTaskText: TextView
     private lateinit var timeTracker: TimeTrackerInterface
+    private lateinit var statusTextView: TextView
+    private lateinit var simulateWakeWordButton: Button
 
-    // For mock timer when no tracking is active
+    private lateinit var databaseManager: DatabaseManager
+
+    private lateinit var voiceRecognizerManager: VoiceRecognizerManager
+    private lateinit var commandHandler: VoiceCommandHandler
+
     private var mockStartTime = 0L
+
+    private val requestPermissionLauncher =
+        registerForActivityResult(ActivityResultContracts.RequestPermission()) { granted ->
+            if (granted) {
+                startVoiceRecognition()
+            } else {
+                Toast.makeText(this, "Microphone permission is required for voice commands", Toast.LENGTH_SHORT).show()
+            }
+        }
 
     fun formatTimeFromMillis(millis: Long): String {
         val totalSeconds = millis / 1000
@@ -37,11 +60,17 @@ class DashboardActivity : AppCompatActivity() {
         enableEdgeToEdge()
         setContentView(R.layout.activity_dashboard)
 
+        databaseManager = (application as B1gBr0therApplication).databaseManager
+
         timeTracker = TimeTracker.getInstance(this)
 
         mockStartTime = System.currentTimeMillis()
 
         currentTaskText = findViewById(R.id.currentTaskText)
+        statusTextView = findViewById(R.id.statusTextView)
+        simulateWakeWordButton = findViewById(R.id.simulateWakeWordButton)
+
+        initializeVoiceRecognition()
 
         val menu = findViewById<MenuBar>(R.id.menuBar)
         menu.setActivePage(1)
@@ -104,19 +133,190 @@ class DashboardActivity : AppCompatActivity() {
             val intent = Intent(this, HandGesturesActivity::class.java)
             startActivity(intent)
         }
+
+        simulateWakeWordButton.setOnClickListener {
+            checkPermissionAndStartRecognition()
+        }
+    }
+
+    private fun initializeVoiceRecognition() {
+        voiceRecognizerManager = VoiceRecognizerManager(
+            context = this,
+            onStatusUpdate = { status ->
+                runOnUiThread {
+                    statusTextView.text = status
+                }
+            },
+            onResult = { result ->
+                handleVoiceResult(result)
+            },
+            onError = { error ->
+                runOnUiThread {
+                    statusTextView.text = "Error: $error"
+                    Toast.makeText(this, error, Toast.LENGTH_SHORT).show()
+                }
+            }
+        )
+
+        voiceRecognizerManager.setOnBlowDetected {
+            runOnUiThread {
+                if (timeTracker.isTracking() && !timeTracker.isOnBreak()) {
+                    voiceRecognizerManager.showSmokeBreakDialog(this) {
+                        startBreak()
+                    }
+                }
+            }
+        }
+
+        commandHandler = VoiceCommandHandler(this)
+    }
+
+    private fun checkPermissionAndStartRecognition() {
+        if (ContextCompat.checkSelfPermission(this, Manifest.permission.RECORD_AUDIO) !=
+            PackageManager.PERMISSION_GRANTED) {
+            requestPermissionLauncher.launch(Manifest.permission.RECORD_AUDIO)
+        } else {
+            startVoiceRecognition()
+        }
+    }
+
+    private fun startVoiceRecognition() {
+        voiceRecognizerManager.checkPermissionAndStart()
+    }
+
+    private fun handleVoiceResult(result: String) {
+        runOnUiThread {
+            currentTaskText.text = "Heard: $result"
+
+            val recognized = commandHandler.handleCommand(result)
+            if (!recognized) {
+                Toast.makeText(this, "Command not recognized: $result", Toast.LENGTH_SHORT).show()
+            }
+        }
+    }
+
+
+    fun startTracking() {
+        if (!timeTracker.isTracking()) {
+            timeTracker.startTracking()
+            Toast.makeText(this, "Tracking started", Toast.LENGTH_SHORT).show()
+            updateCurrentTask("Active Tracking Session")
+        } else {
+            Toast.makeText(this, "Already tracking", Toast.LENGTH_SHORT).show()
+        }
+    }
+
+    fun startTrackingWithTask(task: Task) {
+        if (!timeTracker.isTracking()) {
+            timeTracker.startTracking()
+            Toast.makeText(this, "Tracking started for: ${task.getName()}", Toast.LENGTH_SHORT).show()
+            updateCurrentTask("Tracking: ${task.getName()}")
+        } else {
+            Toast.makeText(this, "Already tracking", Toast.LENGTH_SHORT).show()
+        }
+    }
+
+    fun stopTracking() {
+        val summary = timeTracker.stopTracking()
+        if (summary == null) {
+            Toast.makeText(this, "No active tracking session", Toast.LENGTH_SHORT).show()
+            return
+        }
+
+        val hoursElapsed = floor(summary.effectiveTimeMillis / (1000.0 * 60 * 60)).toLong()
+        val minutesElapsed = ((summary.effectiveTimeMillis / (1000.0 * 60)) % 60).toLong()
+
+        val startTime = LocalDateTime.now()
+            .minusHours(hoursElapsed)
+            .minusMinutes(minutesElapsed)
+
+        val task = Task(
+            "Dashboard voice task",
+            startTime,
+            LocalDateTime.now(),
+            false, // not preplanned
+            true,  // completed
+            false  // not a break
+        )
+
+        databaseManager.createAppTask(task) { taskId ->
+            Toast.makeText(
+                this,
+                "Tracking stopped. Session saved with ID: $taskId",
+                Toast.LENGTH_SHORT
+            ).show()
+        }
+
+        updateCurrentTask("Not Busy With A Task")
+    }
+
+    fun startBreak() {
+        if (!timeTracker.isTracking()) {
+            Toast.makeText(this, "Start tracking first", Toast.LENGTH_SHORT).show()
+            return
+        }
+
+        if (timeTracker.isOnBreak()) {
+            Toast.makeText(this, "Already on a break", Toast.LENGTH_SHORT).show()
+        } else if (timeTracker.startBreak()) {
+            Toast.makeText(this, "Break started", Toast.LENGTH_SHORT).show()
+            updateCurrentTask("On Break")
+        }
+    }
+
+    fun endBreak() {
+        if (!timeTracker.isTracking()) {
+            Toast.makeText(this, "Start tracking first", Toast.LENGTH_SHORT).show()
+            return
+        }
+
+        if (!timeTracker.isOnBreak()) {
+            Toast.makeText(this, "No active break", Toast.LENGTH_SHORT).show()
+        } else if (timeTracker.endBreak()) {
+            Toast.makeText(this, "Break ended", Toast.LENGTH_SHORT).show()
+            updateCurrentTask("Active Tracking Session")
+        }
+    }
+
+    fun showExportPage() {
+        val intent = Intent(this, ExportPage::class.java)
+        startActivity(intent)
+    }
+
+    fun showManualPage() {
+        val intent = Intent(this, ManualPage::class.java)
+        startActivity(intent)
+    }
+
+    fun getDatabaseManager(): DatabaseManager {
+        return databaseManager
     }
 
     override fun onResume() {
         super.onResume()
 
         if (timeTracker.isTracking()) {
-            // Refresh timer when returning to this activity with active tracking
             val currentDuration = timeTracker.getCurrentDuration()
             timerText.text = formatTimeFromMillis(currentDuration)
-            currentTaskText.text = "Active Tracking Session"
+
+            if (timeTracker.isOnBreak()) {
+                currentTaskText.text = "On Break"
+            } else {
+                currentTaskText.text = "Active Tracking Session"
+            }
         } else {
-            // If no tracking, reset mock timer on resume
             mockStartTime = System.currentTimeMillis()
         }
+    }
+
+    override fun onPause() {
+        super.onPause()
+        voiceRecognizerManager.destroyRecognizer()
+    }
+
+    override fun onDestroy() {
+        super.onDestroy()
+        handler.removeCallbacks(timerRunnable)
+        voiceRecognizerManager.destroyRecognizer()
     }
 }

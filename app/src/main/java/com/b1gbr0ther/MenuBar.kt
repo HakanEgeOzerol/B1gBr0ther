@@ -4,6 +4,7 @@ import android.content.Context
 import android.util.AttributeSet
 import android.view.LayoutInflater
 import android.view.View
+import android.widget.Toast
 import androidx.constraintlayout.widget.ConstraintLayout
 
 class MenuBar @JvmOverloads constructor(
@@ -54,9 +55,12 @@ class MenuBar @JvmOverloads constructor(
         val currentActivity = context as? android.app.Activity ?: return
 
         val target = when (index) {
-            0 -> ExportPage::class.java            // export icon
-            1 -> DashboardActivity::class.java     // dashboard icon
-            2 -> AudioRecognitionActivity::class.java // timesheet icon
+            0 -> ExportPage::class.java
+            1 -> DashboardActivity::class.java
+            2 -> {
+                Toast.makeText(context, "Timesheet page coming soon", Toast.LENGTH_SHORT).show()
+                return
+            }
             else -> return
         }
 
