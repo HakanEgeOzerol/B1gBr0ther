@@ -179,8 +179,9 @@ class HandGesturesActivity : ComponentActivity() {
         val dynamicTime = dialog.findViewById<TextView>(R.id.existing_remaining_time)
         val hourDif = getLastTask().getEndTime().hour - LocalDateTime.now().hour
         val minDif = getLastTask().getEndTime().minute - LocalDateTime.now().minute
+        val secDif = getLastTask().getEndTime().second - LocalDateTime.now().second
 
-        val message = "$hourDif hours and $minDif minutes"
+        val message = "$hourDif hours and $minDif minutes and $secDif seconds"
 
         dynamicTime.text = message
 

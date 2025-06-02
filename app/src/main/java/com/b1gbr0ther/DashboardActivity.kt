@@ -1,8 +1,13 @@
 package com.b1gbr0ther
 
 import android.Manifest
+import android.content.Context
 import android.content.Intent
 import android.content.pm.PackageManager
+import android.hardware.Sensor
+import android.hardware.SensorEvent
+import android.hardware.SensorEventListener
+import android.hardware.SensorManager
 import android.os.Bundle
 import android.os.Handler
 import android.os.Looper
@@ -17,7 +22,9 @@ import androidx.core.view.ViewCompat
 import androidx.core.view.WindowInsetsCompat
 import com.b1gbr0ther.data.database.DatabaseManager
 import java.time.LocalDateTime
+import java.util.Objects
 import kotlin.math.floor
+import kotlin.math.sqrt
 
 class DashboardActivity : AppCompatActivity() {
     private lateinit var timerText: TextView
@@ -32,6 +39,12 @@ class DashboardActivity : AppCompatActivity() {
 
     private lateinit var voiceRecognizerManager: VoiceRecognizerManager
     private lateinit var commandHandler: VoiceCommandHandler
+
+    private var sensorManager: SensorManager? = null
+    private var isDialogShown = false
+    private var acceleration = 0f
+    private var currentAcceleration = 0f
+    private var lastAcceleration = 0f
 
     private var mockStartTime = 0L
 
@@ -55,12 +68,18 @@ class DashboardActivity : AppCompatActivity() {
         currentTaskText.text = name
     }
 
-    override fun onCreate(savedInstanceState: Bundle?) {
+    override fun onCreate(savedInstanceState: Bundle?) {//onCreate begins here
         super.onCreate(savedInstanceState)
         enableEdgeToEdge()
         setContentView(R.layout.activity_dashboard)
 
         databaseManager = (application as B1gBr0therApplication).databaseManager
+        sensorManager = getSystemService(Context.SENSOR_SERVICE) as SensorManager
+
+        Objects.requireNonNull(sensorManager)!!.registerListener(sensorListener, sensorManager!!.getDefaultSensor(Sensor.TYPE_ACCELEROMETER), SensorManager.SENSOR_DELAY_NORMAL)
+        acceleration = 10f
+        currentAcceleration = SensorManager.GRAVITY_EARTH
+        lastAcceleration = SensorManager.GRAVITY_EARTH
 
         timeTracker = TimeTracker.getInstance(this)
 
@@ -318,5 +337,34 @@ class DashboardActivity : AppCompatActivity() {
         super.onDestroy()
         handler.removeCallbacks(timerRunnable)
         voiceRecognizerManager.destroyRecognizer()
+    }
+
+    private val sensorListener: SensorEventListener = object : SensorEventListener {
+        override fun onSensorChanged(event: SensorEvent) {
+
+            // Fetching x,y,z values
+            val x = event.values[0]
+            val y = event.values[1]
+            val z = event.values[2]
+            lastAcceleration = currentAcceleration
+
+            // Getting current accelerations
+            // with the help of fetched x,y,z values
+            currentAcceleration = sqrt((x * x + y * y + z * z).toDouble()).toFloat()
+            val delta: Float = currentAcceleration - lastAcceleration
+            acceleration = acceleration * 0.9f + delta
+
+
+            if (acceleration > 17 && !isDialogShown) {
+                Toast.makeText(applicationContext, "Acceleration detected", Toast.LENGTH_SHORT).show()
+//                isDialogShown = true
+//                createExistingTaskDialog()
+            }
+//            else if (acceleration > 17 && !isDialogShown && !::lastTask.isInitialized){
+//                isDialogShown = true
+//                createInputTaskDialog()
+//            }
+        }
+        override fun onAccuracyChanged(sensor: Sensor, accuracy: Int) {}
     }
 }
