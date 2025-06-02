@@ -7,6 +7,18 @@
     android:background="#A7ADC6"
     tools:context=".AudioRecognitionActivity">
 
+    <com.b1gbr0ther.MenuBar
+        android:id="@+id/menuBar"
+        android:layout_width="0dp"
+        android:layout_height="wrap_content"
+        android:layout_marginStart="24dp"
+        android:layout_marginEnd="24dp"
+        android:layout_marginBottom="28dp"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintHorizontal_bias="1.0"
+        app:layout_constraintStart_toStartOf="parent" />
+
     <Button
         android:id="@+id/titleButton"
         android:layout_width="170dp"
@@ -129,22 +141,6 @@
     </androidx.cardview.widget.CardView>
 
     <Button
-        android:id="@+id/statusButton"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_marginTop="16dp"
-        android:layout_marginBottom="16dp"
-        android:background="@drawable/rounded_corners"
-        android:backgroundTint="#5F4B66"
-        android:padding="12dp"
-        android:text="CHECK TRACKING STATUS"
-        android:textColor="#C1A8B5"
-        app:layout_constraintBottom_toTopOf="@+id/listenButton"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/sessionCard" />
-
-    <Button
         android:id="@+id/listenButton"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
@@ -158,18 +154,7 @@
         app:layout_constraintBottom_toTopOf="@+id/menuBar"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/statusButton" />
+        app:layout_constraintTop_toBottomOf="@+id/sessionCard" />
 
-    <com.b1gbr0ther.MenuBar
-        android:id="@+id/menuBar"
-        android:layout_width="0dp"
-        android:layout_height="wrap_content"
-        android:layout_marginStart="24dp"
-        android:layout_marginEnd="24dp"
-        android:layout_marginBottom="16dp"
-        app:layout_constraintBottom_toBottomOf="parent"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintHorizontal_bias="0.0"
-        app:layout_constraintStart_toStartOf="parent" />
 
 </androidx.constraintlayout.widget.ConstraintLayout>
