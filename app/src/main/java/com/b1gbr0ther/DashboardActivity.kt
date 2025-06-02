@@ -367,4 +367,32 @@ class DashboardActivity : AppCompatActivity() {
         }
         override fun onAccuracyChanged(sensor: Sensor, accuracy: Int) {}
     }
+
+    private fun isActiveTask(): Boolean {
+        if (getActiveTask() != null){
+            //Summon completion dialog
+        }
+        else{
+            //Summon creation dialog
+        }
+
+        return true
+    }
+
+    private fun getActiveTask(): Task?{
+        val activeTask = null
+        var allTasks = databaseManager.getAllTasks { tasks ->
+            if (tasks.isNotEmpty()) {
+                // Get the most recently created task (assuming it's the last one in the list)
+                val lastDbTask = tasks.last()
+                lastTaskId = lastDbTask.id
+
+                // Convert to app Task model
+                lastTask = lastDbTask.toAppTask()
+            } }//I would assume that this is the
+        for(allTasks in Task) {
+            //Logic for loop here. It checks whether there is an active task
+        }
+        return null
+    }
 }
