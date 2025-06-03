@@ -131,8 +131,8 @@ class HandGesturesActivity : ComponentActivity() {
 
         startTracking.setOnClickListener{
             var name = textInput.text.toString()
-            var hoursSubmitted = (hours.text.toString()).toLong()
-            var minutesSubmitted = (minutes.text.toString()).toLong()
+            val hoursSubmitted = hours.text.toString().ifBlank { "0" }.toLong()
+            val minutesSubmitted = minutes.text.toString().ifBlank { "0" }.toLong()
 
             var estimatedCompletion = LocalDateTime.now()
 
@@ -224,6 +224,7 @@ class HandGesturesActivity : ComponentActivity() {
             if (task != null) {
                 // Update the task
                 task.isCompleted = true
+                task.endTime = LocalDateTime.now()
                 
                 // Save the updated task
                 databaseManager.updateTask(task) {
