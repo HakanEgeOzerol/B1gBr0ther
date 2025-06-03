@@ -21,8 +21,8 @@ class VoiceRecognizerManager(
 ) {
     private var recognizer: SpeechRecognizer? = null
 
-    private val BLOW_THRESHOLD = 9.9f  // dB threshold for blow detection
-    private val BLOW_COOLDOWN = 5000L  // 5 seconds cooldown to avoid spam
+    private val BLOW_THRESHOLD = 9.9f
+    private val BLOW_COOLDOWN = 5000L
     private var lastBlowDetectedTime = 0L
     private var blowDetectionEnabled = true
     private var onBlowDetected: (() -> Unit)? = null
