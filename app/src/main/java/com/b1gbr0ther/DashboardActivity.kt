@@ -1,6 +1,7 @@
 package com.b1gbr0ther
 
 import android.Manifest
+import android.app.Dialog
 import android.content.Context
 import android.content.Intent
 import android.content.pm.PackageManager
@@ -79,6 +80,7 @@ class DashboardActivity : AppCompatActivity() {
         setContentView(R.layout.activity_dashboard)
 
         databaseManager = DatabaseManager(applicationContext)
+        storeAllTasks()
         sensorManager = getSystemService(Context.SENSOR_SERVICE) as SensorManager
 
         Objects.requireNonNull(sensorManager)!!.registerListener(sensorListener, sensorManager!!.getDefaultSensor(Sensor.TYPE_ACCELEROMETER), SensorManager.SENSOR_DELAY_NORMAL)
@@ -319,6 +321,8 @@ class DashboardActivity : AppCompatActivity() {
     override fun onResume() {
         super.onResume()
 
+        storeAllTasks()
+
         if (timeTracker.isTracking()) {
             val currentDuration = timeTracker.getCurrentDuration()
             timerText.text = formatTimeFromMillis(currentDuration)
@@ -360,26 +364,23 @@ class DashboardActivity : AppCompatActivity() {
             acceleration = acceleration * 0.9f + delta
 
 
-            if (acceleration > 17 && !isDialogShown) {
-                Toast.makeText(applicationContext, "Acceleration detected", Toast.LENGTH_SHORT).show()
+            if (acceleration > 17 && !isDialogShown && !isActiveTask()) {
+                val numberOfTasks = allTasks.size
+                Toast.makeText(applicationContext, "There are this many tasks $numberOfTasks", Toast.LENGTH_SHORT).show()
 //                isDialogShown = true
 //                createExistingTaskDialog()
             }
-//            else if (acceleration > 17 && !isDialogShown && !::lastTask.isInitialized){
-//                isDialogShown = true
-//                createInputTaskDialog()
-//            }
+            else if (acceleration>17 &&!isDialogShown && isActiveTask()){
+                isDialogShown = true
+                createExistingTaskDialog()
+            }
         }
         override fun onAccuracyChanged(sensor: Sensor, accuracy: Int) {}
     }
 
-    private suspend fun isActiveTask(): Boolean{
+    private fun isActiveTask(): Boolean{
         try {
-            val db = AppDatabase.getDatabase(this@DashboardActivity)
-            var tasks = withContext(Dispatchers.IO) {
-                db.taskDao().getAllTasks()
-            }
-             if(getActiveTask(tasks) != null){
+             if(getActiveTask(this.allTasks) != null){
                  return true
              }
         }
@@ -396,5 +397,55 @@ class DashboardActivity : AppCompatActivity() {
             }
         }
         return null
+    }
+
+    private fun storeAllTasks(){
+        databaseManager.getAllTasks { tasks -> this.allTasks = tasks }
+    }
+
+    private fun createExistingTaskDialog(){
+        val dialog = Dialog(this)
+        dialog.setContentView(R.layout.gesture_dialog_existing_task)
+        dialog.setCancelable(true)
+
+        val dynamicTime = dialog.findViewById<TextView>(R.id.existing_remaining_time)
+        val hourDif = getLastTask().getEndTime().hour - LocalDateTime.now().hour
+        val minDif = getLastTask().getEndTime().minute - LocalDateTime.now().minute
+        val secDif = getLastTask().getEndTime().second - LocalDateTime.now().second
+
+        val message = "$hourDif hours and $minDif minutes and $secDif seconds"
+
+        dynamicTime.text = message
+
+        // Add buttons for task operations
+        val okButton = dialog.findViewById<Button>(R.id.existing_ok)
+        val completeButton = dialog.findViewById<Button>(R.id.existing_complete)
+        val deleteButton = dialog.findViewById<Button>(R.id.existing_delete)
+
+        // Just dismiss the dialog
+        okButton.setOnClickListener{
+            isDialogShown = false
+            dialog.dismiss()
+        }
+
+        // Mark task as completed
+        completeButton?.setOnClickListener {
+            if (lastTaskId > 0) {
+                markTaskAsCompleted(lastTaskId)
+            }
+            isDialogShown = false
+            dialog.dismiss()
+        }
+
+        // Delete the task
+        deleteButton?.setOnClickListener {
+            if (lastTaskId > 0) {
+                deleteTask(lastTaskId)
+            }
+            isDialogShown = false
+            dialog.dismiss()
+        }
+
+        dialog.show()
     }
 }
