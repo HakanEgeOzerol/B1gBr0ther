@@ -21,10 +21,7 @@ import androidx.appcompat.app.AppCompatActivity
 import androidx.core.content.ContextCompat
 import androidx.core.view.ViewCompat
 import androidx.core.view.WindowInsetsCompat
-import com.b1gbr0ther.data.database.AppDatabase
 import com.b1gbr0ther.data.database.DatabaseManager
-import kotlinx.coroutines.Dispatchers
-import kotlinx.coroutines.withContext
 import java.time.LocalDateTime
 import java.util.Objects
 import kotlin.math.floor
@@ -51,6 +48,7 @@ class DashboardActivity : AppCompatActivity() {
     private var currentAcceleration = 0f
     private var lastAcceleration = 0f
     private var allTasks: List<Task> = emptyList()
+    private var allTasksId: List<Int> = emptyList()
 
     private var mockStartTime = 0L
 
@@ -365,8 +363,8 @@ class DashboardActivity : AppCompatActivity() {
 
 
             if (acceleration > 17 && !isDialogShown && !isActiveTask()) {
-                val numberOfTasks = allTasks.size
-                Toast.makeText(applicationContext, "There are this many tasks $numberOfTasks", Toast.LENGTH_SHORT).show()
+                val lastId = allTasksId.last()
+                Toast.makeText(applicationContext, "The last ID is $lastId", Toast.LENGTH_SHORT).show()
 //                isDialogShown = true
 //                createExistingTaskDialog()
             }
@@ -401,6 +399,13 @@ class DashboardActivity : AppCompatActivity() {
 
     private fun storeAllTasks(){
         databaseManager.getAllTasks { tasks -> this.allTasks = tasks }
+        databaseManager.getAllTasksId { tasks ->this.allTasksId = tasks }
+    }
+
+    private fun getIdOfActiveTask(): Int{
+
+
+        return 1
     }
 
     private fun createExistingTaskDialog(){
@@ -408,10 +413,12 @@ class DashboardActivity : AppCompatActivity() {
         dialog.setContentView(R.layout.gesture_dialog_existing_task)
         dialog.setCancelable(true)
 
+        val activeTask = getActiveTask(this.allTasks)!!
+
         val dynamicTime = dialog.findViewById<TextView>(R.id.existing_remaining_time)
-        val hourDif = getLastTask().getEndTime().hour - LocalDateTime.now().hour
-        val minDif = getLastTask().getEndTime().minute - LocalDateTime.now().minute
-        val secDif = getLastTask().getEndTime().second - LocalDateTime.now().second
+        val hourDif = activeTask.endTime.hour - LocalDateTime.now().hour
+        val minDif = activeTask.endTime.minute - LocalDateTime.now().minute
+        val secDif = activeTask.endTime.second - LocalDateTime.now().second
 
         val message = "$hourDif hours and $minDif minutes and $secDif seconds"
 
@@ -430,22 +437,55 @@ class DashboardActivity : AppCompatActivity() {
 
         // Mark task as completed
         completeButton?.setOnClickListener {
-            if (lastTaskId > 0) {
-                markTaskAsCompleted(lastTaskId)
-            }
+//            if (lastTaskId > 0) {
+//                markTaskAsCompleted(lastTaskId)
+//            }
             isDialogShown = false
             dialog.dismiss()
         }
 
         // Delete the task
         deleteButton?.setOnClickListener {
-            if (lastTaskId > 0) {
-                deleteTask(lastTaskId)
-            }
+//            if (lastTaskId > 0) {
+//                deleteTask(lastTaskId)
+//            }
             isDialogShown = false
             dialog.dismiss()
         }
 
         dialog.show()
+    }
+
+    /**
+     * Mark a task as completed in the database
+     */
+    private fun markTaskAsCompleted(taskId: Long) {
+//        databaseManager.getTask(taskId) { task ->
+//            if (task != null) {
+//                // Update the task
+//                task.isCompleted = true
+//
+//                // Save the updated task
+//                databaseManager.updateTask(task) {
+//                    Toast.makeText(this, "Task marked as completed", Toast.LENGTH_SHORT).show()
+//                    // Update the in-memory task
+//                    lastTask = task.toAppTask()
+//                }
+//            }
+//        }
+    }
+
+    /**
+     * Delete a task from the database
+     */
+    private fun deleteTask(taskId: Long) {
+//        databaseManager.deleteTask(taskId) {
+//            Toast.makeText(this, "Task deleted", Toast.LENGTH_SHORT).show()
+//            // Clear the in-memory task reference
+//            if (::lastTask.isInitialized) {
+//                // We need to find a new last task
+//                loadLastTask()
+//            }
+//        }
     }
 }
