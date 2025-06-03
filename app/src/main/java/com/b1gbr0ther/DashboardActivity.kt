@@ -20,11 +20,15 @@ import androidx.appcompat.app.AppCompatActivity
 import androidx.core.content.ContextCompat
 import androidx.core.view.ViewCompat
 import androidx.core.view.WindowInsetsCompat
+import com.b1gbr0ther.data.database.AppDatabase
 import com.b1gbr0ther.data.database.DatabaseManager
+import kotlinx.coroutines.Dispatchers
+import kotlinx.coroutines.withContext
 import java.time.LocalDateTime
 import java.util.Objects
 import kotlin.math.floor
 import kotlin.math.sqrt
+import com.b1gbr0ther.data.database.entities.Task
 
 class DashboardActivity : AppCompatActivity() {
     private lateinit var timerText: TextView
@@ -45,6 +49,7 @@ class DashboardActivity : AppCompatActivity() {
     private var acceleration = 0f
     private var currentAcceleration = 0f
     private var lastAcceleration = 0f
+    private var allTasks: List<Task> = emptyList()
 
     private var mockStartTime = 0L
 
@@ -73,7 +78,7 @@ class DashboardActivity : AppCompatActivity() {
         enableEdgeToEdge()
         setContentView(R.layout.activity_dashboard)
 
-        databaseManager = (application as B1gBr0therApplication).databaseManager
+        databaseManager = DatabaseManager(applicationContext)
         sensorManager = getSystemService(Context.SENSOR_SERVICE) as SensorManager
 
         Objects.requireNonNull(sensorManager)!!.registerListener(sensorListener, sensorManager!!.getDefaultSensor(Sensor.TYPE_ACCELEROMETER), SensorManager.SENSOR_DELAY_NORMAL)
@@ -228,8 +233,8 @@ class DashboardActivity : AppCompatActivity() {
     fun startTrackingWithTask(task: Task) {
         if (!timeTracker.isTracking()) {
             timeTracker.startTracking()
-            Toast.makeText(this, "Tracking started for: ${task.getName()}", Toast.LENGTH_SHORT).show()
-            updateCurrentTask("Tracking: ${task.getName()}")
+            Toast.makeText(this, "Tracking started for: ${task.taskName}", Toast.LENGTH_SHORT).show()//Changed from getName to just name
+            updateCurrentTask("Tracking: ${task.taskName}")//Allegedly may break something, as this is not the creation task, it is a DB entity now
         } else {
             Toast.makeText(this, "Already tracking", Toast.LENGTH_SHORT).show()
         }
@@ -368,30 +373,27 @@ class DashboardActivity : AppCompatActivity() {
         override fun onAccuracyChanged(sensor: Sensor, accuracy: Int) {}
     }
 
-    private fun isActiveTask(): Boolean {
-        if (getActiveTask() != null){
-            //Summon completion dialog
+    private suspend fun isActiveTask(): Boolean{
+        try {
+            val db = AppDatabase.getDatabase(this@DashboardActivity)
+            var tasks = withContext(Dispatchers.IO) {
+                db.taskDao().getAllTasks()
+            }
+             if(getActiveTask(tasks) != null){
+                 return true
+             }
         }
-        else{
-            //Summon creation dialog
+        catch (e: Exception){
+            e.printStackTrace()
         }
-
-        return true
+        return false
     }
 
-    private fun getActiveTask(): Task?{
-        val activeTask = null
-        var allTasks = databaseManager.getAllTasks { tasks ->
-            if (tasks.isNotEmpty()) {
-                // Get the most recently created task (assuming it's the last one in the list)
-                val lastDbTask = tasks.last()
-                lastTaskId = lastDbTask.id
-
-                // Convert to app Task model
-                lastTask = lastDbTask.toAppTask()
-            } }//I would assume that this is the
-        for(allTasks in Task) {
-            //Logic for loop here. It checks whether there is an active task
+    private fun getActiveTask(allTasks: List<Task>): Task?{
+        for (task in allTasks){
+            if (task.endTime.isAfter(LocalDateTime.now()) && task.startTime.isBefore(LocalDateTime.now())){
+                return task
+            }
         }
         return null
     }
