@@ -2,17 +2,16 @@ package com.b1gbr0ther
 
 class VoiceCommandHandler(private val activity: DashboardActivity) {
 
+    private val commandMap = mapOf(
+        "stop tracking" to { activity.stopTracking() },
+        "start break" to { activity.startBreak() },
+        "stop break" to { activity.endBreak() },
+        "show export" to { activity.showExportPage() },
+        "show manual" to { activity.showManualPage() },
+        "show timesheet" to { /* activity.showTimesheetPage() */ }
+    )
+
     private val commandAliases = mapOf(
-        "start tracking" to listOf(
-            "start tracking",
-            "begin tracking",
-            "start work",
-            "begin work",
-            "start working",
-            "begin working",
-            "start task",
-            "begin task"
-        ),
         "stop tracking" to listOf(
             "stop tracking",
             "end tracking",
@@ -78,25 +77,26 @@ class VoiceCommandHandler(private val activity: DashboardActivity) {
         )
     )
 
-    private val commandMap = mapOf(
-        "start tracking" to { activity.startTracking() },
-        "stop tracking" to { activity.stopTracking() },
-        "start break" to { activity.startBreak() },
-        "stop break" to { activity.endBreak() },
-        "show export" to { activity.showExportPage() },
-        "show manual" to { activity.showManualPage() },
-        // Un-comment this once timesheet page is implemented.
-        "show timesheet" to { /* activity.showTimesheetPage() */ }
-    )
-
     fun handleCommand(spoken: String): Boolean {
         val normalizedInput = spoken.trim().lowercase()
         
+        // Only handle "start tracking" if it's followed by a task name
+        if (normalizedInput.startsWith("start tracking ") || normalizedInput.startsWith("begin tracking ")) {
+            val taskName = normalizedInput.substringAfter(" tracking ").trim()
+            if (taskName.isNotEmpty()) {
+                activity.startTrackingWithTask(taskName)
+                return true
+            }
+            return false
+        }
+
+        // Then check for exact command matches
         commandMap[normalizedInput]?.let {
             it.invoke()
             return true
         }
 
+        // Check for command aliases
         for ((mainCommand, aliases) in commandAliases) {
             if (aliases.any { alias -> normalizedInput == alias }) {
                 commandMap[mainCommand]?.invoke()
@@ -104,6 +104,7 @@ class VoiceCommandHandler(private val activity: DashboardActivity) {
             }
         }
 
+        // Finally check for similar commands
         for ((mainCommand, aliases) in commandAliases) {
             if (aliases.any { alias -> 
                     isSimilar(normalizedInput, alias) || 
@@ -115,7 +116,6 @@ class VoiceCommandHandler(private val activity: DashboardActivity) {
                 return true
             }
         }
-
         return false
     }
 
@@ -147,7 +147,6 @@ class VoiceCommandHandler(private val activity: DashboardActivity) {
             maxLength <= 10 -> 3
             else -> maxOf(3, maxLength / 3)
         }
-        
         return dp[str1.length][str2.length] <= threshold
     }
 
@@ -161,7 +160,6 @@ class VoiceCommandHandler(private val activity: DashboardActivity) {
                 matchCount++
             }
         }
-
         return matchCount >= (words1.size * 0.6)
     }
 }
