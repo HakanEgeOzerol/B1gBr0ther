@@ -284,10 +284,10 @@ class ExportPage : AppCompatActivity() {
             runOnUiThread {
                 if (tasks.isEmpty()) {
                     // Create sample tasks for testing if none exist
-                    // createSampleTasks {
-                    //     // Try fetch again after creating sample tasks
-                    //     fetchAndDisplayTasks()
-                    // }
+                     createSampleTasks {
+                         // Try fetch again after creating sample tasks
+                         fetchAndDisplayTasks()
+                     }
                     return@runOnUiThread
                 }
                 

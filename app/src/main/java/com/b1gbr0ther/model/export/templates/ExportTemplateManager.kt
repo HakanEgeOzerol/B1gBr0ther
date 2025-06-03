@@ -6,6 +6,10 @@ class ExportTemplateManager {
     val templates: List<ExportTemplate> = listOf(
         CSVTemplate(),
         JSONTemplate(),
+        HTMLTemplate(),
+        MarkdownTemplate(),
+        XMLTemplate(),
+        PlainTextTemplate(),
     )
 
     fun getTemplateByExtension(ext: String): ExportTemplate? {
