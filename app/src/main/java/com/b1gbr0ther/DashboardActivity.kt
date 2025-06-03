@@ -106,15 +106,19 @@ class DashboardActivity : AppCompatActivity() {
                     val currentDuration = timeTracker.getCurrentDuration()
                     timerText.text = formatTimeFromMillis(currentDuration)
 
-                    if (currentTaskText.text == "Not Busy With A Task") {
-                        currentTaskText.text = "Active Tracking Session"
+                    if (currentTaskText.text == "Not busy with a task") {
+                        if (timeTracker.isOnBreak()) {
+                            currentTaskText.text = "On break"
+                        } else {
+                            currentTaskText.text = "Currently busy with a task"
+                        }
                     }
                 } else {
                     val now = java.time.LocalTime.now()
                     timerText.text = now.format(java.time.format.DateTimeFormatter.ofPattern("HH:mm"))
 
-                    if (currentTaskText.text == "Active Tracking Session") {
-                        currentTaskText.text = "Not Busy With A Task"
+                    if (currentTaskText.text != "Not busy with a task") {
+                        currentTaskText.text = "Not busy with a task"
                     }
                 }
 
@@ -152,7 +156,6 @@ class DashboardActivity : AppCompatActivity() {
             },
             onError = { error ->
                 runOnUiThread {
-                    statusTextView.text = "Error: $error"
                     Toast.makeText(this, error, Toast.LENGTH_SHORT).show()
                 }
             }
@@ -169,6 +172,7 @@ class DashboardActivity : AppCompatActivity() {
         }
 
         commandHandler = VoiceCommandHandler(this)
+        statusTextView.text = "Voice recognition ready"
     }
 
     private fun checkPermissionAndStartRecognition() {
@@ -186,8 +190,6 @@ class DashboardActivity : AppCompatActivity() {
 
     private fun handleVoiceResult(result: String) {
         runOnUiThread {
-            currentTaskText.text = "Heard: $result"
-
             val recognized = commandHandler.handleCommand(result)
             if (!recognized) {
                 Toast.makeText(this, "Command not recognized: $result", Toast.LENGTH_SHORT).show()
@@ -195,12 +197,11 @@ class DashboardActivity : AppCompatActivity() {
         }
     }
 
-
     fun startTracking() {
         if (!timeTracker.isTracking()) {
             timeTracker.startTracking()
             Toast.makeText(this, "Tracking started", Toast.LENGTH_SHORT).show()
-            updateCurrentTask("Active Tracking Session")
+            updateCurrentTask("Currently busy with a task")
         } else {
             Toast.makeText(this, "Already tracking", Toast.LENGTH_SHORT).show()
         }
@@ -210,7 +211,7 @@ class DashboardActivity : AppCompatActivity() {
         if (!timeTracker.isTracking()) {
             timeTracker.startTracking()
             Toast.makeText(this, "Tracking started for: ${task.getName()}", Toast.LENGTH_SHORT).show()
-            updateCurrentTask("Tracking: ${task.getName()}")
+            updateCurrentTask("Currently busy with a task")
         } else {
             Toast.makeText(this, "Already tracking", Toast.LENGTH_SHORT).show()
         }
@@ -247,7 +248,7 @@ class DashboardActivity : AppCompatActivity() {
             ).show()
         }
 
-        updateCurrentTask("Not Busy With A Task")
+        updateCurrentTask("Not busy with a task")
     }
 
     fun startBreak() {
@@ -260,7 +261,7 @@ class DashboardActivity : AppCompatActivity() {
             Toast.makeText(this, "Already on a break", Toast.LENGTH_SHORT).show()
         } else if (timeTracker.startBreak()) {
             Toast.makeText(this, "Break started", Toast.LENGTH_SHORT).show()
-            updateCurrentTask("On Break")
+            updateCurrentTask("On break")
         }
     }
 
@@ -274,7 +275,7 @@ class DashboardActivity : AppCompatActivity() {
             Toast.makeText(this, "No active break", Toast.LENGTH_SHORT).show()
         } else if (timeTracker.endBreak()) {
             Toast.makeText(this, "Break ended", Toast.LENGTH_SHORT).show()
-            updateCurrentTask("Active Tracking Session")
+            updateCurrentTask("Currently busy with a task")
         }
     }
 
@@ -300,18 +301,23 @@ class DashboardActivity : AppCompatActivity() {
             timerText.text = formatTimeFromMillis(currentDuration)
 
             if (timeTracker.isOnBreak()) {
-                currentTaskText.text = "On Break"
+                currentTaskText.text = "On break"
             } else {
-                currentTaskText.text = "Active Tracking Session"
+                currentTaskText.text = "Currently busy with a task"
             }
         } else {
             mockStartTime = System.currentTimeMillis()
+            currentTaskText.text = "Not busy with a task"
         }
+        
+        // Reset voice recognition status
+        statusTextView.text = "Voice recognition ready"
     }
 
     override fun onPause() {
         super.onPause()
         voiceRecognizerManager.destroyRecognizer()
+        statusTextView.text = "Voice recognition stopped"
     }
 
     override fun onDestroy() {
