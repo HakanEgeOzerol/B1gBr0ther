@@ -20,11 +20,7 @@ class VoiceRecognizerManager(
     private val onError: (String) -> Unit
 ) {
     private var recognizer: SpeechRecognizer? = null
-
-    private val BLOW_THRESHOLD = 9.9f  // dB threshold for blow detection
-    private val BLOW_COOLDOWN = 5000L  // 5 seconds cooldown to avoid spam
-    private var lastBlowDetectedTime = 0L
-    private var blowDetectionEnabled = true
+    private val blowDetector = BlowDetector()
     private var onBlowDetected: (() -> Unit)? = null
 
     fun setOnBlowDetected(callback: () -> Unit) {
@@ -67,7 +63,7 @@ class VoiceRecognizerManager(
         return object : RecognitionListener {
             override fun onReadyForSpeech(params: Bundle?) {
                 onStatusUpdate("Ready for speech")
-                blowDetectionEnabled = true
+                blowDetector.reset()
             }
 
             override fun onBeginningOfSpeech() {
@@ -75,11 +71,8 @@ class VoiceRecognizerManager(
             }
 
             override fun onRmsChanged(rmsdB: Float) {
-                if (blowDetectionEnabled &&
-                    rmsdB > BLOW_THRESHOLD &&
-                    System.currentTimeMillis() - lastBlowDetectedTime > BLOW_COOLDOWN) {
-
-                    lastBlowDetectedTime = System.currentTimeMillis()
+                // Process the RMS value through our BlowDetector
+                if (blowDetector.processAudioSample(rmsdB, System.currentTimeMillis())) {
                     onBlowDetected?.invoke()
                 }
             }

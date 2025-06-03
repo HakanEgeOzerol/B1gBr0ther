@@ -32,8 +32,6 @@
         <activity android:name=".HandGesturesActivity" />
         <activity android:name=".ManualPage"
             android:theme="@style/Theme.AppCompat.Light.NoActionBar" />/>
-        <activity android:name=".AudioRecognitionActivity"
-            android:theme="@style/Theme.AppCompat.Light.NoActionBar"/>
         <activity 
             android:name=".ExportPage"
             android:exported="false"
