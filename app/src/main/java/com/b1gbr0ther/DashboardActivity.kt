@@ -460,6 +460,27 @@ class DashboardActivity : AppCompatActivity() {
         dialog.show()
     }
 
+    private fun createNewTaskDialog(){
+        val dialog = Dialog(this)
+
+    }
+
+    private fun isFutureTaskDialog(){
+        val dialog = Dialog(this)
+    }
+
+    private fun setDate(){
+        val dialog = Dialog(this)
+    }
+
+    private fun setStartTime(){
+        val dialog = Dialog(this)
+    }
+
+    private fun setEndTime(){
+        val dialog = Dialog(this)
+    }
+
     /**
      * Mark a task as completed in the database
      */
