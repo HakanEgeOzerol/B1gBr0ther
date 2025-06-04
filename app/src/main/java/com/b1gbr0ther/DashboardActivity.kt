@@ -49,6 +49,7 @@ class DashboardActivity : AppCompatActivity() {
     private var lastAcceleration = 0f
     private var allTasks: List<Task> = emptyList()
     private var allTasksId: List<Int> = emptyList()
+    private var activeTaskId: Int = -1
 
     private var mockStartTime = 0L
 
@@ -78,7 +79,7 @@ class DashboardActivity : AppCompatActivity() {
         setContentView(R.layout.activity_dashboard)
 
         databaseManager = DatabaseManager(applicationContext)
-        storeAllTasks()
+        updateAllTasks()
         sensorManager = getSystemService(Context.SENSOR_SERVICE) as SensorManager
 
         Objects.requireNonNull(sensorManager)!!.registerListener(sensorListener, sensorManager!!.getDefaultSensor(Sensor.TYPE_ACCELEROMETER), SensorManager.SENSOR_DELAY_NORMAL)
@@ -319,7 +320,7 @@ class DashboardActivity : AppCompatActivity() {
     override fun onResume() {
         super.onResume()
 
-        storeAllTasks()
+        updateAllTasks()
 
         if (timeTracker.isTracking()) {
             val currentDuration = timeTracker.getCurrentDuration()
@@ -364,7 +365,7 @@ class DashboardActivity : AppCompatActivity() {
 
             if (acceleration > 17 && !isDialogShown && !isActiveTask()) {
                 val lastId = allTasksId.last()
-                Toast.makeText(applicationContext, "The last ID is $lastId", Toast.LENGTH_SHORT).show()
+                Toast.makeText(applicationContext, "The last ID is $activeTaskId", Toast.LENGTH_SHORT).show()
 //                isDialogShown = true
 //                createExistingTaskDialog()
             }
@@ -390,22 +391,29 @@ class DashboardActivity : AppCompatActivity() {
 
     private fun getActiveTask(allTasks: List<Task>): Task?{
         for (task in allTasks){
-            if (task.endTime.isAfter(LocalDateTime.now()) && task.startTime.isBefore(LocalDateTime.now())){
+            if (task.endTime.isAfter(LocalDateTime.now()) && task.startTime.isBefore(LocalDateTime.now()) && !task.isCompleted){
                 return task
             }
         }
         return null
     }
 
-    private fun storeAllTasks(){
+    private fun updateAllTasks(){
         databaseManager.getAllTasks { tasks -> this.allTasks = tasks }
-        databaseManager.getAllTasksId { tasks ->this.allTasksId = tasks }
+        databaseManager.getAllTasksId { tasks -> this.allTasksId = tasks }
+        this.activeTaskId = getIdOfActiveTask()
     }
 
     private fun getIdOfActiveTask(): Int{
-
-
-        return 1
+        val tmpActiveTask = getActiveTask(this.allTasks)
+        if (tmpActiveTask == null){
+            return -1
+        }
+        else{
+            val activeIndex = this.allTasks.indexOf(tmpActiveTask)
+            val activeId = this.allTasksId.get(activeIndex)
+            return activeId
+        }
     }
 
     private fun createExistingTaskDialog(){
@@ -437,18 +445,14 @@ class DashboardActivity : AppCompatActivity() {
 
         // Mark task as completed
         completeButton?.setOnClickListener {
-//            if (lastTaskId > 0) {
-//                markTaskAsCompleted(lastTaskId)
-//            }
+            markTaskAsCompleted(activeTaskId.toLong())
             isDialogShown = false
             dialog.dismiss()
         }
 
         // Delete the task
         deleteButton?.setOnClickListener {
-//            if (lastTaskId > 0) {
-//                deleteTask(lastTaskId)
-//            }
+            deleteTask(activeTaskId.toLong())
             isDialogShown = false
             dialog.dismiss()
         }
@@ -460,32 +464,25 @@ class DashboardActivity : AppCompatActivity() {
      * Mark a task as completed in the database
      */
     private fun markTaskAsCompleted(taskId: Long) {
-//        databaseManager.getTask(taskId) { task ->
-//            if (task != null) {
-//                // Update the task
-//                task.isCompleted = true
-//
-//                // Save the updated task
-//                databaseManager.updateTask(task) {
-//                    Toast.makeText(this, "Task marked as completed", Toast.LENGTH_SHORT).show()
-//                    // Update the in-memory task
-//                    lastTask = task.toAppTask()
-//                }
-//            }
-//        }
+        databaseManager.getTask(taskId) { task ->
+            if (task != null) {
+                // Update the task
+                task.isCompleted = true
+
+                // Save the updated task
+                databaseManager.updateTask(task) {
+                    Toast.makeText(this, "Task marked as completed", Toast.LENGTH_SHORT).show()
+                }
+            }
+        }
     }
 
     /**
      * Delete a task from the database
      */
     private fun deleteTask(taskId: Long) {
-//        databaseManager.deleteTask(taskId) {
-//            Toast.makeText(this, "Task deleted", Toast.LENGTH_SHORT).show()
-//            // Clear the in-memory task reference
-//            if (::lastTask.isInitialized) {
-//                // We need to find a new last task
-//                loadLastTask()
-//            }
-//        }
+        databaseManager.deleteTask(taskId) {
+            Toast.makeText(this, "Task deleted", Toast.LENGTH_SHORT).show()
+        }
     }
 }
