@@ -17,6 +17,7 @@ import android.widget.CheckBox
 import android.widget.DatePicker
 import android.widget.EditText
 import android.widget.TextView
+import android.widget.TimePicker
 import android.widget.Toast
 import androidx.activity.enableEdgeToEdge
 import androidx.activity.result.contract.ActivityResultContracts
@@ -31,6 +32,7 @@ import kotlin.math.floor
 import kotlin.math.sqrt
 import com.b1gbr0ther.data.database.entities.Task
 import java.time.LocalDate
+import java.time.LocalTime
 
 class DashboardActivity : AppCompatActivity() {
     private lateinit var timerText: TextView
@@ -532,6 +534,24 @@ class DashboardActivity : AppCompatActivity() {
         dialog.setContentView(R.layout.gesture_dialog_new_task_step_3)
         dialog.setCancelable(true)
 
+        val startTime = dialog.findViewById<TimePicker>(R.id.timePicker)
+        val continueButton = dialog.findViewById<Button>(R.id.ContinueTaskCreationStep3)
+        val cancelButton = dialog.findViewById<Button>(R.id.Cancel)
+
+        continueButton.setOnClickListener{
+            val time = LocalTime.of(startTime.hour, startTime.minute, 0)
+
+            val dateTime = LocalDateTime.of(date, time)
+
+            dialog.dismiss()
+            setEndTimeDialog(name, dateTime)
+        }
+
+        cancelButton.setOnClickListener{
+            isDialogShown = false
+            dialog.dismiss()
+        }
+
         dialog.show()
     }
 
@@ -551,6 +571,51 @@ class DashboardActivity : AppCompatActivity() {
             val minutesSubmitted = (minutes.text.toString()).toLong()
             var estimatedCompletion = LocalDateTime.now()
             val startTime = LocalDateTime.now()
+
+            if (hoursSubmitted >= 0){
+                estimatedCompletion = estimatedCompletion.plusHours(hoursSubmitted)
+                if (minutesSubmitted >= 0){
+                    estimatedCompletion = estimatedCompletion.plusMinutes(minutesSubmitted)
+                }
+            }
+            else{
+                estimatedCompletion.plusHours(3)//default for task time
+            }
+
+            val newTask = Task(name, startTime, estimatedCompletion)//this creates the task
+
+            // Save the task to the database
+            databaseManager.createAppTask(newTask) { taskId ->
+                Toast.makeText(this, "Task saved to database with ID: $taskId", Toast.LENGTH_SHORT).show()
+            }
+
+            isDialogShown = false
+            dialog.dismiss()
+        }
+
+        cancelButton.setOnClickListener{
+            isDialogShown = false
+            dialog.dismiss()
+        }
+        dialog.show()
+    }
+
+    private fun setEndTimeDialog(name: String, dateTime: LocalDateTime){//Last dialog in chain, if task is to be planned ahead
+        val dialog = Dialog(this)
+        dialog.setContentView(R.layout.gesture_dialog_new_task_step_4)
+        dialog.setCancelable(true)
+
+        val cancelButton = dialog.findViewById<Button>(R.id.Cancel)
+        val submitTask = dialog.findViewById<Button>(R.id.EndTaskCreation)
+
+        val hours = dialog.findViewById<EditText>(R.id.HoursInput)
+        val minutes = dialog.findViewById<EditText>(R.id.MinutesInput)
+
+        submitTask.setOnClickListener{
+            val hoursSubmitted = (hours.text.toString()).toLong()
+            val minutesSubmitted = (minutes.text.toString()).toLong()
+            var estimatedCompletion = LocalDateTime.now()
+            val startTime = dateTime
 
             if (hoursSubmitted >= 0){
                 estimatedCompletion = estimatedCompletion.plusHours(hoursSubmitted)
