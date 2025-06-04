@@ -14,6 +14,7 @@ import android.os.Handler
 import android.os.Looper
 import android.widget.Button
 import android.widget.CheckBox
+import android.widget.DatePicker
 import android.widget.EditText
 import android.widget.TextView
 import android.widget.Toast
@@ -29,6 +30,7 @@ import java.util.Objects
 import kotlin.math.floor
 import kotlin.math.sqrt
 import com.b1gbr0ther.data.database.entities.Task
+import java.time.LocalDate
 
 class DashboardActivity : AppCompatActivity() {
     private lateinit var timerText: TextView
@@ -480,14 +482,12 @@ class DashboardActivity : AppCompatActivity() {
             val isPlannedAhead = checkBox.isChecked
 
             if (isPlannedAhead){
-                setDateDialog(name)
                 dialog.dismiss()
-//                Toast.makeText(this, "Planing ahead, this is name $name", Toast.LENGTH_SHORT).show()
+                setDateDialog(name)
             }
             else{
                 dialog.dismiss()
                 setEndTimeDialog(name)
-//                Toast.makeText(this, "Not planing ahead, this is name $name", Toast.LENGTH_SHORT).show()
             }
         }
 
@@ -504,20 +504,35 @@ class DashboardActivity : AppCompatActivity() {
 
     }
 
-    private fun isFutureTaskDialogDialog(){
-        val dialog = Dialog(this)
-    }
-
     private fun setDateDialog(name: String){
         val dialog = Dialog(this)
+        dialog.setContentView(R.layout.gesture_dialog_new_task_step_2)
+        dialog.setCancelable(true)
+
+        val datePicker = dialog.findViewById<DatePicker>(R.id.datePicker)
+        val continueButton = dialog.findViewById<Button>(R.id.ContinueTaskCreationStep2)
+        val cancelButton = dialog.findViewById<Button>(R.id.Cancel)
+
+        continueButton.setOnClickListener{
+            val taskDate = LocalDate.of(datePicker.year, datePicker.dayOfMonth, datePicker.dayOfMonth)
+
+            dialog.dismiss()
+            setStartTimeDialog(name, taskDate)
+        }
+        cancelButton.setOnClickListener{
+            isDialogShown = false
+            dialog.dismiss()
+        }
+
+        dialog.show()
     }
 
-    private fun setStartTimeDialog(name: String){
+    private fun setStartTimeDialog(name: String, date: LocalDate){//Penultimate dialog in chain, if task is to be planed ahead
         val dialog = Dialog(this)
-    }
+        dialog.setContentView(R.layout.gesture_dialog_new_task_step_3)
+        dialog.setCancelable(true)
 
-    private fun setStartTimeDialog(name: String, dateTime: LocalDateTime){//Last dialog in chain, if task is to be planed ahead
-        val dialog = Dialog(this)
+        dialog.show()
     }
 
     private fun setEndTimeDialog(name: String){//Last dialog in chain, if task is to be immediately tracked
@@ -551,7 +566,6 @@ class DashboardActivity : AppCompatActivity() {
 
             // Save the task to the database
             databaseManager.createAppTask(newTask) { taskId ->
-//                lastTaskId = taskId
                 Toast.makeText(this, "Task saved to database with ID: $taskId", Toast.LENGTH_SHORT).show()
             }
 
