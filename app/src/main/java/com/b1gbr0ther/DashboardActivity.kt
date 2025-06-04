@@ -10,12 +10,24 @@ import androidx.activity.enableEdgeToEdge
 import androidx.appcompat.app.AppCompatActivity
 import androidx.core.view.ViewCompat
 import androidx.core.view.WindowInsetsCompat
+import com.b1gbr0ther.data.database.DatabaseManager // Added DatabaseManager import
+import com.b1gbr0ther.data.database.entities.Task // Added Task entity import
+
+
 
 class DashboardActivity : AppCompatActivity() {
+    private lateinit var databaseManager: DatabaseManager
+    private var allTasksList: List<Task> = emptyList()
     private lateinit var timerText: TextView
     private val handler = Handler(Looper.getMainLooper())
     private lateinit var timerRunnable: Runnable
     private lateinit var currentTaskText: TextView
+
+    private fun loadAllTasks() {
+        databaseManager.getAllTasks { tasks ->
+            this.allTasksList = tasks
+        }
+    }
 
 
     fun getCurrentWorkTime(): String {
@@ -36,6 +48,9 @@ class DashboardActivity : AppCompatActivity() {
         currentTaskText = findViewById(R.id.currentTaskText)
         enableEdgeToEdge()
         setContentView(R.layout.activity_dashboard)
+
+        databaseManager = DatabaseManager(applicationContext)
+        loadAllTasks() // Call the function to load tasks
 
         val menu = findViewById<MenuBar>(R.id.menuBar)
         menu.setActivePage(2) // 2 is for Dashboard
@@ -82,7 +97,7 @@ class DashboardActivity : AppCompatActivity() {
 
         // Set up click listener for database test button
         findViewById<Button>(R.id.btnDatabaseTest).setOnClickListener {
-            val intent = Intent(this, DatabaseTestActivity::class.java)
+            val intent = Intent(this, DatabaseTesterActivity::class.java)
             startActivity(intent)
         }
     }

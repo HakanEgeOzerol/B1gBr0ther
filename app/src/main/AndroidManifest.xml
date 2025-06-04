@@ -32,8 +32,18 @@
         <activity android:name=".HandGesturesActivity" />
         <activity android:name=".AudioRecognitionActivity" />
         <activity 
-            android:name=".DatabaseTestActivity"
+            android:name=".DatabaseTesterActivity"
             android:label="DB Test"
+            android:exported="true"
+            android:theme="@style/Theme.AppCompat.Light.NoActionBar">
+            <intent-filter>
+                <action android:name="android.intent.action.VIEW" />
+                <category android:name="android.intent.category.DEFAULT" />
+            </intent-filter>
+        </activity>
+        <activity 
+            android:name=".DatabaseLauncherActivity"
+            android:label="Database Testing"
             android:exported="true"
             android:theme="@style/Theme.AppCompat.Light.NoActionBar">
             <intent-filter>

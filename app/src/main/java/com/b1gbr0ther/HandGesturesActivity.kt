@@ -151,7 +151,7 @@ class HandGesturesActivity : ComponentActivity() {
             }
 
             // Create the task in memory
-            this.lastTask = Task(name, startTime, estimatedCompletion)//this creates the task
+            this.lastTask = Task(name, startTime, estimatedCompletion, CreationMethod.Gesture)//this creates the task
             
             // Save the task to the database
             databaseManager.createAppTask(this.lastTask) { taskId ->
