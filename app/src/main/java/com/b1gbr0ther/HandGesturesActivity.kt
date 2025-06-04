@@ -119,56 +119,56 @@ class HandGesturesActivity : ComponentActivity() {
     
     private fun createInputTaskDialog(){
         // Create Dialog instance
-        val dialog = Dialog(this)
-        dialog.setContentView(R.layout.gesture_dialog_text_input)
-        dialog.setCancelable(true)
-
-        val textInput = dialog.findViewById<EditText>(R.id.TaskInput)
-        val cancelButton = dialog.findViewById<Button>(R.id.Cancel)
-        val startTracking = dialog.findViewById<Button>(R.id.SubmitTask)
-        val hours = dialog.findViewById<EditText>(R.id.HourInput)
-        val minutes = dialog.findViewById<EditText>(R.id.MinuteInput)
-
-        startTracking.setOnClickListener{
-            var name = textInput.text.toString()
-            var hoursSubmitted = (hours.text.toString()).toLong()
-            var minutesSubmitted = (minutes.text.toString()).toLong()
-
-            var estimatedCompletion = LocalDateTime.now()
-
-            var startTime = LocalDateTime.now()
-
-            if (hoursSubmitted >= 0){
-                estimatedCompletion = estimatedCompletion.plusHours(hoursSubmitted)
-                if (minutesSubmitted >= 0){
-                    estimatedCompletion = estimatedCompletion.plusMinutes(minutesSubmitted)
-                }
-            }
-            else{
-                estimatedCompletion.plusHours(3)//default for task time
-            }
-
-            // Create the task in memory
-            this.lastTask = Task(name, startTime, estimatedCompletion)//this creates the task
-            
-            // Save the task to the database
-            databaseManager.createAppTask(this.lastTask) { taskId ->
-                lastTaskId = taskId
-                Toast.makeText(this, "Task saved to database with ID: $taskId", Toast.LENGTH_SHORT).show()
-            }
-            
-            isDialogShown = false
-            dialog.dismiss()
-        }
-
-        cancelButton.setOnClickListener{
-//            do something is dismissed
-
-            isDialogShown = false
-            dialog.dismiss()
-        }
-
-        dialog.show()
+//        val dialog = Dialog(this)
+//        dialog.setContentView(R.layout.gesture_dialog_new_task_step_1)
+//        dialog.setCancelable(true)
+//
+//        val textInput = dialog.findViewById<EditText>(R.id.TaskInput)
+//        val cancelButton = dialog.findViewById<Button>(R.id.Cancel)
+//        val startTracking = dialog.findViewById<Button>(R.id.SubmitTask)
+//        val hours = dialog.findViewById<EditText>(R.id.HourInput)
+//        val minutes = dialog.findViewById<EditText>(R.id.MinuteInput)
+//
+//        startTracking.setOnClickListener{
+//            var name = textInput.text.toString()
+//            var hoursSubmitted = (hours.text.toString()).toLong()
+//            var minutesSubmitted = (minutes.text.toString()).toLong()
+//
+//            var estimatedCompletion = LocalDateTime.now()
+//
+//            var startTime = LocalDateTime.now()
+//
+//            if (hoursSubmitted >= 0){
+//                estimatedCompletion = estimatedCompletion.plusHours(hoursSubmitted)
+//                if (minutesSubmitted >= 0){
+//                    estimatedCompletion = estimatedCompletion.plusMinutes(minutesSubmitted)
+//                }
+//            }
+//            else{
+//                estimatedCompletion.plusHours(3)//default for task time
+//            }
+//
+//            // Create the task in memory
+//            this.lastTask = Task(name, startTime, estimatedCompletion)//this creates the task
+//
+//            // Save the task to the database
+//            databaseManager.createAppTask(this.lastTask) { taskId ->
+//                lastTaskId = taskId
+//                Toast.makeText(this, "Task saved to database with ID: $taskId", Toast.LENGTH_SHORT).show()
+//            }
+//
+//            isDialogShown = false
+//            dialog.dismiss()
+//        }
+//
+//        cancelButton.setOnClickListener{
+////            do something is dismissed
+//
+//            isDialogShown = false
+//            dialog.dismiss()
+//        }
+//
+//        dialog.show()
     }
 
     private fun createExistingTaskDialog(){

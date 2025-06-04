@@ -13,6 +13,8 @@ import android.os.Bundle
 import android.os.Handler
 import android.os.Looper
 import android.widget.Button
+import android.widget.CheckBox
+import android.widget.EditText
 import android.widget.TextView
 import android.widget.Toast
 import androidx.activity.enableEdgeToEdge
@@ -364,10 +366,9 @@ class DashboardActivity : AppCompatActivity() {
 
 
             if (acceleration > 17 && !isDialogShown && !isActiveTask()) {
-                val lastId = allTasksId.last()
-                Toast.makeText(applicationContext, "The last ID is $activeTaskId", Toast.LENGTH_SHORT).show()
-//                isDialogShown = true
-//                createExistingTaskDialog()
+//                Toast.makeText(applicationContext, "The last ID is $activeTaskId", Toast.LENGTH_SHORT).show()
+                isDialogShown = true
+                createInputTaskDialog()
             }
             else if (acceleration>17 &&!isDialogShown && isActiveTask()){
                 isDialogShown = true
@@ -460,25 +461,129 @@ class DashboardActivity : AppCompatActivity() {
         dialog.show()
     }
 
+    private fun createInputTaskDialog(){
+        // Create Dialog instance
+        val dialog = Dialog(this)
+        dialog.setContentView(R.layout.gesture_dialog_new_task_step_1)
+        dialog.setCancelable(true)
+
+        val textInput = dialog.findViewById<EditText>(R.id.TaskInput)
+        val cancelButton = dialog.findViewById<Button>(R.id.Cancel)
+        val startTaskCreation = dialog.findViewById<Button>(R.id.StartTaskCreation)
+        val checkBox = dialog.findViewById<CheckBox>(R.id.checkBoxNewTask)
+
+        startTaskCreation.setOnClickListener{
+            var name = textInput.text.toString()
+            if (name.isEmpty()){
+                name = "Default task name"
+            }
+            val isPlannedAhead = checkBox.isChecked
+
+            if (isPlannedAhead){
+                setDateDialog(name)
+                dialog.dismiss()
+                Toast.makeText(this, "Planing ahead, this is name $name", Toast.LENGTH_SHORT).show()
+            }
+            else{
+                setEndTimeDialog(name)
+                dialog.dismiss()
+                Toast.makeText(this, "Not planing ahead, this is name $name", Toast.LENGTH_SHORT).show()
+            }
+
+
+
+
+
+
+
+
+
+////            if (hoursSubmitted >= 0){
+////                estimatedCompletion = estimatedCompletion.plusHours(hoursSubmitted)
+////                if (minutesSubmitted >= 0){
+////                    estimatedCompletion = estimatedCompletion.plusMinutes(minutesSubmitted)
+////                }
+////            }
+////            else{
+////                estimatedCompletion.plusHours(3)//default for task time
+////            }
+//
+//            // Create the task in memory
+//            val newTask = Task(name, startTime, estimatedCompletion)//this creates the task
+//
+//            // Save the task to the database
+//            databaseManager.createAppTask(newTask) { taskId ->
+////                lastTaskId = taskId
+//                Toast.makeText(this, "Task saved to database with ID: $taskId", Toast.LENGTH_SHORT).show()
+//            }
+//
+//            isDialogShown = false
+//            dialog.dismiss()
+        }
+
+        cancelButton.setOnClickListener{
+            isDialogShown = false
+            dialog.dismiss()
+        }
+
+        dialog.show()
+    }
+
     private fun createNewTaskDialog(){
         val dialog = Dialog(this)
 
     }
 
-    private fun isFutureTaskDialog(){
+    private fun isFutureTaskDialogDialog(){
         val dialog = Dialog(this)
     }
 
-    private fun setDate(){
+    private fun setDateDialog(name: String){
         val dialog = Dialog(this)
     }
 
-    private fun setStartTime(){
+    private fun setStartTimeDialog(name: String){
         val dialog = Dialog(this)
     }
 
-    private fun setEndTime(){
+    private fun setStartTimeDialog(name: String, dateTime: LocalDateTime){
         val dialog = Dialog(this)
+    }
+
+    private fun setEndTimeDialog(name: String){
+        val dialog = Dialog(this)
+        dialog.setContentView(R.layout.gesture_dialog_new_task_step_4)
+        dialog.setCancelable(true)
+
+        val hours = dialog.findViewById<EditText>(R.id.HoursInput)
+        val minutes = dialog.findViewById<EditText>(R.id.MinutesInput)
+
+        var hoursSubmitted = (hours.text.toString()).toLong()
+        var minutesSubmitted = (minutes.text.toString()).toLong()
+        var estimatedCompletion = LocalDateTime.now()
+        val startTime = LocalDateTime.now()
+
+        if (hoursSubmitted >= 0){
+            estimatedCompletion = estimatedCompletion.plusHours(hoursSubmitted)
+            if (minutesSubmitted >= 0){
+                estimatedCompletion = estimatedCompletion.plusMinutes(minutesSubmitted)
+            }
+        }
+        else{
+            estimatedCompletion.plusHours(3)//default for task time
+        }
+
+        // Create the task in memory
+            val newTask = Task(name, startTime, estimatedCompletion)//this creates the task
+
+            // Save the task to the database
+            databaseManager.createAppTask(newTask) { taskId ->
+//                lastTaskId = taskId
+                Toast.makeText(this, "Task saved to database with ID: $taskId", Toast.LENGTH_SHORT).show()
+            }
+
+            isDialogShown = false
+            dialog.dismiss()
     }
 
     /**
