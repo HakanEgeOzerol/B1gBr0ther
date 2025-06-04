@@ -461,7 +461,7 @@ class DashboardActivity : AppCompatActivity() {
         dialog.show()
     }
 
-    private fun createInputTaskDialog(){
+    private fun createInputTaskDialog(){//First dialog in chain
         // Create Dialog instance
         val dialog = Dialog(this)
         dialog.setContentView(R.layout.gesture_dialog_new_task_step_1)
@@ -482,43 +482,13 @@ class DashboardActivity : AppCompatActivity() {
             if (isPlannedAhead){
                 setDateDialog(name)
                 dialog.dismiss()
-                Toast.makeText(this, "Planing ahead, this is name $name", Toast.LENGTH_SHORT).show()
+//                Toast.makeText(this, "Planing ahead, this is name $name", Toast.LENGTH_SHORT).show()
             }
             else{
-                setEndTimeDialog(name)
                 dialog.dismiss()
-                Toast.makeText(this, "Not planing ahead, this is name $name", Toast.LENGTH_SHORT).show()
+                setEndTimeDialog(name)
+//                Toast.makeText(this, "Not planing ahead, this is name $name", Toast.LENGTH_SHORT).show()
             }
-
-
-
-
-
-
-
-
-
-////            if (hoursSubmitted >= 0){
-////                estimatedCompletion = estimatedCompletion.plusHours(hoursSubmitted)
-////                if (minutesSubmitted >= 0){
-////                    estimatedCompletion = estimatedCompletion.plusMinutes(minutesSubmitted)
-////                }
-////            }
-////            else{
-////                estimatedCompletion.plusHours(3)//default for task time
-////            }
-//
-//            // Create the task in memory
-//            val newTask = Task(name, startTime, estimatedCompletion)//this creates the task
-//
-//            // Save the task to the database
-//            databaseManager.createAppTask(newTask) { taskId ->
-////                lastTaskId = taskId
-//                Toast.makeText(this, "Task saved to database with ID: $taskId", Toast.LENGTH_SHORT).show()
-//            }
-//
-//            isDialogShown = false
-//            dialog.dismiss()
         }
 
         cancelButton.setOnClickListener{
@@ -546,34 +516,37 @@ class DashboardActivity : AppCompatActivity() {
         val dialog = Dialog(this)
     }
 
-    private fun setStartTimeDialog(name: String, dateTime: LocalDateTime){
+    private fun setStartTimeDialog(name: String, dateTime: LocalDateTime){//Last dialog in chain, if task is to be planed ahead
         val dialog = Dialog(this)
     }
 
-    private fun setEndTimeDialog(name: String){
+    private fun setEndTimeDialog(name: String){//Last dialog in chain, if task is to be immediately tracked
         val dialog = Dialog(this)
         dialog.setContentView(R.layout.gesture_dialog_new_task_step_4)
         dialog.setCancelable(true)
 
+        val cancelButton = dialog.findViewById<Button>(R.id.Cancel)
+        val submitTask = dialog.findViewById<Button>(R.id.EndTaskCreation)
+
         val hours = dialog.findViewById<EditText>(R.id.HoursInput)
         val minutes = dialog.findViewById<EditText>(R.id.MinutesInput)
 
-        var hoursSubmitted = (hours.text.toString()).toLong()
-        var minutesSubmitted = (minutes.text.toString()).toLong()
-        var estimatedCompletion = LocalDateTime.now()
-        val startTime = LocalDateTime.now()
+        submitTask.setOnClickListener{
+            val hoursSubmitted = (hours.text.toString()).toLong()
+            val minutesSubmitted = (minutes.text.toString()).toLong()
+            var estimatedCompletion = LocalDateTime.now()
+            val startTime = LocalDateTime.now()
 
-        if (hoursSubmitted >= 0){
-            estimatedCompletion = estimatedCompletion.plusHours(hoursSubmitted)
-            if (minutesSubmitted >= 0){
-                estimatedCompletion = estimatedCompletion.plusMinutes(minutesSubmitted)
+            if (hoursSubmitted >= 0){
+                estimatedCompletion = estimatedCompletion.plusHours(hoursSubmitted)
+                if (minutesSubmitted >= 0){
+                    estimatedCompletion = estimatedCompletion.plusMinutes(minutesSubmitted)
+                }
             }
-        }
-        else{
-            estimatedCompletion.plusHours(3)//default for task time
-        }
+            else{
+                estimatedCompletion.plusHours(3)//default for task time
+            }
 
-        // Create the task in memory
             val newTask = Task(name, startTime, estimatedCompletion)//this creates the task
 
             // Save the task to the database
@@ -584,6 +557,13 @@ class DashboardActivity : AppCompatActivity() {
 
             isDialogShown = false
             dialog.dismiss()
+        }
+
+        cancelButton.setOnClickListener{
+            isDialogShown = false
+            dialog.dismiss()
+        }
+        dialog.show()
     }
 
     /**
