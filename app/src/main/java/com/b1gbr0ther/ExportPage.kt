@@ -46,7 +46,6 @@ class ExportPage : AppCompatActivity() {
         enableEdgeToEdge()
         setContentView(R.layout.activity_export_page)
 
-        // Initialize views
         menuBar = findViewById(R.id.menuBar)
         exportButton = findViewById(R.id.exportButton)
         startDateButton = findViewById(R.id.startDateButton)
@@ -56,19 +55,17 @@ class ExportPage : AppCompatActivity() {
         preplannedCheckbox = findViewById(R.id.preplannedCheckbox)
         recordingsRecyclerView = findViewById(R.id.recordingsRecyclerView)
 
-        // Setup menu bar
-        menuBar.setActivePage(0) // Set export page as active
-        menuBar.bringToFront() // Ensure menu bar is on top
+        menuBar.setActivePage(0)
+        menuBar.bringToFront()
 
         ViewCompat.setOnApplyWindowInsetsListener(findViewById(R.id.main)) { v, insets ->
             val systemBars = insets.getInsets(WindowInsetsCompat.Type.systemBars())
             v.setPadding(systemBars.left, systemBars.top, systemBars.right, systemBars.bottom)
             insets
         }
-        //Initialize database manager
+        
         databaseManager = DatabaseManager(this)
 
-        // Setup recycler view
         recordingsRecyclerView.layoutManager = LinearLayoutManager(this)
         taskAdapter = TaskAdapter(emptyList())
         taskAdapter.setOnSelectionChangedListener {
@@ -76,12 +73,10 @@ class ExportPage : AppCompatActivity() {
         }
         recordingsRecyclerView.adapter = taskAdapter
 
-        // Setup export button
         exportButton.setOnClickListener {
             handleExport()
         }
         
-        // Setup filter buttons
         setupFilterButtons()
 
         templateManager = ExportTemplateManager()
@@ -126,7 +121,6 @@ class ExportPage : AppCompatActivity() {
     private fun applyFilters() {
         var filteredTasks = allTasks
         
-        // Apply date filters
         if (startDate != null) {
             filteredTasks = filteredTasks.filter { 
                 it.startTime.toLocalDate().isAfter(startDate!!.minusDays(1))
@@ -138,7 +132,6 @@ class ExportPage : AppCompatActivity() {
             }
         }
         
-        // Apply status filters
         if (completedCheckbox.isChecked) {
             filteredTasks = filteredTasks.filter { it.isCompleted }
         }
@@ -167,7 +160,6 @@ class ExportPage : AppCompatActivity() {
             return
         }
         
-        // Show template selection dialog
         showTemplateSelectionDialog(selectedTasks)
     }
     
@@ -239,17 +231,14 @@ class ExportPage : AppCompatActivity() {
     
     private fun saveExportedData(data: String, fileExtension: String, mimeType: String) {
         try {
-            // Create filename with current timestamp
             val timestamp = java.text.SimpleDateFormat("yyyyMMdd_HHmmss", java.util.Locale.getDefault()).format(java.util.Date())
             val filename = "tasks_export_$timestamp.$fileExtension"
             
-            // Save to external files directory
             val exportDir = getExternalFilesDir(null)
             val exportFile = java.io.File(exportDir, filename)
             
             exportFile.writeText(data)
             
-            // Share the file
             shareExportedFile(exportFile, mimeType)
             
         } catch (e: Exception) {
@@ -282,15 +271,6 @@ class ExportPage : AppCompatActivity() {
     private fun fetchAndDisplayTasks() {
         databaseManager.getAllTasks { tasks ->
             runOnUiThread {
-                if (tasks.isEmpty()) {
-                    // Create sample tasks for testing if none exist
-                     createSampleTasks {
-                         // Try fetch again after creating sample tasks
-                         fetchAndDisplayTasks()
-                     }
-                    return@runOnUiThread
-                }
-                
                 allTasks = tasks
                 taskAdapter.updateTasks(tasks)
                 updateExportButtonText()
@@ -300,7 +280,7 @@ class ExportPage : AppCompatActivity() {
 
     override fun onResume() {
         super.onResume()
-        menuBar.setActivePage(0) // Ensure correct menu item is highlighted
-        updateExportButtonText() // Update button text when returning to page
+        menuBar.setActivePage(0)
+        updateExportButtonText()
     }
 }

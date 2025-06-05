@@ -16,7 +16,6 @@ class HTMLTemplate : ExportTemplate {
             </tr>
             """.trimIndent()
         }
-
         return """
         <html>
         <head><title>Task Export</title></head>
@@ -32,7 +31,6 @@ class HTMLTemplate : ExportTemplate {
         </html>
         """.trimIndent()
     }
-
     override fun getFileExtension() = "html"
     override fun getMimeType() = "text/html"
 }
