@@ -78,6 +78,20 @@ class DatabaseManager(context: Context) {
             }
         }
     }
+
+    fun getAllTasksId(callback: (List<Int>) -> Unit) {
+        coroutineScope.launch {
+            val tasks = taskRepository.getAllTasks()
+            withContext(Dispatchers.Main) {
+                var tasksId = mutableListOf<Int>()
+
+                for (task in tasks){
+                    tasksId.add(task.id.toInt())
+                }
+                callback(tasksId)
+            }
+        }
+    }
     
     /**
      * Get tasks by completion status asynchronously.

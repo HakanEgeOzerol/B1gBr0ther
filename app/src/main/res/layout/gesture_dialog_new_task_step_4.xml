@@ -6,63 +6,65 @@
     android:padding="4dp">
 
     <TextView
-        android:layout_width="match_parent"
+        android:text="Please input time required for the task"
+        android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:text="There is a task in progress"/>
+        android:layout_weight="1"
+        android:layout_margin="5dp"/>
+
 
     <LinearLayout
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:weightSum="2">
 
-        <TextView
-            android:layout_width="0dp"
+        <EditText
+            android:id="@+id/HoursInput"
+            android:inputType="text"
+            android:layout_width="match_parent"
             android:layout_height="wrap_content"
+            android:layout_margin="4dp"
+            android:fontFamily="sans-serif"
             android:layout_weight="1"
-            android:text="Time left untill completion"/>
+            android:hint="Hours"/>
 
-        <TextView
-            android:id="@+id/existing_remaining_time"
-            android:layout_width="0dp"
+        <EditText
+            android:id="@+id/MinutesInput"
+            android:inputType="text"
+            android:layout_width="match_parent"
             android:layout_height="wrap_content"
+            android:layout_margin="4dp"
+            android:fontFamily="sans-serif"
             android:layout_weight="1"
-            android:text="Placeholder"/>
+            android:hint="Minutes"/>
+
     </LinearLayout>
 
     <LinearLayout
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:orientation="horizontal"
-        android:gravity="center">
+        android:weightSum="2">
+
         <Button
-            android:id="@+id/existing_ok"
-            android:layout_width="wrap_content"
+            android:id="@+id/Cancel"
+            android:layout_width="0dp"
             android:layout_height="wrap_content"
             android:background="@drawable/rounded_corners"
-            android:padding="4dp"
             android:layout_margin="4dp"
+            android:layout_weight="1"
             android:textAlignment="center"
-            android:text="Ok">
+            android:text="Cancel">
         </Button>
         <Button
-            android:id="@+id/existing_complete"
-            android:layout_width="wrap_content"
+            android:id="@+id/EndTaskCreation"
+            android:layout_width="0dp"
             android:layout_height="wrap_content"
             android:background="@drawable/rounded_corners"
             android:padding="4dp"
             android:layout_margin="4dp"
+            android:layout_weight="1"
             android:textAlignment="center"
-            android:text="Complete">
-        </Button>
-        <Button
-            android:id="@+id/existing_delete"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:background="@drawable/rounded_corners"
-            android:padding="4dp"
-            android:layout_margin="4dp"
-            android:textAlignment="center"
-            android:text="Delete">
+            android:text="Start">
         </Button>
     </LinearLayout>
 </LinearLayout>
