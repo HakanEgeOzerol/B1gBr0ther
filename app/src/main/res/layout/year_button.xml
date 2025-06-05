@@ -1,0 +1,11 @@
+<?xml version="1.0" encoding="utf-8"?>
+<Button xmlns:android="http://schemas.android.com/apk/res/android"
+    android:id="@+id/yearMonthBtn"
+    android:layout_width="75dp"
+    android:layout_height="32dp"
+    android:layout_margin="6dp"
+    android:padding="6dp"
+    android:background="@drawable/rounded_year_month"
+    android:textColor="#C1A8B5"
+    android:textSize="14sp"
+    />
