@@ -85,13 +85,22 @@ class DashboardActivity : AppCompatActivity() {
         if (timeTracker.isTracking()) {
             if (timeTracker.isOnBreak()) {
                 updateCurrentTask("On break")
-            } else if (currentTaskName != null) {
-                updateCurrentTask("Currently tracking: $currentTaskName")
-            } else if (currentTaskId != -1L) {
-                databaseManager.getTask(currentTaskId) { task ->
-                    if (task != null) {
-                        currentTaskName = task.taskName
-                        updateCurrentTask("Currently tracking: ${task.taskName}")
+            } else {
+                val taskId = timeTracker.getCurrentTaskId()
+                val taskName = timeTracker.getCurrentTaskName()
+                
+                if (taskName != null) {
+                    currentTaskName = taskName
+                    currentTaskId = taskId
+                    updateCurrentTask("Currently tracking: $taskName")
+                } else if (taskId != -1L) {
+                    databaseManager.getTask(taskId) { task ->
+                        if (task != null) {
+                            currentTaskName = task.taskName
+                            currentTaskId = taskId
+                            timeTracker.setCurrentTask(taskId, task.taskName)
+                            updateCurrentTask("Currently tracking: ${task.taskName}")
+                        }
                     }
                 }
             }
@@ -251,6 +260,9 @@ class DashboardActivity : AppCompatActivity() {
                 if (tasks.isNotEmpty()) {
                     val lastTask = tasks.last()
                     timeTracker.startTracking()
+                    currentTaskName = lastTask.taskName
+                    currentTaskId = lastTask.id
+                    timeTracker.setCurrentTask(lastTask.id, lastTask.taskName)
                     Toast.makeText(this, "Tracking started for: ${lastTask.taskName}", Toast.LENGTH_SHORT).show()
                     updateCurrentTask("Currently tracking: ${lastTask.taskName}")
                 } else {
@@ -273,6 +285,7 @@ class DashboardActivity : AppCompatActivity() {
                         timeTracker.startTracking()
                         currentTaskName = matchingTask.taskName
                         currentTaskId = matchingTask.id
+                        timeTracker.setCurrentTask(matchingTask.id, matchingTask.taskName)
                         Toast.makeText(this, "Tracking started for: ${matchingTask.taskName}", Toast.LENGTH_SHORT).show()
                         updateCurrentTask("Currently tracking: ${matchingTask.taskName}")
                     }
