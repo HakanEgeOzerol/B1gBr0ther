@@ -1,0 +1,57 @@
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:orientation="vertical"
+    android:layout_width="wrap_content"
+    android:layout_height="wrap_content"
+    android:background="#A7ADC6"
+    android:padding="4dp">
+
+    <TextView
+        android:text="Please input start time"
+        android:layout_width="match_parent"
+        android:layout_height="0dp"
+        android:layout_weight="1"
+        android:layout_margin="5dp"
+        android:textSize="30sp"/>
+
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_gravity="center">
+
+        <TimePicker
+            android:id="@+id/timePicker"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:timePickerMode="spinner" />
+
+    </LinearLayout>
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:weightSum="2">
+
+        <Button
+            android:id="@+id/Cancel"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:background="@drawable/rounded_corners"
+            android:layout_margin="4dp"
+            android:layout_weight="1"
+            android:textAlignment="center"
+            android:text="Cancel">
+        </Button>
+        <Button
+            android:id="@+id/ContinueTaskCreationStep3"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:background="@drawable/rounded_corners"
+            android:padding="4dp"
+            android:layout_margin="4dp"
+            android:layout_weight="1"
+            android:textAlignment="center"
+            android:text="Continue">
+        </Button>
+    </LinearLayout>
+</LinearLayout>
