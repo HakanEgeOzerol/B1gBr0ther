@@ -12,6 +12,7 @@ import android.hardware.SensorManager
 import android.os.Bundle
 import android.os.Handler
 import android.os.Looper
+import android.util.Log
 import android.widget.Button
 import android.widget.CheckBox
 import android.widget.DatePicker
@@ -216,6 +217,13 @@ class DashboardActivity : AppCompatActivity() {
         voiceRecognizerManager.setOnSneezeDetected {
             runOnUiThread {
                 handleSneeze()
+            }
+        }
+
+        voiceRecognizerManager.setOnUrinationDetected {
+            runOnUiThread {
+                Log.i("DashboardActivity", "Urination detection callback triggered!")
+                handleUrination()
             }
         }
 
@@ -734,5 +742,34 @@ class DashboardActivity : AppCompatActivity() {
         lastSneezeTime = System.currentTimeMillis()
 
         voiceRecognizerManager.sayBlessYou(this)
+    }
+
+    private fun handleUrination() {
+        Log.i("DashboardActivity", "handleUrination() called - urination detected!")
+        
+        if (timeTracker.isTracking() && !timeTracker.isOnBreak()) {
+            Log.d("DashboardActivity", "Showing bathroom break dialog")
+            val dialog = Dialog(this)
+            dialog.setContentView(R.layout.dialog_bathroom_break)
+            
+            dialog.findViewById<Button>(R.id.btnConfirmBreak).setOnClickListener {
+                dialog.dismiss()
+                startBreak()
+                Toast.makeText(this, "Bathroom break started", Toast.LENGTH_SHORT).show()
+            }
+            
+            dialog.findViewById<Button>(R.id.btnCancelBreak).setOnClickListener {
+                dialog.dismiss()
+            }
+            
+            dialog.show()
+        } else if (timeTracker.isOnBreak()) {
+            Log.d("DashboardActivity", "Ending bathroom break")
+            endBreak()
+            Toast.makeText(this, "Bathroom break ended", Toast.LENGTH_SHORT).show()
+        } else {
+            Log.d("DashboardActivity", "Not tracking or conditions not met for bathroom break")
+            Toast.makeText(this, "Urination detected, but not tracking", Toast.LENGTH_SHORT).show()
+        }
     }
 }
