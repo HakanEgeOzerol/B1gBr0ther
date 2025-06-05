@@ -55,12 +55,9 @@ class MenuBar @JvmOverloads constructor(
         val currentActivity = context as? android.app.Activity ?: return
 
         val target = when (index) {
-            0 -> ExportPage::class.java
-            1 -> DashboardActivity::class.java
-            2 -> {
-                Toast.makeText(context, "Timesheet page coming soon", Toast.LENGTH_SHORT).show()
-                return
-            }
+            0 -> ExportPage::class.java            // export icon
+            1 -> DashboardActivity::class.java     // dashboard icon
+            2 -> TimesheetActivity::class.java // timesheet icon
             else -> return
         }
 

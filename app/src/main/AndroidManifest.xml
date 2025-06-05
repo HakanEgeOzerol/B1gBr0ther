@@ -36,6 +36,12 @@
             android:exported="false"
             android:theme="@style/Theme.AppCompat.Light.NoActionBar" />
         <activity
+            android:name=".TimesheetActivity"
+            android:exported="true"
+            android:theme="@style/Theme.AppCompat.Light.NoActionBar"
+            android:label="Timesheet">
+        </activity>
+        <activity
             android:name=".DatabaseTestActivity"
             android:label="DB Test"
             android:exported="true"
