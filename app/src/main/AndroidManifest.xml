@@ -35,7 +35,7 @@
             android:name=".DatabaseTesterActivity"
             android:label="DB Test"
             android:exported="true"
-            android:theme="@style/Theme.AppCompat.Light.NoActionBar">
+            android:theme="@style/Theme.MaterialComponents.Light.NoActionBar">
             <intent-filter>
                 <action android:name="android.intent.action.VIEW" />
                 <category android:name="android.intent.category.DEFAULT" />
@@ -45,11 +45,17 @@
             android:name=".DatabaseLauncherActivity"
             android:label="Database Testing"
             android:exported="true"
-            android:theme="@style/Theme.AppCompat.Light.NoActionBar">
+            android:theme="@style/Theme.MaterialComponents.Light.NoActionBar">
             <intent-filter>
                 <action android:name="android.intent.action.VIEW" />
                 <category android:name="android.intent.category.DEFAULT" />
             </intent-filter>
+        </activity>
+        <activity 
+            android:name=".StatisticsActivity"
+            android:label="Statistics"
+            android:exported="false"
+            android:theme="@style/Theme.MaterialComponents.Light.NoActionBar">
         </activity>
     </application>
 

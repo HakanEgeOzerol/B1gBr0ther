@@ -102,6 +102,22 @@ class TaskRepository(private val taskDao: TaskDao) {
         return taskDao.getTasksByTimeRange(startTime, endTime)
     }
     
+    // ============================== Statistics Methods ==============================
+    
+    suspend fun getCompletedTasksCount(): Int = taskDao.getCompletedTasksCount()
+    
+    suspend fun getLateCompletedTasksCount(): Int = taskDao.getLateCompletedTasksCount()
+    
+    suspend fun getOnTimeCompletedTasksCount(): Int = taskDao.getOnTimeCompletedTasksCount()
+    
+    suspend fun getEarlyCompletedTasksCount(): Int = taskDao.getEarlyCompletedTasksCount()
+    
+    suspend fun getUncompletedTasksCount(): Int = taskDao.getUncompletedTasksCount()
+    
+    suspend fun getVoiceCreatedTasksCount(): Int = taskDao.getVoiceCreatedTasksCount()
+    
+    suspend fun getGestureCreatedTasksCount(): Int = taskDao.getGestureCreatedTasksCount()
+    
     /**
      * Get tasks that are breaks.
      * @return A list of tasks that are marked as breaks

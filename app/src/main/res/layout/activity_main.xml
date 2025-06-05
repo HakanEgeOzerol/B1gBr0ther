@@ -41,4 +41,13 @@
         android:padding="10dp"
         android:text="Test Database" />
 
+    <Button
+        android:id="@+id/btnStatistics"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_margin="10dp"
+        android:background="@drawable/rounded_corners"
+        android:padding="10dp"
+        android:text="Statistics" />
+
 </LinearLayout>
