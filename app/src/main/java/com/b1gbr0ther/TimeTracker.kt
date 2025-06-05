@@ -12,7 +12,6 @@ object TimeTracker {
         return instance!!
     }
 
-    // Delegate all methods to the implementation
     fun startTracking() = instance?.startTracking() ?: false
     fun stopTracking() = instance?.stopTracking()
     fun startBreak() = instance?.startBreak() ?: false
