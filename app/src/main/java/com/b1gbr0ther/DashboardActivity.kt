@@ -226,7 +226,6 @@ class DashboardActivity : AppCompatActivity() {
         }
     }
 
-
     fun startTracking() {
         if (!timeTracker.isTracking()) {
             timeTracker.startTracking()
@@ -429,11 +428,14 @@ class DashboardActivity : AppCompatActivity() {
         val activeTask = getActiveTask(this.allTasks)!!
 
         val dynamicTime = dialog.findViewById<TextView>(R.id.existing_remaining_time)
+        val dayDif = activeTask.endTime.dayOfMonth - LocalDateTime.now().dayOfMonth
         val hourDif = activeTask.endTime.hour - LocalDateTime.now().hour
         val minDif = activeTask.endTime.minute - LocalDateTime.now().minute
         val secDif = activeTask.endTime.second - LocalDateTime.now().second
 
-        val message = "$hourDif hours and $minDif minutes and $secDif seconds"
+        val convertedValues = differenceConverter(dayDif, hourDif, minDif, secDif)
+
+        val message = "${convertedValues[0]} days, ${convertedValues[1]} hours, ${convertedValues[2]} minutes and ${convertedValues[3]} seconds"
 
         dynamicTime.text = message
 
@@ -446,6 +448,7 @@ class DashboardActivity : AppCompatActivity() {
         okButton.setOnClickListener{
             isDialogShown = false
             dialog.dismiss()
+            updateAllTasks()
         }
 
         // Mark task as completed
@@ -453,6 +456,7 @@ class DashboardActivity : AppCompatActivity() {
             markTaskAsCompleted(activeTaskId.toLong())
             isDialogShown = false
             dialog.dismiss()
+            updateAllTasks()
         }
 
         // Delete the task
@@ -460,6 +464,7 @@ class DashboardActivity : AppCompatActivity() {
             deleteTask(activeTaskId.toLong())
             isDialogShown = false
             dialog.dismiss()
+            updateAllTasks()
         }
 
         dialog.show()
@@ -491,19 +496,16 @@ class DashboardActivity : AppCompatActivity() {
                 dialog.dismiss()
                 setEndTimeDialog(name)
             }
+            updateAllTasks()
         }
 
         cancelButton.setOnClickListener{
             isDialogShown = false
             dialog.dismiss()
+            updateAllTasks()
         }
 
         dialog.show()
-    }
-
-    private fun createNewTaskDialog(){
-        val dialog = Dialog(this)
-
     }
 
     private fun setDateDialog(name: String){
@@ -520,10 +522,12 @@ class DashboardActivity : AppCompatActivity() {
 
             dialog.dismiss()
             setStartTimeDialog(name, taskDate)
+            updateAllTasks()
         }
         cancelButton.setOnClickListener{
             isDialogShown = false
             dialog.dismiss()
+            updateAllTasks()
         }
 
         dialog.show()
@@ -543,64 +547,22 @@ class DashboardActivity : AppCompatActivity() {
 
             val dateTime = LocalDateTime.of(date, time)
 
+            isDialogShown = false
             dialog.dismiss()
             setEndTimeDialog(name, dateTime)
+            updateAllTasks()
         }
 
         cancelButton.setOnClickListener{
             isDialogShown = false
             dialog.dismiss()
+            updateAllTasks()
         }
 
         dialog.show()
     }
 
-    private fun setEndTimeDialog(name: String){//Last dialog in chain, if task is to be immediately tracked
-        val dialog = Dialog(this)
-        dialog.setContentView(R.layout.gesture_dialog_new_task_step_4)
-        dialog.setCancelable(true)
-
-        val cancelButton = dialog.findViewById<Button>(R.id.Cancel)
-        val submitTask = dialog.findViewById<Button>(R.id.EndTaskCreation)
-
-        val hours = dialog.findViewById<EditText>(R.id.HoursInput)
-        val minutes = dialog.findViewById<EditText>(R.id.MinutesInput)
-
-        submitTask.setOnClickListener{
-            val hoursSubmitted = (hours.text.toString()).toLong()
-            val minutesSubmitted = (minutes.text.toString()).toLong()
-            var estimatedCompletion = LocalDateTime.now()
-            val startTime = LocalDateTime.now()
-
-            if (hoursSubmitted >= 0){
-                estimatedCompletion = estimatedCompletion.plusHours(hoursSubmitted)
-                if (minutesSubmitted >= 0){
-                    estimatedCompletion = estimatedCompletion.plusMinutes(minutesSubmitted)
-                }
-            }
-            else{
-                estimatedCompletion.plusHours(3)//default for task time
-            }
-
-            val newTask = Task(name, startTime, estimatedCompletion)//this creates the task
-
-            // Save the task to the database
-            databaseManager.createAppTask(newTask) { taskId ->
-                Toast.makeText(this, "Task saved to database with ID: $taskId", Toast.LENGTH_SHORT).show()
-            }
-
-            isDialogShown = false
-            dialog.dismiss()
-        }
-
-        cancelButton.setOnClickListener{
-            isDialogShown = false
-            dialog.dismiss()
-        }
-        dialog.show()
-    }
-
-    private fun setEndTimeDialog(name: String, dateTime: LocalDateTime){//Last dialog in chain, if task is to be planned ahead
+    private fun setEndTimeDialog(name: String, dateTime: LocalDateTime = LocalDateTime.now()){//Last dialog in chain
         val dialog = Dialog(this)
         dialog.setContentView(R.layout.gesture_dialog_new_task_step_4)
         dialog.setCancelable(true)
@@ -634,15 +596,47 @@ class DashboardActivity : AppCompatActivity() {
                 Toast.makeText(this, "Task saved to database with ID: $taskId", Toast.LENGTH_SHORT).show()
             }
 
+            Toast.makeText(this, "Task updated", Toast.LENGTH_SHORT).show()
             isDialogShown = false
             dialog.dismiss()
+            updateAllTasks()
         }
 
         cancelButton.setOnClickListener{
+            Toast.makeText(this, "Task updated", Toast.LENGTH_SHORT).show()
             isDialogShown = false
             dialog.dismiss()
+            updateAllTasks()
         }
         dialog.show()
+    }
+
+    private fun differenceConverter(day: Int, hour :Int, minute: Int, second: Int): List<Int> {
+        var convertedDays = day
+        var convertedHours = hour
+        var convertedMinutes = minute
+        var convertedSeconds = second
+
+        if (convertedSeconds<0){
+            convertedSeconds += 60
+
+            convertedMinutes -= 1
+        }
+        if (convertedMinutes<0){
+            convertedMinutes += 60
+
+            convertedHours -= 1
+        }
+        if (convertedHours<0){
+            convertedHours += 24
+
+            convertedDays -= 1
+        }
+        if (convertedDays<0){
+            convertedDays +=30
+        }
+
+        return listOf(convertedDays, convertedHours, convertedMinutes, convertedSeconds)
     }
 
     /**
