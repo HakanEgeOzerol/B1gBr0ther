@@ -28,7 +28,7 @@
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="parent"
         app:layout_constraintVertical_bias="0.042" />
-        
+
     <Button
         android:id="@+id/btnDatabaseTest"
         android:layout_width="126dp"
@@ -390,6 +390,34 @@
         app:layout_constraintTop_toTopOf="@+id/weekGrid"
         app:layout_constraintVertical_bias="0.0" />
 
+    <TextView
+        android:id="@+id/statusTextView"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="Voice recognition ready"
+        android:textColor="#000000"
+        android:textSize="14sp"
+        app:layout_constraintBottom_toTopOf="@+id/simulateWakeWordButton"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/currentTaskText"
+        app:layout_constraintVertical_bias="0.8" />
+
+    <Button
+        android:id="@+id/simulateWakeWordButton"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:background="@drawable/rounded_corners"
+        android:backgroundTint="#5F4B66"
+        android:text="Simulate Wake-Word"
+        android:textAllCaps="false"
+        android:textColor="#C1A8B5"
+        app:layout_constraintBottom_toTopOf="@+id/menuBar"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/currentTaskText"
+        app:layout_constraintVertical_bias="0.6" />
+
     <com.b1gbr0ther.MenuBar
         android:id="@+id/menuBar"
         android:layout_width="0dp"
@@ -401,21 +429,6 @@
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintHorizontal_bias="0.0"
         app:layout_constraintStart_toStartOf="parent" />
-
-    <TextView
-        android:id="@+id/twentyfour"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_marginTop="193dp"
-        android:text="24"
-        android:textColor="#070707"
-        android:textSize="9sp"
-        app:layout_constraintBottom_toBottomOf="parent"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintHorizontal_bias="0.835"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toTopOf="@+id/weekGrid"
-        app:layout_constraintVertical_bias="0.0" />
 
     <Button
         android:id="@+id/manualOverlayButton"

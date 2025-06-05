@@ -14,14 +14,6 @@
         android:padding="10dp"
         android:text="Go to gestures" />
 
-    <Button
-        android:id="@+id/audioRecognitionButton"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_marginTop="24dp"
-        android:background="@drawable/rounded_corners"
-        android:padding="10dp"
-        android:text="Audio Recognition" />
 
     <Button
         android:id="@+id/btnDashboard"
