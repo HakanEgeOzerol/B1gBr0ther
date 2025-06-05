@@ -2,7 +2,6 @@ package com.b1gbr0ther
 
 import android.Manifest
 import android.app.Activity
-import android.app.AlertDialog
 import android.content.Context
 import android.content.Intent
 import android.content.pm.PackageManager
@@ -11,6 +10,7 @@ import android.speech.RecognitionListener
 import android.speech.RecognizerIntent
 import android.speech.SpeechRecognizer
 import androidx.core.content.ContextCompat
+import android.widget.Toast
 import java.util.Locale
 
 class VoiceRecognizerManager(
@@ -20,15 +20,16 @@ class VoiceRecognizerManager(
     private val onError: (String) -> Unit
 ) {
     private var recognizer: SpeechRecognizer? = null
-
-    private val BLOW_THRESHOLD = 9.9f  // dB threshold for blow detection
-    private val BLOW_COOLDOWN = 5000L  // 5 seconds cooldown to avoid spam
-    private var lastBlowDetectedTime = 0L
-    private var blowDetectionEnabled = true
+    private val blowDetector = BlowDetector()
     private var onBlowDetected: (() -> Unit)? = null
+    private var onSneezeDetected: (() -> Unit)? = null
 
     fun setOnBlowDetected(callback: () -> Unit) {
         onBlowDetected = callback
+    }
+
+    fun setOnSneezeDetected(callback: () -> Unit) {
+        onSneezeDetected = callback
     }
 
     fun checkPermissionAndStart() {
@@ -67,7 +68,7 @@ class VoiceRecognizerManager(
         return object : RecognitionListener {
             override fun onReadyForSpeech(params: Bundle?) {
                 onStatusUpdate("Ready for speech")
-                blowDetectionEnabled = true
+                blowDetector.reset()
             }
 
             override fun onBeginningOfSpeech() {
@@ -75,13 +76,12 @@ class VoiceRecognizerManager(
             }
 
             override fun onRmsChanged(rmsdB: Float) {
-                if (blowDetectionEnabled &&
-                    rmsdB > BLOW_THRESHOLD &&
-                    System.currentTimeMillis() - lastBlowDetectedTime > BLOW_COOLDOWN) {
-
-                    lastBlowDetectedTime = System.currentTimeMillis()
+                if (blowDetector.processAudioSample(rmsdB, System.currentTimeMillis())) {
                     onBlowDetected?.invoke()
                 }
+                // Note: Sneeze detection will be implemented here
+                // They will need to add their sneeze detection logic here
+                // and call onSneezeDetected?.invoke() when a sneeze is detected
             }
 
             override fun onBufferReceived(buffer: ByteArray?) {}
@@ -134,17 +134,12 @@ class VoiceRecognizerManager(
     }
 
     fun showSmokeBreakDialog(activity: Activity, onConfirm: () -> Unit) {
-        if (activity.isFinishing) return
+        Toast.makeText(activity, "Enjoy your smoke break!", Toast.LENGTH_SHORT).show()
+        onConfirm()
+    }
 
-        AlertDialog.Builder(activity)
-            .setTitle("Smoke Break Detected")
-            .setMessage("Enjoy your smoke break!")
-            .setPositiveButton("OK") { dialog, _ ->
-                dialog.dismiss()
-                onConfirm()
-            }
-            .setCancelable(true)
-            .show()
+    fun sayBlessYou(activity: Activity) {
+        Toast.makeText(activity, "Bless you!", Toast.LENGTH_SHORT).show()
     }
 
     fun destroyRecognizer() {

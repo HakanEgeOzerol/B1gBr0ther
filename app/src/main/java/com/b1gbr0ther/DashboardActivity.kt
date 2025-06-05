@@ -42,8 +42,9 @@ class DashboardActivity : AppCompatActivity() {
     private lateinit var timeTracker: TimeTrackerInterface
     private lateinit var statusTextView: TextView
     private lateinit var simulateWakeWordButton: Button
-
     private lateinit var databaseManager: DatabaseManager
+    private var currentTaskName: String? = null
+    private var lastSneezeTime: Long = 0
 
     private lateinit var voiceRecognizerManager: VoiceRecognizerManager
     private lateinit var commandHandler: VoiceCommandHandler
@@ -79,7 +80,28 @@ class DashboardActivity : AppCompatActivity() {
         currentTaskText.text = name
     }
 
-    override fun onCreate(savedInstanceState: Bundle?) {//onCreate begins here
+    private fun updateCurrentTaskDisplay() {
+        if (timeTracker.isTracking()) {
+            if (timeTracker.isOnBreak()) {
+                updateCurrentTask("On break")
+            } else if (currentTaskName != null) {
+                updateCurrentTask("Currently tracking: $currentTaskName")
+            } else {
+                databaseManager.getAllTasks { tasks ->
+                    if (tasks.isNotEmpty()) {
+                        val lastTask = tasks.last()
+                        currentTaskName = lastTask.taskName
+                        updateCurrentTask("Currently tracking: ${lastTask.taskName}")
+                    }
+                }
+            }
+        } else {
+            currentTaskName = null
+            updateCurrentTask("Not tracking any task")
+        }
+    }
+
+    override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         enableEdgeToEdge()
         setContentView(R.layout.activity_dashboard)
@@ -136,19 +158,12 @@ class DashboardActivity : AppCompatActivity() {
                 if (timeTracker.isTracking()) {
                     val currentDuration = timeTracker.getCurrentDuration()
                     timerText.text = formatTimeFromMillis(currentDuration)
-
-                    if (currentTaskText.text == "Not Busy With A Task") {
-                        currentTaskText.text = "Active Tracking Session"
-                    }
+                    updateCurrentTaskDisplay()
                 } else {
                     val now = java.time.LocalTime.now()
                     timerText.text = now.format(java.time.format.DateTimeFormatter.ofPattern("HH:mm"))
-
-                    if (currentTaskText.text == "Active Tracking Session") {
-                        currentTaskText.text = "Not Busy With A Task"
-                    }
+                    updateCurrentTaskDisplay()
                 }
-
                 handler.postDelayed(this, 1000)
             }
         }
@@ -183,7 +198,6 @@ class DashboardActivity : AppCompatActivity() {
             },
             onError = { error ->
                 runOnUiThread {
-                    statusTextView.text = "Error: $error"
                     Toast.makeText(this, error, Toast.LENGTH_SHORT).show()
                 }
             }
@@ -199,7 +213,14 @@ class DashboardActivity : AppCompatActivity() {
             }
         }
 
+        voiceRecognizerManager.setOnSneezeDetected {
+            runOnUiThread {
+                handleSneeze()
+            }
+        }
+
         commandHandler = VoiceCommandHandler(this)
+        statusTextView.text = "Voice recognition ready"
     }
 
     private fun checkPermissionAndStartRecognition() {
@@ -217,8 +238,6 @@ class DashboardActivity : AppCompatActivity() {
 
     private fun handleVoiceResult(result: String) {
         runOnUiThread {
-            currentTaskText.text = "Heard: $result"
-
             val recognized = commandHandler.handleCommand(result)
             if (!recognized) {
                 Toast.makeText(this, "Command not recognized: $result", Toast.LENGTH_SHORT).show()
@@ -228,21 +247,38 @@ class DashboardActivity : AppCompatActivity() {
 
     fun startTracking() {
         if (!timeTracker.isTracking()) {
-            timeTracker.startTracking()
-            Toast.makeText(this, "Tracking started", Toast.LENGTH_SHORT).show()
-            updateCurrentTask("Active Tracking Session")
+            databaseManager.getAllTasks { tasks ->
+                if (tasks.isNotEmpty()) {
+                    val lastTask = tasks.last()
+                    timeTracker.startTracking()
+                    Toast.makeText(this, "Tracking started for: ${lastTask.taskName}", Toast.LENGTH_SHORT).show()
+                    updateCurrentTask("Currently tracking: ${lastTask.taskName}")
+                } else {
+                    Toast.makeText(this, "No tasks available to track", Toast.LENGTH_SHORT).show()
+                }
+            }
         } else {
-            Toast.makeText(this, "Already tracking", Toast.LENGTH_SHORT).show()
+            Toast.makeText(this, "Already tracking a task", Toast.LENGTH_SHORT).show()
         }
     }
 
-    fun startTrackingWithTask(task: Task) {
+    fun startTrackingWithTask(taskName: String) {
         if (!timeTracker.isTracking()) {
-            timeTracker.startTracking()
-            Toast.makeText(this, "Tracking started for: ${task.taskName}", Toast.LENGTH_SHORT).show()//Changed from getName to just name
-            updateCurrentTask("Tracking: ${task.taskName}")//Allegedly may break something, as this is not the creation task, it is a DB entity now
+            databaseManager.getAllTasks { tasks ->
+                val matchingTask = tasks.find { it.taskName.equals(taskName, ignoreCase = true) }
+                if (matchingTask != null && !matchingTask.isCompleted) {
+                    timeTracker.startTracking()
+                    currentTaskName = matchingTask.taskName
+                    Toast.makeText(this, "Tracking started for: ${matchingTask.taskName}", Toast.LENGTH_SHORT).show()
+                    updateCurrentTask("Currently tracking: ${matchingTask.taskName}")
+                } else if (matchingTask != null && matchingTask.isCompleted) {
+                    Toast.makeText(this, "Task '${matchingTask.taskName}' is already completed", Toast.LENGTH_SHORT).show()
+                } else {
+                    Toast.makeText(this, "Task '$taskName' not found", Toast.LENGTH_SHORT).show()
+                }
+            }
         } else {
-            Toast.makeText(this, "Already tracking", Toast.LENGTH_SHORT).show()
+            Toast.makeText(this, "Already tracking a task", Toast.LENGTH_SHORT).show()
         }
     }
 
@@ -256,28 +292,24 @@ class DashboardActivity : AppCompatActivity() {
         val hoursElapsed = floor(summary.effectiveTimeMillis / (1000.0 * 60 * 60)).toLong()
         val minutesElapsed = ((summary.effectiveTimeMillis / (1000.0 * 60)) % 60).toLong()
 
-        val startTime = LocalDateTime.now()
-            .minusHours(hoursElapsed)
-            .minusMinutes(minutesElapsed)
+        databaseManager.getAllTasks { tasks ->
+            if (tasks.isNotEmpty()) {
+                val lastTask = tasks.last()
+                lastTask.isCompleted = true
+                lastTask.endTime = LocalDateTime.now()
 
-        val task = Task(
-            "Dashboard voice task",
-            startTime,
-            LocalDateTime.now(),
-            false, // not preplanned
-            true,  // completed
-            false  // not a break
-        )
-
-        databaseManager.createAppTask(task) { taskId ->
-            Toast.makeText(
-                this,
-                "Tracking stopped. Session saved with ID: $taskId",
-                Toast.LENGTH_SHORT
-            ).show()
+                databaseManager.updateTask(lastTask) {
+                    Toast.makeText(
+                        this,
+                        "Task '${lastTask.taskName}' completed. Time tracked: ${hoursElapsed}h ${minutesElapsed}m",
+                        Toast.LENGTH_SHORT
+                    ).show()
+                }
+            }
         }
 
-        updateCurrentTask("Not Busy With A Task")
+        currentTaskName = null
+        updateCurrentTask("Not tracking any task")
     }
 
     fun startBreak() {
@@ -289,8 +321,17 @@ class DashboardActivity : AppCompatActivity() {
         if (timeTracker.isOnBreak()) {
             Toast.makeText(this, "Already on a break", Toast.LENGTH_SHORT).show()
         } else if (timeTracker.startBreak()) {
-            Toast.makeText(this, "Break started", Toast.LENGTH_SHORT).show()
-            updateCurrentTask("On Break")
+            databaseManager.getAllTasks { tasks ->
+                if (tasks.isNotEmpty()) {
+                    val currentTask = tasks.last()
+                    currentTask.isBreak = true
+                    
+                    databaseManager.updateTask(currentTask) {
+                        Toast.makeText(this, "Break started", Toast.LENGTH_SHORT).show()
+                        updateCurrentTask("On break")
+                    }
+                }
+            }
         }
     }
 
@@ -303,8 +344,17 @@ class DashboardActivity : AppCompatActivity() {
         if (!timeTracker.isOnBreak()) {
             Toast.makeText(this, "No active break", Toast.LENGTH_SHORT).show()
         } else if (timeTracker.endBreak()) {
-            Toast.makeText(this, "Break ended", Toast.LENGTH_SHORT).show()
-            updateCurrentTask("Active Tracking Session")
+            databaseManager.getAllTasks { tasks ->
+                if (tasks.isNotEmpty()) {
+                    val currentTask = tasks.last()
+                    currentTask.isBreak = false
+                    
+                    databaseManager.updateTask(currentTask) {
+                        Toast.makeText(this, "Break ended", Toast.LENGTH_SHORT).show()
+                        updateCurrentTask("Currently busy with a task")
+                    }
+                }
+            }
         }
     }
 
@@ -330,20 +380,19 @@ class DashboardActivity : AppCompatActivity() {
         if (timeTracker.isTracking()) {
             val currentDuration = timeTracker.getCurrentDuration()
             timerText.text = formatTimeFromMillis(currentDuration)
-
-            if (timeTracker.isOnBreak()) {
-                currentTaskText.text = "On Break"
-            } else {
-                currentTaskText.text = "Active Tracking Session"
-            }
+            updateCurrentTaskDisplay()
         } else {
             mockStartTime = System.currentTimeMillis()
+            updateCurrentTaskDisplay()
         }
+        
+        statusTextView.text = "Voice recognition ready"
     }
 
     override fun onPause() {
         super.onPause()
         voiceRecognizerManager.destroyRecognizer()
+        statusTextView.text = "Voice recognition stopped"
     }
 
     override fun onDestroy() {
@@ -660,5 +709,11 @@ class DashboardActivity : AppCompatActivity() {
         databaseManager.deleteTask(taskId) {
             Toast.makeText(this, "Task deleted", Toast.LENGTH_SHORT).show()
         }
+        
+    private fun handleSneeze() {
+        //Implement sneeze logic here
+        lastSneezeTime = System.currentTimeMillis()
+
+        voiceRecognizerManager.sayBlessYou(this)
     }
 }
