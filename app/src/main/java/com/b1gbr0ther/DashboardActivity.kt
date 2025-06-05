@@ -267,11 +267,15 @@ class DashboardActivity : AppCompatActivity() {
             databaseManager.getAllTasks { tasks ->
                 val matchingTask = tasks.find { it.taskName.equals(taskName, ignoreCase = true) && !it.isCompleted }
                 if (matchingTask != null && !matchingTask.isCompleted) {
-                    timeTracker.startTracking()
-                    currentTaskName = matchingTask.taskName
-                    currentTaskId = matchingTask.id
-                    Toast.makeText(this, "Tracking started for: ${matchingTask.taskName}", Toast.LENGTH_SHORT).show()
-                    updateCurrentTask("Currently tracking: ${matchingTask.taskName}")
+                    matchingTask.startTime = LocalDateTime.now()
+                    
+                    databaseManager.updateTask(matchingTask) {
+                        timeTracker.startTracking()
+                        currentTaskName = matchingTask.taskName
+                        currentTaskId = matchingTask.id
+                        Toast.makeText(this, "Tracking started for: ${matchingTask.taskName}", Toast.LENGTH_SHORT).show()
+                        updateCurrentTask("Currently tracking: ${matchingTask.taskName}")
+                    }
                 } else if (matchingTask != null && matchingTask.isCompleted) {
                     Toast.makeText(this, "Task '${matchingTask.taskName}' is already completed", Toast.LENGTH_SHORT).show()
                 } else {
@@ -642,14 +646,20 @@ class DashboardActivity : AppCompatActivity() {
                 }
             }
             else{
-                estimatedCompletion.plusHours(3)//default for task time
+                estimatedCompletion = estimatedCompletion.plusHours(3)
             }
 
-            val newTask = Task(name, startTime, estimatedCompletion)//this creates the task
+            val newTask = Task(name, startTime, estimatedCompletion)
 
-            // Save the task to the database
             databaseManager.createAppTask(newTask) { taskId ->
                 Toast.makeText(this, "Task saved to database with ID: $taskId", Toast.LENGTH_SHORT).show()
+                
+                if (startTime == LocalDateTime.now()) {
+                    currentTaskName = name
+                    currentTaskId = taskId
+                    timeTracker.startTracking()
+                    updateCurrentTaskDisplay()
+                }
             }
 
             isDialogShown = false
