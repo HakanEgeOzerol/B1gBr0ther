@@ -27,8 +27,8 @@ class DashboardActivity : AppCompatActivity() {
     private lateinit var timeTracker: TimeTrackerInterface
     private lateinit var statusTextView: TextView
     private lateinit var simulateWakeWordButton: Button
-
     private lateinit var databaseManager: DatabaseManager
+    private var currentTaskName: String? = null
 
     private lateinit var voiceRecognizerManager: VoiceRecognizerManager
     private lateinit var commandHandler: VoiceCommandHandler
@@ -53,6 +53,27 @@ class DashboardActivity : AppCompatActivity() {
 
     fun updateCurrentTask(name: String) {
         currentTaskText.text = name
+    }
+
+    private fun updateCurrentTaskDisplay() {
+        if (timeTracker.isTracking()) {
+            if (timeTracker.isOnBreak()) {
+                updateCurrentTask("On break")
+            } else if (currentTaskName != null) {
+                updateCurrentTask("Currently tracking: $currentTaskName")
+            } else {
+                databaseManager.getAllTasks { tasks ->
+                    if (tasks.isNotEmpty()) {
+                        val lastTask = tasks.last()
+                        currentTaskName = lastTask.taskName
+                        updateCurrentTask("Currently tracking: ${lastTask.taskName}")
+                    }
+                }
+            }
+        } else {
+            currentTaskName = null
+            updateCurrentTask("Not tracking any task")
+        }
     }
 
     override fun onCreate(savedInstanceState: Bundle?) {
@@ -105,23 +126,12 @@ class DashboardActivity : AppCompatActivity() {
                 if (timeTracker.isTracking()) {
                     val currentDuration = timeTracker.getCurrentDuration()
                     timerText.text = formatTimeFromMillis(currentDuration)
-
-                    if (currentTaskText.text == "Not busy with a task") {
-                        if (timeTracker.isOnBreak()) {
-                            currentTaskText.text = "On break"
-                        } else {
-                            currentTaskText.text = "Currently busy with a task"
-                        }
-                    }
+                    updateCurrentTaskDisplay()
                 } else {
                     val now = java.time.LocalTime.now()
                     timerText.text = now.format(java.time.format.DateTimeFormatter.ofPattern("HH:mm"))
-
-                    if (currentTaskText.text != "Not busy with a task") {
-                        currentTaskText.text = "Not busy with a task"
-                    }
+                    updateCurrentTaskDisplay()
                 }
-
                 handler.postDelayed(this, 1000)
             }
         }
@@ -220,6 +230,7 @@ class DashboardActivity : AppCompatActivity() {
                 val matchingTask = tasks.find { it.taskName.equals(taskName, ignoreCase = true) }
                 if (matchingTask != null && !matchingTask.isCompleted) {
                     timeTracker.startTracking()
+                    currentTaskName = matchingTask.taskName
                     Toast.makeText(this, "Tracking started for: ${matchingTask.taskName}", Toast.LENGTH_SHORT).show()
                     updateCurrentTask("Currently tracking: ${matchingTask.taskName}")
                 } else if (matchingTask != null && matchingTask.isCompleted) {
@@ -259,6 +270,7 @@ class DashboardActivity : AppCompatActivity() {
             }
         }
 
+        currentTaskName = null
         updateCurrentTask("Not tracking any task")
     }
 
@@ -328,17 +340,12 @@ class DashboardActivity : AppCompatActivity() {
         if (timeTracker.isTracking()) {
             val currentDuration = timeTracker.getCurrentDuration()
             timerText.text = formatTimeFromMillis(currentDuration)
-
-            if (timeTracker.isOnBreak()) {
-                currentTaskText.text = "On break"
-            } else {
-                currentTaskText.text = "Currently busy with a task"
-            }
+            updateCurrentTaskDisplay()
         } else {
             mockStartTime = System.currentTimeMillis()
-            currentTaskText.text = "Not busy with a task"
+            updateCurrentTaskDisplay()
         }
-
+        
         statusTextView.text = "Voice recognition ready"
     }
 
