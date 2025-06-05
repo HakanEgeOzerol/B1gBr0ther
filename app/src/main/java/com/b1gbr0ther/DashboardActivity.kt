@@ -9,6 +9,7 @@ import android.hardware.Sensor
 import android.hardware.SensorEvent
 import android.hardware.SensorEventListener
 import android.hardware.SensorManager
+import android.os.Build
 import android.os.Bundle
 import android.os.Handler
 import android.os.Looper
@@ -32,6 +33,7 @@ import java.util.Objects
 import kotlin.math.floor
 import kotlin.math.sqrt
 import com.b1gbr0ther.data.database.entities.Task
+import com.b1gbr0ther.notifications.TaskNotificationManager
 import java.time.LocalDate
 import java.time.LocalTime
 
@@ -44,6 +46,7 @@ class DashboardActivity : AppCompatActivity() {
     private lateinit var statusTextView: TextView
     private lateinit var simulateWakeWordButton: Button
     private lateinit var databaseManager: DatabaseManager
+    private lateinit var notificationManager: TaskNotificationManager
     private var currentTaskName: String? = null
     private var currentTaskId: Long = -1
     private var lastSneezeTime: Long = 0
@@ -68,6 +71,13 @@ class DashboardActivity : AppCompatActivity() {
                 startVoiceRecognition()
             } else {
                 Toast.makeText(this, "Microphone permission is required for voice commands", Toast.LENGTH_SHORT).show()
+            }
+        }
+
+    private val requestNotificationPermissionLauncher =
+        registerForActivityResult(ActivityResultContracts.RequestPermission()) { isGranted: Boolean ->
+            if (!isGranted) {
+                Toast.makeText(this, "Notifications are disabled. Some features may not work properly.", Toast.LENGTH_LONG).show()
             }
         }
 
@@ -109,6 +119,7 @@ class DashboardActivity : AppCompatActivity() {
         setContentView(R.layout.activity_dashboard)
 
         databaseManager = DatabaseManager(applicationContext)
+        notificationManager = TaskNotificationManager(applicationContext)
         updateAllTasks()
         sensorManager = getSystemService(Context.SENSOR_SERVICE) as SensorManager
 
@@ -184,6 +195,12 @@ class DashboardActivity : AppCompatActivity() {
         simulateWakeWordButton.setOnClickListener {
             checkPermissionAndStartRecognition()
         }
+
+        // Start periodic task checker
+        startTaskChecker()
+
+        // Request notification permission
+        checkNotificationPermission()
     }
 
     private fun initializeVoiceRecognition() {
@@ -321,6 +338,9 @@ class DashboardActivity : AppCompatActivity() {
                         "Task '${task.taskName}' completed. Time tracked: ${hoursElapsed}h ${minutesElapsed}m",
                         Toast.LENGTH_SHORT
                     ).show()
+                    
+                    // Reset notification count when task is completed
+                    notificationManager.resetNotificationCount(task.id)
                 }
             } else {
                 Toast.makeText(this, "Could not find the task being tracked", Toast.LENGTH_SHORT).show()
@@ -744,6 +764,7 @@ class DashboardActivity : AppCompatActivity() {
         voiceRecognizerManager.sayBlessYou(this)
     }
 
+<<<<<<< Updated upstream
     private fun handleUrination() {
         Log.i("DashboardActivity", "handleUrination() called - urination detected!")
         
@@ -770,6 +791,39 @@ class DashboardActivity : AppCompatActivity() {
         } else {
             Log.d("DashboardActivity", "Not tracking or conditions not met for bathroom break")
             Toast.makeText(this, "Urination detected, but not tracking", Toast.LENGTH_SHORT).show()
+=======
+    private fun startTaskChecker() {
+        val handler = Handler(Looper.getMainLooper())
+        val checkInterval = 60000L // Check every minute
+
+        val taskChecker = object : Runnable {
+            override fun run() {
+                checkTasks()
+                handler.postDelayed(this, checkInterval)
+            }
+        }
+
+        handler.post(taskChecker)
+    }
+
+    private fun checkTasks() {
+        databaseManager.getAllTasks { tasks ->
+            tasks.forEach { task ->
+                notificationManager.checkAndNotify(task)
+            }
+        }
+    }
+
+    private fun checkNotificationPermission() {
+        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.TIRAMISU) {
+            if (ContextCompat.checkSelfPermission(
+                    this,
+                    Manifest.permission.POST_NOTIFICATIONS
+                ) != PackageManager.PERMISSION_GRANTED
+            ) {
+                requestNotificationPermissionLauncher.launch(Manifest.permission.POST_NOTIFICATIONS)
+            }
+>>>>>>> Stashed changes
         }
     }
 }
