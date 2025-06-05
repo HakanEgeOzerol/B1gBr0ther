@@ -176,8 +176,7 @@ class DashboardActivity : AppCompatActivity() {
         }
 
         findViewById<Button>(R.id.b1gBr0therButton).setOnClickListener {
-            val intent = Intent(this, HandGesturesActivity::class.java)
-            startActivity(intent)
+            //Used to be gesture activity. Change it to something else or nothing
         }
 
         simulateWakeWordButton.setOnClickListener {

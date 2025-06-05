@@ -29,7 +29,6 @@
             android:name=".MainActivity"
             android:exported="false"
             android:theme="@style/Theme.B1gBr0ther" />
-        <activity android:name=".HandGesturesActivity" />
         <activity android:name=".ManualPage"
             android:theme="@style/Theme.AppCompat.Light.NoActionBar" />/>
         <activity 

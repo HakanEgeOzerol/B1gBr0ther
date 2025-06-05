@@ -17,8 +17,7 @@ class MainActivity : ComponentActivity() {
         val btnDatabaseTest = findViewById<Button>(R.id.btnDatabaseTest)
 
         goToButton.setOnClickListener {
-            val intent = Intent(this, HandGesturesActivity::class.java)
-            startActivity(intent)
+//            Used to send to handGesture activity. Not anymore. The entire class needs to go
         }
 
         btnDashboard.setOnClickListener {
