@@ -6,7 +6,7 @@
     android:padding="4dp">
 
     <TextView
-        android:text="Please input time"
+        android:text="Please input start time"
         android:layout_width="match_parent"
         android:layout_height="0dp"
         android:layout_weight="1"
@@ -16,11 +16,12 @@
 
     <LinearLayout
         android:layout_width="match_parent"
-        android:layout_height="wrap_content">
+        android:layout_height="wrap_content"
+        android:layout_gravity="center">
 
         <TimePicker
             android:id="@+id/timePicker"
-            android:layout_width="wrap_content"
+            android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:timePickerMode="spinner" />
 

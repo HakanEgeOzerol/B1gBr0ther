@@ -6,7 +6,7 @@
     android:padding="4dp">
 
     <TextView
-        android:text="Please input date"
+        android:text="Please input start date"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:layout_weight="1"
