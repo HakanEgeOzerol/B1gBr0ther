@@ -518,7 +518,9 @@ class DashboardActivity : AppCompatActivity() {
         val cancelButton = dialog.findViewById<Button>(R.id.Cancel)
 
         continueButton.setOnClickListener{
-            val taskDate = LocalDate.of(datePicker.year, datePicker.dayOfMonth, datePicker.dayOfMonth)
+            val taskDate = LocalDate.of(datePicker.year, datePicker.month, datePicker.dayOfMonth)
+
+            Toast.makeText(this, "This is year, ${taskDate.year}, this is month ${taskDate.monthValue}, this is day ${taskDate.dayOfMonth}", Toast.LENGTH_SHORT).show()
 
             dialog.dismiss()
             setStartTimeDialog(name, taskDate)
@@ -578,6 +580,8 @@ class DashboardActivity : AppCompatActivity() {
             val minutesSubmitted = (minutes.text.toString()).toLong()
             var estimatedCompletion = LocalDateTime.now()
             val startTime = dateTime
+
+            Toast.makeText(this, "Estimated start time $startTime", Toast.LENGTH_SHORT).show()
 
             if (hoursSubmitted >= 0){
                 estimatedCompletion = estimatedCompletion.plusHours(hoursSubmitted)
