@@ -29,6 +29,7 @@ class DashboardActivity : AppCompatActivity() {
     private lateinit var simulateWakeWordButton: Button
     private lateinit var databaseManager: DatabaseManager
     private var currentTaskName: String? = null
+    private var lastSneezeTime: Long = 0
 
     private lateinit var voiceRecognizerManager: VoiceRecognizerManager
     private lateinit var commandHandler: VoiceCommandHandler
@@ -178,6 +179,12 @@ class DashboardActivity : AppCompatActivity() {
                         startBreak()
                     }
                 }
+            }
+        }
+
+        voiceRecognizerManager.setOnSneezeDetected {
+            runOnUiThread {
+                handleSneeze()
             }
         }
 
@@ -359,5 +366,12 @@ class DashboardActivity : AppCompatActivity() {
         super.onDestroy()
         handler.removeCallbacks(timerRunnable)
         voiceRecognizerManager.destroyRecognizer()
+    }
+
+    private fun handleSneeze() {
+        //Implement sneeze logic here
+        lastSneezeTime = System.currentTimeMillis()
+
+        voiceRecognizerManager.sayBlessYou(this)
     }
 }

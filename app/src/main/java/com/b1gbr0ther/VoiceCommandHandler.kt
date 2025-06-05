@@ -2,15 +2,6 @@ package com.b1gbr0ther
 
 class VoiceCommandHandler(private val activity: DashboardActivity) {
 
-    private val commandMap = mapOf(
-        "stop tracking" to { activity.stopTracking() },
-        "start break" to { activity.startBreak() },
-        "stop break" to { activity.endBreak() },
-        "show export" to { activity.showExportPage() },
-        "show manual" to { activity.showManualPage() },
-        "show timesheet" to { /* activity.showTimesheetPage() */ }
-    )
-
     private val commandAliases = mapOf(
         "stop tracking" to listOf(
             "stop tracking",
@@ -77,10 +68,18 @@ class VoiceCommandHandler(private val activity: DashboardActivity) {
         )
     )
 
+    private val commandMap = mapOf(
+        "stop tracking" to { activity.stopTracking() },
+        "start break" to { activity.startBreak() },
+        "stop break" to { activity.endBreak() },
+        "show export" to { activity.showExportPage() },
+        "show manual" to { activity.showManualPage() },
+        "show timesheet" to { /* activity.showTimesheetPage() */ }
+    )
+
     fun handleCommand(spoken: String): Boolean {
         val normalizedInput = spoken.trim().lowercase()
-        
-        // Only handle "start tracking" if it's followed by a task name
+
         if (normalizedInput.startsWith("start tracking ") || normalizedInput.startsWith("begin tracking ")) {
             val taskName = normalizedInput.substringAfter(" tracking ").trim()
             if (taskName.isNotEmpty()) {
@@ -90,13 +89,11 @@ class VoiceCommandHandler(private val activity: DashboardActivity) {
             return false
         }
 
-        // Then check for exact command matches
         commandMap[normalizedInput]?.let {
             it.invoke()
             return true
         }
 
-        // Check for command aliases
         for ((mainCommand, aliases) in commandAliases) {
             if (aliases.any { alias -> normalizedInput == alias }) {
                 commandMap[mainCommand]?.invoke()
@@ -104,7 +101,6 @@ class VoiceCommandHandler(private val activity: DashboardActivity) {
             }
         }
 
-        // Finally check for similar commands
         for ((mainCommand, aliases) in commandAliases) {
             if (aliases.any { alias -> 
                     isSimilar(normalizedInput, alias) || 
