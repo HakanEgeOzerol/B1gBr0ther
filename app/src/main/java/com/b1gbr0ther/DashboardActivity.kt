@@ -709,6 +709,7 @@ class DashboardActivity : AppCompatActivity() {
         databaseManager.deleteTask(taskId) {
             Toast.makeText(this, "Task deleted", Toast.LENGTH_SHORT).show()
         }
+    }
         
     private fun handleSneeze() {
         //Implement sneeze logic here
