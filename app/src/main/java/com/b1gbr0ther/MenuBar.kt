@@ -56,7 +56,7 @@ class MenuBar @JvmOverloads constructor(
         val target = when (index) {
             0 -> ExportPage::class.java            // export icon
             1 -> DashboardActivity::class.java     // dashboard icon
-            2 -> AudioRecognitionActivity::class.java // timesheet icon
+            2 -> TimesheetActivity::class.java // timesheet icon
             else -> return
         }
 
