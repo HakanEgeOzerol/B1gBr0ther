@@ -369,7 +369,6 @@ class DashboardActivity : AppCompatActivity() {
 
 
             if (acceleration > 17 && !isDialogShown && !isActiveTask()) {
-//                Toast.makeText(applicationContext, "The last ID is $activeTaskId", Toast.LENGTH_SHORT).show()
                 isDialogShown = true
                 createInputTaskDialog()
             }
@@ -494,7 +493,7 @@ class DashboardActivity : AppCompatActivity() {
             }
             else{
                 dialog.dismiss()
-                setEndTimeDialog(name)
+                setEndTimeDialog(name, LocalDateTime.now())
             }
             updateAllTasks()
         }
@@ -519,8 +518,6 @@ class DashboardActivity : AppCompatActivity() {
 
         continueButton.setOnClickListener{
             val taskDate = LocalDate.of(datePicker.year, datePicker.month, datePicker.dayOfMonth)
-
-            Toast.makeText(this, "This is year, ${taskDate.year}, this is month ${taskDate.monthValue}, this is day ${taskDate.dayOfMonth}", Toast.LENGTH_SHORT).show()
 
             dialog.dismiss()
             setStartTimeDialog(name, taskDate)
@@ -564,7 +561,7 @@ class DashboardActivity : AppCompatActivity() {
         dialog.show()
     }
 
-    private fun setEndTimeDialog(name: String, dateTime: LocalDateTime = LocalDateTime.now()){//Last dialog in chain
+    private fun setEndTimeDialog(name: String, dateTime: LocalDateTime){//Last dialog in chain
         val dialog = Dialog(this)
         dialog.setContentView(R.layout.gesture_dialog_new_task_step_4)
         dialog.setCancelable(true)
@@ -578,10 +575,8 @@ class DashboardActivity : AppCompatActivity() {
         submitTask.setOnClickListener{
             val hoursSubmitted = (hours.text.toString()).toLong()
             val minutesSubmitted = (minutes.text.toString()).toLong()
-            var estimatedCompletion = LocalDateTime.now()
+            var estimatedCompletion = dateTime
             val startTime = dateTime
-
-            Toast.makeText(this, "Estimated start time $startTime", Toast.LENGTH_SHORT).show()
 
             if (hoursSubmitted >= 0){
                 estimatedCompletion = estimatedCompletion.plusHours(hoursSubmitted)
@@ -600,14 +595,12 @@ class DashboardActivity : AppCompatActivity() {
                 Toast.makeText(this, "Task saved to database with ID: $taskId", Toast.LENGTH_SHORT).show()
             }
 
-            Toast.makeText(this, "Task updated", Toast.LENGTH_SHORT).show()
             isDialogShown = false
             dialog.dismiss()
             updateAllTasks()
         }
 
         cancelButton.setOnClickListener{
-            Toast.makeText(this, "Task updated", Toast.LENGTH_SHORT).show()
             isDialogShown = false
             dialog.dismiss()
             updateAllTasks()
