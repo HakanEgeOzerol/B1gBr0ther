@@ -44,6 +44,7 @@ class DashboardActivity : AppCompatActivity() {
     private lateinit var simulateWakeWordButton: Button
     private lateinit var databaseManager: DatabaseManager
     private var currentTaskName: String? = null
+    private var currentTaskId: Long = -1
     private var lastSneezeTime: Long = 0
 
     private lateinit var voiceRecognizerManager: VoiceRecognizerManager
@@ -86,17 +87,17 @@ class DashboardActivity : AppCompatActivity() {
                 updateCurrentTask("On break")
             } else if (currentTaskName != null) {
                 updateCurrentTask("Currently tracking: $currentTaskName")
-            } else {
-                databaseManager.getAllTasks { tasks ->
-                    if (tasks.isNotEmpty()) {
-                        val lastTask = tasks.last()
-                        currentTaskName = lastTask.taskName
-                        updateCurrentTask("Currently tracking: ${lastTask.taskName}")
+            } else if (currentTaskId != -1L) {
+                databaseManager.getTask(currentTaskId) { task ->
+                    if (task != null) {
+                        currentTaskName = task.taskName
+                        updateCurrentTask("Currently tracking: ${task.taskName}")
                     }
                 }
             }
         } else {
             currentTaskName = null
+            currentTaskId = -1L
             updateCurrentTask("Not tracking any task")
         }
     }
@@ -264,10 +265,11 @@ class DashboardActivity : AppCompatActivity() {
     fun startTrackingWithTask(taskName: String) {
         if (!timeTracker.isTracking()) {
             databaseManager.getAllTasks { tasks ->
-                val matchingTask = tasks.find { it.taskName.equals(taskName, ignoreCase = true) }
+                val matchingTask = tasks.find { it.taskName.equals(taskName, ignoreCase = true) && !it.isCompleted }
                 if (matchingTask != null && !matchingTask.isCompleted) {
                     timeTracker.startTracking()
                     currentTaskName = matchingTask.taskName
+                    currentTaskId = matchingTask.id
                     Toast.makeText(this, "Tracking started for: ${matchingTask.taskName}", Toast.LENGTH_SHORT).show()
                     updateCurrentTask("Currently tracking: ${matchingTask.taskName}")
                 } else if (matchingTask != null && matchingTask.isCompleted) {
@@ -291,23 +293,30 @@ class DashboardActivity : AppCompatActivity() {
         val hoursElapsed = floor(summary.effectiveTimeMillis / (1000.0 * 60 * 60)).toLong()
         val minutesElapsed = ((summary.effectiveTimeMillis / (1000.0 * 60)) % 60).toLong()
 
-        databaseManager.getAllTasks { tasks ->
-            if (tasks.isNotEmpty()) {
-                val lastTask = tasks.last()
-                lastTask.isCompleted = true
-                lastTask.endTime = LocalDateTime.now()
+        if (currentTaskId == -1L) {
+            Toast.makeText(this, "No task was being tracked", Toast.LENGTH_SHORT).show()
+            return
+        }
 
-                databaseManager.updateTask(lastTask) {
+        databaseManager.getTask(currentTaskId) { task ->
+            if (task != null && !task.isCompleted) {
+                task.isCompleted = true
+                task.endTime = LocalDateTime.now()
+
+                databaseManager.updateTask(task) {
                     Toast.makeText(
                         this,
-                        "Task '${lastTask.taskName}' completed. Time tracked: ${hoursElapsed}h ${minutesElapsed}m",
+                        "Task '${task.taskName}' completed. Time tracked: ${hoursElapsed}h ${minutesElapsed}m",
                         Toast.LENGTH_SHORT
                     ).show()
                 }
+            } else {
+                Toast.makeText(this, "Could not find the task being tracked", Toast.LENGTH_SHORT).show()
             }
         }
 
         currentTaskName = null
+        currentTaskId = -1L
         updateCurrentTask("Not tracking any task")
     }
 
@@ -500,7 +509,7 @@ class DashboardActivity : AppCompatActivity() {
 
         // Mark task as completed
         completeButton?.setOnClickListener {
-            markTaskAsCompleted(activeTaskId.toLong())
+            markTaskAsCompleted(currentTaskId)
             isDialogShown = false
             dialog.dismiss()
             updateAllTasks()
@@ -508,7 +517,7 @@ class DashboardActivity : AppCompatActivity() {
 
         // Delete the task
         deleteButton?.setOnClickListener {
-            deleteTask(activeTaskId.toLong())
+            deleteTask(currentTaskId)
             isDialogShown = false
             dialog.dismiss()
             updateAllTasks()
