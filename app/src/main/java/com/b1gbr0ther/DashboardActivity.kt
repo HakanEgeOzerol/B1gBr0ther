@@ -196,10 +196,8 @@ class DashboardActivity : AppCompatActivity() {
             checkPermissionAndStartRecognition()
         }
 
-        // Start periodic task checker
         startTaskChecker()
 
-        // Request notification permission
         checkNotificationPermission()
     }
 
@@ -234,13 +232,6 @@ class DashboardActivity : AppCompatActivity() {
         voiceRecognizerManager.setOnSneezeDetected {
             runOnUiThread {
                 handleSneeze()
-            }
-        }
-
-        voiceRecognizerManager.setOnUrinationDetected {
-            runOnUiThread {
-                Log.i("DashboardActivity", "Urination detection callback triggered!")
-                handleUrination()
             }
         }
 
@@ -764,34 +755,6 @@ class DashboardActivity : AppCompatActivity() {
         voiceRecognizerManager.sayBlessYou(this)
     }
 
-<<<<<<< Updated upstream
-    private fun handleUrination() {
-        Log.i("DashboardActivity", "handleUrination() called - urination detected!")
-        
-        if (timeTracker.isTracking() && !timeTracker.isOnBreak()) {
-            Log.d("DashboardActivity", "Showing bathroom break dialog")
-            val dialog = Dialog(this)
-            dialog.setContentView(R.layout.dialog_bathroom_break)
-            
-            dialog.findViewById<Button>(R.id.btnConfirmBreak).setOnClickListener {
-                dialog.dismiss()
-                startBreak()
-                Toast.makeText(this, "Bathroom break started", Toast.LENGTH_SHORT).show()
-            }
-            
-            dialog.findViewById<Button>(R.id.btnCancelBreak).setOnClickListener {
-                dialog.dismiss()
-            }
-            
-            dialog.show()
-        } else if (timeTracker.isOnBreak()) {
-            Log.d("DashboardActivity", "Ending bathroom break")
-            endBreak()
-            Toast.makeText(this, "Bathroom break ended", Toast.LENGTH_SHORT).show()
-        } else {
-            Log.d("DashboardActivity", "Not tracking or conditions not met for bathroom break")
-            Toast.makeText(this, "Urination detected, but not tracking", Toast.LENGTH_SHORT).show()
-=======
     private fun startTaskChecker() {
         val handler = Handler(Looper.getMainLooper())
         val checkInterval = 60000L // Check every minute
@@ -823,7 +786,6 @@ class DashboardActivity : AppCompatActivity() {
             ) {
                 requestNotificationPermissionLauncher.launch(Manifest.permission.POST_NOTIFICATIONS)
             }
->>>>>>> Stashed changes
         }
     }
 }

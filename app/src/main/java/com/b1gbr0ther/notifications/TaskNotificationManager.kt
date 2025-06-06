@@ -66,7 +66,7 @@ class TaskNotificationManager(private val context: Context) {
                     task,
                     "Task Overdue",
                     "Task '${task.taskName}' is overdue!",
-                    NotificationCompat.PRIORITY_MAX
+                    NotificationCompat.PRIORITY_HIGH
                 )
             }
         }
