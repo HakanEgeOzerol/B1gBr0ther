@@ -74,7 +74,7 @@ class VoiceCommandHandler(private val activity: DashboardActivity) {
         "stop break" to { activity.endBreak() },
         "show export" to { activity.showExportPage() },
         "show manual" to { activity.showManualPage() },
-        "show timesheet" to { /* activity.showTimesheetPage() */ }
+        "show timesheet" to { activity.showTimesheetPage() }
     )
 
     fun handleCommand(spoken: String): Boolean {

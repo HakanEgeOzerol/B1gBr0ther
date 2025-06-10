@@ -788,4 +788,9 @@ class DashboardActivity : AppCompatActivity() {
             }
         }
     }
+
+    fun showTimesheetPage() {
+        val intent = Intent(this, TimesheetActivity::class.java)
+        startActivity(intent)
+    }
 }
