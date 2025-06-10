@@ -43,25 +43,26 @@ class TaskNotificationManager(private val context: Context) {
         val now = LocalDateTime.now()
         val minutesToStart = ChronoUnit.MINUTES.between(now, task.startTime)
         val minutesToEnd = ChronoUnit.MINUTES.between(now, task.endTime)
+        val secondsAfterEnd = ChronoUnit.SECONDS.between(task.endTime, now)
 
         when {
-            minutesToStart in 14..15 && now.isBefore(task.startTime) -> {
+            minutesToStart == 15L && now.isBefore(task.startTime) -> {
                 showNotification(
                     task,
                     "Task Starting Soon",
-                    "Task '${task.taskName}' will start in 15 minutes",
+                    "Task '${task.taskName}' is due to begin in 15 minutes",
                     NotificationCompat.PRIORITY_HIGH
                 )
             }
-            minutesToEnd in 14..15 && !task.isCompleted && now.isAfter(task.startTime) && now.isBefore(task.endTime) -> {
+            minutesToEnd == 15L && !task.isCompleted && now.isAfter(task.startTime) && now.isBefore(task.endTime) -> {
                 showNotification(
                     task,
                     "Task Ending Soon",
-                    "Task '${task.taskName}' will end in 15 minutes",
+                    "Task '${task.taskName}' is due to end in 15 minutes",
                     NotificationCompat.PRIORITY_HIGH
                 )
             }
-            !task.isCompleted && now.isAfter(task.endTime) && minutesToEnd <= -1 -> {
+            secondsAfterEnd == 1L && !task.isCompleted -> {
                 showNotification(
                     task,
                     "Task Overdue",
