@@ -681,7 +681,7 @@ class DashboardActivity : AppCompatActivity() {
                 estimatedCompletion = estimatedCompletion.plusHours(3)
             }
 
-            val newTask = Task(name, startTime, estimatedCompletion)
+            val newTask = Task(name, startTime, estimatedCompletion, true)
 
             databaseManager.createAppTask(newTask) { taskId ->
                 Toast.makeText(this, "Task saved to database with ID: $taskId", Toast.LENGTH_SHORT).show()
@@ -807,3 +807,12 @@ class DashboardActivity : AppCompatActivity() {
         startActivity(intent)
     }
 }
+
+//Known bugs in gesture
+// on dismis the dialog would not show (not buttons)
+//Cant leave empty spaces
+//Start date can be after end date
+//isPrePlanned is not set v
+//The tasks are created 1 month ahead
+//Consistency with identifying curent task needs to be improved
+//allegedly thats it?
