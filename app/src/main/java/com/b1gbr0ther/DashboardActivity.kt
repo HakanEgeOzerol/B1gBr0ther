@@ -806,4 +806,17 @@ class DashboardActivity : AppCompatActivity() {
         val intent = Intent(this, TimesheetActivity::class.java)
         startActivity(intent)
     }
+
+    fun deleteTaskByName(taskName: String) {
+        databaseManager.getAllTasks { tasks ->
+            val task = tasks.find { it.taskName.equals(taskName, ignoreCase = true) }
+            if (task != null) {
+                databaseManager.deleteTask(task) {
+                    Toast.makeText(this, "Task '${task.taskName}' deleted", Toast.LENGTH_SHORT).show()
+                }
+            } else {
+                Toast.makeText(this, "Could not find task with name '$taskName'", Toast.LENGTH_SHORT).show()
+            }
+        }
+    }
 }

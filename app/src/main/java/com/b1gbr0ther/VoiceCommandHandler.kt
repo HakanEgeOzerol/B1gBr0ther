@@ -80,6 +80,15 @@ class VoiceCommandHandler(private val activity: DashboardActivity) {
     fun handleCommand(spoken: String): Boolean {
         val normalizedInput = spoken.trim().lowercase()
 
+        if (normalizedInput.startsWith("delete task ") || normalizedInput.startsWith("remove task ")) {
+            val taskName = normalizedInput.substringAfter(" task ").trim()
+            if (taskName.isNotEmpty()) {
+                activity.deleteTaskByName(taskName)
+                return true
+            }
+            return false
+        }
+
         if (normalizedInput.startsWith("start tracking ") || normalizedInput.startsWith("begin tracking ")) {
             val taskName = normalizedInput.substringAfter(" tracking ").trim()
             if (taskName.isNotEmpty()) {
