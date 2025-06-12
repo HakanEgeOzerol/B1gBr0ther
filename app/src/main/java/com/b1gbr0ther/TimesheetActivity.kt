@@ -1,5 +1,6 @@
 package com.b1gbr0ther
 
+import android.content.Intent
 import android.os.Bundle
 import android.view.LayoutInflater
 import android.widget.Toast
@@ -49,6 +50,11 @@ class TimesheetActivity : AppCompatActivity() {
 
     monthButton.setOnClickListener {
       showMonthOverlay()
+    }
+
+    findViewById<Button>(R.id.b1gBr0therButton).setOnClickListener {
+      val intent = Intent(this, SettingsActivity::class.java)
+      startActivity(intent)
     }
   }
 

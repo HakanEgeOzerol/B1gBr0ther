@@ -198,7 +198,8 @@ class DashboardActivity : AppCompatActivity() {
         }
 
         findViewById<Button>(R.id.b1gBr0therButton).setOnClickListener {
-            //Used to be gesture activity. Change it to something else or nothing
+            val intent = Intent(this, SettingsActivity::class.java)
+            startActivity(intent)
         }
 
         simulateWakeWordButton.setOnClickListener {
