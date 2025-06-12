@@ -9,6 +9,10 @@ import androidx.activity.enableEdgeToEdge
 class MainActivity : ComponentActivity() {
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
+        
+        // Apply saved theme before setting content view
+        ThemeManager.applyTheme(this)
+        
         enableEdgeToEdge()
         setContentView(R.layout.activity_main)
 

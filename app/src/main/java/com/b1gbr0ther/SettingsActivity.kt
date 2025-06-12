@@ -8,6 +8,7 @@ import android.widget.SeekBar
 import android.widget.Toast
 import androidx.activity.enableEdgeToEdge
 import androidx.appcompat.app.AppCompatActivity
+import androidx.appcompat.app.AppCompatDelegate
 import androidx.core.view.ViewCompat
 import androidx.core.view.WindowInsetsCompat
 import android.content.SharedPreferences
@@ -39,6 +40,9 @@ class SettingsActivity : AppCompatActivity() {
         
         sharedPreferences = getSharedPreferences("B1gBr0therSettings", MODE_PRIVATE)
         
+        // Apply saved theme
+        applyTheme()
+        
         initializeViews()
         loadSettings()
         setupListeners()
@@ -48,6 +52,10 @@ class SettingsActivity : AppCompatActivity() {
             v.setPadding(systemBars.left, systemBars.top, systemBars.right, systemBars.bottom)
             insets
         }
+    }
+
+    private fun applyTheme() {
+        ThemeManager.applyTheme(this)
     }
 
     private fun initializeViews() {
@@ -85,17 +93,22 @@ class SettingsActivity : AppCompatActivity() {
         sensitivitySeekBar.progress = sensitivity
         sensitivityValueText.text = "$sensitivity%"
         
-        darkThemeSwitch.isChecked = sharedPreferences.getBoolean("dark_theme", false)
+        // Load theme setting using ThemeManager
+        val currentTheme = ThemeManager.getCurrentTheme(this)
+        darkThemeSwitch.isChecked = (currentTheme == ThemeManager.THEME_DARK)
         updateThemeLabel()
+        
         languageSwitch.isChecked = sharedPreferences.getBoolean("dutch_language", false)
         updateLanguageLabel()
     }
 
     private fun updateThemeLabel() {
-        themeLabel.text = if (darkThemeSwitch.isChecked) {
-            "Theme: Dark Mode"
-        } else {
-            "Theme: Light Mode"
+        val currentTheme = ThemeManager.getCurrentTheme(this)
+        themeLabel.text = when (currentTheme) {
+            ThemeManager.THEME_LIGHT -> "Theme: Light Mode"
+            ThemeManager.THEME_DARK -> "Theme: Dark Mode"
+            ThemeManager.THEME_SYSTEM -> "Theme: Follow System"
+            else -> "Theme: Follow System"
         }
     }
 
@@ -127,7 +140,9 @@ class SettingsActivity : AppCompatActivity() {
         })
 
         // Dark theme switch listener
-        darkThemeSwitch.setOnCheckedChangeListener { _, _ ->
+        darkThemeSwitch.setOnCheckedChangeListener { _, isChecked ->
+            val themeMode = if (isChecked) ThemeManager.THEME_DARK else ThemeManager.THEME_LIGHT
+            ThemeManager.setTheme(this, themeMode)
             updateThemeLabel()
         }
 
@@ -163,6 +178,7 @@ class SettingsActivity : AppCompatActivity() {
         sensitivitySeekBar.progress = 75
         sensitivityValueText.text = "75%"
         darkThemeSwitch.isChecked = false
+        ThemeManager.setTheme(this, ThemeManager.THEME_SYSTEM)
         updateThemeLabel()
         languageSwitch.isChecked = false
         updateLanguageLabel()
@@ -179,7 +195,7 @@ class SettingsActivity : AppCompatActivity() {
         editor.putBoolean("sneeze_detection", sneezeDetectionSwitch.isChecked)
         editor.putInt("volume", volumeSeekBar.progress)
         editor.putInt("sensitivity", sensitivitySeekBar.progress)
-        editor.putBoolean("dark_theme", darkThemeSwitch.isChecked)
+        // Theme is handled by ThemeManager, no need to save it here
         editor.putBoolean("dutch_language", languageSwitch.isChecked)
         editor.apply()
         
@@ -216,12 +232,16 @@ class SettingsActivity : AppCompatActivity() {
             return sharedPreferences.getInt("sensitivity", 75)
         }
 
-        fun isDarkThemeEnabled(sharedPreferences: SharedPreferences): Boolean {
-            return sharedPreferences.getBoolean("dark_theme", false)
+        fun isDarkThemeEnabled(context: android.content.Context): Boolean {
+            return ThemeManager.getCurrentTheme(context) == ThemeManager.THEME_DARK
         }
 
         fun isDutchLanguageEnabled(sharedPreferences: SharedPreferences): Boolean {
             return sharedPreferences.getBoolean("dutch_language", false)
+        }
+
+        fun applyTheme(context: android.content.Context) {
+            ThemeManager.applyTheme(context)
         }
     }
 } 
