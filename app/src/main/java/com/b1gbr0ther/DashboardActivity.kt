@@ -685,6 +685,8 @@ class DashboardActivity : AppCompatActivity() {
         val hours = dialog.findViewById<EditText>(R.id.HoursInput)
         val minutes = dialog.findViewById<EditText>(R.id.MinutesInput)
 
+        var isPlanned = isPreplanned
+
         submitTask.setOnClickListener{
             var hoursSubmitted: Long = 3 //Possibly expand it in the settings
             var minutesSubmitted: Long = 0
@@ -698,7 +700,7 @@ class DashboardActivity : AppCompatActivity() {
             }
 
             var estimatedCompletion = dateTime
-            val startTime = dateTime
+            var startTime = dateTime
 
             if (hoursSubmitted >= 0){
                 estimatedCompletion = estimatedCompletion.plusHours(hoursSubmitted)
@@ -710,8 +712,10 @@ class DashboardActivity : AppCompatActivity() {
                 estimatedCompletion = estimatedCompletion.plusHours(3)
             }
 
-            if (estimatedCompletion.isBefore(startTime)){
+            if (estimatedCompletion.isBefore(LocalDateTime.now())){//Defaults to 3 hours
                 estimatedCompletion = LocalDateTime.now().plusHours(3)
+                startTime = LocalDateTime.now()
+                isPlanned = false
             }
 
             val newTask = Task(name, startTime, estimatedCompletion, isPreplanned)
@@ -849,7 +853,7 @@ class DashboardActivity : AppCompatActivity() {
 //Known bugs in gesture
 // on dismis the dialog would not show (not buttons) v
 //Cant leave empty spaces v
-//Start date can be after end date 
+//Start date can be after end date v
 //isPrePlanned is not set v
 //The tasks are created 1 month THOUGH it should not be the case
 //Consistency with identifying curent task needs to be improved
