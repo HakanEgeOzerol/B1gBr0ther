@@ -685,8 +685,6 @@ class DashboardActivity : AppCompatActivity() {
         val hours = dialog.findViewById<EditText>(R.id.HoursInput)
         val minutes = dialog.findViewById<EditText>(R.id.MinutesInput)
 
-        var isPlanned = isPreplanned
-
         submitTask.setOnClickListener{
             var hoursSubmitted: Long = 3 //Possibly expand it in the settings
             var minutesSubmitted: Long = 0
@@ -712,10 +710,9 @@ class DashboardActivity : AppCompatActivity() {
                 estimatedCompletion = estimatedCompletion.plusHours(3)
             }
 
-            if (estimatedCompletion.isBefore(LocalDateTime.now())){//Defaults to 3 hours
+            if (startTime.isBefore(LocalDateTime.now())){//Defaults to 3 hours
                 estimatedCompletion = LocalDateTime.now().plusHours(3)
-                startTime = LocalDateTime.now()
-                isPlanned = false
+                startTime = LocalDateTime.now()//This is still buged to some extent, the plan for the future no longer works as intended
             }
 
             val newTask = Task(name, startTime, estimatedCompletion, isPreplanned)
