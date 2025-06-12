@@ -559,6 +559,11 @@ class DashboardActivity : AppCompatActivity() {
             updateAllTasks()
         }
 
+        dialog.setOnCancelListener {
+            isDialogShown = false
+            updateAllTasks()
+        }
+
         dialog.show()
     }
 
@@ -597,6 +602,11 @@ class DashboardActivity : AppCompatActivity() {
             updateAllTasks()
         }
 
+        dialog.setOnCancelListener {
+            isDialogShown = false
+            updateAllTasks()
+        }
+
         dialog.show()
     }
 
@@ -622,6 +632,11 @@ class DashboardActivity : AppCompatActivity() {
             updateAllTasks()
         }
 
+        dialog.setOnCancelListener {
+            isDialogShown = false
+            updateAllTasks()
+        }
+
         dialog.show()
     }
 
@@ -641,7 +656,7 @@ class DashboardActivity : AppCompatActivity() {
 
             isDialogShown = false
             dialog.dismiss()
-            setEndTimeDialog(name, dateTime)
+            setEndTimeDialog(name, dateTime, true)
             updateAllTasks()
         }
 
@@ -651,10 +666,15 @@ class DashboardActivity : AppCompatActivity() {
             updateAllTasks()
         }
 
+        dialog.setOnCancelListener {
+            isDialogShown = false
+            updateAllTasks()
+        }
+
         dialog.show()
     }
 
-    private fun setEndTimeDialog(name: String, dateTime: LocalDateTime){//Last dialog in chain
+    private fun setEndTimeDialog(name: String, dateTime: LocalDateTime, isPreplanned: Boolean = false){//Last dialog in chain
         val dialog = Dialog(this)
         dialog.setContentView(R.layout.gesture_dialog_new_task_step_4)
         dialog.setCancelable(true)
@@ -666,8 +686,17 @@ class DashboardActivity : AppCompatActivity() {
         val minutes = dialog.findViewById<EditText>(R.id.MinutesInput)
 
         submitTask.setOnClickListener{
-            val hoursSubmitted = (hours.text.toString()).toLong()
-            val minutesSubmitted = (minutes.text.toString()).toLong()
+            var hoursSubmitted: Long = 3 //Possibly expand it in the settings
+            var minutesSubmitted: Long = 0
+
+            if (hours.text.isNotEmpty()){
+                hoursSubmitted = (hours.text.toString()).toLong()
+            }
+
+            if (minutes.text.isNotEmpty()){
+                minutesSubmitted = (minutes.text.toString()).toLong()
+            }
+
             var estimatedCompletion = dateTime
             val startTime = dateTime
 
@@ -681,7 +710,11 @@ class DashboardActivity : AppCompatActivity() {
                 estimatedCompletion = estimatedCompletion.plusHours(3)
             }
 
-            val newTask = Task(name, startTime, estimatedCompletion, true)
+            if (estimatedCompletion.isBefore(startTime)){
+                estimatedCompletion = LocalDateTime.now().plusHours(3)
+            }
+
+            val newTask = Task(name, startTime, estimatedCompletion, isPreplanned)
 
             databaseManager.createAppTask(newTask) { taskId ->
                 Toast.makeText(this, "Task saved to database with ID: $taskId", Toast.LENGTH_SHORT).show()
@@ -702,6 +735,11 @@ class DashboardActivity : AppCompatActivity() {
         cancelButton.setOnClickListener{
             isDialogShown = false
             dialog.dismiss()
+            updateAllTasks()
+        }
+
+        dialog.setOnCancelListener {
+            isDialogShown = false
             updateAllTasks()
         }
         dialog.show()
@@ -809,10 +847,10 @@ class DashboardActivity : AppCompatActivity() {
 }
 
 //Known bugs in gesture
-// on dismis the dialog would not show (not buttons)
-//Cant leave empty spaces
-//Start date can be after end date
+// on dismis the dialog would not show (not buttons) v
+//Cant leave empty spaces v
+//Start date can be after end date 
 //isPrePlanned is not set v
-//The tasks are created 1 month ahead
+//The tasks are created 1 month THOUGH it should not be the case
 //Consistency with identifying curent task needs to be improved
 //allegedly thats it?
