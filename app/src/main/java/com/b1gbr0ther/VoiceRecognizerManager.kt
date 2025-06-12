@@ -27,6 +27,8 @@ class VoiceRecognizerManager(
     companion object {
         private const val TAG = "VoiceRecognizerManager"
         private const val NO_COMMAND_TIMEOUT = 5000L
+        private const val MAX_CONSECUTIVE_ERRORS = 3
+        private const val ERROR_RECOVERY_DELAY = 1000L
     }
     
     private var recognizer: SpeechRecognizer? = null
@@ -42,6 +44,7 @@ class VoiceRecognizerManager(
     private val scope = CoroutineScope(Dispatchers.IO + Job())
     private var isVoiceRecognitionActive = false
     private var isProcessingCommand = false
+    private var consecutiveErrorCount = 0
 
     fun setOnBlowDetected(callback: () -> Unit) {
         onBlowDetected = callback
@@ -100,23 +103,26 @@ class VoiceRecognizerManager(
         isVoiceRecognitionActive = true
         isProcessingCommand = false
         lastCommandAttemptTime = System.currentTimeMillis()
+        consecutiveErrorCount = 0
         
         recognizer = SpeechRecognizer.createSpeechRecognizer(context).apply {
             setRecognitionListener(createRecognitionListener())
-
-            val intent = Intent(RecognizerIntent.ACTION_RECOGNIZE_SPEECH).apply {
-                putExtra(RecognizerIntent.EXTRA_LANGUAGE_MODEL, RecognizerIntent.LANGUAGE_MODEL_FREE_FORM)
-                putExtra(RecognizerIntent.EXTRA_LANGUAGE, Locale.getDefault())
-                putExtra(RecognizerIntent.EXTRA_PARTIAL_RESULTS, true)
-                putExtra(RecognizerIntent.EXTRA_MAX_RESULTS, 1)
-                putExtra(RecognizerIntent.EXTRA_SPEECH_INPUT_MINIMUM_LENGTH_MILLIS, 500L)
-                putExtra(RecognizerIntent.EXTRA_SPEECH_INPUT_COMPLETE_SILENCE_LENGTH_MILLIS, 1500L)
-                putExtra(RecognizerIntent.EXTRA_SPEECH_INPUT_POSSIBLY_COMPLETE_SILENCE_LENGTH_MILLIS, 1500L)
-            }
-
-            startListening(intent)
+            startListening(createRecognitionIntent())
         }
         scheduleNoCommandTimeout()
+    }
+
+    private fun createRecognitionIntent(): Intent {
+        return Intent(RecognizerIntent.ACTION_RECOGNIZE_SPEECH).apply {
+            putExtra(RecognizerIntent.EXTRA_LANGUAGE_MODEL, RecognizerIntent.LANGUAGE_MODEL_FREE_FORM)
+            putExtra(RecognizerIntent.EXTRA_LANGUAGE, Locale.getDefault())
+            putExtra(RecognizerIntent.EXTRA_PARTIAL_RESULTS, true)
+            putExtra(RecognizerIntent.EXTRA_MAX_RESULTS, 3)
+            putExtra(RecognizerIntent.EXTRA_SPEECH_INPUT_MINIMUM_LENGTH_MILLIS, 500L)
+            putExtra(RecognizerIntent.EXTRA_SPEECH_INPUT_COMPLETE_SILENCE_LENGTH_MILLIS, 1500L)
+            putExtra(RecognizerIntent.EXTRA_SPEECH_INPUT_POSSIBLY_COMPLETE_SILENCE_LENGTH_MILLIS, 1500L)
+            putExtra(RecognizerIntent.EXTRA_CONFIDENCE_SCORES, true)
+        }
     }
 
     private fun stopRecognition() {
@@ -150,6 +156,44 @@ class VoiceRecognizerManager(
             }
         }
         handler.postDelayed(noCommandRunnable!!, NO_COMMAND_TIMEOUT)
+    }
+
+    private fun handleRecognitionError(error: Int) {
+        val msg = when (error) {
+            SpeechRecognizer.ERROR_AUDIO -> "Audio recording error"
+            SpeechRecognizer.ERROR_CLIENT -> "Listening..."
+            SpeechRecognizer.ERROR_INSUFFICIENT_PERMISSIONS -> "Insufficient permissions"
+            SpeechRecognizer.ERROR_NETWORK -> "Network error"
+            SpeechRecognizer.ERROR_NETWORK_TIMEOUT -> "Network timeout"
+            SpeechRecognizer.ERROR_NO_MATCH -> "Listening..."
+            SpeechRecognizer.ERROR_RECOGNIZER_BUSY -> "Recognizer busy"
+            SpeechRecognizer.ERROR_SERVER -> "Server error"
+            SpeechRecognizer.ERROR_SPEECH_TIMEOUT -> "Listening..."
+            else -> "Unknown error: $error"
+        }
+
+        if (error == SpeechRecognizer.ERROR_INSUFFICIENT_PERMISSIONS ||
+            error == SpeechRecognizer.ERROR_NETWORK ||
+            error == SpeechRecognizer.ERROR_SERVER) {
+            consecutiveErrorCount++
+            if (consecutiveErrorCount >= MAX_CONSECUTIVE_ERRORS) {
+                onError("Voice recognition stopped: $msg")
+                stopRecognition()
+                return
+            }
+            onError(msg)
+        } else {
+            onStatusUpdate(msg)
+            if (isVoiceRecognitionActive && !isProcessingCommand) {
+                lastCommandAttemptTime = System.currentTimeMillis()
+                scheduleNoCommandTimeout()
+                handler.postDelayed({ 
+                    if (isVoiceRecognitionActive) {
+                        restartRecognition() 
+                    }
+                }, ERROR_RECOVERY_DELAY)
+            }
+        }
     }
 
     private fun createRecognitionListener(): RecognitionListener {
@@ -224,8 +268,22 @@ class VoiceRecognizerManager(
             }
 
             override fun onResults(results: Bundle?) {
-                val spoken = results?.getStringArrayList(SpeechRecognizer.RESULTS_RECOGNITION)
-                    ?.firstOrNull().orEmpty()
+                val matches = results?.getStringArrayList(SpeechRecognizer.RESULTS_RECOGNITION)
+                val confidenceScores = results?.getFloatArray(SpeechRecognizer.CONFIDENCE_SCORES)
+
+                var bestMatch: String? = null
+                var bestConfidence = 0f
+                
+                if (matches != null && confidenceScores != null) {
+                    for (i in matches.indices) {
+                        if (i < confidenceScores.size && confidenceScores[i] > bestConfidence) {
+                            bestConfidence = confidenceScores[i]
+                            bestMatch = matches[i]
+                        }
+                    }
+                }
+
+                val spoken = bestMatch ?: matches?.firstOrNull().orEmpty()
 
                 if (spoken.isNotEmpty()) {
                     isProcessingCommand = true
@@ -252,32 +310,7 @@ class VoiceRecognizerManager(
             }
 
             override fun onError(error: Int) {
-                val msg = when (error) {
-                    SpeechRecognizer.ERROR_AUDIO -> "Audio recording error"
-                    SpeechRecognizer.ERROR_CLIENT -> "Listening..."
-                    SpeechRecognizer.ERROR_INSUFFICIENT_PERMISSIONS -> "Insufficient permissions"
-                    SpeechRecognizer.ERROR_NETWORK -> "Network error"
-                    SpeechRecognizer.ERROR_NETWORK_TIMEOUT -> "Network timeout"
-                    SpeechRecognizer.ERROR_NO_MATCH -> "Listening..."
-                    SpeechRecognizer.ERROR_RECOGNIZER_BUSY -> "Recognizer busy"
-                    SpeechRecognizer.ERROR_SERVER -> "Server error"
-                    SpeechRecognizer.ERROR_SPEECH_TIMEOUT -> "Listening..."
-                    else -> "Unknown error: $error"
-                }
-                
-                if (error == SpeechRecognizer.ERROR_INSUFFICIENT_PERMISSIONS ||
-                    error == SpeechRecognizer.ERROR_NETWORK ||
-                    error == SpeechRecognizer.ERROR_SERVER) {
-                    onError(msg)
-                    stopRecognition()
-                } else {
-                    onStatusUpdate(msg)
-                    if (isVoiceRecognitionActive && !isProcessingCommand) {
-                        lastCommandAttemptTime = System.currentTimeMillis()
-                        scheduleNoCommandTimeout()
-                        handler.postDelayed({ restartRecognition() }, 1000)
-                    }
-                }
+                handleRecognitionError(error)
             }
 
             override fun onEvent(eventType: Int, params: Bundle?) {}
