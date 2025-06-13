@@ -268,10 +268,13 @@ class DashboardActivity : AppCompatActivity() {
 
         if (!isEnabled) {
             statusTextView.text = "Voice recognition disabled"
+            voiceRecognizerManager.stopRecognition()
         } else if (!hasPermission) {
             statusTextView.text = "Voice recognition permission required"
+            voiceRecognizerManager.stopRecognition()
         } else {
             statusTextView.text = "Voice recognition ready"
+            startVoiceRecognition()
         }
     }
 

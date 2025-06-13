@@ -334,6 +334,7 @@ class SettingsActivity : AppCompatActivity() {
 
     private fun saveVoiceRecognitionSetting(enabled: Boolean) {
         sharedPreferences.edit().putBoolean("voice_recognition", enabled).apply()
+        setResult(RESULT_OK)
     }
 
     private fun updateVoiceRecognitionSwitchState() {
@@ -411,6 +412,7 @@ class SettingsActivity : AppCompatActivity() {
         
         android.util.Log.d("SettingsActivity", "Settings saved: volume=${volumeSeekBar.progress}, sensitivity=${sensitivitySeekBar.progress}")
         Toast.makeText(this, "Settings saved successfully", Toast.LENGTH_SHORT).show()
+        setResult(RESULT_OK)
     }
     
     private fun debugThemeColors() {
