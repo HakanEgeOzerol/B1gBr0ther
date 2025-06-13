@@ -186,7 +186,7 @@ class ExportPage : AppCompatActivity() {
     private fun exportTasks(tasks: List<Task>, template: com.b1gbr0ther.models.export.templates.ExportTemplate) {
         try {
             val exportedData = template.format(tasks)
-            saveExportedData(exportedData, template.getFileExtension(), template.getMimeType())
+            saveExportedData(exportedData, tasks, template.getFileExtension(), template.getMimeType())
             Toast.makeText(this, "Exported ${tasks.size} tasks as ${template.getFileExtension().uppercase()}", Toast.LENGTH_SHORT).show()
         } catch (e: Exception) {
             Toast.makeText(this, "Export failed: ${e.message}", Toast.LENGTH_LONG).show()
@@ -235,10 +235,12 @@ class ExportPage : AppCompatActivity() {
         }
     }
     
-    private fun saveExportedData(data: String, fileExtension: String, mimeType: String) {
+    private fun saveExportedData(data: String, tasks: List<Task>, fileExtension: String, mimeType: String) {
         try {
-            val timestamp = java.text.SimpleDateFormat("yyyyMMdd_HHmmss", java.util.Locale.getDefault()).format(java.util.Date())
-            val filename = "tasks_export_$timestamp.$fileExtension"
+            val taskCount = tasks.size
+            val dateFormatter = java.text.SimpleDateFormat("MMM_dd_yyyy", java.util.Locale.getDefault())
+            val currentDate = dateFormatter.format(java.util.Date())
+            val filename = "${taskCount}_tasks_$currentDate.$fileExtension"
             
             val exportDir = getExternalFilesDir(null)
             val exportFile = java.io.File(exportDir, filename)
