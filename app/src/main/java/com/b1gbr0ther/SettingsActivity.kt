@@ -73,28 +73,37 @@ class SettingsActivity : AppCompatActivity() {
             return sharedPreferences.getInt("sensitivity", 75)
         }
 
-        fun isDarkThemeEnabled(sharedPreferences: SharedPreferences): Boolean {
-            return sharedPreferences.getBoolean("dark_theme", false)
+        // Updated to use ThemeManager instead of old boolean preference
+        fun isDarkThemeEnabled(context: android.content.Context): Boolean {
+            return ThemeManager.getCurrentTheme(context) == ThemeManager.THEME_DARK
         }
 
         fun isDutchLanguageEnabled(sharedPreferences: SharedPreferences): Boolean {
             return sharedPreferences.getBoolean("dutch_language", false)
         }
+
+        fun applyTheme(activity: android.app.Activity) {
+            ThemeManager.applyTheme(activity)
+        }
     }
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
+        
+        // Apply saved theme BEFORE setting content view
+        ThemeManager.applyTheme(this)
+        
         enableEdgeToEdge()
         setContentView(R.layout.activity_settings)
         
         sharedPreferences = getSharedPreferences("B1gBr0therSettings", MODE_PRIVATE)
         
-        // Apply saved theme
-        applyTheme()
-        
         initializeViews()
         loadSettings()
         setupListeners()
+        
+        // Debug: Log current theme colors
+        debugThemeColors()
 
         ViewCompat.setOnApplyWindowInsetsListener(findViewById(R.id.settingsLayout)) { v, insets ->
             val systemBars = insets.getInsets(WindowInsetsCompat.Type.systemBars())
@@ -130,7 +139,8 @@ class SettingsActivity : AppCompatActivity() {
     }
 
     private fun loadSettings() {
-        // Load saved settings or use defaults
+        android.util.Log.d("SettingsActivity", "Loading settings from SharedPreferences...")
+        
         voiceRecognitionSwitch.isChecked = sharedPreferences.getBoolean("voice_recognition", true)
         notificationsSwitch.isChecked = sharedPreferences.getBoolean("notifications", true)
         accelerometerSwitch.isChecked = sharedPreferences.getBoolean("accelerometer", true)
@@ -145,10 +155,27 @@ class SettingsActivity : AppCompatActivity() {
         sensitivitySeekBar.progress = sensitivity
         sensitivityValueText.text = "$sensitivity%"
         
-        // Load theme setting using ThemeManager
+        android.util.Log.d("SettingsActivity", "Loaded settings: volume=$volume, sensitivity=$sensitivity")
+        
+        // Load theme setting using ThemeManager (temporarily remove listener to prevent infinite loop)
         val currentTheme = ThemeManager.getCurrentTheme(this)
+        android.util.Log.d("SettingsActivity", "Loading settings - current theme: ${ThemeManager.getThemeName(currentTheme)} ($currentTheme)")
+        darkThemeSwitch.setOnCheckedChangeListener(null)
         darkThemeSwitch.isChecked = (currentTheme == ThemeManager.THEME_DARK)
         updateThemeLabel()
+        
+        // Re-attach the listener after setting the state
+        darkThemeSwitch.setOnCheckedChangeListener { _, isChecked ->
+            android.util.Log.d("SettingsActivity", "Theme switch toggled: $isChecked")
+            android.util.Log.d("SettingsActivity", "BEFORE theme change:")
+            debugThemeColors()
+            
+            val themeMode = if (isChecked) ThemeManager.THEME_DARK else ThemeManager.THEME_LIGHT
+            ThemeManager.setTheme(this, themeMode)
+            updateThemeLabel()
+            
+            recreate()
+        }
         
         languageSwitch.isChecked = sharedPreferences.getBoolean("dutch_language", false)
         updateLanguageLabel()
@@ -157,10 +184,9 @@ class SettingsActivity : AppCompatActivity() {
     private fun updateThemeLabel() {
         val currentTheme = ThemeManager.getCurrentTheme(this)
         themeLabel.text = when (currentTheme) {
-            ThemeManager.THEME_LIGHT -> "Theme: Light Mode"
-            ThemeManager.THEME_DARK -> "Theme: Dark Mode"
-            ThemeManager.THEME_SYSTEM -> "Theme: Follow System"
-            else -> "Theme: Follow System"
+            ThemeManager.THEME_LIGHT -> "Theme: Light Mode (Purple)"
+            ThemeManager.THEME_DARK -> "Theme: Dark Mode (Gray)"
+            else -> "Theme: Light Mode (Purple)"
         }
     }
 
@@ -191,12 +217,7 @@ class SettingsActivity : AppCompatActivity() {
             override fun onStopTrackingTouch(seekBar: SeekBar?) {}
         })
 
-        // Dark theme switch listener
-        darkThemeSwitch.setOnCheckedChangeListener { _, isChecked ->
-            val themeMode = if (isChecked) ThemeManager.THEME_DARK else ThemeManager.THEME_LIGHT
-            ThemeManager.setTheme(this, themeMode)
-            updateThemeLabel()
-        }
+        // Dark theme switch listener is now set in loadSettings() to prevent infinite loop
 
         // Language switch listener
         languageSwitch.setOnCheckedChangeListener { _, _ ->
@@ -213,17 +234,14 @@ class SettingsActivity : AppCompatActivity() {
             }
         }
 
-        // Back button
         backButton.setOnClickListener {
             finish()
         }
 
-        // Reset button
         resetButton.setOnClickListener {
             resetToDefaults()
         }
 
-        // Save button
         saveButton.setOnClickListener {
             saveSettings()
         }
@@ -232,15 +250,12 @@ class SettingsActivity : AppCompatActivity() {
     private fun requestVoiceRecognitionPermission() {
         when {
             ContextCompat.checkSelfPermission(this, Manifest.permission.RECORD_AUDIO) == PackageManager.PERMISSION_GRANTED -> {
-                // Permission is already granted, save the setting
                 saveVoiceRecognitionSetting(true)
             }
             ActivityCompat.shouldShowRequestPermissionRationale(this, Manifest.permission.RECORD_AUDIO) -> {
-                // Show an explanation to the user
                 showPermissionRationaleDialog()
             }
             else -> {
-                // No explanation needed, request the permission
                 ActivityCompat.requestPermissions(
                     this,
                     arrayOf(Manifest.permission.RECORD_AUDIO),
@@ -262,7 +277,6 @@ class SettingsActivity : AppCompatActivity() {
                 )
             }
             .setNegativeButton("No") { _, _ ->
-                // User declined, update switch state
                 voiceRecognitionSwitch.isChecked = false
                 saveVoiceRecognitionSetting(false)
             }
@@ -278,7 +292,6 @@ class SettingsActivity : AppCompatActivity() {
                 openAppSettings()
             }
             .setNegativeButton("Cancel") { _, _ ->
-                // User declined, update switch state
                 voiceRecognitionSwitch.isChecked = false
                 saveVoiceRecognitionSetting(false)
             }
@@ -302,11 +315,9 @@ class SettingsActivity : AppCompatActivity() {
         when (requestCode) {
             PERMISSION_REQUEST_RECORD_AUDIO -> {
                 if (grantResults.isNotEmpty() && grantResults[0] == PackageManager.PERMISSION_GRANTED) {
-                    // Permission granted
                     saveVoiceRecognitionSetting(true)
                     Toast.makeText(this, "Voice recognition enabled", Toast.LENGTH_SHORT).show()
                 } else {
-                    // Permission denied
                     if (!ActivityCompat.shouldShowRequestPermissionRationale(this, Manifest.permission.RECORD_AUDIO)) {
                         // User clicked "Don't ask again", show settings dialog
                         showPermissionDeniedDialog()
@@ -332,7 +343,19 @@ class SettingsActivity : AppCompatActivity() {
         ) == PackageManager.PERMISSION_GRANTED
 
         val isEnabled = sharedPreferences.getBoolean("voice_recognition", true)
+        
+        // Temporarily remove listener to prevent triggering other switches
+        voiceRecognitionSwitch.setOnCheckedChangeListener(null)
         voiceRecognitionSwitch.isChecked = isEnabled && hasPermission
+        
+        // Re-attach the listener
+        voiceRecognitionSwitch.setOnCheckedChangeListener { _, isChecked ->
+            if (isChecked) {
+                requestVoiceRecognitionPermission()
+            } else {
+                saveVoiceRecognitionSetting(false)
+            }
+        }
     }
 
     override fun onResume() {
@@ -351,9 +374,20 @@ class SettingsActivity : AppCompatActivity() {
         volumeValueText.text = "50%"
         sensitivitySeekBar.progress = 75
         sensitivityValueText.text = "75%"
+        // Temporarily remove listener to prevent triggering recreation
+        darkThemeSwitch.setOnCheckedChangeListener(null)
         darkThemeSwitch.isChecked = false
-        ThemeManager.setTheme(this, ThemeManager.THEME_SYSTEM)
+        ThemeManager.setTheme(this, ThemeManager.THEME_LIGHT)
         updateThemeLabel()
+        
+        // Re-attach the listener
+        darkThemeSwitch.setOnCheckedChangeListener { _, isChecked ->
+            android.util.Log.d("SettingsActivity", "Theme switch toggled: $isChecked")
+            val themeMode = if (isChecked) ThemeManager.THEME_DARK else ThemeManager.THEME_LIGHT
+            ThemeManager.setTheme(this, themeMode)
+            updateThemeLabel()
+            recreate()
+        }
         languageSwitch.isChecked = false
         updateLanguageLabel()
         
@@ -361,6 +395,8 @@ class SettingsActivity : AppCompatActivity() {
     }
 
     private fun saveSettings() {
+        android.util.Log.d("SettingsActivity", "Save button pressed - saving settings...")
+        
         val editor = sharedPreferences.edit()
         editor.putBoolean("voice_recognition", voiceRecognitionSwitch.isChecked)
         editor.putBoolean("notifications", notificationsSwitch.isChecked)
@@ -373,49 +409,29 @@ class SettingsActivity : AppCompatActivity() {
         editor.putBoolean("dutch_language", languageSwitch.isChecked)
         editor.apply()
         
+        android.util.Log.d("SettingsActivity", "Settings saved: volume=${volumeSeekBar.progress}, sensitivity=${sensitivitySeekBar.progress}")
         Toast.makeText(this, "Settings saved successfully", Toast.LENGTH_SHORT).show()
     }
-
-    companion object {
-        // Static methods to access settings from other activities
-        fun isVoiceRecognitionEnabled(sharedPreferences: SharedPreferences): Boolean {
-            return sharedPreferences.getBoolean("voice_recognition", true)
-        }
-
-        fun isNotificationsEnabled(sharedPreferences: SharedPreferences): Boolean {
-            return sharedPreferences.getBoolean("notifications", true)
-        }
-
-        fun isAccelerometerEnabled(sharedPreferences: SharedPreferences): Boolean {
-            return sharedPreferences.getBoolean("accelerometer", true)
-        }
-
-        fun isBlowDetectionEnabled(sharedPreferences: SharedPreferences): Boolean {
-            return sharedPreferences.getBoolean("blow_detection", true)
-        }
-
-        fun isSneezeDetectionEnabled(sharedPreferences: SharedPreferences): Boolean {
-            return sharedPreferences.getBoolean("sneeze_detection", true)
-        }
-
-        fun getVolume(sharedPreferences: SharedPreferences): Int {
-            return sharedPreferences.getInt("volume", 50)
-        }
-
-        fun getSensitivity(sharedPreferences: SharedPreferences): Int {
-            return sharedPreferences.getInt("sensitivity", 75)
-        }
-
-        fun isDarkThemeEnabled(context: android.content.Context): Boolean {
-            return ThemeManager.getCurrentTheme(context) == ThemeManager.THEME_DARK
-        }
-
-        fun isDutchLanguageEnabled(sharedPreferences: SharedPreferences): Boolean {
-            return sharedPreferences.getBoolean("dutch_language", false)
-        }
-
-        fun applyTheme(context: android.content.Context) {
-            ThemeManager.applyTheme(context)
+    
+    private fun debugThemeColors() {
+        try {
+            val typedArray = theme.obtainStyledAttributes(intArrayOf(
+                android.R.attr.colorBackground,
+                android.R.attr.textColorPrimary
+            ))
+            
+            val backgroundColor = typedArray.getColor(0, 0)
+            val textColor = typedArray.getColor(1, 0)
+            
+            typedArray.recycle()
+            
+            android.util.Log.d("SettingsActivity", "=== THEME DEBUG ===")
+            android.util.Log.d("SettingsActivity", "Background: #${Integer.toHexString(backgroundColor).uppercase()}")
+            android.util.Log.d("SettingsActivity", "Text: #${Integer.toHexString(textColor).uppercase()}")
+            android.util.Log.d("SettingsActivity", "================")
+        } catch (e: Exception) {
+            android.util.Log.e("SettingsActivity", "Error debugging theme colors: ${e.message}")
         }
     }
+
 } 

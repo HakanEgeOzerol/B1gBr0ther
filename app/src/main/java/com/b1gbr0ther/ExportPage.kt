@@ -40,9 +40,15 @@ class ExportPage : AppCompatActivity() {
     private var startDate: LocalDate? = null
     private var endDate: LocalDate? = null
     private var allTasks: List<Task> = emptyList()
+    private var appliedTheme: Int = -1
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
+        
+        // Apply saved theme before setting content view
+        ThemeManager.applyTheme(this)
+        appliedTheme = ThemeManager.getCurrentTheme(this)
+        
         enableEdgeToEdge()
         setContentView(R.layout.activity_export_page)
 
@@ -280,6 +286,16 @@ class ExportPage : AppCompatActivity() {
 
     override fun onResume() {
         super.onResume()
+        
+        // Check if theme has changed and recreate if needed
+        val currentTheme = ThemeManager.getCurrentTheme(this)
+        if (appliedTheme != -1 && appliedTheme != currentTheme) {
+            android.util.Log.d("ExportPage", "Theme changed from $appliedTheme to $currentTheme - recreating activity")
+            recreate()
+            return
+        }
+        appliedTheme = currentTheme
+        
         menuBar.setActivePage(0)
         updateExportButtonText()
     }

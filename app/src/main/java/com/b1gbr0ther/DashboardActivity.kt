@@ -124,6 +124,11 @@ class DashboardActivity : AppCompatActivity() {
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
+        
+        // Apply saved app theme before setting content view
+        ThemeManager.applyTheme(this)
+        appliedTheme = ThemeManager.getCurrentTheme(this)
+        
         enableEdgeToEdge()
         setContentView(R.layout.activity_dashboard)
 
@@ -438,8 +443,19 @@ class DashboardActivity : AppCompatActivity() {
         return databaseManager
     }
 
+    private var appliedTheme: Int = -1
+
     override fun onResume() {
         super.onResume()
+
+        // Check if theme has changed and recreate if needed
+        val currentTheme = ThemeManager.getCurrentTheme(this)
+        if (appliedTheme != -1 && appliedTheme != currentTheme) {
+            android.util.Log.d("DashboardActivity", "Theme changed from $appliedTheme to $currentTheme - recreating activity")
+            recreate()
+            return
+        }
+        appliedTheme = currentTheme
 
         updateAllTasks()
 

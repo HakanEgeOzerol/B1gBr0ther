@@ -4,7 +4,7 @@
     android:id="@+id/settingsLayout"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    android:background="#A7ADC6">
+    android:background="?android:colorBackground">
 
     <!-- Title -->
     <TextView
@@ -12,7 +12,7 @@
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:text="Settings"
-        android:textColor="#000000"
+        android:textColor="?android:textColorPrimary"
         android:textSize="24sp"
         android:textStyle="bold"
         app:layout_constraintTop_toTopOf="parent"
@@ -37,14 +37,14 @@
             android:orientation="vertical"
             android:padding="16dp"
             android:background="@drawable/less_rounded_corners"
-            android:backgroundTint="#8797AF">
+            android:backgroundTint="?attr/cardBackgroundColor">
 
             <!-- Appearance & Language Section -->
             <TextView
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:text="Appearance &amp; Language"
-                android:textColor="#000000"
+                android:textColor="?android:textColorPrimary"
                 android:textSize="18sp"
                 android:textStyle="bold"
                 android:layout_marginTop="16dp"
@@ -62,7 +62,7 @@
                     android:layout_height="wrap_content"
                     android:layout_weight="1"
                     android:text="Theme: Light Mode"
-                    android:textColor="#000000"
+                    android:textColor="?android:textColorPrimary"
                     android:textSize="16sp" />
 
                 <Switch
@@ -84,7 +84,7 @@
                     android:layout_height="wrap_content"
                     android:layout_weight="1"
                     android:text="Language: English"
-                    android:textColor="#000000"
+                    android:textColor="?android:textColorPrimary"
                     android:textSize="16sp" />
 
                 <Switch
@@ -99,7 +99,7 @@
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:text="Voice Recognition"
-                android:textColor="#000000"
+                android:textColor="?android:textColorPrimary"
                 android:textSize="18sp"
                 android:textStyle="bold"
                 android:layout_marginBottom="8dp" />
@@ -115,7 +115,7 @@
                     android:layout_height="wrap_content"
                     android:layout_weight="1"
                     android:text="Enable Voice Commands"
-                    android:textColor="#000000"
+                    android:textColor="?android:textColorPrimary"
                     android:textSize="16sp" />
 
                 <Switch
@@ -130,7 +130,7 @@
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:text="Notifications"
-                android:textColor="#000000"
+                android:textColor="?android:textColorPrimary"
                 android:textSize="18sp"
                 android:textStyle="bold"
                 android:layout_marginBottom="8dp" />
@@ -146,7 +146,7 @@
                     android:layout_height="wrap_content"
                     android:layout_weight="1"
                     android:text="Enable Task Notifications"
-                    android:textColor="#000000"
+                    android:textColor="?android:textColorPrimary"
                     android:textSize="16sp" />
 
                 <Switch
@@ -161,7 +161,7 @@
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:text="Motion &amp; Gesture Detection"
-                android:textColor="#000000"
+                android:textColor="?android:textColorPrimary"
                 android:textSize="18sp"
                 android:textStyle="bold"
                 android:layout_marginBottom="8dp" />
@@ -177,7 +177,7 @@
                     android:layout_height="wrap_content"
                     android:layout_weight="1"
                     android:text="Enable Accelerometer Detection"
-                    android:textColor="#000000"
+                    android:textColor="?android:textColorPrimary"
                     android:textSize="16sp" />
 
                 <Switch
@@ -198,7 +198,7 @@
                     android:layout_height="wrap_content"
                     android:layout_weight="1"
                     android:text="Enable Blow Detection"
-                    android:textColor="#000000"
+                    android:textColor="?android:textColorPrimary"
                     android:textSize="16sp" />
 
                 <Switch
@@ -219,7 +219,7 @@
                     android:layout_height="wrap_content"
                     android:layout_weight="1"
                     android:text="Enable Sneeze Detection"
-                    android:textColor="#000000"
+                    android:textColor="?android:textColorPrimary"
                     android:textSize="16sp" />
 
                 <Switch
@@ -234,7 +234,7 @@
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:text="Audio Settings"
-                android:textColor="#000000"
+                android:textColor="?android:textColorPrimary"
                 android:textSize="18sp"
                 android:textStyle="bold"
                 android:layout_marginBottom="8dp" />
@@ -256,7 +256,7 @@
                         android:layout_height="wrap_content"
                         android:layout_weight="1"
                         android:text="Microphone Volume"
-                        android:textColor="#000000"
+                        android:textColor="?android:textColorPrimary"
                         android:textSize="16sp" />
 
                     <TextView
@@ -264,7 +264,7 @@
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
                         android:text="50%"
-                        android:textColor="#000000"
+                        android:textColor="?android:textColorPrimary"
                         android:textSize="16sp"
                         android:minWidth="50dp"
                         android:gravity="end" />
@@ -296,7 +296,7 @@
                         android:layout_height="wrap_content"
                         android:layout_weight="1"
                         android:text="Detection Sensitivity"
-                        android:textColor="#000000"
+                        android:textColor="?android:textColorPrimary"
                         android:textSize="16sp" />
 
                     <TextView
@@ -304,7 +304,7 @@
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
                         android:text="75%"
-                        android:textColor="#000000"
+                        android:textColor="?android:textColorPrimary"
                         android:textSize="16sp"
                         android:minWidth="50dp"
                         android:gravity="end" />
@@ -340,10 +340,10 @@
             android:layout_weight="1"
             android:layout_marginEnd="8dp"
             android:background="@drawable/rounded_corners"
-            android:backgroundTint="#5F4B66"
+            android:backgroundTint="?colorPrimary"
             android:text="Back"
             android:textAllCaps="false"
-            android:textColor="#C1A8B5"
+            android:textColor="#FFFFFFFF"
             android:textSize="16sp" />
 
         <Button
@@ -354,10 +354,10 @@
             android:layout_marginStart="4dp"
             android:layout_marginEnd="4dp"
             android:background="@drawable/rounded_corners"
-            android:backgroundTint="#5F4B66"
+            android:backgroundTint="?colorPrimary"
             android:text="Reset"
             android:textAllCaps="false"
-            android:textColor="#C1A8B5"
+            android:textColor="#FFFFFFFF"
             android:textSize="16sp" />
 
         <Button
@@ -367,10 +367,10 @@
             android:layout_weight="1"
             android:layout_marginStart="8dp"
             android:background="@drawable/rounded_corners"
-            android:backgroundTint="#5F4B66"
+            android:backgroundTint="?colorPrimary"
             android:text="Save"
             android:textAllCaps="false"
-            android:textColor="#C1A8B5"
+            android:textColor="#FFFFFFFF"
             android:textSize="16sp" />
 
     </LinearLayout>
