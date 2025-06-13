@@ -151,17 +151,7 @@ class VoiceRecognizerManager(
         }
     }
 
-    private fun stopRecognition() {
-        isVoiceRecognitionActive = false
-        noCommandRunnable?.let { handler.removeCallbacks(it) }
-        recognizer?.apply {
-            stopListening()
-            cancel()
-            destroy()
-        }
-        recognizer = null
-        onStatusUpdate("Voice recognition stopped")
-    }
+
 
     private fun restartRecognition() {
         if (!isProcessingCommand && isVoiceRecognitionActive) {
@@ -358,6 +348,7 @@ class VoiceRecognizerManager(
 
     fun stopRecognition() {
         isVoiceRecognitionActive = false
+        noCommandRunnable?.let { handler.removeCallbacks(it) }
         recognizer?.apply {
             stopListening()
             cancel()
