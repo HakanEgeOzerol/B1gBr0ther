@@ -1,13 +1,21 @@
 package com.b1gbr0ther
 
+import android.Manifest
+import android.content.Intent
+import android.content.pm.PackageManager
+import android.net.Uri
 import android.os.Bundle
+import android.provider.Settings
 import android.widget.Button
 import android.widget.Switch
 import android.widget.TextView
 import android.widget.SeekBar
 import android.widget.Toast
 import androidx.activity.enableEdgeToEdge
+import androidx.appcompat.app.AlertDialog
 import androidx.appcompat.app.AppCompatActivity
+import androidx.core.app.ActivityCompat
+import androidx.core.content.ContextCompat
 import androidx.core.view.ViewCompat
 import androidx.core.view.WindowInsetsCompat
 import android.content.SharedPreferences
@@ -32,6 +40,47 @@ class SettingsActivity : AppCompatActivity() {
     private lateinit var resetButton: Button
     private lateinit var saveButton: Button
 
+    companion object {
+        private const val PERMISSION_REQUEST_RECORD_AUDIO = 1001
+        
+        // Static methods to access settings from other activities
+        fun isVoiceRecognitionEnabled(sharedPreferences: SharedPreferences): Boolean {
+            return sharedPreferences.getBoolean("voice_recognition", true)
+        }
+
+        fun isNotificationsEnabled(sharedPreferences: SharedPreferences): Boolean {
+            return sharedPreferences.getBoolean("notifications", true)
+        }
+
+        fun isAccelerometerEnabled(sharedPreferences: SharedPreferences): Boolean {
+            return sharedPreferences.getBoolean("accelerometer", true)
+        }
+
+        fun isBlowDetectionEnabled(sharedPreferences: SharedPreferences): Boolean {
+            return sharedPreferences.getBoolean("blow_detection", true)
+        }
+
+        fun isSneezeDetectionEnabled(sharedPreferences: SharedPreferences): Boolean {
+            return sharedPreferences.getBoolean("sneeze_detection", true)
+        }
+
+        fun getVolume(sharedPreferences: SharedPreferences): Int {
+            return sharedPreferences.getInt("volume", 50)
+        }
+
+        fun getSensitivity(sharedPreferences: SharedPreferences): Int {
+            return sharedPreferences.getInt("sensitivity", 75)
+        }
+
+        fun isDarkThemeEnabled(sharedPreferences: SharedPreferences): Boolean {
+            return sharedPreferences.getBoolean("dark_theme", false)
+        }
+
+        fun isDutchLanguageEnabled(sharedPreferences: SharedPreferences): Boolean {
+            return sharedPreferences.getBoolean("dutch_language", false)
+        }
+    }
+
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         enableEdgeToEdge()
@@ -48,6 +97,9 @@ class SettingsActivity : AppCompatActivity() {
             v.setPadding(systemBars.left, systemBars.top, systemBars.right, systemBars.bottom)
             insets
         }
+
+        // Check initial permission state
+        updateVoiceRecognitionSwitchState()
     }
 
     private fun initializeViews() {
@@ -136,6 +188,16 @@ class SettingsActivity : AppCompatActivity() {
             updateLanguageLabel()
         }
 
+        // Voice recognition switch listener
+        voiceRecognitionSwitch.setOnCheckedChangeListener { _, isChecked ->
+            if (isChecked) {
+                requestVoiceRecognitionPermission()
+            } else {
+                // If turning off, just save the setting
+                saveVoiceRecognitionSetting(false)
+            }
+        }
+
         // Back button
         backButton.setOnClickListener {
             finish()
@@ -150,6 +212,118 @@ class SettingsActivity : AppCompatActivity() {
         saveButton.setOnClickListener {
             saveSettings()
         }
+    }
+
+    private fun requestVoiceRecognitionPermission() {
+        when {
+            ContextCompat.checkSelfPermission(this, Manifest.permission.RECORD_AUDIO) == PackageManager.PERMISSION_GRANTED -> {
+                // Permission is already granted, save the setting
+                saveVoiceRecognitionSetting(true)
+            }
+            ActivityCompat.shouldShowRequestPermissionRationale(this, Manifest.permission.RECORD_AUDIO) -> {
+                // Show an explanation to the user
+                showPermissionRationaleDialog()
+            }
+            else -> {
+                // No explanation needed, request the permission
+                ActivityCompat.requestPermissions(
+                    this,
+                    arrayOf(Manifest.permission.RECORD_AUDIO),
+                    PERMISSION_REQUEST_RECORD_AUDIO
+                )
+            }
+        }
+    }
+
+    private fun showPermissionRationaleDialog() {
+        AlertDialog.Builder(this)
+            .setTitle("Microphone Permission Required")
+            .setMessage("Voice recognition requires microphone access to work. Would you like to grant this permission?")
+            .setPositiveButton("Yes") { _, _ ->
+                ActivityCompat.requestPermissions(
+                    this,
+                    arrayOf(Manifest.permission.RECORD_AUDIO),
+                    PERMISSION_REQUEST_RECORD_AUDIO
+                )
+            }
+            .setNegativeButton("No") { _, _ ->
+                // User declined, update switch state
+                voiceRecognitionSwitch.isChecked = false
+                saveVoiceRecognitionSetting(false)
+            }
+            .create()
+            .show()
+    }
+
+    private fun showPermissionDeniedDialog() {
+        AlertDialog.Builder(this)
+            .setTitle("Permission Required")
+            .setMessage("Voice recognition cannot work without microphone access. Would you like to open settings to grant the permission?")
+            .setPositiveButton("Open Settings") { _, _ ->
+                openAppSettings()
+            }
+            .setNegativeButton("Cancel") { _, _ ->
+                // User declined, update switch state
+                voiceRecognitionSwitch.isChecked = false
+                saveVoiceRecognitionSetting(false)
+            }
+            .create()
+            .show()
+    }
+
+    private fun openAppSettings() {
+        Intent(Settings.ACTION_APPLICATION_DETAILS_SETTINGS).apply {
+            data = Uri.fromParts("package", packageName, null)
+            startActivity(this)
+        }
+    }
+
+    override fun onRequestPermissionsResult(
+        requestCode: Int,
+        permissions: Array<String>,
+        grantResults: IntArray
+    ) {
+        super.onRequestPermissionsResult(requestCode, permissions, grantResults)
+        when (requestCode) {
+            PERMISSION_REQUEST_RECORD_AUDIO -> {
+                if (grantResults.isNotEmpty() && grantResults[0] == PackageManager.PERMISSION_GRANTED) {
+                    // Permission granted
+                    saveVoiceRecognitionSetting(true)
+                    Toast.makeText(this, "Voice recognition enabled", Toast.LENGTH_SHORT).show()
+                } else {
+                    // Permission denied
+                    if (!ActivityCompat.shouldShowRequestPermissionRationale(this, Manifest.permission.RECORD_AUDIO)) {
+                        // User clicked "Don't ask again", show settings dialog
+                        showPermissionDeniedDialog()
+                    } else {
+                        // User just denied once
+                        voiceRecognitionSwitch.isChecked = false
+                        saveVoiceRecognitionSetting(false)
+                        Toast.makeText(this, "Voice recognition disabled: Permission denied", Toast.LENGTH_SHORT).show()
+                    }
+                }
+            }
+        }
+    }
+
+    private fun saveVoiceRecognitionSetting(enabled: Boolean) {
+        sharedPreferences.edit().putBoolean("voice_recognition", enabled).apply()
+    }
+
+    private fun updateVoiceRecognitionSwitchState() {
+        val hasPermission = ContextCompat.checkSelfPermission(
+            this,
+            Manifest.permission.RECORD_AUDIO
+        ) == PackageManager.PERMISSION_GRANTED
+
+        val isEnabled = sharedPreferences.getBoolean("voice_recognition", true)
+        voiceRecognitionSwitch.isChecked = isEnabled && hasPermission
+    }
+
+    override fun onResume() {
+        super.onResume()
+        // Update switch state when returning from Settings
+        updateVoiceRecognitionSwitchState()
     }
 
     private fun resetToDefaults() {
@@ -184,44 +358,5 @@ class SettingsActivity : AppCompatActivity() {
         editor.apply()
         
         Toast.makeText(this, "Settings saved successfully", Toast.LENGTH_SHORT).show()
-    }
-
-    companion object {
-        // Static methods to access settings from other activities
-        fun isVoiceRecognitionEnabled(sharedPreferences: SharedPreferences): Boolean {
-            return sharedPreferences.getBoolean("voice_recognition", true)
-        }
-
-        fun isNotificationsEnabled(sharedPreferences: SharedPreferences): Boolean {
-            return sharedPreferences.getBoolean("notifications", true)
-        }
-
-        fun isAccelerometerEnabled(sharedPreferences: SharedPreferences): Boolean {
-            return sharedPreferences.getBoolean("accelerometer", true)
-        }
-
-        fun isBlowDetectionEnabled(sharedPreferences: SharedPreferences): Boolean {
-            return sharedPreferences.getBoolean("blow_detection", true)
-        }
-
-        fun isSneezeDetectionEnabled(sharedPreferences: SharedPreferences): Boolean {
-            return sharedPreferences.getBoolean("sneeze_detection", true)
-        }
-
-        fun getVolume(sharedPreferences: SharedPreferences): Int {
-            return sharedPreferences.getInt("volume", 50)
-        }
-
-        fun getSensitivity(sharedPreferences: SharedPreferences): Int {
-            return sharedPreferences.getInt("sensitivity", 75)
-        }
-
-        fun isDarkThemeEnabled(sharedPreferences: SharedPreferences): Boolean {
-            return sharedPreferences.getBoolean("dark_theme", false)
-        }
-
-        fun isDutchLanguageEnabled(sharedPreferences: SharedPreferences): Boolean {
-            return sharedPreferences.getBoolean("dutch_language", false)
-        }
     }
 } 

@@ -99,7 +99,7 @@ class DashboardActivity : AppCompatActivity() {
             } else {
                 val taskId = timeTracker.getCurrentTaskId()
                 val taskName = timeTracker.getCurrentTaskName()
-                
+
                 if (taskName != null) {
                     currentTaskName = taskName
                     currentTaskId = taskId
@@ -224,7 +224,11 @@ class DashboardActivity : AppCompatActivity() {
             },
             onError = { error ->
                 runOnUiThread {
-                    Toast.makeText(this, error, Toast.LENGTH_SHORT).show()
+                    if (error == "Voice recognition is disabled in settings") {
+                        statusTextView.text = "Voice recognition disabled"
+                    } else {
+                        Toast.makeText(this, error, Toast.LENGTH_SHORT).show()
+                    }
                 }
             }
         )
@@ -246,7 +250,24 @@ class DashboardActivity : AppCompatActivity() {
         }
 
         commandHandler = VoiceCommandHandler(this)
-        statusTextView.text = "Voice recognition ready"
+        updateVoiceRecognitionStatus()
+    }
+
+    private fun updateVoiceRecognitionStatus() {
+        val sharedPreferences = getSharedPreferences("B1gBr0therSettings", MODE_PRIVATE)
+        val isEnabled = SettingsActivity.isVoiceRecognitionEnabled(sharedPreferences)
+        val hasPermission = ContextCompat.checkSelfPermission(
+            this,
+            Manifest.permission.RECORD_AUDIO
+        ) == PackageManager.PERMISSION_GRANTED
+
+        if (!isEnabled) {
+            statusTextView.text = "Voice recognition disabled"
+        } else if (!hasPermission) {
+            statusTextView.text = "Voice recognition permission required"
+        } else {
+            statusTextView.text = "Voice recognition ready"
+        }
     }
 
     private fun checkPermissionAndStartRecognition() {
@@ -297,7 +318,7 @@ class DashboardActivity : AppCompatActivity() {
                 val matchingTask = tasks.find { it.taskName.equals(taskName, ignoreCase = true) && !it.isCompleted }
                 if (matchingTask != null && !matchingTask.isCompleted) {
                     matchingTask.startTime = LocalDateTime.now()
-                    
+
                     databaseManager.updateTask(matchingTask) {
                         timeTracker.startTracking()
                         currentTaskName = matchingTask.taskName
@@ -343,7 +364,7 @@ class DashboardActivity : AppCompatActivity() {
                         "Task '${task.taskName}' completed. Time tracked: ${hoursElapsed}h ${minutesElapsed}m",
                         Toast.LENGTH_SHORT
                     ).show()
-                    
+
                     // Reset notification count when task is completed
                     notificationManager.resetNotificationCount(task.id)
                 }
@@ -370,7 +391,7 @@ class DashboardActivity : AppCompatActivity() {
                 if (tasks.isNotEmpty()) {
                     val currentTask = tasks.last()
                     currentTask.isBreak = true
-                    
+
                     databaseManager.updateTask(currentTask) {
                         Toast.makeText(this, "Break started", Toast.LENGTH_SHORT).show()
                         updateCurrentTask("On break")
@@ -393,7 +414,7 @@ class DashboardActivity : AppCompatActivity() {
                 if (tasks.isNotEmpty()) {
                     val currentTask = tasks.last()
                     currentTask.isBreak = false
-                    
+
                     databaseManager.updateTask(currentTask) {
                         Toast.makeText(this, "Break ended", Toast.LENGTH_SHORT).show()
                         updateCurrentTask("Currently busy with a task")
@@ -430,20 +451,20 @@ class DashboardActivity : AppCompatActivity() {
             mockStartTime = System.currentTimeMillis()
             updateCurrentTaskDisplay()
         }
-        
-        statusTextView.text = "Voice recognition ready"
+
+        updateVoiceRecognitionStatus()
     }
 
     override fun onPause() {
         super.onPause()
-        voiceRecognizerManager.destroyRecognizer()
+        voiceRecognizerManager.stopRecognition()
         statusTextView.text = "Voice recognition stopped"
     }
 
     override fun onDestroy() {
         super.onDestroy()
         handler.removeCallbacks(timerRunnable)
-        voiceRecognizerManager.destroyRecognizer()
+        voiceRecognizerManager.stopRecognition()
     }
 
     private val sensorListener: SensorEventListener = object : SensorEventListener {
@@ -476,9 +497,9 @@ class DashboardActivity : AppCompatActivity() {
 
     private fun isActiveTask(): Boolean{
         try {
-             if(getActiveTask(this.allTasks) != null){
-                 return true
-             }
+            if(getActiveTask(this.allTasks) != null){
+                return true
+            }
         }
         catch (e: Exception){
             e.printStackTrace()
@@ -686,7 +707,7 @@ class DashboardActivity : AppCompatActivity() {
 
             databaseManager.createAppTask(newTask) { taskId ->
                 Toast.makeText(this, "Task saved to database with ID: $taskId", Toast.LENGTH_SHORT).show()
-                
+
                 if (startTime == LocalDateTime.now()) {
                     currentTaskName = name
                     currentTaskId = taskId
@@ -761,7 +782,7 @@ class DashboardActivity : AppCompatActivity() {
             Toast.makeText(this, "Task deleted", Toast.LENGTH_SHORT).show()
         }
     }
-        
+
     private fun handleSneeze() {
         //Implement sneeze logic here
         lastSneezeTime = System.currentTimeMillis()

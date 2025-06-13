@@ -51,8 +51,18 @@ class VoiceRecognizerManager(
     }
 
     fun checkPermissionAndStart() {
+        val sharedPreferences = context.getSharedPreferences("B1gBr0therSettings", Context.MODE_PRIVATE)
+        val isVoiceRecognitionEnabled = SettingsActivity.isVoiceRecognitionEnabled(sharedPreferences)
+
+        if (!isVoiceRecognitionEnabled) {
+            onStatusUpdate("Voice recognition disabled")
+            onError("Voice recognition is disabled in settings")
+            return
+        }
+
         if (ContextCompat.checkSelfPermission(context, Manifest.permission.RECORD_AUDIO)
             != PackageManager.PERMISSION_GRANTED) {
+            onStatusUpdate("Voice recognition permission required")
             onError("Microphone permission required")
             return
         }
@@ -61,8 +71,24 @@ class VoiceRecognizerManager(
     }
 
     fun startRecognition() {
+        val sharedPreferences = context.getSharedPreferences("B1gBr0therSettings", Context.MODE_PRIVATE)
+        val isVoiceRecognitionEnabled = SettingsActivity.isVoiceRecognitionEnabled(sharedPreferences)
+        val hasPermission = ContextCompat.checkSelfPermission(context, Manifest.permission.RECORD_AUDIO) == PackageManager.PERMISSION_GRANTED
+
+        if (!isVoiceRecognitionEnabled || !hasPermission) {
+            Log.w(TAG, "Cannot start recognition - enabled: $isVoiceRecognitionEnabled, permission: $hasPermission")
+            if (!isVoiceRecognitionEnabled) {
+                onStatusUpdate("Voice recognition disabled")
+                onError("Voice recognition is disabled in settings")
+            } else {
+                onStatusUpdate("Voice recognition permission required")
+                onError("Voice recognition is disabled or permission not granted")
+            }
+            return
+        }
+
         Log.d(TAG, "Starting recognition - using single microphone source...")
-        onStatusUpdate("Initializing speech recognition...")
+        onStatusUpdate("Voice recognition ready")
 
         if (!SpeechRecognizer.isRecognitionAvailable(context)) {
             onError("Speech recognition not available on this device")
@@ -77,18 +103,17 @@ class VoiceRecognizerManager(
                 Log.i(TAG, "Urination detector initialized successfully")
                 
                 withContext(Dispatchers.Main) {
-                    onStatusUpdate("Voice commands and urination detection ready")
+                    onStatusUpdate("Voice recognition ready")
                 }
                 
             } catch (e: Exception) {
                 Log.e(TAG, "Failed to initialize urination detector (voice commands still work)", e)
                 withContext(Dispatchers.Main) {
-                    onStatusUpdate("Voice commands active, urination detection failed")
+                    onStatusUpdate("Voice recognition ready")
                 }
             }
         }
 
-        // Start ONLY voice recognition (no separate AudioRecord)
         startVoiceRecognition()
     }
 
@@ -256,18 +281,23 @@ class VoiceRecognizerManager(
         Toast.makeText(activity, "Urination detected!", Toast.LENGTH_SHORT).show()
     }
 
-    fun destroyRecognizer() {
-        try {
-            isVoiceRecognitionActive = false
-            recognizer?.apply {
-                stopListening()
-                cancel()
-                destroy()
-            }
-        } catch (e: Exception) {
-            onError("Error destroying recognizer: ${e.message}")
-        } finally {
-            recognizer = null
+    fun stopRecognition() {
+        isVoiceRecognitionActive = false
+        recognizer?.apply {
+            stopListening()
+            cancel()
+            destroy()
+        }
+        recognizer = null
+        
+        val sharedPreferences = context.getSharedPreferences("B1gBr0therSettings", Context.MODE_PRIVATE)
+        val isEnabled = SettingsActivity.isVoiceRecognitionEnabled(sharedPreferences)
+        val hasPermission = ContextCompat.checkSelfPermission(context, Manifest.permission.RECORD_AUDIO) == PackageManager.PERMISSION_GRANTED
+
+        when {
+            !isEnabled -> onStatusUpdate("Voice recognition disabled")
+            !hasPermission -> onStatusUpdate("Voice recognition permission required")
+            else -> onStatusUpdate("Voice recognition ready")
         }
     }
 }
