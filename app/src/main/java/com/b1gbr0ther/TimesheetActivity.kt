@@ -82,9 +82,9 @@ class TimesheetActivity : AppCompatActivity() {
     }
 
     for (day in 1..daysInMonth) {
-      val block = inflater.inflate(R.layout.component_timesheet_day, calendarGrid, false)
-      block.findViewById<TextView>(R.id.dayNumberText).text = day.toString()
-      block.findViewById<TextView>(R.id.hoursWorkedText).text = "${(1..8).random()}h"
+      val block = TimesheetDayComponent(this)
+      block.setDayNumber(day.toString())
+      block.setHoursWorked("${(1..8).random()}")
 
       block.setOnClickListener {
         showDayTasksOverlay(day, currentYearMonth.month.getDisplayName(TextStyle.FULL, Locale.ENGLISH))
@@ -129,7 +129,7 @@ class TimesheetActivity : AppCompatActivity() {
     window?.setGravity(Gravity.TOP or Gravity.START)
     window?.attributes = window?.attributes?.apply {
       x = 40 //change position x axis
-      y = 230 // change position y axiss
+      y = 230 // change position y axis
     }
   }
 
