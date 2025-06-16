@@ -1,0 +1,207 @@
+<resources>
+    <string name="app_name">B1gBr0ther</string>
+    
+    <!-- Status strings -->
+    <string name="status_working">Aan het werken</string>
+    <string name="status_on_break">Op pauze</string>
+    <string name="status_not_tracking">Niet bezig met een taak</string>
+    <string name="tracking_started">Tracking gestart</string>
+    <string name="tracking_stopped">Tracking gestopt</string>
+    
+    <!-- Settings Activity -->
+    <string name="settings_title">Instellingen</string>
+    <string name="appearance_language">Uiterlijk &amp; Taal</string>
+    <string name="theme_light_mode">Thema: Lichte modus (Paars)</string>
+    <string name="theme_dark_mode">Thema: Donkere modus (Grijs)</string>
+    <string name="language_label">Taal: %1$s</string>
+    <string name="language_english">Engels</string>
+    <string name="language_dutch">Nederlands</string>
+    <string name="choose_language">Taal kiezen</string>
+    <string name="voice_recognition">Spraakherkenning</string>
+    <string name="enable_voice_commands">Spraakopdrachten inschakelen</string>
+    <string name="notifications">Meldingen</string>
+    <string name="enable_task_notifications">Taak meldingen inschakelen</string>
+    <string name="motion_gesture_detection">Bewegings- &amp; gebaardetectie</string>
+    <string name="enable_accelerometer_detection">Accelerometer detectie inschakelen</string>
+    <string name="enable_blow_detection">Blaas detectie inschakelen</string>
+    <string name="enable_sneeze_detection">Nies detectie inschakelen</string>
+    <string name="audio_settings">Audio instellingen</string>
+    <string name="microphone_volume">Microfoon volume</string>
+    <string name="detection_sensitivity">Detectie gevoeligheid</string>
+    <string name="back">Terug</string>
+    <string name="reset">Herstel</string>
+    <string name="save">Opslaan</string>
+    
+    <!-- Permission dialogs -->
+    <string name="microphone_permission_required">Microfoon toestemming vereist</string>
+    <string name="microphone_permission_message">Spraakherkenning heeft microfoon toegang nodig om te werken. Wilt u deze toestemming verlenen?</string>
+    <string name="permission_required">Toestemming vereist</string>
+    <string name="microphone_permission_denied_message">Spraakherkenning kan niet werken zonder microfoon toegang. Wilt u instellingen openen om de toestemming te verlenen?</string>
+    <string name="notification_permission_required">Melding toestemming vereist</string>
+    <string name="notification_permission_message">Push meldingen hebben melding toestemming nodig om te werken. Wilt u deze toestemming verlenen?</string>
+    <string name="notification_permission_denied_message">Push meldingen kunnen niet werken zonder melding toestemming. Wilt u instellingen openen om de toestemming te verlenen?</string>
+    <string name="open_settings">Instellingen openen</string>
+    <string name="yes">Ja</string>
+    <string name="no">Nee</string>
+    <string name="cancel">Annuleren</string>
+    <string name="ok">Oké</string>
+    <string name="continue_text">Doorgaan</string>
+    <string name="start">Start</string>
+    
+    <!-- Toast messages -->
+    <string name="voice_recognition_enabled">Spraakherkenning ingeschakeld</string>
+    <string name="voice_recognition_disabled_permission">Spraakherkenning uitgeschakeld: Toestemming geweigerd</string>
+    <string name="push_notifications_enabled">Push meldingen ingeschakeld</string>
+    <string name="push_notifications_disabled_permission">Push meldingen uitgeschakeld: Toestemming geweigerd</string>
+    <string name="settings_reset_to_defaults">Instellingen hersteld naar standaardwaarden</string>
+    <string name="settings_saved_successfully">Instellingen succesvol opgeslagen</string>
+    <string name="microphone_permission_required_for_voice">Microfoon toestemming is vereist voor spraakopdrachten</string>
+    <string name="notifications_disabled_warning">Meldingen zijn uitgeschakeld. Sommige functies werken mogelijk niet goed.</string>
+    <string name="command_not_recognized">Opdracht niet herkend: %1$s</string>
+    <string name="tracking_started_for_task">Tracking gestart voor: %1$s</string>
+    <string name="no_tasks_available">Geen taken beschikbaar om te volgen</string>
+    <string name="already_tracking_task">Al bezig met het volgen van een taak</string>
+    <string name="task_already_completed">Taak '%1$s' is al voltooid</string>
+    <string name="task_not_found">Taak '%1$s' niet gevonden. Beschikbare taken: %2$s</string>
+    <string name="no_active_tracking_session">Geen actieve tracking sessie</string>
+    <string name="no_task_being_tracked">Geen taak werd gevolgd</string>
+    <string name="could_not_find_tracked_task">Kon de gevolgde taak niet vinden</string>
+    <string name="start_tracking_first">Start eerst tracking</string>
+    <string name="already_on_break">Al op pauze</string>
+    <string name="break_started">Pauze gestart</string>
+    <string name="no_active_break">Geen actieve pauze</string>
+    <string name="break_ended">Pauze beëindigd</string>
+    <string name="task_saved_to_database">Taak opgeslagen in database met ID: %1$d</string>
+    <string name="task_marked_completed">Taak gemarkeerd als voltooid</string>
+    <string name="task_deleted">Taak verwijderd</string>
+    <string name="task_name_deleted">Taak '%1$s' verwijderd</string>
+    <string name="could_not_find_task_with_name">Kon taak met naam '%1$s' niet vinden. Beschikbare taken: %2$s</string>
+    
+    <!-- Voice recognition messages -->
+    <string name="enjoy_smoke_break">Geniet van je rookpauze!</string>
+    <string name="bless_you">Gezondheid!</string>
+    <string name="urination_detected">Urinatie gedetecteerd!</string>
+    
+    <!-- Export messages -->
+    <string name="please_select_tasks_to_export">Selecteer taken om te exporteren</string>
+    <string name="exported_tasks">%1$d taken geëxporteerd als %2$s</string>
+    <string name="export_failed">Export mislukt: %1$s</string>
+    <string name="creating_sample_tasks">Voorbeeldtaken maken voor testen...</string>
+    <string name="created_sample_tasks">%1$d voorbeeldtaken gemaakt</string>
+    <string name="error_saving_export">Fout bij opslaan export: %1$s</string>
+    <string name="file_saved_to">Bestand opgeslagen naar: %1$s</string>
+    <string name="choose_export_format">Kies export formaat</string>
+    
+    <!-- Dashboard -->
+    <string name="dashboard">Dashboard</string>
+    <string name="test_db">Test DB</string>
+    <string name="go_to_gestures">Ga naar gebaren</string>
+    <string name="test_database">Test Database</string>
+    
+    <!-- Days of week -->
+    <string name="monday_short">Maa</string>
+    <string name="tuesday_short">Din</string>
+    <string name="wednesday_short">Woe</string>
+    <string name="thursday_short">Don</string>
+    <string name="friday_short">Vri</string>
+    <string name="saturday_short">Zat</string>
+    <string name="sunday_short">Zon</string>
+    
+    <!-- Timesheet -->
+    <string name="select_year">Selecteer een jaar</string>
+    <string name="pick_month">Kies een maand</string>
+    <string name="you_picked_year">Je koos %1$s</string>
+    <string name="you_picked_month">Je koos %1$s</string>
+    <string name="tasks_on_date">Taken op %1$s</string>
+    
+    <!-- Manual -->
+    <string name="manual_how_to">Handleiding / Hoe te</string>
+    
+    <!-- Export Page -->
+    <string name="start_date">Startdatum</string>
+    <string name="end_date">Einddatum</string>
+    <string name="completed">Voltooid</string>
+    <string name="breaks">Pauzes</string>
+    <string name="preplanned">Vooraf gepland</string>
+    <string name="export_selected_recordings">Geselecteerde opnames exporteren</string>
+    <string name="task_name">Taaknaam</string>
+    <string name="time_range">Tijdsbereik</string>
+    <string name="status">Status</string>
+    
+    <!-- Database Test -->
+    <string name="database_test">Database Test</string>
+    <string name="insert_task">Taak invoegen</string>
+    <string name="update_task">Taak bijwerken</string>
+    <string name="delete_task">Taak verwijderen</string>
+    <string name="get_all_tasks">Alle taken ophalen</string>
+    <string name="error_initializing">Fout bij initialiseren: %1$s</string>
+    
+    <!-- Gesture Dialogs -->
+    <string name="input_time_required">Voer de benodigde tijd voor de taak in</string>
+    <string name="input_start_time">Voer starttijd in</string>
+    <string name="input_start_date">Voer startdatum in</string>
+    <string name="planning_ahead">Ben je van tevoren aan het plannen?</string>
+    <string name="task_in_progress">Er is een taak gaande</string>
+    <string name="time_left_completion">Tijd over tot voltooiing</string>
+    <string name="placeholder">Plaatshouder</string>
+    <string name="complete">Voltooien</string>
+    <string name="delete">Verwijderen</string>
+    
+    <!-- Bathroom Break Dialog -->
+    <string name="bathroom_break_detected">Toiletpauze gedetecteerd</string>
+    <string name="start_bathroom_break_question">Wilt u een toiletpauze starten?</string>
+    <string name="start_break">Pauze starten</string>
+    
+    <!-- Month names -->
+    <string name="january">Januari</string>
+    <string name="february">Februari</string>
+    <string name="march">Maart</string>
+    <string name="april">April</string>
+    <string name="may">Mei</string>
+    <string name="june">Juni</string>
+    <string name="july">Juli</string>
+    <string name="august">Augustus</string>
+    <string name="september">September</string>
+    <string name="october">Oktober</string>
+    <string name="november">November</string>
+    <string name="december">December</string>
+    
+    <!-- Day letters -->
+    <string name="monday_letter">M</string>
+    <string name="tuesday_letter">D</string>  
+    <string name="wednesday_letter">W</string>
+    <string name="thursday_letter">D</string>
+    <string name="friday_letter">V</string>
+    <string name="saturday_letter">Z</string>
+    <string name="sunday_letter">Z</string>
+    
+    <!-- Additional strings -->
+    <string name="default_timer">00:00</string>
+    <string name="default_year">2025</string>
+    <string name="percent_50">50%</string>
+    <string name="percent_75">75%</string>
+    <string name="manual_yes_test">• Ja Test</string>
+    
+    <!-- Hour labels -->
+    <string name="hour_00">00</string>
+    <string name="hour_02">02</string>
+    <string name="hour_04">04</string>
+    <string name="hour_06">06</string>
+    <string name="hour_08">08</string>
+    <string name="hour_10">10</string>
+    <string name="hour_12">12</string>
+    <string name="hour_14">14</string>
+    <string name="hour_16">16</string>
+    <string name="hour_18">18</string>
+    <string name="hour_20">20</string>
+    <string name="hour_22">22</string>
+    
+    <!-- Voice recognition -->
+    <string name="voice_recognition_ready">Spraakherkenning gereed</string>
+    <string name="start_voice_recognition">Spraakherkenning starten</string>
+    
+    <!-- Timesheet component placeholders -->
+    <string name="day_number_placeholder">1</string>
+    <string name="hours_worked_placeholder">4u</string>
+    
+</resources> 

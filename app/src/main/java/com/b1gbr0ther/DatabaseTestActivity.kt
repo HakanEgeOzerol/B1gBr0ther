@@ -1,5 +1,6 @@
 package com.b1gbr0ther
 
+import android.content.Context
 import android.os.Bundle
 import android.widget.Button
 import android.widget.TextView
@@ -22,6 +23,10 @@ class DatabaseTestActivity : AppCompatActivity() {
     private lateinit var resultTextView: TextView
     private var currentTaskId: Long = 0
     private var appliedTheme: Int = -1
+    
+    override fun attachBaseContext(newBase: Context) {
+        super.attachBaseContext(LocaleHelper.onAttach(newBase))
+    }
     
     override fun onCreate(savedInstanceState: Bundle?) {
         try {
