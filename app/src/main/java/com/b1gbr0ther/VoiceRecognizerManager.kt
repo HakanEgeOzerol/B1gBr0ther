@@ -15,7 +15,6 @@ import android.speech.SpeechRecognizer
 import androidx.core.content.ContextCompat
 import android.widget.Toast
 import java.util.Locale
-import com.b1gbr0ther.audio.UrinationSoundDetector
 import kotlinx.coroutines.*
 import android.util.Log
 
@@ -26,20 +25,19 @@ class VoiceRecognizerManager(
     private val onError: (String) -> Unit) {
     companion object {
         private const val TAG = "VoiceRecognizerManager"
-        private const val NO_COMMAND_TIMEOUT = 5000L
+        private const val NO_COMMAND_TIMEOUT = 15000L // 15 seconds timeout to allow for proper command detection
         private const val MAX_CONSECUTIVE_ERRORS = 3
         private const val ERROR_RECOVERY_DELAY = 1000L
     }
     
     private var recognizer: SpeechRecognizer? = null
     private val blowDetector = BlowDetector()
-    private val urinationDetector = UrinationSoundDetector(context)
     private var onBlowDetected: (() -> Unit)? = null
     private var onSneezeDetected: (() -> Unit)? = null
     private var onUrinationDetected: (() -> Unit)? = null
     private val handler = Handler(Looper.getMainLooper())
-    private var lastCommandAttemptTime = 0L
     private var noCommandRunnable: Runnable? = null
+    private var sessionStartTime = 0L
     
     private val scope = CoroutineScope(Dispatchers.IO + Job())
     private var isVoiceRecognitionActive = false
@@ -104,38 +102,21 @@ class VoiceRecognizerManager(
             return
         }
 
-        scope.launch {
-            try {
-                Log.d(TAG, "Starting background urination detector initialization...")
-                urinationDetector.initialize()
-                Log.i(TAG, "Urination detector initialized successfully")
-                
-                withContext(Dispatchers.Main) {
-                    onStatusUpdate("Voice recognition ready")
-                }
-                
-            } catch (e: Exception) {
-                Log.e(TAG, "Failed to initialize urination detector (voice commands still work)", e)
-                withContext(Dispatchers.Main) {
-                    onStatusUpdate("Voice recognition ready")
-                }
-            }
-        }
-
         startVoiceRecognition()
     }
 
     private fun startVoiceRecognition() {
         isVoiceRecognitionActive = true
         isProcessingCommand = false
-        lastCommandAttemptTime = System.currentTimeMillis()
         consecutiveErrorCount = 0
+        sessionStartTime = System.currentTimeMillis()
         
         recognizer = SpeechRecognizer.createSpeechRecognizer(context).apply {
             setRecognitionListener(createRecognitionListener())
             startListening(createRecognitionIntent())
         }
         scheduleNoCommandTimeout()
+        onStatusUpdate("Listening... (say your command)")
     }
 
     private fun createRecognitionIntent(): Intent {
@@ -151,8 +132,6 @@ class VoiceRecognizerManager(
         }
     }
 
-
-
     private fun restartRecognition() {
         if (!isProcessingCommand && isVoiceRecognitionActive) {
             recognizer?.apply {
@@ -167,9 +146,8 @@ class VoiceRecognizerManager(
     private fun scheduleNoCommandTimeout() {
         noCommandRunnable?.let { handler.removeCallbacks(it) }
         noCommandRunnable = Runnable {
-            if (System.currentTimeMillis() - lastCommandAttemptTime >= NO_COMMAND_TIMEOUT) {
-                stopRecognition()
-            }
+            onStatusUpdate("Voice recognition timeout - stopping")
+            stopRecognition()
         }
         handler.postDelayed(noCommandRunnable!!, NO_COMMAND_TIMEOUT)
     }
@@ -201,13 +179,14 @@ class VoiceRecognizerManager(
         } else {
             onStatusUpdate(msg)
             if (isVoiceRecognitionActive && !isProcessingCommand) {
-                lastCommandAttemptTime = System.currentTimeMillis()
-                scheduleNoCommandTimeout()
-                handler.postDelayed({ 
-                    if (isVoiceRecognitionActive) {
-                        restartRecognition() 
-                    }
-                }, ERROR_RECOVERY_DELAY)
+                // Only restart if we still have time left in our session
+                if (System.currentTimeMillis() - sessionStartTime < NO_COMMAND_TIMEOUT - 2000L) {
+                    scheduleNoCommandTimeout()
+                    restartRecognition()
+                } else {
+                    onStatusUpdate("Voice recognition timeout - stopping")
+                    stopRecognition()
+                }
             }
         }
     }
@@ -231,52 +210,10 @@ class VoiceRecognizerManager(
                 if (blowDetector.processAudioSample(rmsdB, System.currentTimeMillis())) {
                     onBlowDetected?.invoke()
                 }
-                
-                scope.launch {
-                    try {
-                        val simulatedSamples = ShortArray(1024) { (rmsdB * 100).toInt().toShort() }
-                        Log.v(TAG, "Processing RMS data: rmsdB=$rmsdB")
-                        val detectionResult = urinationDetector.processAudioSample(simulatedSamples)
-                        Log.v(TAG, "Urination detection result from RMS: $detectionResult")
-                        if (detectionResult) {
-                            withContext(Dispatchers.Main) {
-                                Log.i(TAG, "URINATION DETECTED from RMS data - invoking callback!")
-                                onUrinationDetected?.invoke()
-                            }
-                        }
-                    } catch (e: Exception) {
-                        Log.e(TAG, "Error processing RMS for urination detection", e)
-                    }
-                }
             }
 
             override fun onBufferReceived(buffer: ByteArray?) {
-                buffer?.let { audioData ->
-                    scope.launch {
-                        try {
-                            val audioSamples = ShortArray(audioData.size / 2)
-                            for (i in audioSamples.indices) {
-                                val byteIndex = i * 2
-                                if (byteIndex + 1 < audioData.size) {
-                                    audioSamples[i] = ((audioData[byteIndex + 1].toInt() shl 8) or 
-                                                      (audioData[byteIndex].toInt() and 0xFF)).toShort()
-                                }
-                            }
-                            
-                            Log.v(TAG, "Processing ${audioSamples.size} audio samples from buffer")
-                            val detectionResult = urinationDetector.processAudioSample(audioSamples)
-                            Log.d(TAG, "Urination detection result from buffer: $detectionResult")
-                            if (detectionResult) {
-                                withContext(Dispatchers.Main) {
-                                    Log.i(TAG, "URINATION DETECTED from audio buffer - invoking callback!")
-                                    onUrinationDetected?.invoke()
-                                }
-                            }
-                        } catch (e: Exception) {
-                            Log.e(TAG, "Error processing audio buffer for urination detection", e)
-                        }
-                    }
-                }
+                // Buffer received - no action needed for our implementation
             }
 
             override fun onEndOfSpeech() {
@@ -306,10 +243,15 @@ class VoiceRecognizerManager(
                     onResult(spoken)
                     stopRecognition()
                 } else {
-                    lastCommandAttemptTime = System.currentTimeMillis()
                     if (isVoiceRecognitionActive && !isProcessingCommand) {
-                        scheduleNoCommandTimeout()
-                        restartRecognition()
+                        // Only restart if we still have time left in our session
+                        if (System.currentTimeMillis() - sessionStartTime < NO_COMMAND_TIMEOUT - 2000L) {
+                            scheduleNoCommandTimeout()
+                            restartRecognition()
+                        } else {
+                            onStatusUpdate("Voice recognition timeout - stopping")
+                            stopRecognition()
+                        }
                     }
                 }
             }
@@ -319,7 +261,6 @@ class VoiceRecognizerManager(
                     val text = partial?.getStringArrayList(SpeechRecognizer.RESULTS_RECOGNITION)
                         ?.firstOrNull().orEmpty()
                     if (text.isNotEmpty()) {
-                        lastCommandAttemptTime = System.currentTimeMillis()
                         onStatusUpdate("Partial: $text")
                     }
                 }
@@ -363,7 +304,7 @@ class VoiceRecognizerManager(
         when {
             !isEnabled -> onStatusUpdate("Voice recognition disabled")
             !hasPermission -> onStatusUpdate("Voice recognition permission required")
-            else -> onStatusUpdate("Voice recognition ready")
+            else -> onStatusUpdate("Press button to start voice recognition")
         }
     }
 }

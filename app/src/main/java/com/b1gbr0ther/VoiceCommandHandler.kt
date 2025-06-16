@@ -46,6 +46,24 @@ class VoiceCommandHandler(private val activity: DashboardActivity) {
             return false
         }
 
+        // Enhanced flexible command parsing for various tracking patterns
+        if (normalizedInput.contains("track") && (normalizedInput.contains("task") || normalizedInput.contains("project"))) {
+            var taskName = ""
+            if (normalizedInput.contains(" task ")) {
+                taskName = normalizedInput.substringAfter(" task ").trim()
+            } else if (normalizedInput.contains(" project ")) {
+                taskName = normalizedInput.substringAfter(" project ").trim()
+            } else if (normalizedInput.contains("track ")) {
+                taskName = normalizedInput.substringAfter("track ").trim()
+                taskName = taskName.replace("the ", "").replace("my ", "").replace("a ", "").trim()
+            }
+            
+            if (taskName.isNotEmpty()) {
+                activity.startTrackingWithTask(taskName)
+                return true
+            }
+        }
+
         commandMap[normalizedInput]?.let {
             it.invoke()
             return true
