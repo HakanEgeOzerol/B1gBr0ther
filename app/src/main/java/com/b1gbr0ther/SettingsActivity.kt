@@ -4,6 +4,7 @@ import android.Manifest
 import android.content.Intent
 import android.content.pm.PackageManager
 import android.net.Uri
+import android.os.Build
 import android.os.Bundle
 import android.provider.Settings
 import android.widget.Button
@@ -43,6 +44,7 @@ class SettingsActivity : AppCompatActivity() {
 
     companion object {
         private const val PERMISSION_REQUEST_RECORD_AUDIO = 1001
+        private const val PERMISSION_REQUEST_NOTIFICATIONS = 1002
         
         // Static methods to access settings from other activities
         fun isVoiceRecognitionEnabled(sharedPreferences: SharedPreferences): Boolean {
@@ -224,13 +226,19 @@ class SettingsActivity : AppCompatActivity() {
             updateLanguageLabel()
         }
 
-        // Voice recognition switch listener
         voiceRecognitionSwitch.setOnCheckedChangeListener { _, isChecked ->
             if (isChecked) {
                 requestVoiceRecognitionPermission()
             } else {
-                // If turning off, just save the setting
                 saveVoiceRecognitionSetting(false)
+            }
+        }
+
+        notificationsSwitch.setOnCheckedChangeListener { _, isChecked ->
+            if (isChecked) {
+                requestNotificationPermission()
+            } else {
+                saveNotificationSetting(false)
             }
         }
 
@@ -306,34 +314,71 @@ class SettingsActivity : AppCompatActivity() {
         }
     }
 
-    override fun onRequestPermissionsResult(
-        requestCode: Int,
-        permissions: Array<String>,
-        grantResults: IntArray
-    ) {
-        super.onRequestPermissionsResult(requestCode, permissions, grantResults)
-        when (requestCode) {
-            PERMISSION_REQUEST_RECORD_AUDIO -> {
-                if (grantResults.isNotEmpty() && grantResults[0] == PackageManager.PERMISSION_GRANTED) {
-                    saveVoiceRecognitionSetting(true)
-                    Toast.makeText(this, "Voice recognition enabled", Toast.LENGTH_SHORT).show()
-                } else {
-                    if (!ActivityCompat.shouldShowRequestPermissionRationale(this, Manifest.permission.RECORD_AUDIO)) {
-                        // User clicked "Don't ask again", show settings dialog
-                        showPermissionDeniedDialog()
-                    } else {
-                        // User just denied once
-                        voiceRecognitionSwitch.isChecked = false
-                        saveVoiceRecognitionSetting(false)
-                        Toast.makeText(this, "Voice recognition disabled: Permission denied", Toast.LENGTH_SHORT).show()
-                    }
+    private fun requestNotificationPermission() {
+        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.TIRAMISU) {
+            when {
+                ContextCompat.checkSelfPermission(this, Manifest.permission.POST_NOTIFICATIONS) == PackageManager.PERMISSION_GRANTED -> {
+                    saveNotificationSetting(true)
+                }
+                ActivityCompat.shouldShowRequestPermissionRationale(this, Manifest.permission.POST_NOTIFICATIONS) -> {
+                    showNotificationPermissionRationaleDialog()
+                }
+                else -> {
+                    ActivityCompat.requestPermissions(
+                        this,
+                        arrayOf(Manifest.permission.POST_NOTIFICATIONS),
+                        PERMISSION_REQUEST_NOTIFICATIONS
+                    )
                 }
             }
+        } else {
+            saveNotificationSetting(true)
         }
+    }
+
+    private fun showNotificationPermissionRationaleDialog() {
+        AlertDialog.Builder(this)
+            .setTitle("Notification Permission Required")
+            .setMessage("Push notifications require notification permission to work. Would you like to grant this permission?")
+            .setPositiveButton("Yes") { _, _ ->
+                if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.TIRAMISU) {
+                    ActivityCompat.requestPermissions(
+                        this,
+                        arrayOf(Manifest.permission.POST_NOTIFICATIONS),
+                        PERMISSION_REQUEST_NOTIFICATIONS
+                    )
+                }
+            }
+            .setNegativeButton("No") { _, _ ->
+                notificationsSwitch.isChecked = false
+                saveNotificationSetting(false)
+            }
+            .create()
+            .show()
+    }
+
+    private fun showNotificationPermissionDeniedDialog() {
+        AlertDialog.Builder(this)
+            .setTitle("Permission Required")
+            .setMessage("Push notifications cannot work without notification permission. Would you like to open settings to grant the permission?")
+            .setPositiveButton("Open Settings") { _, _ ->
+                openAppSettings()
+            }
+            .setNegativeButton("Cancel") { _, _ ->
+                notificationsSwitch.isChecked = false
+                saveNotificationSetting(false)
+            }
+            .create()
+            .show()
     }
 
     private fun saveVoiceRecognitionSetting(enabled: Boolean) {
         sharedPreferences.edit().putBoolean("voice_recognition", enabled).apply()
+        setResult(RESULT_OK)
+    }
+
+    private fun saveNotificationSetting(enabled: Boolean) {
+        sharedPreferences.edit().putBoolean("notifications", enabled).apply()
         setResult(RESULT_OK)
     }
 
@@ -359,10 +404,72 @@ class SettingsActivity : AppCompatActivity() {
         }
     }
 
+    private fun updateNotificationSwitchState() {
+        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.TIRAMISU) {
+            val hasPermission = ContextCompat.checkSelfPermission(
+                this,
+                Manifest.permission.POST_NOTIFICATIONS
+            ) == PackageManager.PERMISSION_GRANTED
+
+            val isEnabled = sharedPreferences.getBoolean("notifications", true)
+            
+            notificationsSwitch.setOnCheckedChangeListener(null)
+            notificationsSwitch.isChecked = isEnabled && hasPermission
+            
+            notificationsSwitch.setOnCheckedChangeListener { _, isChecked ->
+                if (isChecked) {
+                    requestNotificationPermission()
+                } else {
+                    saveNotificationSetting(false)
+                }
+            }
+        } else {
+            notificationsSwitch.isChecked = sharedPreferences.getBoolean("notifications", true)
+        }
+    }
+
+    override fun onRequestPermissionsResult(
+        requestCode: Int,
+        permissions: Array<String>,
+        grantResults: IntArray
+    ) {
+        super.onRequestPermissionsResult(requestCode, permissions, grantResults)
+        when (requestCode) {
+            PERMISSION_REQUEST_RECORD_AUDIO -> {
+                if (grantResults.isNotEmpty() && grantResults[0] == PackageManager.PERMISSION_GRANTED) {
+                    saveVoiceRecognitionSetting(true)
+                    Toast.makeText(this, "Voice recognition enabled", Toast.LENGTH_SHORT).show()
+                } else {
+                    if (!ActivityCompat.shouldShowRequestPermissionRationale(this, Manifest.permission.RECORD_AUDIO)) {
+                        showPermissionDeniedDialog()
+                    } else {
+                        voiceRecognitionSwitch.isChecked = false
+                        saveVoiceRecognitionSetting(false)
+                        Toast.makeText(this, "Voice recognition disabled: Permission denied", Toast.LENGTH_SHORT).show()
+                    }
+                }
+            }
+            PERMISSION_REQUEST_NOTIFICATIONS -> {
+                if (grantResults.isNotEmpty() && grantResults[0] == PackageManager.PERMISSION_GRANTED) {
+                    saveNotificationSetting(true)
+                    Toast.makeText(this, "Push notifications enabled", Toast.LENGTH_SHORT).show()
+                } else {
+                    if (!ActivityCompat.shouldShowRequestPermissionRationale(this, Manifest.permission.POST_NOTIFICATIONS)) {
+                        showNotificationPermissionDeniedDialog()
+                    } else {
+                        notificationsSwitch.isChecked = false
+                        saveNotificationSetting(false)
+                        Toast.makeText(this, "Push notifications disabled: Permission denied", Toast.LENGTH_SHORT).show()
+                    }
+                }
+            }
+        }
+    }
+
     override fun onResume() {
         super.onResume()
-        // Update switch state when returning from Settings
         updateVoiceRecognitionSwitchState()
+        updateNotificationSwitchState()
     }
 
     private fun resetToDefaults() {
