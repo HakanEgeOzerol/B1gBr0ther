@@ -409,7 +409,7 @@
         android:layout_height="wrap_content"
         android:background="@drawable/rounded_corners"
         android:backgroundTint="?colorPrimary"
-        android:text="Simulate Wake-Word"
+        android:text="Start Voice Recognition"
         android:textAllCaps="false"
         android:textColor="?attr/buttonTextColor"
         app:layout_constraintBottom_toTopOf="@+id/menuBar"
