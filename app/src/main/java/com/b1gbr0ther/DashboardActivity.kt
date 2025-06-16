@@ -124,6 +124,11 @@ class DashboardActivity : AppCompatActivity() {
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
+        
+        // Apply saved app theme before setting content view
+        ThemeManager.applyTheme(this)
+        appliedTheme = ThemeManager.getCurrentTheme(this)
+        
         enableEdgeToEdge()
         setContentView(R.layout.activity_dashboard)
 
@@ -263,10 +268,13 @@ class DashboardActivity : AppCompatActivity() {
 
         if (!isEnabled) {
             statusTextView.text = "Voice recognition disabled"
+            voiceRecognizerManager.stopRecognition()
         } else if (!hasPermission) {
             statusTextView.text = "Voice recognition permission required"
+            voiceRecognizerManager.stopRecognition()
         } else {
             statusTextView.text = "Voice recognition ready"
+            startVoiceRecognition()
         }
     }
 
@@ -438,8 +446,19 @@ class DashboardActivity : AppCompatActivity() {
         return databaseManager
     }
 
+    private var appliedTheme: Int = -1
+
     override fun onResume() {
         super.onResume()
+
+        // Check if theme has changed and recreate if needed
+        val currentTheme = ThemeManager.getCurrentTheme(this)
+        if (appliedTheme != -1 && appliedTheme != currentTheme) {
+            android.util.Log.d("DashboardActivity", "Theme changed from $appliedTheme to $currentTheme - recreating activity")
+            recreate()
+            return
+        }
+        appliedTheme = currentTheme
 
         updateAllTasks()
 
@@ -827,5 +846,18 @@ class DashboardActivity : AppCompatActivity() {
     fun showTimesheetPage() {
         val intent = Intent(this, TimesheetActivity::class.java)
         startActivity(intent)
+    }
+
+    fun deleteTaskByName(taskName: String) {
+        databaseManager.getAllTasks { tasks ->
+            val task = tasks.find { it.taskName.equals(taskName, ignoreCase = true) }
+            if (task != null) {
+                databaseManager.deleteTask(task) {
+                    Toast.makeText(this, "Task '${task.taskName}' deleted", Toast.LENGTH_SHORT).show()
+                }
+            } else {
+                Toast.makeText(this, "Could not find task with name '$taskName'", Toast.LENGTH_SHORT).show()
+            }
+        }
     }
 }

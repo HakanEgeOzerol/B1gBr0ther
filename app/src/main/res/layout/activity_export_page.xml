@@ -5,7 +5,7 @@
     android:id="@+id/main"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    android:background="#A7ADC6"
+    android:background="?android:colorBackground"
     tools:context=".ExportPage">
 
     <!-- Filter Section -->
@@ -15,7 +15,7 @@
         android:layout_height="wrap_content"
         android:layout_margin="16dp"
         app:cardCornerRadius="8dp"
-        app:cardBackgroundColor="#8797AF"
+        app:cardBackgroundColor="?attr/cardBackgroundColor"
         app:layout_constraintTop_toTopOf="parent">
         
         <LinearLayout
@@ -86,7 +86,7 @@
         android:padding="16dp"
         android:clipToPadding="false"
         android:background="@drawable/less_rounded_corners"
-        android:backgroundTint="#8797AF"
+        android:backgroundTint="?attr/cardBackgroundColor"
         app:layout_constraintTop_toBottomOf="@id/filterCard"
         app:layout_constraintBottom_toTopOf="@id/exportButton"
         android:layout_marginStart="24dp"
@@ -101,10 +101,10 @@
         android:layout_marginEnd="24dp"
         android:layout_marginBottom="16dp"
         android:background="@drawable/rounded_corners"
-        android:backgroundTint="#5F4B66"
+        android:backgroundTint="?colorPrimary"
         android:text="Export Selected Recordings"
         android:textAllCaps="false"
-        android:textColor="#C1A8B5"
+        android:textColor="?attr/buttonTextColor"
         android:textSize="16sp"
         app:layout_constraintBottom_toTopOf="@id/menuBar"
         app:layout_constraintStart_toStartOf="parent"

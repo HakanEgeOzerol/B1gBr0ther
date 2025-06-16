@@ -40,9 +40,15 @@ class ExportPage : AppCompatActivity() {
     private var startDate: LocalDate? = null
     private var endDate: LocalDate? = null
     private var allTasks: List<Task> = emptyList()
+    private var appliedTheme: Int = -1
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
+        
+        // Apply saved theme before setting content view
+        ThemeManager.applyTheme(this)
+        appliedTheme = ThemeManager.getCurrentTheme(this)
+        
         enableEdgeToEdge()
         setContentView(R.layout.activity_export_page)
 
@@ -180,7 +186,7 @@ class ExportPage : AppCompatActivity() {
     private fun exportTasks(tasks: List<Task>, template: com.b1gbr0ther.models.export.templates.ExportTemplate) {
         try {
             val exportedData = template.format(tasks)
-            saveExportedData(exportedData, template.getFileExtension(), template.getMimeType())
+            saveExportedData(exportedData, tasks, template.getFileExtension(), template.getMimeType())
             Toast.makeText(this, "Exported ${tasks.size} tasks as ${template.getFileExtension().uppercase()}", Toast.LENGTH_SHORT).show()
         } catch (e: Exception) {
             Toast.makeText(this, "Export failed: ${e.message}", Toast.LENGTH_LONG).show()
@@ -229,10 +235,12 @@ class ExportPage : AppCompatActivity() {
         }
     }
     
-    private fun saveExportedData(data: String, fileExtension: String, mimeType: String) {
+    private fun saveExportedData(data: String, tasks: List<Task>, fileExtension: String, mimeType: String) {
         try {
-            val timestamp = java.text.SimpleDateFormat("yyyyMMdd_HHmmss", java.util.Locale.getDefault()).format(java.util.Date())
-            val filename = "tasks_export_$timestamp.$fileExtension"
+            val taskCount = tasks.size
+            val dateFormatter = java.text.SimpleDateFormat("MMM_dd_yyyy", java.util.Locale.getDefault())
+            val currentDate = dateFormatter.format(java.util.Date())
+            val filename = "${taskCount}_tasks_$currentDate.$fileExtension"
             
             val exportDir = getExternalFilesDir(null)
             val exportFile = java.io.File(exportDir, filename)
@@ -280,6 +288,16 @@ class ExportPage : AppCompatActivity() {
 
     override fun onResume() {
         super.onResume()
+        
+        // Check if theme has changed and recreate if needed
+        val currentTheme = ThemeManager.getCurrentTheme(this)
+        if (appliedTheme != -1 && appliedTheme != currentTheme) {
+            android.util.Log.d("ExportPage", "Theme changed from $appliedTheme to $currentTheme - recreating activity")
+            recreate()
+            return
+        }
+        appliedTheme = currentTheme
+        
         menuBar.setActivePage(0)
         updateExportButtonText()
     }
