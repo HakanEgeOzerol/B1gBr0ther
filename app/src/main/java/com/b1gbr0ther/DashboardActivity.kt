@@ -13,7 +13,6 @@ import android.os.Build
 import android.os.Bundle
 import android.os.Handler
 import android.os.Looper
-import android.util.Log
 import android.widget.Button
 import android.widget.CheckBox
 import android.widget.DatePicker
@@ -33,7 +32,6 @@ import java.time.LocalDateTime
 import java.util.Objects
 import kotlin.math.floor
 import kotlin.math.sqrt
-import com.b1gbr0ther.data.database.entities.Task
 import com.b1gbr0ther.notifications.TaskNotificationManager
 import java.time.LocalDate
 import java.time.LocalTime
@@ -48,7 +46,6 @@ class DashboardActivity : AppCompatActivity() {
     private lateinit var timeTracker: TimeTrackerInterface
     private lateinit var statusTextView: TextView
     private lateinit var simulateWakeWordButton: Button
-    private lateinit var databaseManager: DatabaseManager
     private lateinit var notificationManager: TaskNotificationManager
     private var currentTaskName: String? = null
     private var currentTaskId: Long = -1
@@ -145,7 +142,7 @@ class DashboardActivity : AppCompatActivity() {
         loadAllTasks() // Call the function to load tasks
 
         val menu = findViewById<MenuBar>(R.id.menuBar)
-        menu.setActivePage(2) // 2 is for Dashboard
+        menu.setActivePage(1) // 1 is for Dashboard
         notificationManager = TaskNotificationManager(applicationContext)
         updateAllTasks()
         sensorManager = getSystemService(Context.SENSOR_SERVICE) as SensorManager
@@ -164,9 +161,6 @@ class DashboardActivity : AppCompatActivity() {
         simulateWakeWordButton = findViewById(R.id.simulateWakeWordButton)
 
         initializeVoiceRecognition()
-
-        val menu = findViewById<MenuBar>(R.id.menuBar)
-        menu.setActivePage(1)
         ViewCompat.setOnApplyWindowInsetsListener(findViewById(R.id.main)) { v, insets ->
             val systemBars = insets.getInsets(WindowInsetsCompat.Type.systemBars())
             v.setPadding(systemBars.left, systemBars.top, systemBars.right, systemBars.bottom)
@@ -823,7 +817,7 @@ class DashboardActivity : AppCompatActivity() {
                 startTime = LocalDateTime.now()//This is still buged to some extent, the plan for the future no longer works as intended
             }
 
-            val newTask = Task(name, startTime, estimatedCompletion, isPreplanned)
+            val newTask = Task(name, startTime, estimatedCompletion, CreationMethod.Gesture, isPreplanned)
 
             databaseManager.createAppTask(newTask) { taskId ->
                 Toast.makeText(this, "Task saved to database with ID: $taskId", Toast.LENGTH_SHORT).show()

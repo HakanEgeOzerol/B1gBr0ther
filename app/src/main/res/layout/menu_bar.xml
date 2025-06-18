@@ -8,87 +8,7 @@
     android:backgroundTint="#5F4B66"
     android:padding="8dp">
 
-    <FrameLayout
-        android:id="@+id/exportPageMenuButton"
-        android:layout_width="43dp"
-        android:layout_height="43dp"
-        android:clickable="true"
-        app:layout_constraintBottom_toBottomOf="parent"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintHorizontal_bias="0.135"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toTopOf="parent"
-        app:layout_constraintVertical_bias="0.5">
-
-        <ImageView
-            android:id="@+id/imageView3"
-            android:layout_width="match_parent"
-            android:layout_height="match_parent"
-            android:padding="8dp"
-            android:tint="#FFFFFF"
-            app:srcCompat="@drawable/export_icon"
-            app:tint="#FFFFFF" />
-
-    </FrameLayout>
-
-    <FrameLayout
-        android:id="@+id/dashboardPageMenuButton"
-        android:layout_width="43dp"
-        android:layout_height="43dp"
-        android:clickable="true"
-        app:layout_constraintBottom_toBottomOf="parent"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintHorizontal_bias="0.5"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toTopOf="parent"
-        app:layout_constraintVertical_bias="0.5">
-
-        <ImageView
-            android:id="@+id/imageView2"
-            android:layout_width="30dp"
-            android:layout_height="35dp"
-            android:layout_gravity="center"
-            android:padding="8dp"
-            android:tint="#FFFFFF"
-            app:srcCompat="@drawable/dasboard_icon"
-            app:tint="#FFFFFF" />
-
-    </FrameLayout>
-
-    <FrameLayout
-        android:id="@+id/timesheetPageMenuButton"
-        android:layout_width="43dp"
-        android:layout_height="43dp"
-        android:clickable="true"
-        app:layout_constraintBottom_toBottomOf="parent"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintHorizontal_bias="0.865"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toTopOf="parent"
-        app:layout_constraintVertical_bias="0.5">
-
-        <ImageView
-            android:id="@+id/imageView4"
-            android:layout_width="match_parent"
-            android:layout_height="match_parent"
-            android:layout_gravity="center"
-            android:padding="8dp"
-            android:tint="#FFFFFF"
-            app:srcCompat="@drawable/timesheet_icon"
-            app:tint="#FFFFFF" />
-    </FrameLayout>
-
-    <View
-        android:id="@+id/selectedPage"
-        android:layout_width="43dp"
-        android:layout_height="43dp"
-        android:background="@drawable/circle"
-        android:backgroundTint="#805A6D"
-        android:translationZ="-1dp"
-        app:layout_constraintStart_toStartOf="@id/exportPageMenuButton"
-        app:layout_constraintTop_toTopOf="@id/exportPageMenuButton" />
-
-
+    <!-- Export Button (Index 0) -->
     <FrameLayout
         android:id="@+id/exportPageMenuButton"
         android:layout_width="43dp"
@@ -102,13 +22,16 @@
         app:layout_constraintTop_toTopOf="parent">
 
         <ImageView
-            android:id="@+id/imageView3"
+            android:id="@+id/exportIcon"
             android:layout_width="match_parent"
             android:layout_height="match_parent"
-            app:srcCompat="@drawable/export_icon" />
-
+            android:padding="8dp"
+            android:tint="#FFFFFF"
+            app:srcCompat="@drawable/export_icon"
+            app:tint="#FFFFFF" />
     </FrameLayout>
 
+    <!-- Dashboard Button (Index 1) -->
     <FrameLayout
         android:id="@+id/dashboardPageMenuButton"
         android:layout_width="43dp"
@@ -122,15 +45,17 @@
         app:layout_constraintTop_toTopOf="parent">
 
         <ImageView
-            android:id="@+id/imageView"
+            android:id="@+id/dashboardIcon"
             android:layout_width="30dp"
             android:layout_height="35dp"
             android:layout_gravity="center"
-            android:layout_marginBottom="1dp"
-            app:srcCompat="@drawable/dasboard_icon" />
-
+            android:padding="8dp"
+            android:tint="#FFFFFF"
+            app:srcCompat="@drawable/dasboard_icon"
+            app:tint="#FFFFFF" />
     </FrameLayout>
 
+    <!-- Timesheet Button (Index 2) -->
     <FrameLayout
         android:id="@+id/timesheetPageMenuButton"
         android:layout_width="43dp"
@@ -144,13 +69,17 @@
         app:layout_constraintTop_toTopOf="parent">
 
         <ImageView
-            android:id="@+id/imageView4"
+            android:id="@+id/timesheetIcon"
             android:layout_width="40dp"
             android:layout_height="match_parent"
-            android:layout_gravity="bottom|center"
-            app:srcCompat="@drawable/timesheet_icon" />
+            android:layout_gravity="center"
+            android:padding="8dp"
+            android:tint="#FFFFFF"
+            app:srcCompat="@drawable/timesheet_icon"
+            app:tint="#FFFFFF" />
     </FrameLayout>
     
+    <!-- Statistics Button (Index 3) -->
     <FrameLayout
         android:id="@+id/statisticsPageMenuButton"
         android:layout_width="43dp"
@@ -164,11 +93,52 @@
         app:layout_constraintTop_toTopOf="parent">
 
         <ImageView
-            android:id="@+id/imageView5"
+            android:id="@+id/statisticsIcon"
             android:layout_width="40dp"
             android:layout_height="match_parent"
-            android:layout_gravity="bottom|center"
-            app:srcCompat="@android:drawable/ic_menu_recent_history" />
+            android:layout_gravity="center"
+            android:padding="8dp"
+            android:tint="#FFFFFF"
+            app:srcCompat="@android:drawable/ic_menu_recent_history"
+            app:tint="#FFFFFF" />
     </FrameLayout>
+
+    <!-- Selection Highlight -->
+    <View
+        android:id="@+id/selectedPage"
+        android:layout_width="43dp"
+        android:layout_height="43dp"
+        android:background="@drawable/circle"
+        android:backgroundTint="#805A6D"
+        android:translationZ="-1dp"
+        app:layout_constraintStart_toStartOf="@id/exportPageMenuButton"
+        app:layout_constraintTop_toTopOf="@id/exportPageMenuButton" />
+
+    <!-- Language Switch Button (Future Implementation) -->
+    <!-- This space is reserved for the language switch button -->
+    <!-- It can be positioned above or to the side of the navigation bar -->
+    <!-- 
+    <FrameLayout
+        android:id="@+id/languageSwitchButton"
+        android:layout_width="30dp"
+        android:layout_height="30dp"
+        android:layout_marginTop="8dp"
+        android:clickable="true"
+        android:foreground="?attr/selectableItemBackground"
+        android:visibility="gone"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintTop_toTopOf="parent">
+        
+        <TextView
+            android:id="@+id/languageText"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_gravity="center"
+            android:text="EN"
+            android:textColor="#FFFFFF"
+            android:textSize="12sp"
+            android:textStyle="bold" />
+    </FrameLayout>
+    -->
 
 </androidx.constraintlayout.widget.ConstraintLayout>

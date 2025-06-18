@@ -34,7 +34,4 @@
         <item name="cardBackgroundColor">#3E3E42</item>
         <item name="buttonTextColor">#FFFFFF</item>
     </style>
-
-    <!-- Default theme - points to light -->
-    <style name="Theme.B1gBr0ther" parent="Theme.B1gBr0ther.Light" />
 </resources>
