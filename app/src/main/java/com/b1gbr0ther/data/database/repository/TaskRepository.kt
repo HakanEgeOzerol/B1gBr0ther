@@ -42,9 +42,12 @@ class TaskRepository(private val taskDao: TaskDao) {
      * @param id The ID of the task to update
      */
     suspend fun updateAppTask(appTask: com.b1gbr0ther.Task, id: Long) {
-        val task = Task.fromAppTask(appTask)
-        task.id = id
-        taskDao.updateTask(task)
+        // Get the existing task first to preserve any properties not being updated
+        val existingTask = taskDao.getTaskById(id)
+        if (existingTask != null) {
+            val updatedTask = Task.fromAppTask(appTask, id)
+            taskDao.updateTask(updatedTask)
+        }
     }
     
     /**
@@ -98,6 +101,22 @@ class TaskRepository(private val taskDao: TaskDao) {
     suspend fun getTasksByTimeRange(startTime: LocalDateTime, endTime: LocalDateTime): List<Task> {
         return taskDao.getTasksByTimeRange(startTime, endTime)
     }
+    
+    // ============================== Statistics Methods ==============================
+    
+    suspend fun getCompletedTasksCount(): Int = taskDao.getCompletedTasksCount()
+    
+    suspend fun getLateCompletedTasksCount(): Int = taskDao.getLateCompletedTasksCount()
+    
+    suspend fun getOnTimeCompletedTasksCount(): Int = taskDao.getOnTimeCompletedTasksCount()
+    
+    suspend fun getEarlyCompletedTasksCount(): Int = taskDao.getEarlyCompletedTasksCount()
+    
+    suspend fun getUncompletedTasksCount(): Int = taskDao.getUncompletedTasksCount()
+    
+    suspend fun getVoiceCreatedTasksCount(): Int = taskDao.getVoiceCreatedTasksCount()
+    
+    suspend fun getGestureCreatedTasksCount(): Int = taskDao.getGestureCreatedTasksCount()
     
     /**
      * Get tasks that are breaks.

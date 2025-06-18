@@ -47,6 +47,8 @@ android {
 }
 
 dependencies {
+    // MPAndroidChart for beautiful charts
+    implementation("com.github.PhilJay:MPAndroidChart:v3.1.0")
 
     implementation(libs.androidx.core.ktx)
     implementation(libs.androidx.lifecycle.runtime.ktx)
@@ -72,6 +74,10 @@ dependencies {
     
     // MP3 decoding for sample file processing
     implementation("com.googlecode.soundlibs:mp3spi:1.9.5.4")
+    
+    // Navigation Component
+    implementation("androidx.navigation:navigation-fragment-ktx:2.7.7")
+    implementation("androidx.navigation:navigation-ui-ktx:2.7.7")
     
     testImplementation(libs.junit)
     androidTestImplementation(libs.androidx.junit)

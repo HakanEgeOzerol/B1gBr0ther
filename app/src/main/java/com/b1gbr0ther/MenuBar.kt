@@ -6,6 +6,7 @@ import android.view.LayoutInflater
 import android.view.View
 import android.widget.Toast
 import androidx.constraintlayout.widget.ConstraintLayout
+import com.b1gbr0ther.StatisticsActivity
 
 class MenuBar @JvmOverloads constructor(
     context: Context,
@@ -25,6 +26,7 @@ class MenuBar @JvmOverloads constructor(
             findViewById(R.id.exportPageMenuButton),
             findViewById(R.id.dashboardPageMenuButton),
             findViewById(R.id.timesheetPageMenuButton),
+            findViewById(R.id.statisticsPageMenuButton)
         )
 
         setupClicks()
@@ -58,6 +60,7 @@ class MenuBar @JvmOverloads constructor(
             0 -> ExportPage::class.java            // export icon
             1 -> DashboardActivity::class.java     // dashboard icon
             2 -> TimesheetActivity::class.java // timesheet icon
+            3 -> StatisticsActivity::class.java // Statistics page (index 3 for the 4th item)
             else -> return
         }
 

@@ -27,7 +27,8 @@ import androidx.appcompat.app.AppCompatActivity
 import androidx.core.content.ContextCompat
 import androidx.core.view.ViewCompat
 import androidx.core.view.WindowInsetsCompat
-import com.b1gbr0ther.data.database.DatabaseManager
+import com.b1gbr0ther.data.database.DatabaseManager // Added DatabaseManager import
+import com.b1gbr0ther.data.database.entities.Task // Added Task entity import
 import java.time.LocalDateTime
 import java.util.Objects
 import kotlin.math.floor
@@ -38,6 +39,8 @@ import java.time.LocalDate
 import java.time.LocalTime
 
 class DashboardActivity : AppCompatActivity() {
+    private lateinit var databaseManager: DatabaseManager
+    private var allTasksList: List<Task> = emptyList()
     private lateinit var timerText: TextView
     private val handler = Handler(Looper.getMainLooper())
     private lateinit var timerRunnable: Runnable
@@ -50,6 +53,12 @@ class DashboardActivity : AppCompatActivity() {
     private var currentTaskName: String? = null
     private var currentTaskId: Long = -1
     private var lastSneezeTime: Long = 0
+
+    private fun loadAllTasks() {
+        databaseManager.getAllTasks { tasks ->
+            this.allTasksList = tasks
+        }
+    }
 
     private lateinit var voiceRecognizerManager: VoiceRecognizerManager
     private lateinit var commandHandler: VoiceCommandHandler
@@ -133,6 +142,10 @@ class DashboardActivity : AppCompatActivity() {
         setContentView(R.layout.activity_dashboard)
 
         databaseManager = DatabaseManager(applicationContext)
+        loadAllTasks() // Call the function to load tasks
+
+        val menu = findViewById<MenuBar>(R.id.menuBar)
+        menu.setActivePage(2) // 2 is for Dashboard
         notificationManager = TaskNotificationManager(applicationContext)
         updateAllTasks()
         sensorManager = getSystemService(Context.SENSOR_SERVICE) as SensorManager
@@ -198,7 +211,7 @@ class DashboardActivity : AppCompatActivity() {
         handler.post(timerRunnable)
 
         findViewById<Button>(R.id.btnDatabaseTest).setOnClickListener {
-            val intent = Intent(this, DatabaseTestActivity::class.java)
+            val intent = Intent(this, DatabaseTesterActivity::class.java)
             startActivity(intent)
         }
 
