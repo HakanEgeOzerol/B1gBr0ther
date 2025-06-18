@@ -169,7 +169,8 @@ class VoiceRecognizerManager(
         noCommandRunnable?.let { handler.removeCallbacks(it) }
         
         if (audioMode == SettingsActivity.AUDIO_MODE_SOUND_DETECTION) {
-            // Sound Detection Mode - no timeout, run continuously
+            // Sound Detection Mode - NO TIMEOUT, run continuously
+            Log.d(TAG, "Sound Detection Mode - no timeout scheduled")
         } else {
             // Voice Commands Mode - use timeout
             noCommandRunnable = Runnable {
@@ -177,6 +178,7 @@ class VoiceRecognizerManager(
                 stopRecognition()
             }
             handler.postDelayed(noCommandRunnable!!, NO_COMMAND_TIMEOUT)
+            Log.d(TAG, "Voice Commands Mode - timeout scheduled for ${NO_COMMAND_TIMEOUT}ms")
         }
     }
 
@@ -191,12 +193,17 @@ class VoiceRecognizerManager(
             SpeechRecognizer.ERROR_RECOGNIZER_BUSY -> "Recognizer busy"
             SpeechRecognizer.ERROR_SERVER -> "Server error"
             SpeechRecognizer.ERROR_SPEECH_TIMEOUT -> "Listening..."
+            11 -> "Language not supported" // ERROR_LANGUAGE_NOT_SUPPORTED
             else -> "Unknown error: $error"
         }
 
+        Log.w(TAG, "Recognition error: $error ($msg)")
+
+        // Critical errors that should stop recognition
         if (error == SpeechRecognizer.ERROR_INSUFFICIENT_PERMISSIONS ||
             error == SpeechRecognizer.ERROR_NETWORK ||
-            error == SpeechRecognizer.ERROR_SERVER) {
+            error == SpeechRecognizer.ERROR_SERVER ||
+            error == 11) { // Language not supported
             consecutiveErrorCount++
             if (consecutiveErrorCount >= MAX_CONSECUTIVE_ERRORS) {
                 onError("Voice recognition stopped: $msg")
@@ -205,15 +212,24 @@ class VoiceRecognizerManager(
             }
             onError(msg)
         } else {
+            // Non-critical errors - just continue listening
             onStatusUpdate(msg)
             if (isVoiceRecognitionActive && !isProcessingCommand) {
                 val sharedPreferences = context.getSharedPreferences("B1gBr0therSettings", Context.MODE_PRIVATE)
                 val audioMode = SettingsActivity.getAudioMode(sharedPreferences)
                 
                 if (audioMode == SettingsActivity.AUDIO_MODE_SOUND_DETECTION) {
-                    // Sound Detection Mode - much longer delays to allow blow/sneeze detection to complete
-                    scheduleNoCommandTimeout()
-                    handler.postDelayed({ restartRecognition() }, 8000L)
+                    // Sound Detection Mode - CRITICAL: Don't restart on every error!
+                    // Only restart on actual audio failures, not timeout/no-match
+                    if (error == SpeechRecognizer.ERROR_AUDIO || 
+                        error == SpeechRecognizer.ERROR_RECOGNIZER_BUSY) {
+                        Log.d(TAG, "Sound Detection Mode - restarting after audio error")
+                        scheduleNoCommandTimeout()
+                        handler.postDelayed({ restartRecognition() }, 3000L)
+                    } else {
+                        // For timeout/no-match errors in Sound Detection Mode, just continue
+                        Log.d(TAG, "Sound Detection Mode - ignoring non-critical error: $error")
+                    }
                 } else {
                     // Voice Commands Mode - check timeout
                     if (System.currentTimeMillis() - sessionStartTime < NO_COMMAND_TIMEOUT - 2000L) {
@@ -232,10 +248,20 @@ class VoiceRecognizerManager(
         return object : RecognitionListener {
             override fun onReadyForSpeech(params: Bundle?) {
                 if (!isProcessingCommand) {
-                    Log.d(TAG, "onReadyForSpeech called")
+                    val sharedPreferences = context.getSharedPreferences("B1gBr0therSettings", Context.MODE_PRIVATE)
+                    val audioMode = SettingsActivity.getAudioMode(sharedPreferences)
+                    
+                    Log.d(TAG, "onReadyForSpeech called - mode: $audioMode")
                     onStatusUpdate("Ready for speech")
-                    blowDetector.reset()
-                    sneezeDetector.reset()
+                    
+                    // CRITICAL: Only initialize detectors in Sound Detection Mode
+                    if (audioMode == SettingsActivity.AUDIO_MODE_SOUND_DETECTION) {
+                        Log.d(TAG, "Sound Detection Mode - initializing detectors")
+                        blowDetector.reset()
+                        sneezeDetector.reset()
+                    } else {
+                        Log.d(TAG, "Voice Commands Mode - skipping detector initialization")
+                    }
                 }
             }
 
@@ -247,29 +273,40 @@ class VoiceRecognizerManager(
             }
 
             override fun onRmsChanged(rmsdB: Float) {
-                // Only log high audio levels to reduce spam
-                if (rmsdB > 8.0f) {
-                    Log.d(TAG, "High RMS Level: $rmsdB dB")
-                }
-                
                 // Check audio mode setting
                 val sharedPreferences = context.getSharedPreferences("B1gBr0therSettings", Context.MODE_PRIVATE)
                 val audioMode = SettingsActivity.getAudioMode(sharedPreferences)
                 
-                // Only process audio detection in Sound Detection Mode
+                // Only log high audio levels to reduce spam, but include mode info
+                if (rmsdB > 8.0f) {
+                    Log.d(TAG, "High RMS Level: $rmsdB dB (Mode: $audioMode)")
+                }
+                
+                // CRITICAL: Only process audio detection in Sound Detection Mode
                 if (audioMode == SettingsActivity.AUDIO_MODE_SOUND_DETECTION) {
-                    if (blowDetector.processAudioSample(rmsdB, System.currentTimeMillis())) {
+                    // Process blow detection with more logging
+                    val blowResult = blowDetector.processAudioSample(rmsdB, System.currentTimeMillis())
+                    if (blowResult) {
                         Log.i(TAG, "BLOW DETECTED! Triggering callback...")
                         onBlowDetected?.invoke()
                     }
                     
-                    if (sneezeDetector.processAudioSample(rmsdB, System.currentTimeMillis())) {
+                    // Process sneeze detection with detailed logging
+                    val sneezeResult = sneezeDetector.processAudioSample(rmsdB, System.currentTimeMillis())
+                    if (rmsdB > 10.0f) { // Log sneeze detection attempts for high audio
+                        Log.d(TAG, "SneezeDetector processing: rmsdB=$rmsdB, result=$sneezeResult")
+                    }
+                    if (sneezeResult) {
                         Log.i(TAG, "SNEEZE DETECTED! Triggering callback...")
                         onSneezeDetected?.invoke()
                         // In sound detection mode, keep listening after sneeze (no stop)
                     }
+                } else {
+                    // Voice Commands Mode - completely skip audio detection (no detector calls at all)
+                    if (rmsdB > 10.0f) { // Only log very high audio in voice mode to confirm separation
+                        Log.d(TAG, "Voice Commands Mode - ignoring audio detection (rmsdB=$rmsdB)")
+                    }
                 }
-                // Voice Commands Mode - silently skip audio detection (no log spam)
             }
 
             override fun onBufferReceived(buffer: ByteArray?) {
@@ -311,19 +348,16 @@ class VoiceRecognizerManager(
                     } else {
                         // Sound Detection Mode - ignore voice commands, just continue listening
                         Log.d(TAG, "Sound Detection Mode - ignoring voice command: $spoken")
-                        if (isVoiceRecognitionActive && !isProcessingCommand) {
-                            // Don't restart immediately on every voice result, just continue current session
-                            scheduleNoCommandTimeout()
-                            // Add much longer delay to avoid rapid restarts and microphone fighting
-                            handler.postDelayed({ restartRecognition() }, 5000L)
-                        }
+                        // CRITICAL: Don't restart on every voice result! This causes the constant restarting
+                        // Just continue the current session without restarting
                     }
                 } else {
+                    // No speech detected
                     if (isVoiceRecognitionActive && !isProcessingCommand) {
                         if (audioMode == SettingsActivity.AUDIO_MODE_SOUND_DETECTION) {
-                            // Sound Detection Mode - much longer delays to allow blow/sneeze detection to complete
-                            scheduleNoCommandTimeout()
-                            handler.postDelayed({ restartRecognition() }, 8000L)
+                            // Sound Detection Mode - CRITICAL: Don't restart continuously!
+                            // Let the session continue naturally without forced restarts
+                            Log.d(TAG, "Sound Detection Mode - no speech, continuing current session")
                         } else {
                             // Voice Commands Mode - check timeout
                             if (System.currentTimeMillis() - sessionStartTime < NO_COMMAND_TIMEOUT - 2000L) {
