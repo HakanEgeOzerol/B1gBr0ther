@@ -215,7 +215,16 @@ class DashboardActivity : AppCompatActivity() {
         }
 
         simulateWakeWordButton.setOnClickListener {
-            if (simulateWakeWordButton.text == "Stop Voice Recognition") {
+            val sharedPreferences = getSharedPreferences("B1gBr0therSettings", MODE_PRIVATE)
+            val audioMode = SettingsActivity.getAudioMode(sharedPreferences)
+            
+            val stopText = when (audioMode) {
+                SettingsActivity.AUDIO_MODE_VOICE_COMMANDS -> "Stop Voice Commands"
+                SettingsActivity.AUDIO_MODE_SOUND_DETECTION -> "Stop Sound Detection"
+                else -> "Stop Audio"
+            }
+            
+            if (simulateWakeWordButton.text == stopText) {
                 voiceRecognizerManager.stopRecognition()
             } else {
                 checkPermissionAndStartRecognition()
@@ -233,17 +242,31 @@ class DashboardActivity : AppCompatActivity() {
             onStatusUpdate = { status ->
                 runOnUiThread {
                     statusTextView.text = status
-                    // Update button text based on voice recognition status
+                    // Update button text based on voice recognition status and mode
+                    val sharedPreferences = getSharedPreferences("B1gBr0therSettings", MODE_PRIVATE)
+                    val audioMode = SettingsActivity.getAudioMode(sharedPreferences)
+                    
+                    val startText = when (audioMode) {
+                        SettingsActivity.AUDIO_MODE_VOICE_COMMANDS -> "Start Voice Commands"
+                        SettingsActivity.AUDIO_MODE_SOUND_DETECTION -> "Start Sound Detection"
+                        else -> "Start Audio"
+                    }
+                    val stopText = when (audioMode) {
+                        SettingsActivity.AUDIO_MODE_VOICE_COMMANDS -> "Stop Voice Commands"
+                        SettingsActivity.AUDIO_MODE_SOUND_DETECTION -> "Stop Sound Detection"
+                        else -> "Stop Audio"
+                    }
+                    
                     when {
-                        status.contains("Listening") -> {
-                            simulateWakeWordButton.text = "Stop Voice Recognition"
+                        status.contains("Listening") || status.contains("Ready for speech") || status.contains("Processing") -> {
+                            simulateWakeWordButton.text = stopText
                         }
                         status.contains("disabled") || status.contains("permission") -> {
-                            simulateWakeWordButton.text = "Start Voice Recognition"
+                            simulateWakeWordButton.text = "Start Audio"
                             simulateWakeWordButton.isEnabled = false
                         }
                         else -> {
-                            simulateWakeWordButton.text = "Start Voice Recognition"
+                            simulateWakeWordButton.text = startText
                             simulateWakeWordButton.isEnabled = true
                         }
                     }
@@ -254,13 +277,34 @@ class DashboardActivity : AppCompatActivity() {
             },
             onError = { error ->
                 runOnUiThread {
+                    val sharedPreferences = getSharedPreferences("B1gBr0therSettings", MODE_PRIVATE)
+                    val audioMode = SettingsActivity.getAudioMode(sharedPreferences)
+                    
+                    val startText = when (audioMode) {
+                        SettingsActivity.AUDIO_MODE_VOICE_COMMANDS -> "Start Voice Commands"
+                        SettingsActivity.AUDIO_MODE_SOUND_DETECTION -> "Start Sound Detection"
+                        else -> "Start Audio"
+                    }
+                    
                     if (error == "Voice recognition is disabled in settings") {
-                        statusTextView.text = "Voice recognition disabled"
-                        simulateWakeWordButton.text = "Start Voice Recognition"
-                        simulateWakeWordButton.isEnabled = false
+                        // Only show disabled if audio mode is actually off
+                        if (audioMode == SettingsActivity.AUDIO_MODE_OFF) {
+                            statusTextView.text = "Audio features disabled"
+                            simulateWakeWordButton.text = "Start Audio"
+                            simulateWakeWordButton.isEnabled = false
+                        } else {
+                            // If a mode is enabled, show the appropriate start text
+                            statusTextView.text = when (audioMode) {
+                                SettingsActivity.AUDIO_MODE_VOICE_COMMANDS -> "Press button to start voice commands"
+                                SettingsActivity.AUDIO_MODE_SOUND_DETECTION -> "Press button to start sound detection"
+                                else -> "Press button to start audio"
+                            }
+                            simulateWakeWordButton.text = startText
+                            simulateWakeWordButton.isEnabled = true
+                        }
                     } else {
                         Toast.makeText(this, error, Toast.LENGTH_SHORT).show()
-                        simulateWakeWordButton.text = "Start Voice Recognition"
+                        simulateWakeWordButton.text = startText
                         simulateWakeWordButton.isEnabled = true
                     }
                 }
@@ -273,6 +317,9 @@ class DashboardActivity : AppCompatActivity() {
                     voiceRecognizerManager.showSmokeBreakDialog(this) {
                         startBreak()
                     }
+                } else {
+                    // Show blow detection even when not tracking
+                    Toast.makeText(this, "Blow detected! 💨", Toast.LENGTH_SHORT).show()
                 }
             }
         }
@@ -289,27 +336,44 @@ class DashboardActivity : AppCompatActivity() {
 
     private fun updateVoiceRecognitionStatus() {
         val sharedPreferences = getSharedPreferences("B1gBr0therSettings", MODE_PRIVATE)
-        val isEnabled = SettingsActivity.isVoiceRecognitionEnabled(sharedPreferences)
+        val audioMode = SettingsActivity.getAudioMode(sharedPreferences)
         val hasPermission = ContextCompat.checkSelfPermission(
             this,
             Manifest.permission.RECORD_AUDIO
         ) == PackageManager.PERMISSION_GRANTED
 
-        if (!isEnabled) {
-            statusTextView.text = "Voice recognition disabled"
-            simulateWakeWordButton.text = "Start Voice Recognition"
+        if (audioMode == SettingsActivity.AUDIO_MODE_OFF) {
+            statusTextView.text = "Audio features disabled - select a mode in settings"
+            simulateWakeWordButton.text = "Start Audio"
             simulateWakeWordButton.isEnabled = false
             voiceRecognizerManager.stopRecognition()
         } else if (!hasPermission) {
-            statusTextView.text = "Voice recognition permission required"
-            simulateWakeWordButton.text = "Start Voice Recognition"
+            val modeText = when (audioMode) {
+                SettingsActivity.AUDIO_MODE_VOICE_COMMANDS -> "Voice commands"
+                SettingsActivity.AUDIO_MODE_SOUND_DETECTION -> "Sound detection"
+                else -> "Audio"
+            }
+            statusTextView.text = "$modeText permission required"
+            simulateWakeWordButton.text = "Start Audio"
             simulateWakeWordButton.isEnabled = false
             voiceRecognizerManager.stopRecognition()
         } else {
-            statusTextView.text = "Press button to start voice recognition"
-            simulateWakeWordButton.text = "Start Voice Recognition"
+            when (audioMode) {
+                SettingsActivity.AUDIO_MODE_VOICE_COMMANDS -> {
+                    statusTextView.text = "Press button to start voice commands"
+                    simulateWakeWordButton.text = "Start Voice Commands"
+                }
+                SettingsActivity.AUDIO_MODE_SOUND_DETECTION -> {
+                    statusTextView.text = "Press button to start sound detection"
+                    simulateWakeWordButton.text = "Start Sound Detection"
+                }
+                else -> {
+                    statusTextView.text = "Audio mode not configured"
+                    simulateWakeWordButton.text = "Start Audio"
+                }
+            }
             simulateWakeWordButton.isEnabled = true
-            // Don't automatically start voice recognition
+            // Don't automatically start recognition
         }
     }
 
@@ -532,6 +596,10 @@ class DashboardActivity : AppCompatActivity() {
             updateCurrentTaskDisplay()
         }
 
+        // Stop any running recognition to ensure clean state when returning from settings
+        if (::voiceRecognizerManager.isInitialized) {
+            voiceRecognizerManager.stopRecognition()
+        }
         updateVoiceRecognitionStatus()
     }
 

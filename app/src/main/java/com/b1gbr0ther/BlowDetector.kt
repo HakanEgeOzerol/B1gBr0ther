@@ -37,12 +37,14 @@ class BlowDetector {
             if (!isBlowing && highRMSCount >= REQUIRED_HIGH_RMS) {
                 isBlowing = true
                 blowStartTime = currentTimeMs
+                android.util.Log.d("BlowDetector", "Blow detection started!")
             }
         } else {
             highRMSCount = 0
             if (isBlowing) {
                 val duration = currentTimeMs - blowStartTime
                 if (duration >= MIN_DURATION && duration <= MAX_DURATION) {
+                    android.util.Log.i("BlowDetector", "BLOW DETECTED! Duration: $duration ms")
                     lastBlowTime = currentTimeMs
                     resetState()
                     return true
