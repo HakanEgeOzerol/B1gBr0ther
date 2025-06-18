@@ -18,6 +18,99 @@ class DatabaseManager(context: Context) {
     private val taskRepository = TaskRepository(database.taskDao())
     private val coroutineScope = CoroutineScope(Dispatchers.IO)
     
+    // ============================== Statistics Methods ==============================
+    
+    /**
+     * Get count of all completed tasks.
+     * @param callback Callback with the count of completed tasks
+     */
+    fun getCompletedTasksCount(callback: (Int) -> Unit) {
+        coroutineScope.launch {
+            val count = taskRepository.getCompletedTasksCount()
+            withContext(Dispatchers.Main) {
+                callback(count)
+            }
+        }
+    }
+    
+    /**
+     * Get count of tasks completed late.
+     * @param callback Callback with the count of late completed tasks
+     */
+    fun getLateCompletedTasksCount(callback: (Int) -> Unit) {
+        coroutineScope.launch {
+            val count = taskRepository.getLateCompletedTasksCount()
+            withContext(Dispatchers.Main) {
+                callback(count)
+            }
+        }
+    }
+    
+    /**
+     * Get count of tasks completed on time.
+     * @param callback Callback with the count of on-time completed tasks
+     */
+    fun getOnTimeCompletedTasksCount(callback: (Int) -> Unit) {
+        coroutineScope.launch {
+            val count = taskRepository.getOnTimeCompletedTasksCount()
+            withContext(Dispatchers.Main) {
+                callback(count)
+            }
+        }
+    }
+    
+    /**
+     * Get count of tasks completed early.
+     * @param callback Callback with the count of early completed tasks
+     */
+    fun getEarlyCompletedTasksCount(callback: (Int) -> Unit) {
+        coroutineScope.launch {
+            val count = taskRepository.getEarlyCompletedTasksCount()
+            withContext(Dispatchers.Main) {
+                callback(count)
+            }
+        }
+    }
+    
+    /**
+     * Get count of uncompleted tasks.
+     * @param callback Callback with the count of uncompleted tasks
+     */
+    fun getUncompletedTasksCount(callback: (Int) -> Unit) {
+        coroutineScope.launch {
+            val count = taskRepository.getUncompletedTasksCount()
+            withContext(Dispatchers.Main) {
+                callback(count)
+            }
+        }
+    }
+    
+    /**
+     * Get count of tasks created via voice command.
+     * @param callback Callback with the count of voice-created tasks
+     */
+    fun getVoiceCreatedTasksCount(callback: (Int) -> Unit) {
+        coroutineScope.launch {
+            val count = taskRepository.getVoiceCreatedTasksCount()
+            withContext(Dispatchers.Main) {
+                callback(count)
+            }
+        }
+    }
+    
+    /**
+     * Get count of tasks created via gesture.
+     * @param callback Callback with the count of gesture-created tasks
+     */
+    fun getGestureCreatedTasksCount(callback: (Int) -> Unit) {
+        coroutineScope.launch {
+            val count = taskRepository.getGestureCreatedTasksCount()
+            withContext(Dispatchers.Main) {
+                callback(count)
+            }
+        }
+    }
+    
     // ============================== Task CRUD Operations ==============================
     
     /**

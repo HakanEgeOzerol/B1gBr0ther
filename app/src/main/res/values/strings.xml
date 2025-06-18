@@ -5,4 +5,16 @@
     <string name="status_not_tracking">Not Busy With A Task</string>
     <string name="tracking_started">Tracking started</string>
     <string name="tracking_stopped">Tracking stopped</string>
+    <string name="completion">Completion</string>
+    <string name="creation_methods">Creation Methods</string>
+    <string name="statistics_title">Statistics</string>
+    <string name="task_completion">Task Completion</string>
+    <string name="task_timing">Task Timing</string>
+    <string name="timing_statistics">Timing Statistics</string>
+    <string name="creation_method_statistics">Creation Method Statistics</string>
+    <string name="total_tasks">Total Tasks</string>
+    <string name="completed_tasks">Completed Tasks</string>
+    <string name="completion_rate">Completion Rate</string>
+    <string name="quick_stats">Quick Stats</string>
+    <string name="tasks_completed">Tasks Completed</string>
 </resources>
