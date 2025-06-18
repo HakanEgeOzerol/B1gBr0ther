@@ -62,14 +62,18 @@ dependencies {
     implementation(libs.material)
     implementation(libs.androidx.activity)
     implementation(libs.androidx.constraintlayout)
-    
     // Room Database dependencies
     implementation(libs.androidx.room.runtime)
     implementation(libs.androidx.room.ktx)
     kapt(libs.androidx.room.compiler)
-    
     // Coroutines
     implementation(libs.kotlinx.coroutines.android)
+
+    // FFT implementation
+    implementation("edu.emory.mathcs:JTransforms:2.4")
+    
+    // MP3 decoding for sample file processing
+    implementation("com.googlecode.soundlibs:mp3spi:1.9.5.4")
     
     // Navigation Component
     implementation("androidx.navigation:navigation-fragment-ktx:2.7.7")

@@ -4,6 +4,7 @@ import android.content.Context
 import android.util.AttributeSet
 import android.view.LayoutInflater
 import android.view.View
+import android.widget.Toast
 import androidx.constraintlayout.widget.ConstraintLayout
 import com.b1gbr0ther.StatisticsActivity
 
@@ -23,7 +24,6 @@ class MenuBar @JvmOverloads constructor(
 
         icons = listOf(
             findViewById(R.id.exportPageMenuButton),
-//            findViewById(R.id.manualPageMenuButton),
             findViewById(R.id.dashboardPageMenuButton),
             findViewById(R.id.timesheetPageMenuButton),
             findViewById(R.id.statisticsPageMenuButton)
@@ -35,7 +35,6 @@ class MenuBar @JvmOverloads constructor(
     private fun setupClicks() {
         icons.forEachIndexed { index, view ->
             view.setOnClickListener {
-                moveHighlightTo(index)
                 handleNavigation(index)
             }
         }
@@ -50,6 +49,7 @@ class MenuBar @JvmOverloads constructor(
         val params = highlight.layoutParams as ConstraintLayout.LayoutParams
         params.startToStart = view.id
         params.topToTop = view.id
+        params.endToEnd = view.id
         highlight.layoutParams = params
     }
 
@@ -57,13 +57,9 @@ class MenuBar @JvmOverloads constructor(
         val currentActivity = context as? android.app.Activity ?: return
 
         val target = when (index) {
-//            0 -> AudioRecognitionActivity::class.java //change this to actual EXPORT page
-//            1 -> AudioRecognitionActivity::class.java // change this to actual MANUAL page
-//            2 -> DashboardActivity::class.java
-//            3 -> AudioRecognitionActivity::class.java //change this to actual TIMESHEET page
-            0 -> AudioRecognitionActivity::class.java //change this to actual EXPORT page
-            1 -> DashboardActivity::class.java
-            2 -> AudioRecognitionActivity::class.java //change this to actual TIMESHEET page
+            0 -> ExportPage::class.java            // export icon
+            1 -> DashboardActivity::class.java     // dashboard icon
+            2 -> TimesheetActivity::class.java // timesheet icon
             3 -> StatisticsActivity::class.java // Statistics page (index 3 for the 4th item)
             else -> return
         }

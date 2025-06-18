@@ -12,4 +12,7 @@ interface TimeTrackerInterface {
     fun getCurrentEffectiveTime(): Long
     fun getBreakCount(): Int
     fun reset()
+    fun setCurrentTask(taskId: Long, taskName: String)
+    fun getCurrentTaskId(): Long
+    fun getCurrentTaskName(): String?
 }

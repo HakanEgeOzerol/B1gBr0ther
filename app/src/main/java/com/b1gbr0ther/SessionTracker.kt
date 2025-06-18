@@ -8,6 +8,8 @@ class SessionTracker(context: Context) : TimeTrackerInterface {
     private var endTime: Long = 0L
     private var currentBreakStart: Long? = null
     private val breaks = mutableListOf<Pair<Long, Long>>()
+    private var currentTaskId: Long = -1L
+    private var currentTaskName: String? = null
 
     private val prefs: SharedPreferences =
         context.getSharedPreferences("time_tracker", Context.MODE_PRIVATE)
@@ -15,6 +17,8 @@ class SessionTracker(context: Context) : TimeTrackerInterface {
     init {
         if (prefs.getBoolean("is_tracking", false)) {
             startTime = prefs.getLong("start_time", 0L)
+            currentTaskId = prefs.getLong("current_task_id", -1L)
+            currentTaskName = prefs.getString("current_task_name", null)
 
             if (prefs.getBoolean("is_on_break", false)) {
                 currentBreakStart = prefs.getLong("current_break", 0L)
@@ -71,6 +75,8 @@ class SessionTracker(context: Context) : TimeTrackerInterface {
         val effectiveTime = totalTime - totalBreakTime
 
         clearState()
+        currentTaskId = -1L
+        currentTaskName = null
 
         return TimeTracker.TrackingSummary(
             totalTimeMillis = totalTime,
@@ -85,6 +91,8 @@ class SessionTracker(context: Context) : TimeTrackerInterface {
             putBoolean("is_tracking", isTracking())
             putLong("start_time", startTime)
             putBoolean("is_on_break", isOnBreak())
+            putLong("current_task_id", currentTaskId)
+            putString("current_task_name", currentTaskName)
 
             if (isOnBreak()) {
                 putLong("current_break", currentBreakStart!!)
@@ -108,6 +116,16 @@ class SessionTracker(context: Context) : TimeTrackerInterface {
     }
 
     override fun isOnBreak(): Boolean = currentBreakStart != null
+
+    override fun getCurrentTaskId(): Long = currentTaskId
+
+    override fun getCurrentTaskName(): String? = currentTaskName
+
+    override fun setCurrentTask(taskId: Long, taskName: String) {
+        currentTaskId = taskId
+        currentTaskName = taskName
+        saveState()
+    }
 
     fun getCurrentBreakTime(): Long {
         val breakStart = currentBreakStart ?: return 0L
@@ -139,6 +157,8 @@ class SessionTracker(context: Context) : TimeTrackerInterface {
         endTime = 0L
         breaks.clear()
         currentBreakStart = null
+        currentTaskId = -1L
+        currentTaskName = null
         clearState()
     }
 }
