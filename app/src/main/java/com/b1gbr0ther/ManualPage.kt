@@ -8,9 +8,15 @@ import androidx.core.view.WindowInsetsCompat
 
 class ManualPage : AppCompatActivity() {
     private lateinit var menuBar: MenuBar
+    private var appliedTheme: Int = -1
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
+        
+        // Apply saved theme before setting content view
+        ThemeManager.applyTheme(this)
+        appliedTheme = ThemeManager.getCurrentTheme(this)
+        
         enableEdgeToEdge()
         setContentView(R.layout.activity_manual)
 
@@ -27,6 +33,16 @@ class ManualPage : AppCompatActivity() {
 
     override fun onResume() {
         super.onResume()
+        
+        // Check if theme has changed and recreate if needed
+        val currentTheme = ThemeManager.getCurrentTheme(this)
+        if (appliedTheme != -1 && appliedTheme != currentTheme) {
+            android.util.Log.d("ManualPage", "Theme changed from $appliedTheme to $currentTheme - recreating activity")
+            recreate()
+            return
+        }
+        appliedTheme = currentTheme
+        
         menuBar.setActivePage(1)
     }
 }

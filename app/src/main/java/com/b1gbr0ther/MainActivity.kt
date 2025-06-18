@@ -3,12 +3,19 @@ package com.b1gbr0ther
 import android.content.Intent
 import android.os.Bundle
 import android.widget.Button
-import androidx.activity.ComponentActivity
+import androidx.appcompat.app.AppCompatActivity
 import androidx.activity.enableEdgeToEdge
 
-class MainActivity : ComponentActivity() {
+class MainActivity : AppCompatActivity() {
+    private var appliedTheme: Int = -1
+    
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
+        
+        // Apply saved app theme before setting content view
+        ThemeManager.applyTheme(this)
+        appliedTheme = ThemeManager.getCurrentTheme(this)
+        
         enableEdgeToEdge()
         setContentView(R.layout.activity_main)
 
@@ -29,5 +36,18 @@ class MainActivity : ComponentActivity() {
             val intent = Intent(this, DatabaseTestActivity::class.java)
             startActivity(intent)
         }
+    }
+    
+    override fun onResume() {
+        super.onResume()
+        
+        // Check if theme has changed and recreate if needed
+        val currentTheme = ThemeManager.getCurrentTheme(this)
+        if (appliedTheme != -1 && appliedTheme != currentTheme) {
+            android.util.Log.d("MainActivity", "Theme changed from $appliedTheme to $currentTheme - recreating activity")
+            recreate()
+            return
+        }
+        appliedTheme = currentTheme
     }
 }

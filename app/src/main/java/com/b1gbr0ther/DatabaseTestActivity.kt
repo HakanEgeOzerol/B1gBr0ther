@@ -21,10 +21,16 @@ class DatabaseTestActivity : AppCompatActivity() {
 
     private lateinit var resultTextView: TextView
     private var currentTaskId: Long = 0
+    private var appliedTheme: Int = -1
     
     override fun onCreate(savedInstanceState: Bundle?) {
         try {
             super.onCreate(savedInstanceState)
+            
+            // Apply saved app theme before setting content view
+            ThemeManager.applyTheme(this)
+            appliedTheme = ThemeManager.getCurrentTheme(this)
+            
             setContentView(R.layout.activity_database_test)
             
             // Initialize UI elements
@@ -217,5 +223,18 @@ class DatabaseTestActivity : AppCompatActivity() {
                 resultTextView.text = formattedText + currentText
             }
         }
+    }
+    
+    override fun onResume() {
+        super.onResume()
+        
+        // Check if theme has changed and recreate if needed
+        val currentTheme = ThemeManager.getCurrentTheme(this)
+        if (appliedTheme != -1 && appliedTheme != currentTheme) {
+            android.util.Log.d("DatabaseTestActivity", "Theme changed from $appliedTheme to $currentTheme - recreating activity")
+            recreate()
+            return
+        }
+        appliedTheme = currentTheme
     }
 }

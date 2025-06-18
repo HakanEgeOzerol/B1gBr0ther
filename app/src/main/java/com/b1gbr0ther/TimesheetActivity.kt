@@ -1,5 +1,6 @@
 package com.b1gbr0ther
 
+import android.content.Intent
 import android.os.Bundle
 import android.view.LayoutInflater
 import android.widget.Toast
@@ -22,9 +23,15 @@ import java.util.Locale
 class TimesheetActivity : AppCompatActivity() {
 
   private var currentYearMonth: YearMonth = YearMonth.of(2021, 5)
+  private var appliedTheme: Int = -1
 
   override fun onCreate(savedInstanceState: Bundle?) {
     super.onCreate(savedInstanceState)
+    
+    // Apply saved theme before setting content view
+    ThemeManager.applyTheme(this)
+    appliedTheme = ThemeManager.getCurrentTheme(this)
+    
     enableEdgeToEdge()
     setContentView(R.layout.activity_timesheet)
 
@@ -49,6 +56,11 @@ class TimesheetActivity : AppCompatActivity() {
 
     monthButton.setOnClickListener {
       showMonthOverlay()
+    }
+
+    findViewById<Button>(R.id.b1gBr0therButton).setOnClickListener {
+      val intent = Intent(this, SettingsActivity::class.java)
+      startActivity(intent)
     }
   }
 
@@ -209,5 +221,18 @@ class TimesheetActivity : AppCompatActivity() {
     }
 
     dialog.show()
+  }
+  
+  override fun onResume() {
+    super.onResume()
+    
+    // Check if theme has changed and recreate if needed
+    val currentTheme = ThemeManager.getCurrentTheme(this)
+    if (appliedTheme != -1 && appliedTheme != currentTheme) {
+      android.util.Log.d("TimesheetActivity", "Theme changed from $appliedTheme to $currentTheme - recreating activity")
+      recreate()
+      return
+    }
+    appliedTheme = currentTheme
   }
 }
