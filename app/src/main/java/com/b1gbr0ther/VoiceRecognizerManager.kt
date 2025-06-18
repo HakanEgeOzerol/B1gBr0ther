@@ -25,7 +25,7 @@ class VoiceRecognizerManager(
     private val onError: (String) -> Unit) {
     companion object {
         private const val TAG = "VoiceRecognizerManager"
-        private const val NO_COMMAND_TIMEOUT = 15000L // 15 seconds timeout to allow for proper command detection
+        private const val NO_COMMAND_TIMEOUT = 15000L
         private const val MAX_CONSECUTIVE_ERRORS = 3
         private const val ERROR_RECOVERY_DELAY = 1000L
     }

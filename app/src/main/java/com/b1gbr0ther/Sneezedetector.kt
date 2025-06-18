@@ -12,7 +12,7 @@ class SneezeDetector {
         private const val MAX_SNEEZE_DURATION = 1500L // 1.5 seconds maximum  
         private const val RAPID_ONSET_THRESHOLD = 3.0f // Lowered from 6.0f - Quick volume increase
         private const val COOLDOWN_PERIOD = 3000L // 3 seconds between detections
-        private const val SPEECH_VARIANCE_THRESHOLD = 2.5f // Detect speech-like patterns
+        private const val STARTUP_GRACE_PERIOD = 2000L // 2 seconds to ignore microphone initialization spikes
     }
     
     private var isDetecting = false
@@ -20,19 +20,22 @@ class SneezeDetector {
     private var maxVolumeInBurst = 0f
     private var lastDetectionTime = 0L
     private var previousRms = 0f
-    private var lastRMSValues = ArrayDeque<Float>(10) // Track recent RMS values for speech detection
+    private var initializationTime = 0L // Track when detector was reset/started
     
     fun processAudioSample(rmsdB: Float, timestamp: Long): Boolean {
         // Debug logging for high audio levels
         if (rmsdB > 8.5f) {
-            Log.d(TAG, "Processing audio: rmsdB=$rmsdB, isDetecting=$isDetecting, cooldown=${timestamp - lastDetectionTime}ms")
+            Log.d(TAG, "Processing audio: rmsdB=$rmsdB, isDetecting=$isDetecting, cooldown=${timestamp - lastDetectionTime}ms, grace=${timestamp - initializationTime}ms")
         }
         
-        // Update RMS history for speech detection
-        if (lastRMSValues.size >= 10) {
-            lastRMSValues.removeFirst()
+        // Grace period after initialization to ignore microphone startup spikes
+        if (timestamp - initializationTime < STARTUP_GRACE_PERIOD) {
+            if (rmsdB > 8.5f) {
+                Log.d(TAG, "In startup grace period - ignoring potential false positive")
+            }
+            previousRms = rmsdB // Update baseline but don't detect
+            return false
         }
-        lastRMSValues.addLast(rmsdB)
         
         // Cooldown period to prevent multiple detections
         if (timestamp - lastDetectionTime < COOLDOWN_PERIOD) {
@@ -42,25 +45,21 @@ class SneezeDetector {
             return false
         }
         
-        // Check for speech-like patterns and reject them
-        if (isSpeechLikePattern()) {
-            if (isDetecting) {
-                Log.d(TAG, "Speech pattern detected - cancelling sneeze detection")
-                reset()
-            }
-            return false
-        }
-        
         // Calculate volume change rate (rapid onset detection)
         val volumeChangeRate = rmsdB - previousRms
         previousRms = rmsdB
         
-        // Start detection if we hit the sneeze threshold with rapid onset
-        if (!isDetecting && rmsdB > SNEEZE_THRESHOLD && volumeChangeRate > RAPID_ONSET_THRESHOLD) {
+        // More robust onset detection: require both threshold AND reasonable change rate
+        // Prevent massive false spikes from triggering detection
+        if (!isDetecting && rmsdB > SNEEZE_THRESHOLD && volumeChangeRate > RAPID_ONSET_THRESHOLD && volumeChangeRate < 15.0f) {
             isDetecting = true
             detectionStartTime = timestamp
             maxVolumeInBurst = rmsdB
             Log.i(TAG, "Sneeze detection started - RMS: $rmsdB, onset rate: $volumeChangeRate")
+            return false
+        } else if (!isDetecting && rmsdB > SNEEZE_THRESHOLD && volumeChangeRate >= 15.0f) {
+            // Log massive spikes that we're ignoring (likely false positives)
+            Log.w(TAG, "Ignoring massive onset spike - RMS: $rmsdB, onset rate: $volumeChangeRate (likely false positive)")
             return false
         }
         
@@ -72,7 +71,7 @@ class SneezeDetector {
             Log.v(TAG, "Tracking sneeze: duration=${duration}ms, current=$rmsdB, peak=$maxVolumeInBurst")
             
             // Check if volume drops significantly (end of sneeze)
-            val isVolumeDropped = rmsdB < (maxVolumeInBurst * 0.4f) // Slightly more lenient
+            val isVolumeDropped = rmsdB < (maxVolumeInBurst * 0.4f)
             
             // Valid sneeze: right duration, high peak, and volume dropped
             if (isVolumeDropped && duration in MIN_SNEEZE_DURATION..MAX_SNEEZE_DURATION) {
@@ -93,23 +92,13 @@ class SneezeDetector {
         return false
     }
     
-    private fun isSpeechLikePattern(): Boolean {
-        if (lastRMSValues.size < 5) return false
-        
-        val mean = lastRMSValues.average()
-        val variance = lastRMSValues.map { (it - mean) * (it - mean) }.average()
-        
-        // Speech has variable patterns; sneezes are more sudden bursts
-        return variance > SPEECH_VARIANCE_THRESHOLD
-    }
-    
     fun reset() {
         isDetecting = false
         detectionStartTime = 0L
         maxVolumeInBurst = 0f
         previousRms = 0f
-        lastRMSValues.clear()
-        Log.d(TAG, "SneezeDetector reset")
+        initializationTime = System.currentTimeMillis() // Track when we reset
+        Log.d(TAG, "SneezeDetector reset - starting grace period")
     }
     
     fun getLastDetectionInfo(): String {

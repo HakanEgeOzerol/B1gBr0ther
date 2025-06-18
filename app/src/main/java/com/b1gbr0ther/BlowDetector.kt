@@ -17,20 +17,9 @@ class BlowDetector {
     private var isBlowing: Boolean = false
     private var highRMSCount: Int = 0
     private var maxRMSInBlow: Float = 0f
-    private var lastRMSValues = ArrayDeque<Float>(5)
 
     fun processAudioSample(rms: Float, currentTimeMs: Long): Boolean {
-        if (lastRMSValues.size >= 5) {
-            lastRMSValues.removeFirst()
-        }
-        lastRMSValues.addLast(rms)
-
         if (currentTimeMs - lastBlowTime < COOLDOWN) {
-            return false
-        }
-
-        if (isSpeechLikePattern()) {
-            resetState()
             return false
         }
 
@@ -82,15 +71,6 @@ class BlowDetector {
         return false
     }
 
-    private fun isSpeechLikePattern(): Boolean {
-        if (lastRMSValues.size < 5) return false
-
-        val mean = lastRMSValues.average()
-        val variance = lastRMSValues.map { (it - mean) * (it - mean) }.average()
-
-        return variance > 3.0f
-    }
-
     private fun resetState() {
         isBlowing = false
         highRMSCount = 0
@@ -101,6 +81,5 @@ class BlowDetector {
         resetState()
         lastBlowTime = 0
         blowStartTime = 0
-        lastRMSValues.clear()
     }
 }
