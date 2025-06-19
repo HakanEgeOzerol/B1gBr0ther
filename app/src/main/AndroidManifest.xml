@@ -71,6 +71,13 @@
             android:label="Settings"
             android:exported="false">
         </activity>
+        <activity
+            android:name=".easteregg.DoodleJumpActivity"
+            android:label="Doodle Jump"
+            android:exported="false"
+            android:screenOrientation="portrait"
+            android:theme="@style/Theme.B1gBr0ther">
+        </activity>
         
         <provider
             android:name="androidx.core.content.FileProvider"

@@ -1,10 +1,13 @@
 package com.b1gbr0ther
 
 import android.content.Context
+import android.content.Intent
 import android.graphics.*
 import android.util.AttributeSet
+import android.view.MotionEvent
 import android.view.View
 import androidx.core.graphics.toColorInt
+import com.b1gbr0ther.easteregg.DoodleJumpActivity
 
 class WeekTimeGridView(context: Context, attrs: AttributeSet?) : View(context, attrs) {
 
@@ -26,6 +29,12 @@ class WeekTimeGridView(context: Context, attrs: AttributeSet?) : View(context, a
     }
 
     private var dataBlocks: List<WorkBlock> = emptyList()
+    
+    // Easter egg variables
+    private var clickCount = 0
+    private var lastClickTime = 0L
+    private val easterEggClickThreshold = 5 // Number of clicks needed
+    private val clickTimeWindow = 3000L // 3 seconds
 
     fun setWorkData(newData: List<WorkBlock>) {
         dataBlocks = newData
@@ -78,5 +87,39 @@ class WeekTimeGridView(context: Context, attrs: AttributeSet?) : View(context, a
             val paint = if (block.isBreak) breakPaint else workPaint
             canvas.drawRect(left, top, right, bottom, paint)
         }
+    }
+
+    override fun onTouchEvent(event: MotionEvent): Boolean {
+        when (event.action) {
+            MotionEvent.ACTION_DOWN -> {
+                handleEasterEggClick()
+                return true
+            }
+        }
+        return super.onTouchEvent(event)
+    }
+
+    private fun handleEasterEggClick() {
+        val currentTime = System.currentTimeMillis()
+        
+        // Reset click count if too much time has passed
+        if (currentTime - lastClickTime > clickTimeWindow) {
+            clickCount = 0
+        }
+        
+        clickCount++
+        lastClickTime = currentTime
+        
+        // Trigger easter egg if threshold is reached
+        if (clickCount >= easterEggClickThreshold) {
+            triggerEasterEgg()
+            clickCount = 0 // Reset counter
+        }
+    }
+
+    private fun triggerEasterEgg() {
+        // Launch the Doodle Jump game
+        val intent = Intent(context, DoodleJumpActivity::class.java)
+        context.startActivity(intent)
     }
 }
