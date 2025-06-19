@@ -84,7 +84,7 @@ class TimesheetActivity : AppCompatActivity() {
     yearButton.text = currentYearMonth.year.toString()
 
     val monthButton = findViewById<Button>(R.id.monthSelector)
-    monthButton.text = currentYearMonth.month.getDisplayName(TextStyle.FULL, Locale.ENGLISH)
+    monthButton.text = currentYearMonth.month.getDisplayName(TextStyle.FULL, Locale.getDefault())
 
     val calendarGrid = findViewById<GridLayout>(R.id.calendarGridDays)
     calendarGrid.removeAllViews()
@@ -104,7 +104,7 @@ class TimesheetActivity : AppCompatActivity() {
       block.findViewById<TextView>(R.id.hoursWorkedText).text = "${(1..8).random()}h"
 
       block.setOnClickListener {
-        showDayTasksOverlay(day, currentYearMonth.month.getDisplayName(TextStyle.FULL, Locale.ENGLISH))
+        showDayTasksOverlay(day, currentYearMonth.month.getDisplayName(TextStyle.FULL, Locale.getDefault()))
       }
 
       calendarGrid.addView(block)
@@ -128,7 +128,7 @@ class TimesheetActivity : AppCompatActivity() {
 
       button.setOnClickListener {
         selectedYear = year
-        Toast.makeText(this, "You picked $year", Toast.LENGTH_SHORT).show()
+        Toast.makeText(this, getString(R.string.you_picked_year, year), Toast.LENGTH_SHORT).show()
         setCurrentYear(year)
         dialog.dismiss()
       }
@@ -161,8 +161,9 @@ class TimesheetActivity : AppCompatActivity() {
       .create()
 
     val months = listOf(
-      "January", "February", "March", "April", "May", "June",
-      "July", "August", "September", "October", "November", "December"
+      getString(R.string.january), getString(R.string.february), getString(R.string.march), getString(R.string.april), 
+      getString(R.string.may), getString(R.string.june), getString(R.string.july), getString(R.string.august), 
+      getString(R.string.september), getString(R.string.october), getString(R.string.november), getString(R.string.december)
     )
 
     for ((index, name) in months.withIndex()) {
@@ -170,7 +171,7 @@ class TimesheetActivity : AppCompatActivity() {
       button.text = name
 
       button.setOnClickListener {
-        Toast.makeText(this, "You picked $name", Toast.LENGTH_SHORT).show()
+        Toast.makeText(this, getString(R.string.you_picked_month, name), Toast.LENGTH_SHORT).show()
         setCurrentMonth(index + 1)
         dialog.dismiss()
       }
@@ -205,7 +206,7 @@ class TimesheetActivity : AppCompatActivity() {
 
     val container = dialogView.findViewById<LinearLayout>(R.id.taskContainer)
     val title = dialogView.findViewById<TextView>(R.id.overlayTitle)
-    title.text = "Tasks on $monthName $day"
+    title.text = getString(R.string.tasks_on_date, "$monthName $day")
 
     // Dummy task data, replace this with tasks and hours fetched form db
     val tasks = listOf(

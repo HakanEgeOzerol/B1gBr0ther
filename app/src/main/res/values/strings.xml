@@ -18,6 +18,7 @@
     <string name="language_dutch">Dutch</string>
     <string name="choose_language">Choose Language</string>
     <string name="voice_recognition">Voice Recognition</string>
+    <string name="audio_off">Off</string>
     <string name="enable_voice_commands">Enable Voice Commands</string>
     <string name="notifications">Notifications</string>
     <string name="enable_task_notifications">Enable Task Notifications</string>
@@ -203,5 +204,51 @@
     <!-- Timesheet component placeholders -->
     <string name="day_number_placeholder">1</string>
     <string name="hours_worked_placeholder">4h</string>
+    
+    <!-- Additional export strings -->
+    <string name="export_selected_format">Export Selected (%1$d/%2$d)</string>
+    <string name="format_suffix">%1$s Format</string>
+    <string name="task_export_subject">Task Export</string>
+    <string name="share_export_file">Share export file</string>
+    
+    <!-- Dashboard tracking messages -->
+    <string name="on_break">On break</string>
+    <string name="currently_tracking">Currently tracking: %1$s</string>
+    <string name="not_tracking_any_task">Not tracking any task</string>
+    
+    <!-- Dashboard audio status messages -->
+    <string name="audio_features_disabled">Audio features disabled - select a mode in settings</string>
+    <string name="start_audio">Start Audio</string>
+    <string name="voice_commands">Voice commands</string>
+    <string name="sound_detection">Sound detection</string>
+    <string name="audio">Audio</string>
+    <string name="permission_required">%1$s permission required</string>
+    <string name="press_button_start_voice_commands">Press button to start voice commands</string>
+    <string name="start_voice_commands">Start Voice Commands</string>
+    <string name="press_button_start_sound_detection">Press button to start sound detection</string>
+    <string name="start_sound_detection">Start Sound Detection</string>
+    <string name="audio_mode_not_configured">Audio mode not configured</string>
+    <string name="stop_voice_commands">Stop Voice Commands</string>
+    <string name="stop_sound_detection">Stop Sound Detection</string>
+    <string name="stop_audio">Stop Audio</string>
+    <string name="voice_recognition_stopped">Voice recognition stopped</string>
+    
+    <!-- Dashboard tracking action messages -->
+    <string name="task_completed_time_tracked">Task '%1$s' completed. Time tracked: %2$dh %3$dm</string>
+    <string name="currently_busy_with_task">Currently busy with a task</string>
+    
+    <!-- Timesheet activity messages -->
+    <string name="start_date_format">Start: %1$s</string>
+    <string name="end_date_format">End: %1$s</string>
+    
+    <!-- Statistics chart labels -->
+    <string name="no_task_data_available">No task data available</string>
+    <string name="early">Early</string>
+    <string name="on_time">On time</string>
+    <string name="late">Late</string>
+    <string name="no_timing_data_available">No timing data available</string>
+    <string name="no_task_creation_data_available">No task creation data available</string>
+    <string name="voice">Voice</string>
+    <string name="gesture">Gesture</string>
     
 </resources>

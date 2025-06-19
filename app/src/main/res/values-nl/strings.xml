@@ -18,6 +18,7 @@
     <string name="language_dutch">Nederlands</string>
     <string name="choose_language">Taal kiezen</string>
     <string name="voice_recognition">Spraakherkenning</string>
+    <string name="audio_off">Uit</string>
     <string name="enable_voice_commands">Spraakopdrachten inschakelen</string>
     <string name="notifications">Meldingen</string>
     <string name="enable_task_notifications">Taak meldingen inschakelen</string>
@@ -213,5 +214,59 @@
     <string name="total_tasks">Totaal taken</string>
     <string name="tasks_completed">Taken voltooid</string>
     <string name="completion_rate">Voltooiingspercentage</string>
+    <string name="uncompleted">Niet voltooid</string>
+    <string name="on_time">Op tijd</string>
+    <string name="late">Laat</string>
+    <string name="early">Vroeg</string>
+    <string name="voice">Spraak</string>
+    <string name="gesture">Gebaar</string>
+    <string name="no_data_available">Geen gegevens beschikbaar</string>
+    <string name="completion_stats_format">Voltooid: %1$s / Niet voltooid: %2$s</string>
     
+    <!-- Additional export strings -->
+    <string name="export_selected_format">Geselecteerde exporteren (%1$d/%2$d)</string>
+    <string name="format_suffix">%1$s Formaat</string>
+    <string name="task_export_subject">Taak Export</string>
+    <string name="share_export_file">Export bestand delen</string>
+    
+    <!-- Dashboard tracking messages -->
+    <string name="on_break">Op pauze</string>
+    <string name="currently_tracking">Momenteel aan het volgen: %1$s</string>
+    <string name="not_tracking_any_task">Geen taak aan het volgen</string>
+    
+    <!-- Dashboard audio status messages -->
+    <string name="audio_features_disabled">Audio functies uitgeschakeld - selecteer een modus in instellingen</string>
+    <string name="start_audio">Audio starten</string>
+    <string name="voice_commands">Spraakopdrachten</string>
+    <string name="sound_detection">Geluidsdetectie</string>
+    <string name="audio">Audio</string>
+    <string name="permission_required">%1$s toestemming vereist</string>
+    <string name="press_button_start_voice_commands">Druk op knop om spraakopdrachten te starten</string>
+    <string name="start_voice_commands">Spraakopdrachten starten</string>
+    <string name="press_button_start_sound_detection">Druk op knop om geluidsdetectie te starten</string>
+    <string name="start_sound_detection">Geluidsdetectie starten</string>
+    <string name="audio_mode_not_configured">Audio modus niet geconfigureerd</string>
+    <string name="stop_voice_commands">Spraakopdrachten stoppen</string>
+    <string name="stop_sound_detection">Geluidsdetectie stoppen</string>
+    <string name="stop_audio">Audio stoppen</string>
+    <string name="voice_recognition_stopped">Spraakherkenning gestopt</string>
+    
+    <!-- Dashboard tracking action messages -->
+    <string name="task_completed_time_tracked">Taak '%1$s' voltooid. Tijd gevolgd: %2$du %3$dm</string>
+    <string name="currently_busy_with_task">Momenteel bezig met een taak</string>
+    
+    <!-- Timesheet activity messages -->
+    <string name="start_date_format">Start: %1$s</string>
+    <string name="end_date_format">Eind: %1$s</string>
+    
+    <!-- Statistics chart labels -->
+    <string name="no_task_data_available">Geen taakgegevens beschikbaar</string>
+    <string name="early">Vroeg</string>
+    <string name="on_time">Op tijd</string>
+    <string name="late">Laat</string>
+    <string name="no_timing_data_available">Geen tijdgegevens beschikbaar</string>
+    <string name="no_task_creation_data_available">Geen taakcreatiegegevens beschikbaar</string>
+    <string name="voice">Spraak</string>
+    <string name="gesture">Gebaar</string>
+
 </resources> 

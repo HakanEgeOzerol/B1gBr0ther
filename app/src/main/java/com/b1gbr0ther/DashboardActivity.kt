@@ -110,7 +110,7 @@ class DashboardActivity : AppCompatActivity() {
     private fun updateCurrentTaskDisplay() {
         if (timeTracker.isTracking()) {
             if (timeTracker.isOnBreak()) {
-                updateCurrentTask("On break")
+                updateCurrentTask(getString(R.string.on_break))
             } else {
                 val taskId = timeTracker.getCurrentTaskId()
                 val taskName = timeTracker.getCurrentTaskName()
@@ -118,14 +118,14 @@ class DashboardActivity : AppCompatActivity() {
                 if (taskName != null) {
                     currentTaskName = taskName
                     currentTaskId = taskId
-                    updateCurrentTask("Currently tracking: $taskName")
+                    updateCurrentTask(getString(R.string.currently_tracking, taskName))
                 } else if (taskId != -1L) {
                     databaseManager.getTask(taskId) { task ->
                         if (task != null) {
                             currentTaskName = task.taskName
                             currentTaskId = taskId
                             timeTracker.setCurrentTask(taskId, task.taskName)
-                            updateCurrentTask("Currently tracking: ${task.taskName}")
+                            updateCurrentTask(getString(R.string.currently_tracking, task.taskName))
                         }
                     }
                 }
@@ -133,7 +133,7 @@ class DashboardActivity : AppCompatActivity() {
         } else {
             currentTaskName = null
             currentTaskId = -1L
-            updateCurrentTask("Not tracking any task")
+            updateCurrentTask(getString(R.string.not_tracking_any_task))
         }
     }
 
@@ -231,9 +231,9 @@ class DashboardActivity : AppCompatActivity() {
             val audioMode = SettingsActivity.getAudioMode(sharedPreferences)
             
             val stopText = when (audioMode) {
-                SettingsActivity.AUDIO_MODE_VOICE_COMMANDS -> "Stop Voice Commands"
-                SettingsActivity.AUDIO_MODE_SOUND_DETECTION -> "Stop Sound Detection"
-                else -> "Stop Audio"
+                SettingsActivity.AUDIO_MODE_VOICE_COMMANDS -> getString(R.string.stop_voice_commands)
+                SettingsActivity.AUDIO_MODE_SOUND_DETECTION -> getString(R.string.stop_sound_detection)
+                else -> getString(R.string.stop_audio)
             }
             
             if (simulateWakeWordButton.text == stopText) {
@@ -259,14 +259,14 @@ class DashboardActivity : AppCompatActivity() {
                     val audioMode = SettingsActivity.getAudioMode(sharedPreferences)
                     
                     val startText = when (audioMode) {
-                        SettingsActivity.AUDIO_MODE_VOICE_COMMANDS -> "Start Voice Commands"
-                        SettingsActivity.AUDIO_MODE_SOUND_DETECTION -> "Start Sound Detection"
-                        else -> "Start Audio"
+                        SettingsActivity.AUDIO_MODE_VOICE_COMMANDS -> getString(R.string.start_voice_commands)
+                        SettingsActivity.AUDIO_MODE_SOUND_DETECTION -> getString(R.string.start_sound_detection)
+                        else -> getString(R.string.start_audio)
                     }
                     val stopText = when (audioMode) {
-                        SettingsActivity.AUDIO_MODE_VOICE_COMMANDS -> "Stop Voice Commands"
-                        SettingsActivity.AUDIO_MODE_SOUND_DETECTION -> "Stop Sound Detection"
-                        else -> "Stop Audio"
+                        SettingsActivity.AUDIO_MODE_VOICE_COMMANDS -> getString(R.string.stop_voice_commands)
+                        SettingsActivity.AUDIO_MODE_SOUND_DETECTION -> getString(R.string.stop_sound_detection)
+                        else -> getString(R.string.stop_audio)
                     }
                     
                     when {
@@ -274,7 +274,7 @@ class DashboardActivity : AppCompatActivity() {
                             simulateWakeWordButton.text = stopText
                         }
                         status.contains("disabled") || status.contains("permission") -> {
-                            simulateWakeWordButton.text = "Start Audio"
+                            simulateWakeWordButton.text = getString(R.string.start_audio)
                             simulateWakeWordButton.isEnabled = false
                         }
                         else -> {
@@ -293,9 +293,9 @@ class DashboardActivity : AppCompatActivity() {
                     val audioMode = SettingsActivity.getAudioMode(sharedPreferences)
                     
                     val startText = when (audioMode) {
-                        SettingsActivity.AUDIO_MODE_VOICE_COMMANDS -> "Start Voice Commands"
-                        SettingsActivity.AUDIO_MODE_SOUND_DETECTION -> "Start Sound Detection"
-                        else -> "Start Audio"
+                        SettingsActivity.AUDIO_MODE_VOICE_COMMANDS -> getString(R.string.start_voice_commands)
+                        SettingsActivity.AUDIO_MODE_SOUND_DETECTION -> getString(R.string.start_sound_detection)
+                        else -> getString(R.string.start_audio)
                     }
                     
                     if (error == "Voice recognition is disabled in settings") {
@@ -355,33 +355,33 @@ class DashboardActivity : AppCompatActivity() {
         ) == PackageManager.PERMISSION_GRANTED
 
         if (audioMode == SettingsActivity.AUDIO_MODE_OFF) {
-            statusTextView.text = "Audio features disabled - select a mode in settings"
-            simulateWakeWordButton.text = "Start Audio"
+            statusTextView.text = getString(R.string.audio_features_disabled)
+            simulateWakeWordButton.text = getString(R.string.start_audio)
             simulateWakeWordButton.isEnabled = false
             voiceRecognizerManager.stopRecognition()
         } else if (!hasPermission) {
             val modeText = when (audioMode) {
-                SettingsActivity.AUDIO_MODE_VOICE_COMMANDS -> "Voice commands"
-                SettingsActivity.AUDIO_MODE_SOUND_DETECTION -> "Sound detection"
-                else -> "Audio"
+                SettingsActivity.AUDIO_MODE_VOICE_COMMANDS -> getString(R.string.voice_commands)
+                SettingsActivity.AUDIO_MODE_SOUND_DETECTION -> getString(R.string.sound_detection)
+                else -> getString(R.string.audio)
             }
-            statusTextView.text = "$modeText permission required"
-            simulateWakeWordButton.text = "Start Audio"
+            statusTextView.text = getString(R.string.permission_required, modeText)
+            simulateWakeWordButton.text = getString(R.string.start_audio)
             simulateWakeWordButton.isEnabled = false
             voiceRecognizerManager.stopRecognition()
         } else {
             when (audioMode) {
                 SettingsActivity.AUDIO_MODE_VOICE_COMMANDS -> {
-                    statusTextView.text = "Press button to start voice commands"
-                    simulateWakeWordButton.text = "Start Voice Commands"
+                    statusTextView.text = getString(R.string.press_button_start_voice_commands)
+                    simulateWakeWordButton.text = getString(R.string.start_voice_commands)
                 }
                 SettingsActivity.AUDIO_MODE_SOUND_DETECTION -> {
-                    statusTextView.text = "Press button to start sound detection"
-                    simulateWakeWordButton.text = "Start Sound Detection"
+                    statusTextView.text = getString(R.string.press_button_start_sound_detection)
+                    simulateWakeWordButton.text = getString(R.string.start_sound_detection)
                 }
                 else -> {
-                    statusTextView.text = "Audio mode not configured"
-                    simulateWakeWordButton.text = "Start Audio"
+                    statusTextView.text = getString(R.string.audio_mode_not_configured)
+                    simulateWakeWordButton.text = getString(R.string.start_audio)
                 }
             }
             simulateWakeWordButton.isEnabled = true
@@ -506,7 +506,7 @@ class DashboardActivity : AppCompatActivity() {
                 databaseManager.updateTask(task) {
                     Toast.makeText(
                         this,
-                        "Task '${task.taskName}' completed. Time tracked: ${hoursElapsed}h ${minutesElapsed}m",
+                        getString(R.string.task_completed_time_tracked, task.taskName, hoursElapsed, minutesElapsed),
                         Toast.LENGTH_SHORT
                     ).show()
 
@@ -562,7 +562,7 @@ class DashboardActivity : AppCompatActivity() {
 
                     databaseManager.updateTask(currentTask) {
                         Toast.makeText(this, "Break ended", Toast.LENGTH_SHORT).show()
-                        updateCurrentTask("Currently busy with a task")
+                        updateCurrentTask(getString(R.string.currently_busy_with_task))
                     }
                 }
             }
@@ -623,7 +623,7 @@ class DashboardActivity : AppCompatActivity() {
     override fun onPause() {
         super.onPause()
         voiceRecognizerManager.stopRecognition()
-        statusTextView.text = "Voice recognition stopped"
+        statusTextView.text = getString(R.string.voice_recognition_stopped)
     }
 
     override fun onDestroy() {

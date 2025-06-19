@@ -71,7 +71,7 @@ class StatisticsActivity : AppCompatActivity() {
             setHoleColor(Color.TRANSPARENT)
             setTransparentCircleAlpha(0)
             animateY(1400, Easing.EaseInOutQuad)
-            setNoDataText("No task data available")
+            setNoDataText(getString(R.string.no_task_data_available))
             setNoDataTextColor(Color.BLACK)
         }
         
@@ -79,7 +79,7 @@ class StatisticsActivity : AppCompatActivity() {
         timingChart.apply {
             description.isEnabled = false
             xAxis.apply {
-                valueFormatter = IndexAxisValueFormatter(arrayOf("Early", "On time", "Late"))
+                valueFormatter = IndexAxisValueFormatter(arrayOf(getString(R.string.early), getString(R.string.on_time), getString(R.string.late)))
                 position = XAxis.XAxisPosition.BOTTOM
                 granularity = 1f
                 setCenterAxisLabels(false)
@@ -93,7 +93,7 @@ class StatisticsActivity : AppCompatActivity() {
             legend.isEnabled = false
             setFitBars(true)
             animateY(1400)
-            setNoDataText("No timing data available")
+            setNoDataText(getString(R.string.no_timing_data_available))
             setNoDataTextColor(Color.BLACK)
         }
         
@@ -109,7 +109,7 @@ class StatisticsActivity : AppCompatActivity() {
             setHoleColor(Color.TRANSPARENT)
             setTransparentCircleAlpha(0)
             animateY(1400, Easing.EaseInOutQuad)
-            setNoDataText("No task creation data available")
+            setNoDataText(getString(R.string.no_task_creation_data_available))
             setNoDataTextColor(Color.BLACK)
         }
     }
@@ -132,7 +132,7 @@ class StatisticsActivity : AppCompatActivity() {
                     completionRateText.text = "$completionRate%"
                     
                     // Update completion stats text
-                    completionStatsText.text = "Completed: ${numberFormat.format(completedCount)} / Uncompleted: ${numberFormat.format(uncompletedCount)}"
+                    completionStatsText.text = getString(R.string.completion_stats_format, numberFormat.format(completedCount), numberFormat.format(uncompletedCount))
                     
                     // Update completion chart if there's data
                     if (totalTasks > 0) {
@@ -204,8 +204,8 @@ class StatisticsActivity : AppCompatActivity() {
                 databaseManager.getGestureCreatedTasksCount { gestureCount ->
                     if (voiceCount + gestureCount > 0) {
                         val creationEntries = listOf(
-                            PieEntry(voiceCount.toFloat(), "Voice"),
-                            PieEntry(gestureCount.toFloat(), "Gesture")
+                            PieEntry(voiceCount.toFloat(), getString(R.string.voice)),
+                            PieEntry(gestureCount.toFloat(), getString(R.string.gesture))
                         )
                         
                         val creationDataSet = PieDataSet(creationEntries, "").apply {

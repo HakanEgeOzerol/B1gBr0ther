@@ -18,6 +18,7 @@
     <string name="language_dutch">Néerlandais</string>
     <string name="choose_language">Choisir la langue</string>
     <string name="voice_recognition">Reconnaissance vocale</string>
+    <string name="audio_off">Désactivé</string>
     <string name="enable_voice_commands">Activer les commandes vocales</string>
     <string name="notifications">Notifications</string>
     <string name="enable_task_notifications">Activer les notifications de tâches</string>
@@ -204,4 +205,63 @@
     <string name="day_number_placeholder">1</string>
     <string name="hours_worked_placeholder">4h</string>
     
+    <!-- Statistics -->
+    <string name="statistics_title">Statistiques</string>
+    <string name="task_completion">Achèvement des tâches</string>
+    <string name="task_timing">Timing des tâches</string>
+    <string name="creation_methods">Méthodes de création</string>
+    <string name="quick_stats">Statistiques rapides</string>
+    <string name="total_tasks">Total des tâches</string>
+    <string name="tasks_completed">Tâches terminées</string>
+    <string name="completion_rate">Taux d\'achèvement</string>
+    <string name="uncompleted">Non terminé</string>
+    <string name="on_time">À l\'heure</string>
+    <string name="late">En retard</string>
+    <string name="early">En avance</string>
+    <string name="voice">Voix</string>
+    <string name="gesture">Geste</string>
+    <string name="no_data_available">Aucune donnée disponible</string>
+    <string name="completion_stats_format">Terminé: %1$s / Non terminé: %2$s</string>
+    
+    <!-- Additional export strings -->
+    <string name="export_selected_format">Exporter sélectionné (%1$d/%2$d)</string>
+    <string name="format_suffix">Format %1$s</string>
+    <string name="task_export_subject">Export de tâche</string>
+    <string name="share_export_file">Partager le fichier d\'export</string>
+    
+    <!-- Dashboard tracking messages -->
+    <string name="on_break">En pause</string>
+    <string name="currently_tracking">Actuellement suivi: %1$s</string>
+    <string name="not_tracking_any_task">Aucune tâche en cours de suivi</string>
+    
+    <!-- Dashboard audio status messages -->
+    <string name="audio_features_disabled">Fonctionnalités audio désactivées - sélectionnez un mode dans les paramètres</string>
+    <string name="start_audio">Démarrer l\'audio</string>
+    <string name="voice_commands">Commandes vocales</string>
+    <string name="sound_detection">Détection sonore</string>
+    <string name="audio">Audio</string>
+    <string name="permission_required">Permission %1$s requise</string>
+    <string name="press_button_start_voice_commands">Appuyez sur le bouton pour démarrer les commandes vocales</string>
+    <string name="start_voice_commands">Démarrer les commandes vocales</string>
+    <string name="press_button_start_sound_detection">Appuyez sur le bouton pour démarrer la détection sonore</string>
+    <string name="start_sound_detection">Démarrer la détection sonore</string>
+    <string name="audio_mode_not_configured">Mode audio non configuré</string>
+    <string name="stop_voice_commands">Arrêter les commandes vocales</string>
+    <string name="stop_sound_detection">Arrêter la détection sonore</string>
+    <string name="stop_audio">Arrêter l\'audio</string>
+    <string name="voice_recognition_stopped">Reconnaissance vocale arrêtée</string>
+    
+    <!-- Dashboard tracking action messages -->
+    <string name="task_completed_time_tracked">Tâche '%1$s' terminée. Temps suivi: %2$dh %3$dm</string>
+    <string name="currently_busy_with_task">Actuellement occupé avec une tâche</string>
+    
+    <!-- Timesheet activity messages -->
+    <string name="start_date_format">Début: %1$s</string>
+    <string name="end_date_format">Fin: %1$s</string>
+    
+    <!-- Statistics chart labels -->
+    <string name="no_task_data_available">Aucune donnée de tâche disponible</string>
+    <string name="no_timing_data_available">Aucune donnée de timing disponible</string>
+    <string name="no_task_creation_data_available">Aucune donnée de création de tâche disponible</string>
+
 </resources> 
