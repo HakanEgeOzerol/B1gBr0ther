@@ -1,5 +1,7 @@
 package com.b1gbr0ther
 
+import android.annotation.SuppressLint
+import com.b1gbr0ther.data.database.DatabaseManager
 import android.os.Bundle
 import android.view.LayoutInflater
 import android.widget.Toast
@@ -78,21 +80,37 @@ class TimesheetActivity : AppCompatActivity() {
     val startDayOfWeek = currentYearMonth.atDay(1).dayOfWeek.value - 1
     val daysInMonth = currentYearMonth.lengthOfMonth()
 
-    for (i in 0 until startDayOfWeek) {
-      val emptyView = inflater.inflate(R.layout.empty_day, calendarGrid, false)
-      calendarGrid.addView(emptyView)
-    }
+    val dbManager = DatabaseManager(this)
+    val startOfMonth = currentYearMonth.atDay(1).atStartOfDay()
+    val endOfMonth = currentYearMonth.atEndOfMonth().atTime(23, 59)
 
-    for (day in 1..daysInMonth) {
-      val block = TimesheetDayComponent(this)
-      block.setDayNumber(day.toString())
-      block.setHoursWorked("${(1..8).random()}")
+    dbManager.getTasksByTimeRange(startOfMonth, endOfMonth) { tasks ->
+      val completedTasks = tasks.filter { it.isCompleted }
+      val hoursMap = mutableMapOf<Int, Int>()
 
-      block.setOnClickListener {
-        showDayTasksOverlay(day, currentYearMonth.month.getDisplayName(TextStyle.FULL, Locale.ENGLISH))
+      completedTasks.forEach { task ->
+        val day = task.startTime.dayOfMonth
+        val duration = java.time.Duration.between(task.startTime, task.endTime).toMinutes()
+        val hours = (duration / 60.0).toInt()
+        hoursMap[day] = (hoursMap[day] ?: 0) + hours
       }
 
-      calendarGrid.addView(block)
+      repeat(startDayOfWeek) {
+        val emptyView = inflater.inflate(R.layout.empty_day, calendarGrid, false)
+        calendarGrid.addView(emptyView)
+      }
+
+      for (day in 1..daysInMonth) {
+        val block = TimesheetDayComponent(this)
+        block.setDayNumber(day.toString())
+        block.setHoursWorked((hoursMap[day] ?: 0).toString())
+
+        block.setOnClickListener {
+          showDayTasksOverlay(day, currentYearMonth.month.getDisplayName(TextStyle.FULL, Locale.ENGLISH))
+        }
+
+        calendarGrid.addView(block)
+      }
     }
   }
 
@@ -178,10 +196,10 @@ class TimesheetActivity : AppCompatActivity() {
     }
   }
 
-  //this is for the overlay of the day
-  private fun showDayTasksOverlay(day: Int, monthName : String) {
+  @SuppressLint("SetTextI18n")
+  private fun showDayTasksOverlay(day: Int, monthName: String) {
     val dialogView = layoutInflater.inflate(R.layout.day_overlay, null)
-    val dialog = android.app.AlertDialog.Builder(this)
+    val dialog = AlertDialog.Builder(this)
       .setView(dialogView)
       .setCancelable(true)
       .create()
@@ -192,25 +210,36 @@ class TimesheetActivity : AppCompatActivity() {
     val title = dialogView.findViewById<TextView>(R.id.overlayTitle)
     title.text = "Tasks on $monthName $day"
 
-    // Dummy task data, replace this with tasks and hours fetched form db
-    val tasks = listOf(
-      "Making the design" to "1h",
-      "Building the frontend" to "1h",
-      "Building the backend" to "1h 30m",
-      "Writing unit tests" to "30m"
-    )
+    val dbManager = DatabaseManager(this)
+    val selectedDate = currentYearMonth.atDay(day)
+    val startOfDay = selectedDate.atStartOfDay()
+    val endOfDay = selectedDate.atTime(23, 59)
 
-    for ((name, duration) in tasks) {
-      val taskRow = TextView(this).apply {
-        text = "$name - $duration"
-        setPadding(8, 8, 8, 8)
-        textSize = 16f
-        setTextColor(android.graphics.Color.BLACK)
+    dbManager.getTasksByTimeRange(startOfDay, endOfDay) { tasks ->
+      val completedTasks = tasks.filter { it.isCompleted }
+      container.removeAllViews()
+
+      completedTasks.forEach { task ->
+        val duration = java.time.Duration.between(task.startTime, task.endTime)
+        val hours = duration.toHours()
+        val minutes = duration.toMinutes() % 60
+        val durationStr = buildString {
+          if (hours > 0) append("${hours}h ")
+          if (minutes > 0) append("${minutes}m")
+        }
+
+        val taskRow = TextView(this).apply {
+          text = "${task.taskName} - $durationStr"
+          setPadding(8, 8, 8, 8)
+          textSize = 16f
+          setTextColor(android.graphics.Color.BLACK)
+        }
+
+        container.addView(taskRow)
       }
-      container.addView(taskRow)
-    }
 
-    dialog.show()
+      dialog.show()
+    }
   }
 
   private fun saveSelectedMonthYear() {
