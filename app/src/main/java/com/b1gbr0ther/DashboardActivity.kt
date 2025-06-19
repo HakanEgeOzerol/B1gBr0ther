@@ -102,7 +102,7 @@ class DashboardActivity : AppCompatActivity() {
             } else {
                 val taskId = timeTracker.getCurrentTaskId()
                 val taskName = timeTracker.getCurrentTaskName()
-                
+
                 if (taskName != null) {
                     currentTaskName = taskName
                     currentTaskId = taskId
@@ -127,6 +127,11 @@ class DashboardActivity : AppCompatActivity() {
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
+        
+        // Apply saved app theme before setting content view
+        ThemeManager.applyTheme(this)
+        appliedTheme = ThemeManager.getCurrentTheme(this)
+        
         enableEdgeToEdge()
         setContentView(R.layout.activity_dashboard)
 
@@ -201,11 +206,16 @@ class DashboardActivity : AppCompatActivity() {
         }
 
         findViewById<Button>(R.id.b1gBr0therButton).setOnClickListener {
-            //Used to be gesture activity. Change it to something else or nothing
+            val intent = Intent(this, SettingsActivity::class.java)
+            startActivity(intent)
         }
 
         simulateWakeWordButton.setOnClickListener {
-            checkPermissionAndStartRecognition()
+            if (simulateWakeWordButton.text == "Stop Voice Recognition") {
+                voiceRecognizerManager.stopRecognition()
+            } else {
+                checkPermissionAndStartRecognition()
+            }
         }
 
         startTaskChecker()
@@ -219,6 +229,20 @@ class DashboardActivity : AppCompatActivity() {
             onStatusUpdate = { status ->
                 runOnUiThread {
                     statusTextView.text = status
+                    // Update button text based on voice recognition status
+                    when {
+                        status.contains("Listening") -> {
+                            simulateWakeWordButton.text = "Stop Voice Recognition"
+                        }
+                        status.contains("disabled") || status.contains("permission") -> {
+                            simulateWakeWordButton.text = "Start Voice Recognition"
+                            simulateWakeWordButton.isEnabled = false
+                        }
+                        else -> {
+                            simulateWakeWordButton.text = "Start Voice Recognition"
+                            simulateWakeWordButton.isEnabled = true
+                        }
+                    }
                 }
             },
             onResult = { result ->
@@ -226,7 +250,15 @@ class DashboardActivity : AppCompatActivity() {
             },
             onError = { error ->
                 runOnUiThread {
-                    Toast.makeText(this, error, Toast.LENGTH_SHORT).show()
+                    if (error == "Voice recognition is disabled in settings") {
+                        statusTextView.text = "Voice recognition disabled"
+                        simulateWakeWordButton.text = "Start Voice Recognition"
+                        simulateWakeWordButton.isEnabled = false
+                    } else {
+                        Toast.makeText(this, error, Toast.LENGTH_SHORT).show()
+                        simulateWakeWordButton.text = "Start Voice Recognition"
+                        simulateWakeWordButton.isEnabled = true
+                    }
                 }
             }
         )
@@ -248,7 +280,33 @@ class DashboardActivity : AppCompatActivity() {
         }
 
         commandHandler = VoiceCommandHandler(this)
-        statusTextView.text = "Voice recognition ready"
+        updateVoiceRecognitionStatus()
+    }
+
+    private fun updateVoiceRecognitionStatus() {
+        val sharedPreferences = getSharedPreferences("B1gBr0therSettings", MODE_PRIVATE)
+        val isEnabled = SettingsActivity.isVoiceRecognitionEnabled(sharedPreferences)
+        val hasPermission = ContextCompat.checkSelfPermission(
+            this,
+            Manifest.permission.RECORD_AUDIO
+        ) == PackageManager.PERMISSION_GRANTED
+
+        if (!isEnabled) {
+            statusTextView.text = "Voice recognition disabled"
+            simulateWakeWordButton.text = "Start Voice Recognition"
+            simulateWakeWordButton.isEnabled = false
+            voiceRecognizerManager.stopRecognition()
+        } else if (!hasPermission) {
+            statusTextView.text = "Voice recognition permission required"
+            simulateWakeWordButton.text = "Start Voice Recognition"
+            simulateWakeWordButton.isEnabled = false
+            voiceRecognizerManager.stopRecognition()
+        } else {
+            statusTextView.text = "Press button to start voice recognition"
+            simulateWakeWordButton.text = "Start Voice Recognition"
+            simulateWakeWordButton.isEnabled = true
+            // Don't automatically start voice recognition
+        }
     }
 
     private fun checkPermissionAndStartRecognition() {
@@ -296,10 +354,36 @@ class DashboardActivity : AppCompatActivity() {
     fun startTrackingWithTask(taskName: String) {
         if (!timeTracker.isTracking()) {
             databaseManager.getAllTasks { tasks ->
-                val matchingTask = tasks.find { it.taskName.equals(taskName, ignoreCase = true) && !it.isCompleted }
+                // Enhanced task matching: tries exact, partial, reverse partial, and word-by-word matching
+                android.util.Log.d("VoiceCommand", "Looking for task: '$taskName'")
+                android.util.Log.d("VoiceCommand", "Available tasks: ${tasks.map { "${it.taskName} (completed: ${it.isCompleted})" }}")
+                
+                var matchingTask = tasks.find { it.taskName.equals(taskName, ignoreCase = true) && !it.isCompleted }
+                
+                if (matchingTask == null) {
+                    matchingTask = tasks.find { 
+                        it.taskName.contains(taskName, ignoreCase = true) && !it.isCompleted 
+                    }
+                }
+                
+                if (matchingTask == null) {
+                    matchingTask = tasks.find { task ->
+                        !task.isCompleted && taskName.contains(task.taskName, ignoreCase = true)
+                    }
+                }
+                
+                if (matchingTask == null) {
+                    val spokenWords = taskName.split(" ").filter { it.length > 2 }
+                    matchingTask = tasks.find { task ->
+                        !task.isCompleted && spokenWords.any { word -> 
+                            task.taskName.contains(word, ignoreCase = true) 
+                        }
+                    }
+                }
+                
                 if (matchingTask != null && !matchingTask.isCompleted) {
                     matchingTask.startTime = LocalDateTime.now()
-                    
+
                     databaseManager.updateTask(matchingTask) {
                         timeTracker.startTracking()
                         currentTaskName = matchingTask.taskName
@@ -311,7 +395,7 @@ class DashboardActivity : AppCompatActivity() {
                 } else if (matchingTask != null && matchingTask.isCompleted) {
                     Toast.makeText(this, "Task '${matchingTask.taskName}' is already completed", Toast.LENGTH_SHORT).show()
                 } else {
-                    Toast.makeText(this, "Task '$taskName' not found", Toast.LENGTH_SHORT).show()
+                    Toast.makeText(this, "Task '$taskName' not found. Available tasks: ${tasks.filter { !it.isCompleted }.map { it.taskName }.joinToString(", ")}", Toast.LENGTH_LONG).show()
                 }
             }
         } else {
@@ -345,7 +429,7 @@ class DashboardActivity : AppCompatActivity() {
                         "Task '${task.taskName}' completed. Time tracked: ${hoursElapsed}h ${minutesElapsed}m",
                         Toast.LENGTH_SHORT
                     ).show()
-                    
+
                     // Reset notification count when task is completed
                     notificationManager.resetNotificationCount(task.id)
                 }
@@ -372,7 +456,7 @@ class DashboardActivity : AppCompatActivity() {
                 if (tasks.isNotEmpty()) {
                     val currentTask = tasks.last()
                     currentTask.isBreak = true
-                    
+
                     databaseManager.updateTask(currentTask) {
                         Toast.makeText(this, "Break started", Toast.LENGTH_SHORT).show()
                         updateCurrentTask("On break")
@@ -395,7 +479,7 @@ class DashboardActivity : AppCompatActivity() {
                 if (tasks.isNotEmpty()) {
                     val currentTask = tasks.last()
                     currentTask.isBreak = false
-                    
+
                     databaseManager.updateTask(currentTask) {
                         Toast.makeText(this, "Break ended", Toast.LENGTH_SHORT).show()
                         updateCurrentTask("Currently busy with a task")
@@ -419,8 +503,19 @@ class DashboardActivity : AppCompatActivity() {
         return databaseManager
     }
 
+    private var appliedTheme: Int = -1
+
     override fun onResume() {
         super.onResume()
+
+        // Check if theme has changed and recreate if needed
+        val currentTheme = ThemeManager.getCurrentTheme(this)
+        if (appliedTheme != -1 && appliedTheme != currentTheme) {
+            android.util.Log.d("DashboardActivity", "Theme changed from $appliedTheme to $currentTheme - recreating activity")
+            recreate()
+            return
+        }
+        appliedTheme = currentTheme
 
         updateAllTasks()
 
@@ -432,20 +527,20 @@ class DashboardActivity : AppCompatActivity() {
             mockStartTime = System.currentTimeMillis()
             updateCurrentTaskDisplay()
         }
-        
-        statusTextView.text = "Voice recognition ready"
+
+        updateVoiceRecognitionStatus()
     }
 
     override fun onPause() {
         super.onPause()
-        voiceRecognizerManager.destroyRecognizer()
+        voiceRecognizerManager.stopRecognition()
         statusTextView.text = "Voice recognition stopped"
     }
 
     override fun onDestroy() {
         super.onDestroy()
         handler.removeCallbacks(timerRunnable)
-        voiceRecognizerManager.destroyRecognizer()
+        voiceRecognizerManager.stopRecognition()
     }
 
     private val sensorListener: SensorEventListener = object : SensorEventListener {
@@ -486,9 +581,9 @@ class DashboardActivity : AppCompatActivity() {
 
     private fun isActiveTask(): Boolean{
         try {
-             if(getActiveTask(this.allTasks) != null){
-                 return true
-             }
+            if(getActiveTask(this.allTasks) != null){
+                return true
+            }
         }
         catch (e: Exception){
             e.printStackTrace()
@@ -746,7 +841,7 @@ class DashboardActivity : AppCompatActivity() {
 
             databaseManager.createAppTask(newTask) { taskId ->
                 Toast.makeText(this, "Task saved to database with ID: $taskId", Toast.LENGTH_SHORT).show()
-                
+
                 if (startTime == LocalDateTime.now()) {
                     currentTaskName = name
                     currentTaskId = taskId
@@ -806,7 +901,7 @@ class DashboardActivity : AppCompatActivity() {
             Toast.makeText(this, "Task deleted", Toast.LENGTH_SHORT).show()
         }
     }
-        
+
     private fun handleSneeze() {
         //Implement sneeze logic here
         lastSneezeTime = System.currentTimeMillis()
@@ -851,5 +946,35 @@ class DashboardActivity : AppCompatActivity() {
     fun showTimesheetPage() {
         val intent = Intent(this, TimesheetActivity::class.java)
         startActivity(intent)
+    }
+
+    fun deleteTaskByName(taskName: String) {
+        databaseManager.getAllTasks { tasks ->
+            // Enhanced task matching: tries exact, partial, reverse partial, and word-by-word matching
+            var task = tasks.find { it.taskName.equals(taskName, ignoreCase = true) }
+            
+            if (task == null) {
+                task = tasks.find { it.taskName.contains(taskName, ignoreCase = true) }
+            }
+            
+            if (task == null) {
+                task = tasks.find { taskName.contains(it.taskName, ignoreCase = true) }
+            }
+            
+            if (task == null) {
+                val spokenWords = taskName.split(" ").filter { it.length > 2 }
+                task = tasks.find { t ->
+                    spokenWords.any { word -> t.taskName.contains(word, ignoreCase = true) }
+                }
+            }
+            
+            if (task != null) {
+                databaseManager.deleteTask(task) {
+                    Toast.makeText(this, "Task '${task.taskName}' deleted", Toast.LENGTH_SHORT).show()
+                }
+            } else {
+                Toast.makeText(this, "Could not find task with name '$taskName'. Available tasks: ${tasks.map { it.taskName }.joinToString(", ")}", Toast.LENGTH_LONG).show()
+            }
+        }
     }
 }
