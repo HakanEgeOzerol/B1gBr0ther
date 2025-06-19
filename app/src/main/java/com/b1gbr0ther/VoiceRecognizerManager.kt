@@ -25,13 +25,14 @@ class VoiceRecognizerManager(
     private val onError: (String) -> Unit) {
     companion object {
         private const val TAG = "VoiceRecognizerManager"
-        private const val NO_COMMAND_TIMEOUT = 15000L // 15 seconds timeout to allow for proper command detection
+        private const val NO_COMMAND_TIMEOUT = 15000L
         private const val MAX_CONSECUTIVE_ERRORS = 3
         private const val ERROR_RECOVERY_DELAY = 1000L
     }
     
     private var recognizer: SpeechRecognizer? = null
     private val blowDetector = BlowDetector()
+    private val sneezeDetector = SneezeDetector()
     private var onBlowDetected: (() -> Unit)? = null
     private var onSneezeDetected: (() -> Unit)? = null
     private var onUrinationDetected: (() -> Unit)? = null
@@ -59,17 +60,17 @@ class VoiceRecognizerManager(
 
     fun checkPermissionAndStart() {
         val sharedPreferences = context.getSharedPreferences("B1gBr0therSettings", Context.MODE_PRIVATE)
-        val isVoiceRecognitionEnabled = SettingsActivity.isVoiceRecognitionEnabled(sharedPreferences)
+        val audioMode = SettingsActivity.getAudioMode(sharedPreferences)
 
-        if (!isVoiceRecognitionEnabled) {
-            onStatusUpdate("Voice recognition disabled")
+        if (audioMode == SettingsActivity.AUDIO_MODE_OFF) {
+            onStatusUpdate("Audio features disabled")
             onError("Voice recognition is disabled in settings")
             return
         }
 
         if (ContextCompat.checkSelfPermission(context, Manifest.permission.RECORD_AUDIO)
             != PackageManager.PERMISSION_GRANTED) {
-            onStatusUpdate("Voice recognition permission required")
+            onStatusUpdate("Audio permission required")
             onError("Microphone permission required")
             return
         }
@@ -79,23 +80,33 @@ class VoiceRecognizerManager(
 
     fun startRecognition() {
         val sharedPreferences = context.getSharedPreferences("B1gBr0therSettings", Context.MODE_PRIVATE)
-        val isVoiceRecognitionEnabled = SettingsActivity.isVoiceRecognitionEnabled(sharedPreferences)
+        val audioMode = SettingsActivity.getAudioMode(sharedPreferences)
         val hasPermission = ContextCompat.checkSelfPermission(context, Manifest.permission.RECORD_AUDIO) == PackageManager.PERMISSION_GRANTED
 
-        if (!isVoiceRecognitionEnabled || !hasPermission) {
-            Log.w(TAG, "Cannot start recognition - enabled: $isVoiceRecognitionEnabled, permission: $hasPermission")
-            if (!isVoiceRecognitionEnabled) {
-                onStatusUpdate("Voice recognition disabled")
+        if (audioMode == SettingsActivity.AUDIO_MODE_OFF || !hasPermission) {
+            Log.w(TAG, "Cannot start recognition - audio mode: $audioMode, permission: $hasPermission")
+            if (audioMode == SettingsActivity.AUDIO_MODE_OFF) {
+                onStatusUpdate("Audio features disabled")
                 onError("Voice recognition is disabled in settings")
             } else {
-                onStatusUpdate("Voice recognition permission required")
+                val modeText = when (audioMode) {
+                    SettingsActivity.AUDIO_MODE_VOICE_COMMANDS -> "Voice commands"
+                    SettingsActivity.AUDIO_MODE_SOUND_DETECTION -> "Sound detection"
+                    else -> "Audio"
+                }
+                onStatusUpdate("$modeText permission required")
                 onError("Voice recognition is disabled or permission not granted")
             }
             return
         }
 
-        Log.d(TAG, "Starting recognition - using single microphone source...")
-        onStatusUpdate("Voice recognition ready")
+        Log.d(TAG, "Starting recognition - mode: $audioMode")
+        val statusMessage = when (audioMode) {
+            SettingsActivity.AUDIO_MODE_VOICE_COMMANDS -> "Voice recognition ready"
+            SettingsActivity.AUDIO_MODE_SOUND_DETECTION -> "Sound detection ready"
+            else -> "Audio ready"
+        }
+        onStatusUpdate(statusMessage)
 
         if (!SpeechRecognizer.isRecognitionAvailable(context)) {
             onError("Speech recognition not available on this device")
@@ -116,7 +127,15 @@ class VoiceRecognizerManager(
             startListening(createRecognitionIntent())
         }
         scheduleNoCommandTimeout()
-        onStatusUpdate("Listening... (say your command)")
+        
+        val sharedPreferences = context.getSharedPreferences("B1gBr0therSettings", Context.MODE_PRIVATE)
+        val audioMode = SettingsActivity.getAudioMode(sharedPreferences)
+        val listeningMessage = when (audioMode) {
+            SettingsActivity.AUDIO_MODE_VOICE_COMMANDS -> "Listening... (say your command)"
+            SettingsActivity.AUDIO_MODE_SOUND_DETECTION -> "Listening for sounds..."
+            else -> "Listening..."
+        }
+        onStatusUpdate(listeningMessage)
     }
 
     private fun createRecognitionIntent(): Intent {
@@ -144,12 +163,23 @@ class VoiceRecognizerManager(
     }
 
     private fun scheduleNoCommandTimeout() {
+        val sharedPreferences = context.getSharedPreferences("B1gBr0therSettings", Context.MODE_PRIVATE)
+        val audioMode = SettingsActivity.getAudioMode(sharedPreferences)
+        
         noCommandRunnable?.let { handler.removeCallbacks(it) }
-        noCommandRunnable = Runnable {
-            onStatusUpdate("Voice recognition timeout - stopping")
-            stopRecognition()
+        
+        if (audioMode == SettingsActivity.AUDIO_MODE_SOUND_DETECTION) {
+            // Sound Detection Mode - NO TIMEOUT, run continuously
+            Log.d(TAG, "Sound Detection Mode - no timeout scheduled")
+        } else {
+            // Voice Commands Mode - use timeout
+            noCommandRunnable = Runnable {
+                onStatusUpdate("Voice recognition timeout - stopping")
+                stopRecognition()
+            }
+            handler.postDelayed(noCommandRunnable!!, NO_COMMAND_TIMEOUT)
+            Log.d(TAG, "Voice Commands Mode - timeout scheduled for ${NO_COMMAND_TIMEOUT}ms")
         }
-        handler.postDelayed(noCommandRunnable!!, NO_COMMAND_TIMEOUT)
     }
 
     private fun handleRecognitionError(error: Int) {
@@ -163,12 +193,25 @@ class VoiceRecognizerManager(
             SpeechRecognizer.ERROR_RECOGNIZER_BUSY -> "Recognizer busy"
             SpeechRecognizer.ERROR_SERVER -> "Server error"
             SpeechRecognizer.ERROR_SPEECH_TIMEOUT -> "Listening..."
+            11 -> "Language not supported" // ERROR_LANGUAGE_NOT_SUPPORTED
             else -> "Unknown error: $error"
         }
 
+        val sharedPreferences = context.getSharedPreferences("B1gBr0therSettings", Context.MODE_PRIVATE)
+        val audioMode = SettingsActivity.getAudioMode(sharedPreferences)
+
+        if (audioMode == SettingsActivity.AUDIO_MODE_SOUND_DETECTION && 
+            (error == SpeechRecognizer.ERROR_NO_MATCH || error == SpeechRecognizer.ERROR_SPEECH_TIMEOUT)) {
+            Log.d(TAG, "Sound Detection Mode - expected error: $error ($msg)")
+        } else {
+            Log.w(TAG, "Recognition error: $error ($msg)")
+        }
+
+        // Critical errors that should stop recognition
         if (error == SpeechRecognizer.ERROR_INSUFFICIENT_PERMISSIONS ||
             error == SpeechRecognizer.ERROR_NETWORK ||
-            error == SpeechRecognizer.ERROR_SERVER) {
+            error == SpeechRecognizer.ERROR_SERVER ||
+            error == 11) { // Language not supported
             consecutiveErrorCount++
             if (consecutiveErrorCount >= MAX_CONSECUTIVE_ERRORS) {
                 onError("Voice recognition stopped: $msg")
@@ -177,15 +220,28 @@ class VoiceRecognizerManager(
             }
             onError(msg)
         } else {
+            // Non-critical errors - just continue listening
             onStatusUpdate(msg)
             if (isVoiceRecognitionActive && !isProcessingCommand) {
-                // Only restart if we still have time left in our session
-                if (System.currentTimeMillis() - sessionStartTime < NO_COMMAND_TIMEOUT - 2000L) {
-                    scheduleNoCommandTimeout()
-                    restartRecognition()
+                
+                if (audioMode == SettingsActivity.AUDIO_MODE_SOUND_DETECTION) {
+                    if (error == SpeechRecognizer.ERROR_AUDIO || 
+                        error == SpeechRecognizer.ERROR_RECOGNIZER_BUSY) {
+                        Log.d(TAG, "Sound Detection Mode - restarting after audio error")
+                        scheduleNoCommandTimeout()
+                        handler.postDelayed({ restartRecognition() }, 3000L)
+                    } else {
+                        Log.d(TAG, "Sound Detection Mode - ignoring non-critical error: $error")
+                    }
                 } else {
-                    onStatusUpdate("Voice recognition timeout - stopping")
-                    stopRecognition()
+                    // Voice Commands Mode - check timeout
+                    if (System.currentTimeMillis() - sessionStartTime < NO_COMMAND_TIMEOUT - 2000L) {
+                        scheduleNoCommandTimeout()
+                        restartRecognition()
+                    } else {
+                        onStatusUpdate("Voice recognition timeout - stopping")
+                        stopRecognition()
+                    }
                 }
             }
         }
@@ -195,20 +251,60 @@ class VoiceRecognizerManager(
         return object : RecognitionListener {
             override fun onReadyForSpeech(params: Bundle?) {
                 if (!isProcessingCommand) {
+                    val sharedPreferences = context.getSharedPreferences("B1gBr0therSettings", Context.MODE_PRIVATE)
+                    val audioMode = SettingsActivity.getAudioMode(sharedPreferences)
+                    
+                    Log.d(TAG, "onReadyForSpeech called - mode: $audioMode")
                     onStatusUpdate("Ready for speech")
-                    blowDetector.reset()
+                    
+                    if (audioMode == SettingsActivity.AUDIO_MODE_SOUND_DETECTION) {
+                        Log.d(TAG, "Sound Detection Mode - initializing detectors")
+                        blowDetector.reset()
+                        sneezeDetector.reset()
+                    } else {
+                        Log.d(TAG, "Voice Commands Mode - skipping detector initialization")
+                    }
                 }
             }
 
             override fun onBeginningOfSpeech() {
                 if (!isProcessingCommand) {
+                    Log.d(TAG, "onBeginningOfSpeech called")
                     onStatusUpdate("Speech started")
                 }
             }
 
             override fun onRmsChanged(rmsdB: Float) {
-                if (blowDetector.processAudioSample(rmsdB, System.currentTimeMillis())) {
-                    onBlowDetected?.invoke()
+                // Check audio mode setting
+                val sharedPreferences = context.getSharedPreferences("B1gBr0therSettings", Context.MODE_PRIVATE)
+                val audioMode = SettingsActivity.getAudioMode(sharedPreferences)
+                
+                if (rmsdB > 8.0f) {
+                    Log.d(TAG, "High RMS Level: $rmsdB dB (Mode: $audioMode)")
+                }
+                if (audioMode == SettingsActivity.AUDIO_MODE_SOUND_DETECTION) {
+                    val blowResult = blowDetector.processAudioSample(rmsdB, System.currentTimeMillis())
+                    if (blowResult) {
+                        Log.i(TAG, "BLOW DETECTED!")
+                        onBlowDetected?.invoke()
+                        handler.postDelayed({ stopRecognition() }, 1000L)
+                        return
+                    }
+                    
+                    val sneezeResult = sneezeDetector.processAudioSample(rmsdB, System.currentTimeMillis())
+                    if (rmsdB > 10.0f) {
+                        Log.d(TAG, "SneezeDetector processing: rmsdB=$rmsdB, result=$sneezeResult")
+                    }
+                    if (sneezeResult) {
+                        Log.i(TAG, "SNEEZE DETECTED!")
+                        onSneezeDetected?.invoke()
+                        handler.postDelayed({ stopRecognition() }, 1000L)
+                        return
+                    }
+                } else {
+                    if (rmsdB > 10.0f) {
+                        Log.d(TAG, "Voice Commands Mode - ignoring audio detection (rmsdB=$rmsdB)")
+                    }
                 }
             }
 
@@ -238,19 +334,33 @@ class VoiceRecognizerManager(
 
                 val spoken = bestMatch ?: matches?.firstOrNull().orEmpty()
 
+                // Check audio mode setting
+                val sharedPreferences = context.getSharedPreferences("B1gBr0therSettings", Context.MODE_PRIVATE)
+                val audioMode = SettingsActivity.getAudioMode(sharedPreferences)
+                
                 if (spoken.isNotEmpty()) {
-                    isProcessingCommand = true
-                    onResult(spoken)
-                    stopRecognition()
+                    if (audioMode == SettingsActivity.AUDIO_MODE_VOICE_COMMANDS) {
+                        // Voice Commands Mode - process command and stop
+                        isProcessingCommand = true
+                        onResult(spoken)
+                        stopRecognition()
+                    } else {
+                        Log.d(TAG, "Sound Detection Mode - ignoring voice command: $spoken")
+                    }
                 } else {
+                    // No speech detected
                     if (isVoiceRecognitionActive && !isProcessingCommand) {
-                        // Only restart if we still have time left in our session
-                        if (System.currentTimeMillis() - sessionStartTime < NO_COMMAND_TIMEOUT - 2000L) {
-                            scheduleNoCommandTimeout()
-                            restartRecognition()
+                        if (audioMode == SettingsActivity.AUDIO_MODE_SOUND_DETECTION) {
+                            Log.d(TAG, "Sound Detection Mode - no speech, continuing current session")
                         } else {
-                            onStatusUpdate("Voice recognition timeout - stopping")
-                            stopRecognition()
+                            // Voice Commands Mode - check timeout
+                            if (System.currentTimeMillis() - sessionStartTime < NO_COMMAND_TIMEOUT - 2000L) {
+                                scheduleNoCommandTimeout()
+                                restartRecognition()
+                            } else {
+                                onStatusUpdate("Voice recognition timeout - stopping")
+                                stopRecognition()
+                            }
                         }
                     }
                 }
@@ -298,12 +408,12 @@ class VoiceRecognizerManager(
         recognizer = null
         
         val sharedPreferences = context.getSharedPreferences("B1gBr0therSettings", Context.MODE_PRIVATE)
-        val isEnabled = SettingsActivity.isVoiceRecognitionEnabled(sharedPreferences)
-        val hasPermission = ContextCompat.checkSelfPermission(context, Manifest.permission.RECORD_AUDIO) == PackageManager.PERMISSION_GRANTED
+        val audioMode = SettingsActivity.getAudioMode(sharedPreferences)
 
         when {
-            !isEnabled -> onStatusUpdate("Voice recognition disabled")
-            !hasPermission -> onStatusUpdate("Voice recognition permission required")
+            audioMode == SettingsActivity.AUDIO_MODE_OFF -> onStatusUpdate("Audio features disabled")
+            audioMode == SettingsActivity.AUDIO_MODE_VOICE_COMMANDS -> onStatusUpdate("Press button to start voice commands")
+            audioMode == SettingsActivity.AUDIO_MODE_SOUND_DETECTION -> onStatusUpdate("Press button to start sound detection")
             else -> onStatusUpdate("Press button to start voice recognition")
         }
     }

@@ -22,6 +22,7 @@ class MainActivity : AppCompatActivity() {
         val goToButton = findViewById<Button>(R.id.goToButton)
         val btnDashboard = findViewById<Button>(R.id.btnDashboard)
         val btnDatabaseTest = findViewById<Button>(R.id.btnDatabaseTest)
+        val btnStatistics = findViewById<Button>(R.id.btnStatistics)
 
         goToButton.setOnClickListener {
 //            Used to send to handGesture activity. Not anymore. The entire class needs to go
@@ -33,7 +34,12 @@ class MainActivity : AppCompatActivity() {
         }
 
         btnDatabaseTest.setOnClickListener {
-            val intent = Intent(this, DatabaseTestActivity::class.java)
+            val intent = Intent(this, DatabaseTesterActivity::class.java)
+            startActivity(intent)
+        }
+        
+        btnStatistics.setOnClickListener {
+            val intent = Intent(this, StatisticsActivity::class.java)
             startActivity(intent)
         }
     }

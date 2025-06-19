@@ -11,6 +11,7 @@ class VoiceCommandHandler(private val activity: DashboardActivity) {
         "show export" to { activity.showExportPage() },
         "show manual" to { activity.showManualPage() },
         "show timesheet" to { activity.showTimesheetPage() },
+        "show statistics" to { activity.showStatisticsPage() },
     )
 
     private var lastSpokenCommand: String? = null

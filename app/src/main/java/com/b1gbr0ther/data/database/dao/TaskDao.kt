@@ -63,13 +63,62 @@ interface TaskDao {
     suspend fun getTasksByCompletionStatus(isCompleted: Boolean): List<Task>
     
     /**
-     * Get tasks by time range.
-     * @param startTime The start time of the range
-     * @param endTime The end time of the range
-     * @return A list of tasks with start times within the specified range
+     * Get tasks that fall within a specific time range.
+     * @param startTime The start of the time range
+     * @param endTime The end of the time range
+     * @return List of tasks with start times within the specified range
      */
     @Query("SELECT * FROM tasks WHERE startTime BETWEEN :startTime AND :endTime")
     suspend fun getTasksByTimeRange(startTime: LocalDateTime, endTime: LocalDateTime): List<Task>
+    
+    /**
+     * Get count of all completed tasks.
+     * @return Number of completed tasks
+     */
+    @Query("SELECT COUNT(*) FROM tasks WHERE isCompleted = 1")
+    suspend fun getCompletedTasksCount(): Int
+    
+    /**
+     * Get count of tasks completed late (endTime > startTime + expected duration).
+     * @return Number of late completed tasks
+     */
+    @Query("SELECT COUNT(*) FROM tasks WHERE isCompleted = 1 AND endTime > startTime")
+    suspend fun getLateCompletedTasksCount(): Int
+    
+    /**
+     * Get count of tasks completed on time (endTime <= startTime + expected duration).
+     * @return Number of on-time completed tasks
+     */
+    @Query("SELECT COUNT(*) FROM tasks WHERE isCompleted = 1 AND endTime <= startTime")
+    suspend fun getOnTimeCompletedTasksCount(): Int
+    
+    /**
+     * Get count of tasks completed early (endTime < startTime).
+     * @return Number of early completed tasks
+     */
+    @Query("SELECT COUNT(*) FROM tasks WHERE isCompleted = 1 AND endTime < startTime")
+    suspend fun getEarlyCompletedTasksCount(): Int
+    
+    /**
+     * Get count of uncompleted tasks.
+     * @return Number of uncompleted tasks
+     */
+    @Query("SELECT COUNT(*) FROM tasks WHERE isCompleted = 0")
+    suspend fun getUncompletedTasksCount(): Int
+    
+    /**
+     * Get count of tasks created via voice command.
+     * @return Number of voice-created tasks
+     */
+    @Query("SELECT COUNT(*) FROM tasks WHERE creationMethod = 'Voice'")
+    suspend fun getVoiceCreatedTasksCount(): Int
+    
+    /**
+     * Get count of tasks created via gesture.
+     * @return Number of gesture-created tasks
+     */
+    @Query("SELECT COUNT(*) FROM tasks WHERE creationMethod = 'Gesture'")
+    suspend fun getGestureCreatedTasksCount(): Int
     
     /**
      * Get tasks that are breaks.

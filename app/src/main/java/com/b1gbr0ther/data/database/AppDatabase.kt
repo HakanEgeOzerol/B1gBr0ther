@@ -13,7 +13,7 @@ import com.b1gbr0ther.data.database.entities.Task
  * Main database class for the B1gBr0ther app.
  * This is the primary access point for the Room database.
  */
-@Database(entities = [Task::class], version = 1, exportSchema = false)
+@Database(entities = [Task::class], version = 3, exportSchema = false)
 @TypeConverters(LocalDateTimeConverter::class)
 abstract class AppDatabase : RoomDatabase() {
     /**
@@ -37,6 +37,7 @@ abstract class AppDatabase : RoomDatabase() {
                     AppDatabase::class.java,
                     "b1gbr0ther_database"
                 )
+                // Add fallback migration strategy - recreates tables if needed
                 .fallbackToDestructiveMigration()
                 .build()
                 INSTANCE = instance

@@ -201,6 +201,7 @@ class ExportPage : AppCompatActivity() {
                 taskName = "Morning Planning",
                 startTime = java.time.LocalDateTime.now().minusHours(2),
                 endTime = java.time.LocalDateTime.now().minusHours(1).minusMinutes(30),
+                creationMethod = com.b1gbr0ther.CreationMethod.Gesture,
                 isPreplanned = true,
                 isCompleted = true,
                 isBreak = false
@@ -209,6 +210,7 @@ class ExportPage : AppCompatActivity() {
                 taskName = "Coffee Break",
                 startTime = java.time.LocalDateTime.now().minusHours(1).minusMinutes(30),
                 endTime = java.time.LocalDateTime.now().minusHours(1),
+                creationMethod = com.b1gbr0ther.CreationMethod.Gesture,
                 isPreplanned = false,
                 isCompleted = true,
                 isBreak = true
@@ -217,6 +219,7 @@ class ExportPage : AppCompatActivity() {
                 taskName = "Development Work",
                 startTime = java.time.LocalDateTime.now().minusHours(1),
                 endTime = java.time.LocalDateTime.now(),
+                creationMethod = com.b1gbr0ther.CreationMethod.Gesture,
                 isPreplanned = true,
                 isCompleted = false,
                 isBreak = false

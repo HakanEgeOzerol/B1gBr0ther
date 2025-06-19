@@ -14,6 +14,13 @@
         <item name="buttonTextColor">#C1A8B5</item>
     </style>
 
+    <style name="Theme.B1gBr0ther" parent="android:Theme.Material.Light.NoActionBar">
+        <!-- System bar colors -->
+        <item name="android:statusBarColor">@color/dashboard_background</item>
+        <item name="android:navigationBarColor">@color/dashboard_background</item>
+        <item name="android:windowLightStatusBar">false</item>
+        <item name="android:windowLightNavigationBar">false</item>
+    </style>
     <!-- Dark Theme (Dark Purple/Gray Theme) -->
     <style name="Theme.B1gBr0ther.Dark" parent="Theme.AppCompat.NoActionBar">
         <item name="colorPrimary">#6C6C6C</item>
@@ -27,7 +34,4 @@
         <item name="cardBackgroundColor">#3E3E42</item>
         <item name="buttonTextColor">#FFFFFF</item>
     </style>
-
-    <!-- Default theme - points to light -->
-    <style name="Theme.B1gBr0ther" parent="Theme.B1gBr0ther.Light" />
 </resources>
