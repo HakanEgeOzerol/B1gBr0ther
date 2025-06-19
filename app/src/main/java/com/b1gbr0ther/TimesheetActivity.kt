@@ -37,7 +37,7 @@ class TimesheetActivity : AppCompatActivity() {
       insets
     }
 
-    currentYearMonth = YearMonth.of(2021, 5) // change this to work with database
+    currentYearMonth = loadSelectedMonthYear()
     updateCalendarUI()
 
     val yearButton = findViewById<Button>(R.id.yearSelector)
@@ -54,11 +54,13 @@ class TimesheetActivity : AppCompatActivity() {
 
   private fun setCurrentMonth(month: Int) {
     currentYearMonth = YearMonth.of(currentYearMonth.year, month)
+    saveSelectedMonthYear()
     updateCalendarUI()
   }
 
   private fun setCurrentYear(year: Int) {
     currentYearMonth = YearMonth.of(year, currentYearMonth.monthValue)
+    saveSelectedMonthYear()
     updateCalendarUI()
   }
 
@@ -210,4 +212,20 @@ class TimesheetActivity : AppCompatActivity() {
 
     dialog.show()
   }
+
+  private fun saveSelectedMonthYear() {
+    val prefs = getSharedPreferences("TimesheetPrefs", MODE_PRIVATE)
+    val editor = prefs.edit()
+    editor.putInt("selectedYear", currentYearMonth.year)
+    editor.putInt("selectedMonth", currentYearMonth.monthValue)
+    editor.apply()
+  }
+
+  private fun loadSelectedMonthYear(): YearMonth {
+    val prefs = getSharedPreferences("TimesheetPrefs", MODE_PRIVATE)
+    val year = prefs.getInt("selectedYear", 2021)
+    val month = prefs.getInt("selectedMonth", 5)
+    return YearMonth.of(year, month)
+  }
+
 }
