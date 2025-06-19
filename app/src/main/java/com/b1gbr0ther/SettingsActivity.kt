@@ -58,7 +58,9 @@ class SettingsActivity : AppCompatActivity() {
         
         // Static methods to access settings from other activities
         fun getAudioMode(sharedPreferences: SharedPreferences): Int {
-            return sharedPreferences.getInt("audio_mode", AUDIO_MODE_OFF)
+            val mode = sharedPreferences.getInt("audio_mode", AUDIO_MODE_OFF)
+            android.util.Log.d("SettingsActivity", "getAudioMode() returning: $mode")
+            return mode
         }
         
         fun isVoiceRecognitionEnabled(sharedPreferences: SharedPreferences): Boolean {
@@ -581,6 +583,16 @@ class SettingsActivity : AppCompatActivity() {
         if (audioMode !in arrayOf(AUDIO_MODE_OFF, AUDIO_MODE_VOICE_COMMANDS, AUDIO_MODE_SOUND_DETECTION)) {
             android.util.Log.w("SettingsActivity", "Invalid audio mode detected, resetting to OFF")
             sharedPreferences.edit().putInt("audio_mode", AUDIO_MODE_OFF).apply()
+        }
+        
+        // For fresh installs, explicitly ensure we start with OFF mode
+        val isFirstRun = sharedPreferences.getBoolean("first_run", true)
+        if (isFirstRun) {
+            android.util.Log.i("SettingsActivity", "First run detected - ensuring audio mode is OFF")
+            sharedPreferences.edit()
+                .putInt("audio_mode", AUDIO_MODE_OFF)
+                .putBoolean("first_run", false)
+                .apply()
         }
     }
 

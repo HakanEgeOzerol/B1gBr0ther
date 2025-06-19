@@ -197,7 +197,19 @@ class VoiceRecognizerManager(
             else -> "Unknown error: $error"
         }
 
-        Log.w(TAG, "Recognition error: $error ($msg)")
+        // Check audio mode setting for context-specific logging
+        val sharedPreferences = context.getSharedPreferences("B1gBr0therSettings", Context.MODE_PRIVATE)
+        val audioMode = SettingsActivity.getAudioMode(sharedPreferences)
+
+        // Reduce log spam for expected errors in Sound Detection Mode
+        if (audioMode == SettingsActivity.AUDIO_MODE_SOUND_DETECTION && 
+            (error == SpeechRecognizer.ERROR_NO_MATCH || error == SpeechRecognizer.ERROR_SPEECH_TIMEOUT)) {
+            // These are expected in sound detection mode - only log at debug level
+            Log.d(TAG, "Sound Detection Mode - expected error: $error ($msg)")
+        } else {
+            // Log other errors at warning level
+            Log.w(TAG, "Recognition error: $error ($msg)")
+        }
 
         // Critical errors that should stop recognition
         if (error == SpeechRecognizer.ERROR_INSUFFICIENT_PERMISSIONS ||
@@ -215,8 +227,6 @@ class VoiceRecognizerManager(
             // Non-critical errors - just continue listening
             onStatusUpdate(msg)
             if (isVoiceRecognitionActive && !isProcessingCommand) {
-                val sharedPreferences = context.getSharedPreferences("B1gBr0therSettings", Context.MODE_PRIVATE)
-                val audioMode = SettingsActivity.getAudioMode(sharedPreferences)
                 
                 if (audioMode == SettingsActivity.AUDIO_MODE_SOUND_DETECTION) {
                     // Sound Detection Mode - CRITICAL: Don't restart on every error!
@@ -287,8 +297,11 @@ class VoiceRecognizerManager(
                     // Process blow detection with more logging
                     val blowResult = blowDetector.processAudioSample(rmsdB, System.currentTimeMillis())
                     if (blowResult) {
-                        Log.i(TAG, "BLOW DETECTED! Triggering callback...")
+                        Log.i(TAG, "BLOW DETECTED! Triggering callback and stopping recognition...")
                         onBlowDetected?.invoke()
+                        // Stop recognition after blow detection to prevent stuck state
+                        handler.postDelayed({ stopRecognition() }, 1000L)
+                        return // Exit early to prevent further processing
                     }
                     
                     // Process sneeze detection with detailed logging
@@ -297,9 +310,11 @@ class VoiceRecognizerManager(
                         Log.d(TAG, "SneezeDetector processing: rmsdB=$rmsdB, result=$sneezeResult")
                     }
                     if (sneezeResult) {
-                        Log.i(TAG, "SNEEZE DETECTED! Triggering callback...")
+                        Log.i(TAG, "SNEEZE DETECTED! Triggering callback and stopping recognition...")
                         onSneezeDetected?.invoke()
-                        // In sound detection mode, keep listening after sneeze (no stop)
+                        // Stop recognition after sneeze detection to prevent stuck state
+                        handler.postDelayed({ stopRecognition() }, 1000L)
+                        return // Exit early to prevent further processing
                     }
                 } else {
                     // Voice Commands Mode - completely skip audio detection (no detector calls at all)
@@ -418,8 +433,8 @@ class VoiceRecognizerManager(
 
         when {
             audioMode == SettingsActivity.AUDIO_MODE_OFF -> onStatusUpdate("Audio features disabled")
-            audioMode == SettingsActivity.AUDIO_MODE_VOICE_COMMANDS -> onStatusUpdate("Voice commands")
-            audioMode == SettingsActivity.AUDIO_MODE_SOUND_DETECTION -> onStatusUpdate("Sound detection")
+            audioMode == SettingsActivity.AUDIO_MODE_VOICE_COMMANDS -> onStatusUpdate("Press button to start voice commands")
+            audioMode == SettingsActivity.AUDIO_MODE_SOUND_DETECTION -> onStatusUpdate("Press button to start sound detection")
             else -> onStatusUpdate("Press button to start voice recognition")
         }
     }

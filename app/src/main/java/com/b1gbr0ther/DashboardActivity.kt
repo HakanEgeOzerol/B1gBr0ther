@@ -74,7 +74,18 @@ class DashboardActivity : AppCompatActivity() {
     private val requestPermissionLauncher =
         registerForActivityResult(ActivityResultContracts.RequestPermission()) { granted ->
             if (granted) {
-                startVoiceRecognition()
+                // When permission is granted for the first time, default to Voice Commands mode
+                val sharedPreferences = getSharedPreferences("B1gBr0therSettings", MODE_PRIVATE)
+                val currentMode = SettingsActivity.getAudioMode(sharedPreferences)
+                
+                // If currently OFF (first time setup), default to Voice Commands
+                if (currentMode == SettingsActivity.AUDIO_MODE_OFF) {
+                    sharedPreferences.edit().putInt("audio_mode", SettingsActivity.AUDIO_MODE_VOICE_COMMANDS).apply()
+                    Toast.makeText(this, "Voice Commands enabled by default", Toast.LENGTH_SHORT).show()
+                    updateVoiceRecognitionStatus() // Update UI to reflect new mode
+                } else {
+                    startVoiceRecognition()
+                }
             } else {
                 Toast.makeText(this, "Microphone permission is required for voice commands", Toast.LENGTH_SHORT).show()
             }

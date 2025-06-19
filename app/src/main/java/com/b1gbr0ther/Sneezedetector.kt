@@ -12,7 +12,7 @@ class SneezeDetector {
         private const val MAX_SNEEZE_DURATION = 1500L // 1.5 seconds maximum  
         private const val RAPID_ONSET_THRESHOLD = 3.0f // Lowered from 6.0f - Quick volume increase
         private const val COOLDOWN_PERIOD = 3000L // 3 seconds between detections
-        private const val STARTUP_GRACE_PERIOD = 2000L // 2 seconds to ignore microphone initialization spikes
+        private const val STARTUP_GRACE_PERIOD = 400L // 0.4 seconds to ignore microphone initialization spikes
     }
     
     private var isDetecting = false
