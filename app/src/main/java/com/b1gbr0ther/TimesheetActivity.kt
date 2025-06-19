@@ -1,5 +1,6 @@
 package com.b1gbr0ther
 
+import android.content.Intent
 import android.annotation.SuppressLint
 import com.b1gbr0ther.data.database.DatabaseManager
 import android.os.Bundle
@@ -27,6 +28,11 @@ class TimesheetActivity : AppCompatActivity() {
 
   override fun onCreate(savedInstanceState: Bundle?) {
     super.onCreate(savedInstanceState)
+    
+    // Apply saved theme before setting content view
+    ThemeManager.applyTheme(this)
+    appliedTheme = ThemeManager.getCurrentTheme(this)
+    
     enableEdgeToEdge()
     setContentView(R.layout.activity_timesheet)
 
@@ -51,6 +57,11 @@ class TimesheetActivity : AppCompatActivity() {
 
     monthButton.setOnClickListener {
       showMonthOverlay()
+    }
+
+    findViewById<Button>(R.id.b1gBr0therButton).setOnClickListener {
+      val intent = Intent(this, SettingsActivity::class.java)
+      startActivity(intent)
     }
   }
 
@@ -256,5 +267,4 @@ class TimesheetActivity : AppCompatActivity() {
     val month = prefs.getInt("selectedMonth", 5)  //default month is May
     return YearMonth.of(year, month)
   }
-
 }

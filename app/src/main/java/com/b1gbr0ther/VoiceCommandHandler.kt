@@ -2,71 +2,7 @@ package com.b1gbr0ther
 
 class VoiceCommandHandler(private val activity: DashboardActivity) {
 
-    private val commandAliases = mapOf(
-        "stop tracking" to listOf(
-            "stop tracking",
-            "end tracking",
-            "finish tracking",
-            "stop work",
-            "end work",
-            "finish work",
-            "stop working",
-            "end working"
-        ),
-        "start break" to listOf(
-            "log break",
-            "begin break",
-            "take break",
-            "take a break",
-            "start a break",
-            "begin a break",
-            "going on break",
-        ),
-        "stop break" to listOf(
-            "stop break",
-            "end break",
-            "finish break",
-            "stop the break",
-            "end the break",
-            "finish the break",
-            "break ended",
-            "break finished",
-            "break is over",
-            "breaks over",
-            "break over",
-            "done with break",
-            "finished break",
-            "handbreak",
-        ),
-        "show export" to listOf(
-            "show export",
-            "export data",
-            "open export",
-            "show exports",
-            "export page",
-            "open exports"
-        ),
-        "show manual" to listOf(
-            "show manual",
-            "open manual",
-            "show help",
-            "open help",
-            "help page",
-            "manual page"
-        ),
-        "show timesheet" to listOf(
-            "show timesheet",
-            "open timesheet",
-            "view timesheet",
-            "show time sheet",
-            "open time sheet",
-            "view time sheet",
-            "show my hours",
-            "view my hours",
-            "check timesheet",
-            "check my hours"
-        )
-    )
+    private val commandAliases = VoiceCommandAliases.commandAliases
 
     private val commandMap = mapOf(
         "stop tracking" to { activity.stopTracking() },
@@ -74,11 +10,32 @@ class VoiceCommandHandler(private val activity: DashboardActivity) {
         "stop break" to { activity.endBreak() },
         "show export" to { activity.showExportPage() },
         "show manual" to { activity.showManualPage() },
-        "show timesheet" to { activity.showTimesheetPage() }
+        "show timesheet" to { activity.showTimesheetPage() },
     )
+
+    private var lastSpokenCommand: String? = null
 
     fun handleCommand(spoken: String): Boolean {
         val normalizedInput = spoken.trim().lowercase()
+        
+        if (commandAliases["cancel command"]?.any { alias -> 
+            normalizedInput == alias || 
+            normalizedInput.contains(alias) 
+        } == true) {
+            lastSpokenCommand = null
+            return true
+        }
+
+        lastSpokenCommand = normalizedInput
+
+        if (normalizedInput.startsWith("delete task ") || normalizedInput.startsWith("remove task ")) {
+            val taskName = normalizedInput.substringAfter(" task ").trim()
+            if (taskName.isNotEmpty()) {
+                activity.deleteTaskByName(taskName)
+                return true
+            }
+            return false
+        }
 
         if (normalizedInput.startsWith("start tracking ") || normalizedInput.startsWith("begin tracking ")) {
             val taskName = normalizedInput.substringAfter(" tracking ").trim()
@@ -87,6 +44,24 @@ class VoiceCommandHandler(private val activity: DashboardActivity) {
                 return true
             }
             return false
+        }
+
+        // Enhanced flexible command parsing for various tracking patterns
+        if (normalizedInput.contains("track") && (normalizedInput.contains("task") || normalizedInput.contains("project"))) {
+            var taskName = ""
+            if (normalizedInput.contains(" task ")) {
+                taskName = normalizedInput.substringAfter(" task ").trim()
+            } else if (normalizedInput.contains(" project ")) {
+                taskName = normalizedInput.substringAfter(" project ").trim()
+            } else if (normalizedInput.contains("track ")) {
+                taskName = normalizedInput.substringAfter("track ").trim()
+                taskName = taskName.replace("the ", "").replace("my ", "").replace("a ", "").trim()
+            }
+            
+            if (taskName.isNotEmpty()) {
+                activity.startTrackingWithTask(taskName)
+                return true
+            }
         }
 
         commandMap[normalizedInput]?.let {
@@ -104,8 +79,6 @@ class VoiceCommandHandler(private val activity: DashboardActivity) {
         for ((mainCommand, aliases) in commandAliases) {
             if (aliases.any { alias -> 
                     isSimilar(normalizedInput, alias) || 
-                    normalizedInput.contains(alias) ||
-                    alias.contains(normalizedInput) ||
                     isSimilarWords(normalizedInput, alias)
                 }) {
                 commandMap[mainCommand]?.invoke()
