@@ -6,7 +6,6 @@ import android.os.Bundle
 import android.widget.Button
 import androidx.appcompat.app.AppCompatActivity
 import androidx.activity.enableEdgeToEdge
-import android.content.Context
 
 class MainActivity : AppCompatActivity() {
     private var appliedTheme: Int = -1

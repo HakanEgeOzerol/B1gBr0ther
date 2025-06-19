@@ -61,8 +61,8 @@
     <string name="tracking_started_for_task">Tracking started for: %1$s</string>
     <string name="no_tasks_available">No tasks available to track</string>
     <string name="already_tracking_task">Already tracking a task</string>
-    <string name="task_already_completed">Task '%1$s' is already completed</string>
-    <string name="task_not_found">Task '%1$s' not found. Available tasks: %2$s</string>
+    <string name="task_already_completed">Task \"%1$s\" is already completed</string>
+    <string name="task_not_found">Task \"%1$s\" not found. Available tasks: %2$s</string>
     <string name="no_active_tracking_session">No active tracking session</string>
     <string name="no_task_being_tracked">No task was being tracked</string>
     <string name="could_not_find_tracked_task">Could not find the task being tracked</string>
@@ -74,8 +74,8 @@
     <string name="task_saved_to_database">Task saved to database with ID: %1$d</string>
     <string name="task_marked_completed">Task marked as completed</string>
     <string name="task_deleted">Task deleted</string>
-    <string name="task_name_deleted">Task '%1$s' deleted</string>
-    <string name="could_not_find_task_with_name">Could not find task with name '%1$s'. Available tasks: %2$s</string>
+    <string name="task_name_deleted">Task \"%1$s\" deleted</string>
+    <string name="could_not_find_task_with_name">Could not find task with name \"%1$s\". Available tasks: %2$s</string>
     
     <!-- Voice recognition messages -->
     <string name="enjoy_smoke_break">Enjoy your smoke break!</string>

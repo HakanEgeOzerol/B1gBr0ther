@@ -1,0 +1,3942 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<issues format="6" by="lint 8.10.1" type="baseline" client="gradle" dependencies="false" name="AGP (8.10.1)" variant="all" version="8.10.1">
+
+    <issue
+        id="DefaultLocale"
+        message="Implicitly using the default locale is a common source of bugs: Use `String.format(Locale, ...)` instead"
+        errorLine1="        return String.format(&quot;%02d:%02d&quot;, minutes, seconds)"
+        errorLine2="               ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~">
+        <location
+            file="src/main/java/com/b1gbr0ther/DashboardActivity.kt"
+            line="103"
+            column="16"/>
+    </issue>
+
+    <issue
+        id="OldTargetApi"
+        message="Not targeting the latest versions of Android; compatibility modes apply. Consider testing and updating this version. Consult the `android.os.Build.VERSION_CODES` javadoc for details."
+        errorLine1="        targetSdk = 34"
+        errorLine2="        ~~~~~~~~~~~~~~">
+        <location
+            file="build.gradle.kts"
+            line="20"
+            column="9"/>
+    </issue>
+
+    <issue
+        id="AppBundleLocaleChanges"
+        message="Found dynamic locale changes, but did not find corresponding Play Core library calls for downloading languages and splitting by language is not disabled in the `bundle` configuration"
+        errorLine1="        config.setLocale(locale)"
+        errorLine2="        ~~~~~~~~~~~~~~~~~~~~~~~~">
+        <location
+            file="src/main/java/com/b1gbr0ther/LocaleHelper.kt"
+            line="56"
+            column="9"/>
+    </issue>
+
+    <issue
+        id="RedundantLabel"
+        message="Redundant label can be removed"
+        errorLine1="            android:label=&quot;@string/app_name&quot;>"
+        errorLine2="            ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~">
+        <location
+            file="src/main/AndroidManifest.xml"
+            line="22"
+            column="13"/>
+    </issue>
+
+    <issue
+        id="UseSwitchCompatOrMaterialCode"
+        message="Use `SwitchCompat` from AppCompat or `MaterialSwitch` from Material library"
+        errorLine1="    private lateinit var notificationsSwitch: Switch"
+        errorLine2="    ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~">
+        <location
+            file="src/main/java/com/b1gbr0ther/SettingsActivity.kt"
+            line="35"
+            column="5"/>
+    </issue>
+
+    <issue
+        id="UseSwitchCompatOrMaterialCode"
+        message="Use `SwitchCompat` from AppCompat or `MaterialSwitch` from Material library"
+        errorLine1="    private lateinit var accelerometerSwitch: Switch"
+        errorLine2="    ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~">
+        <location
+            file="src/main/java/com/b1gbr0ther/SettingsActivity.kt"
+            line="36"
+            column="5"/>
+    </issue>
+
+    <issue
+        id="UseSwitchCompatOrMaterialCode"
+        message="Use `SwitchCompat` from AppCompat or `MaterialSwitch` from Material library"
+        errorLine1="    private lateinit var blowDetectionSwitch: Switch"
+        errorLine2="    ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~">
+        <location
+            file="src/main/java/com/b1gbr0ther/SettingsActivity.kt"
+            line="37"
+            column="5"/>
+    </issue>
+
+    <issue
+        id="UseSwitchCompatOrMaterialCode"
+        message="Use `SwitchCompat` from AppCompat or `MaterialSwitch` from Material library"
+        errorLine1="    private lateinit var sneezeDetectionSwitch: Switch"
+        errorLine2="    ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~">
+        <location
+            file="src/main/java/com/b1gbr0ther/SettingsActivity.kt"
+            line="38"
+            column="5"/>
+    </issue>
+
+    <issue
+        id="UseSwitchCompatOrMaterialCode"
+        message="Use `SwitchCompat` from AppCompat or `MaterialSwitch` from Material library"
+        errorLine1="    private lateinit var darkThemeSwitch: Switch"
+        errorLine2="    ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~">
+        <location
+            file="src/main/java/com/b1gbr0ther/SettingsActivity.kt"
+            line="43"
+            column="5"/>
+    </issue>
+
+    <issue
+        id="UseSwitchCompatOrMaterialXml"
+        message="Use `SwitchCompat` from AppCompat or `MaterialSwitch` from Material library"
+        errorLine1="                &lt;Switch"
+        errorLine2="                ^">
+        <location
+            file="src/main/res/layout/activity_settings.xml"
+            line="68"
+            column="17"/>
+    </issue>
+
+    <issue
+        id="UseSwitchCompatOrMaterialXml"
+        message="Use `SwitchCompat` from AppCompat or `MaterialSwitch` from Material library"
+        errorLine1="                &lt;Switch"
+        errorLine2="                ^">
+        <location
+            file="src/main/res/layout/activity_settings.xml"
+            line="182"
+            column="17"/>
+    </issue>
+
+    <issue
+        id="UseSwitchCompatOrMaterialXml"
+        message="Use `SwitchCompat` from AppCompat or `MaterialSwitch` from Material library"
+        errorLine1="                &lt;Switch"
+        errorLine2="                ^">
+        <location
+            file="src/main/res/layout/activity_settings.xml"
+            line="213"
+            column="17"/>
+    </issue>
+
+    <issue
+        id="UseSwitchCompatOrMaterialXml"
+        message="Use `SwitchCompat` from AppCompat or `MaterialSwitch` from Material library"
+        errorLine1="                &lt;Switch"
+        errorLine2="                ^">
+        <location
+            file="src/main/res/layout/activity_settings.xml"
+            line="234"
+            column="17"/>
+    </issue>
+
+    <issue
+        id="UseSwitchCompatOrMaterialXml"
+        message="Use `SwitchCompat` from AppCompat or `MaterialSwitch` from Material library"
+        errorLine1="                &lt;Switch"
+        errorLine2="                ^">
+        <location
+            file="src/main/res/layout/activity_settings.xml"
+            line="255"
+            column="17"/>
+    </issue>
+
+    <issue
+        id="GradleDependency"
+        message="A newer version of `compileSdkVersion` than 34 is available: 35"
+        errorLine1="    compileSdk = 34"
+        errorLine2="    ~~~~~~~~~~~~~~~">
+        <location
+            file="build.gradle.kts"
+            line="15"
+            column="5"/>
+    </issue>
+
+    <issue
+        id="GradleDependency"
+        message="A newer version of androidx.navigation:navigation-fragment-ktx than 2.7.7 is available: 2.9.0"
+        errorLine1="    implementation(&quot;androidx.navigation:navigation-fragment-ktx:2.7.7&quot;)"
+        errorLine2="                   ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~">
+        <location
+            file="build.gradle.kts"
+            line="83"
+            column="20"/>
+    </issue>
+
+    <issue
+        id="GradleDependency"
+        message="A newer version of androidx.navigation:navigation-ui-ktx than 2.7.7 is available: 2.9.0"
+        errorLine1="    implementation(&quot;androidx.navigation:navigation-ui-ktx:2.7.7&quot;)"
+        errorLine2="                   ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~">
+        <location
+            file="build.gradle.kts"
+            line="84"
+            column="20"/>
+    </issue>
+
+    <issue
+        id="GradleDependency"
+        message="A newer version of androidx.core:core-ktx than 1.13.1 is available: 1.16.0"
+        errorLine1="coreKtx = &quot;1.13.1&quot; #This was downgraded cause comp issues. 1.14.0 was not running. Latest version allegedly"
+        errorLine2="          ~~~~~~~~">
+        <location
+            file="$HOME/Documents/GitHub/B1gBr0ther/gradle/libs.versions.toml"
+            line="4"
+            column="11"/>
+    </issue>
+
+    <issue
+        id="GradleDependency"
+        message="A newer version of androidx.lifecycle:lifecycle-runtime-ktx than 2.8.7 is available: 2.9.1"
+        errorLine1="lifecycleRuntimeKtx = &quot;2.8.7&quot;"
+        errorLine2="                      ~~~~~~~">
+        <location
+            file="$HOME/Documents/GitHub/B1gBr0ther/gradle/libs.versions.toml"
+            line="8"
+            column="23"/>
+    </issue>
+
+    <issue
+        id="GradleDependency"
+        message="A newer version of androidx.activity:activity-compose than 1.9.3 is available: 1.10.1"
+        errorLine1="activityCompose = &quot;1.9.3&quot; #This version was changed from defaul for compatibility issues (downgrade)"
+        errorLine2="                  ~~~~~~~">
+        <location
+            file="$HOME/Documents/GitHub/B1gBr0ther/gradle/libs.versions.toml"
+            line="9"
+            column="19"/>
+    </issue>
+
+    <issue
+        id="GradleDependency"
+        message="A newer version of androidx.compose:compose-bom than 2024.09.00 is available: 2025.06.01"
+        errorLine1="composeBom = &quot;2024.09.00&quot;"
+        errorLine2="             ~~~~~~~~~~~~">
+        <location
+            file="$HOME/Documents/GitHub/B1gBr0ther/gradle/libs.versions.toml"
+            line="10"
+            column="14"/>
+    </issue>
+
+    <issue
+        id="GradleDependency"
+        message="A newer version of androidx.appcompat:appcompat than 1.7.0 is available: 1.7.1"
+        errorLine1="appcompat = &quot;1.7.0&quot;"
+        errorLine2="            ~~~~~~~">
+        <location
+            file="$HOME/Documents/GitHub/B1gBr0ther/gradle/libs.versions.toml"
+            line="11"
+            column="13"/>
+    </issue>
+
+    <issue
+        id="GradleDependency"
+        message="A newer version of com.google.android.material:material than 1.10.0 is available: 1.12.0"
+        errorLine1="material = &quot;1.10.0&quot;"
+        errorLine2="           ~~~~~~~~">
+        <location
+            file="$HOME/Documents/GitHub/B1gBr0ther/gradle/libs.versions.toml"
+            line="12"
+            column="12"/>
+    </issue>
+
+    <issue
+        id="GradleDependency"
+        message="A newer version of androidx.activity:activity than 1.8.0 is available: 1.10.1"
+        errorLine1="activity = &quot;1.8.0&quot;"
+        errorLine2="           ~~~~~~~">
+        <location
+            file="$HOME/Documents/GitHub/B1gBr0ther/gradle/libs.versions.toml"
+            line="13"
+            column="12"/>
+    </issue>
+
+    <issue
+        id="GradleDependency"
+        message="A newer version of androidx.constraintlayout:constraintlayout than 2.1.4 is available: 2.2.1"
+        errorLine1="constraintlayout = &quot;2.1.4&quot;"
+        errorLine2="                   ~~~~~~~">
+        <location
+            file="$HOME/Documents/GitHub/B1gBr0ther/gradle/libs.versions.toml"
+            line="14"
+            column="20"/>
+    </issue>
+
+    <issue
+        id="GradleDependency"
+        message="A newer version of androidx.room:room-compiler than 2.6.1 is available: 2.7.2"
+        errorLine1="room = &quot;2.6.1&quot;"
+        errorLine2="       ~~~~~~~">
+        <location
+            file="$HOME/Documents/GitHub/B1gBr0ther/gradle/libs.versions.toml"
+            line="15"
+            column="8"/>
+    </issue>
+
+    <issue
+        id="GradleDependency"
+        message="A newer version of androidx.room:room-ktx than 2.6.1 is available: 2.7.2"
+        errorLine1="room = &quot;2.6.1&quot;"
+        errorLine2="       ~~~~~~~">
+        <location
+            file="$HOME/Documents/GitHub/B1gBr0ther/gradle/libs.versions.toml"
+            line="15"
+            column="8"/>
+    </issue>
+
+    <issue
+        id="GradleDependency"
+        message="A newer version of androidx.room:room-runtime than 2.6.1 is available: 2.7.2"
+        errorLine1="room = &quot;2.6.1&quot;"
+        errorLine2="       ~~~~~~~">
+        <location
+            file="$HOME/Documents/GitHub/B1gBr0ther/gradle/libs.versions.toml"
+            line="15"
+            column="8"/>
+    </issue>
+
+    <issue
+        id="UseAppTint"
+        message="Must use `app:tint` instead of `android:tint`"
+        errorLine1="            android:tint=&quot;#FFFFFF&quot;"
+        errorLine2="            ~~~~~~~~~~~~~~~~~~~~~~">
+        <location
+            file="src/main/res/layout/menu_bar.xml"
+            line="29"
+            column="13"/>
+    </issue>
+
+    <issue
+        id="UseAppTint"
+        message="Must use `app:tint` instead of `android:tint`"
+        errorLine1="            android:tint=&quot;#FFFFFF&quot;"
+        errorLine2="            ~~~~~~~~~~~~~~~~~~~~~~">
+        <location
+            file="src/main/res/layout/menu_bar.xml"
+            line="53"
+            column="13"/>
+    </issue>
+
+    <issue
+        id="UseAppTint"
+        message="Must use `app:tint` instead of `android:tint`"
+        errorLine1="            android:tint=&quot;#FFFFFF&quot;"
+        errorLine2="            ~~~~~~~~~~~~~~~~~~~~~~">
+        <location
+            file="src/main/res/layout/menu_bar.xml"
+            line="77"
+            column="13"/>
+    </issue>
+
+    <issue
+        id="UseAppTint"
+        message="Must use `app:tint` instead of `android:tint`"
+        errorLine1="            android:tint=&quot;#FFFFFF&quot;"
+        errorLine2="            ~~~~~~~~~~~~~~~~~~~~~~">
+        <location
+            file="src/main/res/layout/menu_bar.xml"
+            line="101"
+            column="13"/>
+    </issue>
+
+    <issue
+        id="MissingTranslation"
+        message="&quot;statistics_title&quot; is not translated in &quot;fr&quot; (French)"
+        errorLine1="    &lt;string name=&quot;statistics_title&quot;>Statistics&lt;/string>"
+        errorLine2="            ~~~~~~~~~~~~~~~~~~~~~~~">
+        <location
+            file="src/main/res/values/strings_statistics.xml"
+            line="3"
+            column="13"/>
+    </issue>
+
+    <issue
+        id="MissingTranslation"
+        message="&quot;task_completion&quot; is not translated in &quot;fr&quot; (French)"
+        errorLine1="    &lt;string name=&quot;task_completion&quot;>Task Completion&lt;/string>"
+        errorLine2="            ~~~~~~~~~~~~~~~~~~~~~~">
+        <location
+            file="src/main/res/values/strings_statistics.xml"
+            line="4"
+            column="13"/>
+    </issue>
+
+    <issue
+        id="MissingTranslation"
+        message="&quot;task_timing&quot; is not translated in &quot;fr&quot; (French)"
+        errorLine1="    &lt;string name=&quot;task_timing&quot;>Task Timing&lt;/string>"
+        errorLine2="            ~~~~~~~~~~~~~~~~~~">
+        <location
+            file="src/main/res/values/strings_statistics.xml"
+            line="5"
+            column="13"/>
+    </issue>
+
+    <issue
+        id="MissingTranslation"
+        message="&quot;creation_methods&quot; is not translated in &quot;fr&quot; (French)"
+        errorLine1="    &lt;string name=&quot;creation_methods&quot;>Creation Methods&lt;/string>"
+        errorLine2="            ~~~~~~~~~~~~~~~~~~~~~~~">
+        <location
+            file="src/main/res/values/strings_statistics.xml"
+            line="6"
+            column="13"/>
+    </issue>
+
+    <issue
+        id="MissingTranslation"
+        message="&quot;quick_stats&quot; is not translated in &quot;fr&quot; (French)"
+        errorLine1="    &lt;string name=&quot;quick_stats&quot;>Quick Stats&lt;/string>"
+        errorLine2="            ~~~~~~~~~~~~~~~~~~">
+        <location
+            file="src/main/res/values/strings_statistics.xml"
+            line="7"
+            column="13"/>
+    </issue>
+
+    <issue
+        id="MissingTranslation"
+        message="&quot;total_tasks&quot; is not translated in &quot;fr&quot; (French)"
+        errorLine1="    &lt;string name=&quot;total_tasks&quot;>Total Tasks&lt;/string>"
+        errorLine2="            ~~~~~~~~~~~~~~~~~~">
+        <location
+            file="src/main/res/values/strings_statistics.xml"
+            line="8"
+            column="13"/>
+    </issue>
+
+    <issue
+        id="MissingTranslation"
+        message="&quot;tasks_completed&quot; is not translated in &quot;fr&quot; (French)"
+        errorLine1="    &lt;string name=&quot;tasks_completed&quot;>Tasks Completed&lt;/string>"
+        errorLine2="            ~~~~~~~~~~~~~~~~~~~~~~">
+        <location
+            file="src/main/res/values/strings_statistics.xml"
+            line="9"
+            column="13"/>
+    </issue>
+
+    <issue
+        id="MissingTranslation"
+        message="&quot;completion_rate&quot; is not translated in &quot;fr&quot; (French)"
+        errorLine1="    &lt;string name=&quot;completion_rate&quot;>Completion Rate&lt;/string>"
+        errorLine2="            ~~~~~~~~~~~~~~~~~~~~~~">
+        <location
+            file="src/main/res/values/strings_statistics.xml"
+            line="10"
+            column="13"/>
+    </issue>
+
+    <issue
+        id="MissingTranslation"
+        message="&quot;uncompleted&quot; is not translated in &quot;fr&quot; (French) or &quot;nl&quot; (Dutch)"
+        errorLine1="    &lt;string name=&quot;uncompleted&quot;>Uncompleted&lt;/string>"
+        errorLine2="            ~~~~~~~~~~~~~~~~~~">
+        <location
+            file="src/main/res/values/strings_statistics.xml"
+            line="11"
+            column="13"/>
+    </issue>
+
+    <issue
+        id="MissingTranslation"
+        message="&quot;on_time&quot; is not translated in &quot;fr&quot; (French) or &quot;nl&quot; (Dutch)"
+        errorLine1="    &lt;string name=&quot;on_time&quot;>On Time&lt;/string>"
+        errorLine2="            ~~~~~~~~~~~~~~">
+        <location
+            file="src/main/res/values/strings_statistics.xml"
+            line="12"
+            column="13"/>
+    </issue>
+
+    <issue
+        id="MissingTranslation"
+        message="&quot;late&quot; is not translated in &quot;fr&quot; (French) or &quot;nl&quot; (Dutch)"
+        errorLine1="    &lt;string name=&quot;late&quot;>Late&lt;/string>"
+        errorLine2="            ~~~~~~~~~~~">
+        <location
+            file="src/main/res/values/strings_statistics.xml"
+            line="13"
+            column="13"/>
+    </issue>
+
+    <issue
+        id="MissingTranslation"
+        message="&quot;early&quot; is not translated in &quot;fr&quot; (French) or &quot;nl&quot; (Dutch)"
+        errorLine1="    &lt;string name=&quot;early&quot;>Early&lt;/string>"
+        errorLine2="            ~~~~~~~~~~~~">
+        <location
+            file="src/main/res/values/strings_statistics.xml"
+            line="14"
+            column="13"/>
+    </issue>
+
+    <issue
+        id="MissingTranslation"
+        message="&quot;voice&quot; is not translated in &quot;fr&quot; (French) or &quot;nl&quot; (Dutch)"
+        errorLine1="    &lt;string name=&quot;voice&quot;>Voice&lt;/string>"
+        errorLine2="            ~~~~~~~~~~~~">
+        <location
+            file="src/main/res/values/strings_statistics.xml"
+            line="15"
+            column="13"/>
+    </issue>
+
+    <issue
+        id="MissingTranslation"
+        message="&quot;gesture&quot; is not translated in &quot;fr&quot; (French) or &quot;nl&quot; (Dutch)"
+        errorLine1="    &lt;string name=&quot;gesture&quot;>Gesture&lt;/string>"
+        errorLine2="            ~~~~~~~~~~~~~~">
+        <location
+            file="src/main/res/values/strings_statistics.xml"
+            line="16"
+            column="13"/>
+    </issue>
+
+    <issue
+        id="MissingTranslation"
+        message="&quot;no_data_available&quot; is not translated in &quot;fr&quot; (French) or &quot;nl&quot; (Dutch)"
+        errorLine1="    &lt;string name=&quot;no_data_available&quot;>No data available&lt;/string>"
+        errorLine2="            ~~~~~~~~~~~~~~~~~~~~~~~~">
+        <location
+            file="src/main/res/values/strings_statistics.xml"
+            line="17"
+            column="13"/>
+    </issue>
+
+    <issue
+        id="MissingTranslation"
+        message="&quot;completion_stats_format&quot; is not translated in &quot;fr&quot; (French) or &quot;nl&quot; (Dutch)"
+        errorLine1="    &lt;string name=&quot;completion_stats_format&quot;>Completed: %1$s / Uncompleted: %2$s&lt;/string>"
+        errorLine2="            ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~">
+        <location
+            file="src/main/res/values/strings_statistics.xml"
+            line="18"
+            column="13"/>
+    </issue>
+
+    <issue
+        id="Typos"
+        message="&quot;ther&quot; is a common misspelling; did you mean &quot;there&quot; or &quot;their&quot; or &quot;the&quot;?"
+        errorLine1="    &lt;string name=&quot;app_name&quot;>B1gBr0ther&lt;/string>"
+        errorLine2="                                  ^">
+        <location
+            file="src/main/res/values/strings.xml"
+            line="2"
+            column="35"/>
+    </issue>
+
+    <issue
+        id="Typos"
+        message="&quot;Ok&quot; is usually capitalized as &quot;OK&quot;"
+        errorLine1="    &lt;string name=&quot;ok&quot;>Ok&lt;/string>"
+        errorLine2="                      ^">
+        <location
+            file="src/main/res/values/strings.xml"
+            line="47"
+            column="23"/>
+    </issue>
+
+    <issue
+        id="PluralsCandidate"
+        message="Formatting %d followed by words (&quot;tasks&quot;): This should probably be a plural rather than a string"
+        errorLine1="    &lt;string name=&quot;exported_tasks&quot;>Exported %1$d tasks as %2$s&lt;/string>"
+        errorLine2="    ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~">
+        <location
+            file="src/main/res/values/strings.xml"
+            line="87"
+            column="5"/>
+    </issue>
+
+    <issue
+        id="PluralsCandidate"
+        message="Formatting %d followed by words (&quot;sample&quot;): This should probably be a plural rather than a string"
+        errorLine1="    &lt;string name=&quot;created_sample_tasks&quot;>Created %1$d sample tasks&lt;/string>"
+        errorLine2="    ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~">
+        <location
+            file="src/main/res/values/strings.xml"
+            line="90"
+            column="5"/>
+    </issue>
+
+    <issue
+        id="NotifyDataSetChanged"
+        message="It will always be more efficient to use more specific change events if you can. Rely on `notifyDataSetChanged` as a last resort."
+        errorLine1="        notifyDataSetChanged()"
+        errorLine2="        ~~~~~~~~~~~~~~~~~~~~~~">
+        <location
+            file="src/main/java/com/b1gbr0ther/adapters/TaskAdapter.kt"
+            line="26"
+            column="9"/>
+    </issue>
+
+    <issue
+        id="NotifyDataSetChanged"
+        message="It will always be more efficient to use more specific change events if you can. Rely on `notifyDataSetChanged` as a last resort."
+        errorLine1="        notifyDataSetChanged()"
+        errorLine2="        ~~~~~~~~~~~~~~~~~~~~~~">
+        <location
+            file="src/main/java/com/b1gbr0ther/ui/TaskAdapter.kt"
+            line="66"
+            column="9"/>
+    </issue>
+
+    <issue
+        id="NotifyDataSetChanged"
+        message="It will always be more efficient to use more specific change events if you can. Rely on `notifyDataSetChanged` as a last resort."
+        errorLine1="        notifyDataSetChanged()"
+        errorLine2="        ~~~~~~~~~~~~~~~~~~~~~~">
+        <location
+            file="src/main/java/com/b1gbr0ther/ui/TaskAdapter.kt"
+            line="76"
+            column="9"/>
+    </issue>
+
+    <issue
+        id="NotifyDataSetChanged"
+        message="It will always be more efficient to use more specific change events if you can. Rely on `notifyDataSetChanged` as a last resort."
+        errorLine1="        notifyDataSetChanged()"
+        errorLine2="        ~~~~~~~~~~~~~~~~~~~~~~">
+        <location
+            file="src/main/java/com/b1gbr0ther/ui/TaskAdapter.kt"
+            line="82"
+            column="9"/>
+    </issue>
+
+    <issue
+        id="ObsoleteSdkInt"
+        message="Unnecessary; `SDK_INT` is always >= 31"
+        errorLine1="        tools:targetApi=&quot;31&quot;>"
+        errorLine2="        ~~~~~~~~~~~~~~~~~~~~">
+        <location
+            file="src/main/AndroidManifest.xml"
+            line="18"
+            column="9"/>
+    </issue>
+
+    <issue
+        id="ObsoleteSdkInt"
+        message="Unnecessary; `SDK_INT` is always >= 34"
+        errorLine1="        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.TIRAMISU) {"
+        errorLine2="            ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~">
+        <location
+            file="src/main/java/com/b1gbr0ther/DashboardActivity.kt"
+            line="1020"
+            column="13"/>
+    </issue>
+
+    <issue
+        id="ObsoleteSdkInt"
+        message="Unnecessary; `SDK_INT` is always >= 34"
+        errorLine1="        return if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.N) {"
+        errorLine2="                   ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~">
+        <location
+            file="src/main/java/com/b1gbr0ther/LocaleHelper.kt"
+            line="58"
+            column="20"/>
+    </issue>
+
+    <issue
+        id="ObsoleteSdkInt"
+        message="Unnecessary; `SDK_INT` is always >= 34"
+        errorLine1="        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.TIRAMISU) {"
+        errorLine2="            ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~">
+        <location
+            file="src/main/java/com/b1gbr0ther/SettingsActivity.kt"
+            line="399"
+            column="13"/>
+    </issue>
+
+    <issue
+        id="ObsoleteSdkInt"
+        message="Unnecessary; `SDK_INT` is always >= 34"
+        errorLine1="                if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.TIRAMISU) {"
+        errorLine2="                    ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~">
+        <location
+            file="src/main/java/com/b1gbr0ther/SettingsActivity.kt"
+            line="425"
+            column="21"/>
+    </issue>
+
+    <issue
+        id="ObsoleteSdkInt"
+        message="Unnecessary; `SDK_INT` is always >= 34"
+        errorLine1="        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.O) {"
+        errorLine2="            ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~">
+        <location
+            file="src/main/java/com/b1gbr0ther/notifications/TaskNotificationManager.kt"
+            line="29"
+            column="13"/>
+    </issue>
+
+    <issue
+        id="ObsoleteSdkInt"
+        message="Unnecessary; `SDK_INT` is always >= 34"
+        errorLine1="        dynamicColor &amp;&amp; Build.VERSION.SDK_INT >= Build.VERSION_CODES.S -> {"
+        errorLine2="                        ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~">
+        <location
+            file="src/main/java/com/b1gbr0ther/ui/theme/Theme.kt"
+            line="44"
+            column="25"/>
+    </issue>
+
+    <issue
+        id="UnnecessaryArrayInit"
+        message="This initialization lambda (`{ 0.0 }`) is unnecessary and is less efficient"
+        errorLine1="                energyDistribution = DoubleArray(10) { 0.0 },"
+        errorLine2="                                                     ~~~~~~~">
+        <location
+            file="src/main/java/com/b1gbr0ther/audio/AudioFingerprintMatcher.kt"
+            line="220"
+            column="54"/>
+    </issue>
+
+    <issue
+        id="UnnecessaryArrayInit"
+        message="This initialization lambda (`{ 0.0 }`) is unnecessary and is less efficient"
+        errorLine1="                mfcc = DoubleArray(13) { 0.0 }"
+        errorLine2="                                       ~~~~~~~">
+        <location
+            file="src/main/java/com/b1gbr0ther/audio/AudioFingerprintMatcher.kt"
+            line="221"
+            column="40"/>
+    </issue>
+
+    <issue
+        id="UnnecessaryArrayInit"
+        message="This initialization lambda (`{ 0.0 }`) is unnecessary and is less efficient"
+        errorLine1="        val energyDistribution = DoubleArray(bands) { 0.0 }"
+        errorLine2="                                                    ~~~~~~~">
+        <location
+            file="src/main/java/com/b1gbr0ther/audio/AudioFingerprintMatcher.kt"
+            line="317"
+            column="53"/>
+    </issue>
+
+    <issue
+        id="UnnecessaryArrayInit"
+        message="This initialization lambda (`{ 0.0 }`) is unnecessary and is less efficient"
+        errorLine1="        val mfcc = DoubleArray(13) { 0.0 }"
+        errorLine2="                                   ~~~~~~~">
+        <location
+            file="src/main/java/com/b1gbr0ther/audio/AudioFingerprintMatcher.kt"
+            line="341"
+            column="36"/>
+    </issue>
+
+    <issue
+        id="VectorPath"
+        message="Very long vector path (940 characters), which is bad for performance. Considering reducing precision, removing minor details or rasterizing vector."
+        errorLine1="      android:pathData=&quot;M15.667,7.833H14.1C11.907,7.833 10.809,7.833 9.971,8.26C9.235,8.636 8.636,9.234 8.26,9.971C7.833,10.809 7.833,11.907 7.833,14.1V15.667M15.667,7.833H31.333M15.667,7.833V3.917M31.333,7.833H32.9C35.094,7.833 36.189,7.833 37.027,8.26C37.764,8.636 38.365,9.234 38.74,9.971C39.167,10.809 39.167,11.905 39.167,14.094V15.667M31.333,7.833V3.917M7.833,15.667V32.9C7.833,35.094 7.833,36.19 8.26,37.028C8.636,37.765 9.235,38.365 9.971,38.74C10.809,39.167 11.905,39.167 14.094,39.167H32.906C35.095,39.167 36.19,39.167 37.027,38.74C37.764,38.365 38.365,37.765 38.74,37.028C39.167,36.191 39.167,35.096 39.167,32.907V15.667M7.833,15.667H39.167M31.333,31.333H31.337L31.337,31.337L31.333,31.337V31.333ZM23.5,31.333H23.504L23.504,31.337L23.5,31.337V31.333ZM15.667,31.333H15.671L15.67,31.337L15.667,31.337V31.333ZM31.337,23.5V23.504L31.333,23.504V23.5H31.337ZM23.5,23.5H23.504L23.504,23.504L23.5,23.504V23.5ZM15.667,23.5H15.671L15.67,23.504L15.667,23.504V23.5Z&quot;"
+        errorLine2="                        ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~">
+        <location
+            file="src/main/res/drawable/timesheet_icon.xml"
+            line="7"
+            column="25"/>
+    </issue>
+
+    <issue
+        id="KaptUsageInsteadOfKsp"
+        message="This library supports using KSP instead of kapt, which greatly improves performance. Learn more: https://developer.android.com/studio/build/migrate-to-ksp"
+        errorLine1="    kapt(libs.androidx.room.compiler)"
+        errorLine2="    ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~">
+        <location
+            file="build.gradle.kts"
+            line="72"
+            column="5"/>
+    </issue>
+
+    <issue
+        id="InefficientWeight"
+        message="Use a `layout_height` of `0dp` instead of `wrap_content` for better performance"
+        errorLine1="        android:layout_height=&quot;wrap_content&quot;"
+        errorLine2="        ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~">
+        <location
+            file="src/main/res/layout/gesture_dialog_new_task_step_2.xml"
+            line="11"
+            column="9"/>
+    </issue>
+
+    <issue
+        id="InefficientWeight"
+        message="Use a `layout_height` of `0dp` instead of `wrap_content` for better performance"
+        errorLine1="        android:layout_height=&quot;wrap_content&quot;"
+        errorLine2="        ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~">
+        <location
+            file="src/main/res/layout/gesture_dialog_new_task_step_4.xml"
+            line="11"
+            column="9"/>
+    </issue>
+
+    <issue
+        id="Overdraw"
+        message="Possible overdraw: Root element paints background `?android:colorBackground` with a theme that also paints a background (inferred theme is `@style/Theme.B1gBr0ther`)"
+        errorLine1="    android:background=&quot;?android:colorBackground&quot;"
+        errorLine2="    ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~">
+        <location
+            file="src/main/res/layout/activity_dashboard.xml"
+            line="8"
+            column="5"/>
+    </issue>
+
+    <issue
+        id="Overdraw"
+        message="Possible overdraw: Root element paints background `?android:colorBackground` with a theme that also paints a background (inferred theme is `@style/Theme_AppCompat_Light_NoActionBar`)"
+        errorLine1="    android:background=&quot;?android:colorBackground&quot;"
+        errorLine2="    ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~">
+        <location
+            file="src/main/res/layout/activity_export_page.xml"
+            line="8"
+            column="5"/>
+    </issue>
+
+    <issue
+        id="Overdraw"
+        message="Possible overdraw: Root element paints background `#F5F5DC` with a theme that also paints a background (inferred theme is `@style/Theme_B1gBr0ther`)"
+        errorLine1="    android:background=&quot;#F5F5DC&quot;>"
+        errorLine2="    ~~~~~~~~~~~~~~~~~~~~~~~~~~~~">
+        <location
+            file="src/main/res/layout/activity_main.xml"
+            line="7"
+            column="5"/>
+    </issue>
+
+    <issue
+        id="Overdraw"
+        message="Possible overdraw: Root element paints background `?android:colorBackground` with a theme that also paints a background (inferred theme is `@style/Theme_AppCompat_Light_NoActionBar`)"
+        errorLine1="    android:background=&quot;?android:colorBackground&quot;"
+        errorLine2="    ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~">
+        <location
+            file="src/main/res/layout/activity_manual.xml"
+            line="8"
+            column="5"/>
+    </issue>
+
+    <issue
+        id="Overdraw"
+        message="Possible overdraw: Root element paints background `?android:colorBackground` with a theme that also paints a background (inferred theme is `@style/Theme.B1gBr0ther`)"
+        errorLine1="    android:background=&quot;?android:colorBackground&quot;>"
+        errorLine2="    ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~">
+        <location
+            file="src/main/res/layout/activity_settings.xml"
+            line="7"
+            column="5"/>
+    </issue>
+
+    <issue
+        id="Overdraw"
+        message="Possible overdraw: Root element paints background `@color/dashboard_background` with a theme that also paints a background (inferred theme is `@style/Theme_MaterialComponents_Light_NoActionBar`)"
+        errorLine1="    android:background=&quot;@color/dashboard_background&quot;"
+        errorLine2="    ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~">
+        <location
+            file="src/main/res/layout/activity_statistics.xml"
+            line="8"
+            column="5"/>
+    </issue>
+
+    <issue
+        id="Overdraw"
+        message="Possible overdraw: Root element paints background `?android:colorBackground` with a theme that also paints a background (inferred theme is `@style/Theme_AppCompat_Light_NoActionBar`)"
+        errorLine1="    android:background=&quot;?android:colorBackground&quot;>"
+        errorLine2="    ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~">
+        <location
+            file="src/main/res/layout/activity_timesheet.xml"
+            line="8"
+            column="5"/>
+    </issue>
+
+    <issue
+        id="Overdraw"
+        message="Possible overdraw: Root element paints background `#A7ADC6` with a theme that also paints a background (inferred theme is `@style/Theme.B1gBr0ther`)"
+        errorLine1="    android:background=&quot;#A7ADC6&quot;"
+        errorLine2="    ~~~~~~~~~~~~~~~~~~~~~~~~~~~~">
+        <location
+            file="src/main/res/layout/gesture_dialog_existing_task.xml"
+            line="5"
+            column="5"/>
+    </issue>
+
+    <issue
+        id="Overdraw"
+        message="Possible overdraw: Root element paints background `#A7ADC6` with a theme that also paints a background (inferred theme is `@style/Theme.B1gBr0ther`)"
+        errorLine1="    android:background=&quot;#A7ADC6&quot;"
+        errorLine2="    ~~~~~~~~~~~~~~~~~~~~~~~~~~~~">
+        <location
+            file="src/main/res/layout/gesture_dialog_new_task_step_1.xml"
+            line="5"
+            column="5"/>
+    </issue>
+
+    <issue
+        id="Overdraw"
+        message="Possible overdraw: Root element paints background `#A7ADC6` with a theme that also paints a background (inferred theme is `@style/Theme.B1gBr0ther`)"
+        errorLine1="    android:background=&quot;#A7ADC6&quot;"
+        errorLine2="    ~~~~~~~~~~~~~~~~~~~~~~~~~~~~">
+        <location
+            file="src/main/res/layout/gesture_dialog_new_task_step_2.xml"
+            line="5"
+            column="5"/>
+    </issue>
+
+    <issue
+        id="Overdraw"
+        message="Possible overdraw: Root element paints background `#A7ADC6` with a theme that also paints a background (inferred theme is `@style/Theme.B1gBr0ther`)"
+        errorLine1="    android:background=&quot;#A7ADC6&quot;"
+        errorLine2="    ~~~~~~~~~~~~~~~~~~~~~~~~~~~~">
+        <location
+            file="src/main/res/layout/gesture_dialog_new_task_step_3.xml"
+            line="5"
+            column="5"/>
+    </issue>
+
+    <issue
+        id="Overdraw"
+        message="Possible overdraw: Root element paints background `#A7ADC6` with a theme that also paints a background (inferred theme is `@style/Theme.B1gBr0ther`)"
+        errorLine1="    android:background=&quot;#A7ADC6&quot;"
+        errorLine2="    ~~~~~~~~~~~~~~~~~~~~~~~~~~~~">
+        <location
+            file="src/main/res/layout/gesture_dialog_new_task_step_4.xml"
+            line="5"
+            column="5"/>
+    </issue>
+
+    <issue
+        id="UnusedResources"
+        message="The resource `R.color.purple_100` appears to be unused"
+        errorLine1="    &lt;color name=&quot;purple_100&quot;>#FFE1BEE7&lt;/color>"
+        errorLine2="           ~~~~~~~~~~~~~~~~~">
+        <location
+            file="src/main/res/values/colors.xml"
+            line="3"
+            column="12"/>
+    </issue>
+
+    <issue
+        id="UnusedResources"
+        message="The resource `R.color.purple_500` appears to be unused"
+        errorLine1="    &lt;color name=&quot;purple_500&quot;>#FF6200EE&lt;/color>"
+        errorLine2="           ~~~~~~~~~~~~~~~~~">
+        <location
+            file="src/main/res/values/colors.xml"
+            line="5"
+            column="12"/>
+    </issue>
+
+    <issue
+        id="UnusedResources"
+        message="The resource `R.color.purple_700` appears to be unused"
+        errorLine1="    &lt;color name=&quot;purple_700&quot;>#FF3700B3&lt;/color>"
+        errorLine2="           ~~~~~~~~~~~~~~~~~">
+        <location
+            file="src/main/res/values/colors.xml"
+            line="6"
+            column="12"/>
+    </issue>
+
+    <issue
+        id="UnusedResources"
+        message="The resource `R.color.teal_200` appears to be unused"
+        errorLine1="    &lt;color name=&quot;teal_200&quot;>#FF03DAC5&lt;/color>"
+        errorLine2="           ~~~~~~~~~~~~~~~">
+        <location
+            file="src/main/res/values/colors.xml"
+            line="7"
+            column="12"/>
+    </issue>
+
+    <issue
+        id="UnusedResources"
+        message="The resource `R.color.teal_700` appears to be unused"
+        errorLine1="    &lt;color name=&quot;teal_700&quot;>#FF018786&lt;/color>"
+        errorLine2="           ~~~~~~~~~~~~~~~">
+        <location
+            file="src/main/res/values/colors.xml"
+            line="8"
+            column="12"/>
+    </issue>
+
+    <issue
+        id="UnusedResources"
+        message="The resource `R.color.black` appears to be unused"
+        errorLine1="    &lt;color name=&quot;black&quot;>#FF000000&lt;/color>"
+        errorLine2="           ~~~~~~~~~~~~">
+        <location
+            file="src/main/res/values/colors.xml"
+            line="9"
+            column="12"/>
+    </issue>
+
+    <issue
+        id="UnusedResources"
+        message="The resource `R.color.primary_color` appears to be unused"
+        errorLine1="    &lt;color name=&quot;primary_color&quot;>#FF6200EE&lt;/color>"
+        errorLine2="           ~~~~~~~~~~~~~~~~~~~~">
+        <location
+            file="src/main/res/values/colors.xml"
+            line="18"
+            column="12"/>
+    </issue>
+
+    <issue
+        id="UnusedResources"
+        message="The resource `R.color.primary_variant_color` appears to be unused"
+        errorLine1="    &lt;color name=&quot;primary_variant_color&quot;>#FF3700B3&lt;/color>"
+        errorLine2="           ~~~~~~~~~~~~~~~~~~~~~~~~~~~~">
+        <location
+            file="src/main/res/values/colors.xml"
+            line="19"
+            column="12"/>
+    </issue>
+
+    <issue
+        id="UnusedResources"
+        message="The resource `R.color.on_primary_color` appears to be unused"
+        errorLine1="    &lt;color name=&quot;on_primary_color&quot;>#FFFFFFFF&lt;/color>"
+        errorLine2="           ~~~~~~~~~~~~~~~~~~~~~~~">
+        <location
+            file="src/main/res/values/colors.xml"
+            line="20"
+            column="12"/>
+    </issue>
+
+    <issue
+        id="UnusedResources"
+        message="The resource `R.color.secondary_color` appears to be unused"
+        errorLine1="    &lt;color name=&quot;secondary_color&quot;>#FF03DAC5&lt;/color>"
+        errorLine2="           ~~~~~~~~~~~~~~~~~~~~~~">
+        <location
+            file="src/main/res/values/colors.xml"
+            line="21"
+            column="12"/>
+    </issue>
+
+    <issue
+        id="UnusedResources"
+        message="The resource `R.color.secondary_variant_color` appears to be unused"
+        errorLine1="    &lt;color name=&quot;secondary_variant_color&quot;>#FF018786&lt;/color>"
+        errorLine2="           ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~">
+        <location
+            file="src/main/res/values/colors.xml"
+            line="22"
+            column="12"/>
+    </issue>
+
+    <issue
+        id="UnusedResources"
+        message="The resource `R.color.on_secondary_color` appears to be unused"
+        errorLine1="    &lt;color name=&quot;on_secondary_color&quot;>#FF000000&lt;/color>"
+        errorLine2="           ~~~~~~~~~~~~~~~~~~~~~~~~~">
+        <location
+            file="src/main/res/values/colors.xml"
+            line="23"
+            column="12"/>
+    </issue>
+
+    <issue
+        id="UnusedResources"
+        message="The resource `R.color.background_color` appears to be unused"
+        errorLine1="    &lt;color name=&quot;background_color&quot;>#FFFFFFFF&lt;/color>"
+        errorLine2="           ~~~~~~~~~~~~~~~~~~~~~~~">
+        <location
+            file="src/main/res/values/colors.xml"
+            line="24"
+            column="12"/>
+    </issue>
+
+    <issue
+        id="UnusedResources"
+        message="The resource `R.color.surface_color` appears to be unused"
+        errorLine1="    &lt;color name=&quot;surface_color&quot;>#FFFFFFFF&lt;/color>"
+        errorLine2="           ~~~~~~~~~~~~~~~~~~~~">
+        <location
+            file="src/main/res/values/colors.xml"
+            line="25"
+            column="12"/>
+    </issue>
+
+    <issue
+        id="UnusedResources"
+        message="The resource `R.color.on_surface_color` appears to be unused"
+        errorLine1="    &lt;color name=&quot;on_surface_color&quot;>#FF000000&lt;/color>"
+        errorLine2="           ~~~~~~~~~~~~~~~~~~~~~~~">
+        <location
+            file="src/main/res/values/colors.xml"
+            line="26"
+            column="12"/>
+    </issue>
+
+    <issue
+        id="UnusedResources"
+        message="The resource `R.color.text_color` appears to be unused"
+        errorLine1="    &lt;color name=&quot;text_color&quot;>#FF000000&lt;/color>"
+        errorLine2="           ~~~~~~~~~~~~~~~~~">
+        <location
+            file="src/main/res/values/colors.xml"
+            line="27"
+            column="12"/>
+    </issue>
+
+    <issue
+        id="UnusedResources"
+        message="The resource `R.color.text_primary_color` appears to be unused"
+        errorLine1="    &lt;color name=&quot;text_primary_color&quot;>#FF000000&lt;/color>"
+        errorLine2="           ~~~~~~~~~~~~~~~~~~~~~~~~~">
+        <location
+            file="src/main/res/values/colors.xml"
+            line="28"
+            column="12"/>
+    </issue>
+
+    <issue
+        id="UnusedResources"
+        message="The resource `R.color.text_secondary_color` appears to be unused"
+        errorLine1="    &lt;color name=&quot;text_secondary_color&quot;>#FF757575&lt;/color>"
+        errorLine2="           ~~~~~~~~~~~~~~~~~~~~~~~~~~~">
+        <location
+            file="src/main/res/values/colors.xml"
+            line="29"
+            column="12"/>
+    </issue>
+
+    <issue
+        id="UnusedResources"
+        message="The resource `R.layout.dialog_bathroom_break` appears to be unused"
+        errorLine1="&lt;LinearLayout xmlns:android=&quot;http://schemas.android.com/apk/res/android&quot;"
+        errorLine2="^">
+        <location
+            file="src/main/res/layout/dialog_bathroom_break.xml"
+            line="2"
+            column="1"/>
+    </issue>
+
+    <issue
+        id="UnusedResources"
+        message="The resource `R.string.status_working` appears to be unused"
+        errorLine1="    &lt;string name=&quot;status_working&quot;>Working&lt;/string>"
+        errorLine2="            ~~~~~~~~~~~~~~~~~~~~~">
+        <location
+            file="src/main/res/values/strings.xml"
+            line="5"
+            column="13"/>
+    </issue>
+
+    <issue
+        id="UnusedResources"
+        message="The resource `R.string.status_on_break` appears to be unused"
+        errorLine1="    &lt;string name=&quot;status_on_break&quot;>On Break&lt;/string>"
+        errorLine2="            ~~~~~~~~~~~~~~~~~~~~~~">
+        <location
+            file="src/main/res/values/strings.xml"
+            line="6"
+            column="13"/>
+    </issue>
+
+    <issue
+        id="UnusedResources"
+        message="The resource `R.string.tracking_started` appears to be unused"
+        errorLine1="    &lt;string name=&quot;tracking_started&quot;>Tracking started&lt;/string>"
+        errorLine2="            ~~~~~~~~~~~~~~~~~~~~~~~">
+        <location
+            file="src/main/res/values/strings.xml"
+            line="8"
+            column="13"/>
+    </issue>
+
+    <issue
+        id="UnusedResources"
+        message="The resource `R.string.tracking_stopped` appears to be unused"
+        errorLine1="    &lt;string name=&quot;tracking_stopped&quot;>Tracking stopped&lt;/string>"
+        errorLine2="            ~~~~~~~~~~~~~~~~~~~~~~~">
+        <location
+            file="src/main/res/values/strings.xml"
+            line="9"
+            column="13"/>
+    </issue>
+
+    <issue
+        id="UnusedResources"
+        message="The resource `R.string.language_dutch` appears to be unused"
+        errorLine1="    &lt;string name=&quot;language_dutch&quot;>Dutch&lt;/string>"
+        errorLine2="            ~~~~~~~~~~~~~~~~~~~~~">
+        <location
+            file="src/main/res/values/strings.xml"
+            line="18"
+            column="13"/>
+    </issue>
+
+    <issue
+        id="UnusedResources"
+        message="The resource `R.string.microphone_permission_required` appears to be unused"
+        errorLine1="    &lt;string name=&quot;microphone_permission_required&quot;>Microphone Permission Required&lt;/string>"
+        errorLine2="            ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~">
+        <location
+            file="src/main/res/values/strings.xml"
+            line="36"
+            column="13"/>
+    </issue>
+
+    <issue
+        id="UnusedResources"
+        message="The resource `R.string.microphone_permission_message` appears to be unused"
+        errorLine1="    &lt;string name=&quot;microphone_permission_message&quot;>Voice recognition requires microphone access to work. Would you like to grant this permission?&lt;/string>"
+        errorLine2="            ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~">
+        <location
+            file="src/main/res/values/strings.xml"
+            line="37"
+            column="13"/>
+    </issue>
+
+    <issue
+        id="UnusedResources"
+        message="The resource `R.string.microphone_permission_denied_message` appears to be unused"
+        errorLine1="    &lt;string name=&quot;microphone_permission_denied_message&quot;>Voice recognition cannot work without microphone access. Would you like to open settings to grant the permission?&lt;/string>"
+        errorLine2="            ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~">
+        <location
+            file="src/main/res/values/strings.xml"
+            line="39"
+            column="13"/>
+    </issue>
+
+    <issue
+        id="UnusedResources"
+        message="The resource `R.string.voice_recognition_enabled` appears to be unused"
+        errorLine1="    &lt;string name=&quot;voice_recognition_enabled&quot;>Voice recognition enabled&lt;/string>"
+        errorLine2="            ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~">
+        <location
+            file="src/main/res/values/strings.xml"
+            line="52"
+            column="13"/>
+    </issue>
+
+    <issue
+        id="UnusedResources"
+        message="The resource `R.string.voice_recognition_disabled_permission` appears to be unused"
+        errorLine1="    &lt;string name=&quot;voice_recognition_disabled_permission&quot;>Voice recognition disabled: Permission denied&lt;/string>"
+        errorLine2="            ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~">
+        <location
+            file="src/main/res/values/strings.xml"
+            line="53"
+            column="13"/>
+    </issue>
+
+    <issue
+        id="UnusedResources"
+        message="The resource `R.string.push_notifications_enabled` appears to be unused"
+        errorLine1="    &lt;string name=&quot;push_notifications_enabled&quot;>Push notifications enabled&lt;/string>"
+        errorLine2="            ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~">
+        <location
+            file="src/main/res/values/strings.xml"
+            line="54"
+            column="13"/>
+    </issue>
+
+    <issue
+        id="UnusedResources"
+        message="The resource `R.string.push_notifications_disabled_permission` appears to be unused"
+        errorLine1="    &lt;string name=&quot;push_notifications_disabled_permission&quot;>Push notifications disabled: Permission denied&lt;/string>"
+        errorLine2="            ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~">
+        <location
+            file="src/main/res/values/strings.xml"
+            line="55"
+            column="13"/>
+    </issue>
+
+    <issue
+        id="UnusedResources"
+        message="The resource `R.string.settings_reset_to_defaults` appears to be unused"
+        errorLine1="    &lt;string name=&quot;settings_reset_to_defaults&quot;>Settings reset to defaults&lt;/string>"
+        errorLine2="            ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~">
+        <location
+            file="src/main/res/values/strings.xml"
+            line="56"
+            column="13"/>
+    </issue>
+
+    <issue
+        id="UnusedResources"
+        message="The resource `R.string.settings_saved_successfully` appears to be unused"
+        errorLine1="    &lt;string name=&quot;settings_saved_successfully&quot;>Settings saved successfully&lt;/string>"
+        errorLine2="            ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~">
+        <location
+            file="src/main/res/values/strings.xml"
+            line="57"
+            column="13"/>
+    </issue>
+
+    <issue
+        id="UnusedResources"
+        message="The resource `R.string.command_not_recognized` appears to be unused"
+        errorLine1="    &lt;string name=&quot;command_not_recognized&quot;>Command not recognized: %1$s&lt;/string>"
+        errorLine2="            ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~">
+        <location
+            file="src/main/res/values/strings.xml"
+            line="60"
+            column="13"/>
+    </issue>
+
+    <issue
+        id="UnusedResources"
+        message="The resource `R.string.tracking_started_for_task` appears to be unused"
+        errorLine1="    &lt;string name=&quot;tracking_started_for_task&quot;>Tracking started for: %1$s&lt;/string>"
+        errorLine2="            ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~">
+        <location
+            file="src/main/res/values/strings.xml"
+            line="61"
+            column="13"/>
+    </issue>
+
+    <issue
+        id="UnusedResources"
+        message="The resource `R.string.no_tasks_available` appears to be unused"
+        errorLine1="    &lt;string name=&quot;no_tasks_available&quot;>No tasks available to track&lt;/string>"
+        errorLine2="            ~~~~~~~~~~~~~~~~~~~~~~~~~">
+        <location
+            file="src/main/res/values/strings.xml"
+            line="62"
+            column="13"/>
+    </issue>
+
+    <issue
+        id="UnusedResources"
+        message="The resource `R.string.already_tracking_task` appears to be unused"
+        errorLine1="    &lt;string name=&quot;already_tracking_task&quot;>Already tracking a task&lt;/string>"
+        errorLine2="            ~~~~~~~~~~~~~~~~~~~~~~~~~~~~">
+        <location
+            file="src/main/res/values/strings.xml"
+            line="63"
+            column="13"/>
+    </issue>
+
+    <issue
+        id="UnusedResources"
+        message="The resource `R.string.task_already_completed` appears to be unused"
+        errorLine1="    &lt;string name=&quot;task_already_completed&quot;>Task \&quot;%1$s\&quot; is already completed&lt;/string>"
+        errorLine2="            ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~">
+        <location
+            file="src/main/res/values/strings.xml"
+            line="64"
+            column="13"/>
+    </issue>
+
+    <issue
+        id="UnusedResources"
+        message="The resource `R.string.task_not_found` appears to be unused"
+        errorLine1="    &lt;string name=&quot;task_not_found&quot;>Task \&quot;%1$s\&quot; not found. Available tasks: %2$s&lt;/string>"
+        errorLine2="            ~~~~~~~~~~~~~~~~~~~~~">
+        <location
+            file="src/main/res/values/strings.xml"
+            line="65"
+            column="13"/>
+    </issue>
+
+    <issue
+        id="UnusedResources"
+        message="The resource `R.string.no_active_tracking_session` appears to be unused"
+        errorLine1="    &lt;string name=&quot;no_active_tracking_session&quot;>No active tracking session&lt;/string>"
+        errorLine2="            ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~">
+        <location
+            file="src/main/res/values/strings.xml"
+            line="66"
+            column="13"/>
+    </issue>
+
+    <issue
+        id="UnusedResources"
+        message="The resource `R.string.no_task_being_tracked` appears to be unused"
+        errorLine1="    &lt;string name=&quot;no_task_being_tracked&quot;>No task was being tracked&lt;/string>"
+        errorLine2="            ~~~~~~~~~~~~~~~~~~~~~~~~~~~~">
+        <location
+            file="src/main/res/values/strings.xml"
+            line="67"
+            column="13"/>
+    </issue>
+
+    <issue
+        id="UnusedResources"
+        message="The resource `R.string.could_not_find_tracked_task` appears to be unused"
+        errorLine1="    &lt;string name=&quot;could_not_find_tracked_task&quot;>Could not find the task being tracked&lt;/string>"
+        errorLine2="            ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~">
+        <location
+            file="src/main/res/values/strings.xml"
+            line="68"
+            column="13"/>
+    </issue>
+
+    <issue
+        id="UnusedResources"
+        message="The resource `R.string.start_tracking_first` appears to be unused"
+        errorLine1="    &lt;string name=&quot;start_tracking_first&quot;>Start tracking first&lt;/string>"
+        errorLine2="            ~~~~~~~~~~~~~~~~~~~~~~~~~~~">
+        <location
+            file="src/main/res/values/strings.xml"
+            line="69"
+            column="13"/>
+    </issue>
+
+    <issue
+        id="UnusedResources"
+        message="The resource `R.string.already_on_break` appears to be unused"
+        errorLine1="    &lt;string name=&quot;already_on_break&quot;>Already on a break&lt;/string>"
+        errorLine2="            ~~~~~~~~~~~~~~~~~~~~~~~">
+        <location
+            file="src/main/res/values/strings.xml"
+            line="70"
+            column="13"/>
+    </issue>
+
+    <issue
+        id="UnusedResources"
+        message="The resource `R.string.break_started` appears to be unused"
+        errorLine1="    &lt;string name=&quot;break_started&quot;>Break started&lt;/string>"
+        errorLine2="            ~~~~~~~~~~~~~~~~~~~~">
+        <location
+            file="src/main/res/values/strings.xml"
+            line="71"
+            column="13"/>
+    </issue>
+
+    <issue
+        id="UnusedResources"
+        message="The resource `R.string.no_active_break` appears to be unused"
+        errorLine1="    &lt;string name=&quot;no_active_break&quot;>No active break&lt;/string>"
+        errorLine2="            ~~~~~~~~~~~~~~~~~~~~~~">
+        <location
+            file="src/main/res/values/strings.xml"
+            line="72"
+            column="13"/>
+    </issue>
+
+    <issue
+        id="UnusedResources"
+        message="The resource `R.string.break_ended` appears to be unused"
+        errorLine1="    &lt;string name=&quot;break_ended&quot;>Break ended&lt;/string>"
+        errorLine2="            ~~~~~~~~~~~~~~~~~~">
+        <location
+            file="src/main/res/values/strings.xml"
+            line="73"
+            column="13"/>
+    </issue>
+
+    <issue
+        id="UnusedResources"
+        message="The resource `R.string.task_saved_to_database` appears to be unused"
+        errorLine1="    &lt;string name=&quot;task_saved_to_database&quot;>Task saved to database with ID: %1$d&lt;/string>"
+        errorLine2="            ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~">
+        <location
+            file="src/main/res/values/strings.xml"
+            line="74"
+            column="13"/>
+    </issue>
+
+    <issue
+        id="UnusedResources"
+        message="The resource `R.string.task_marked_completed` appears to be unused"
+        errorLine1="    &lt;string name=&quot;task_marked_completed&quot;>Task marked as completed&lt;/string>"
+        errorLine2="            ~~~~~~~~~~~~~~~~~~~~~~~~~~~~">
+        <location
+            file="src/main/res/values/strings.xml"
+            line="75"
+            column="13"/>
+    </issue>
+
+    <issue
+        id="UnusedResources"
+        message="The resource `R.string.task_deleted` appears to be unused"
+        errorLine1="    &lt;string name=&quot;task_deleted&quot;>Task deleted&lt;/string>"
+        errorLine2="            ~~~~~~~~~~~~~~~~~~~">
+        <location
+            file="src/main/res/values/strings.xml"
+            line="76"
+            column="13"/>
+    </issue>
+
+    <issue
+        id="UnusedResources"
+        message="The resource `R.string.task_name_deleted` appears to be unused"
+        errorLine1="    &lt;string name=&quot;task_name_deleted&quot;>Task \&quot;%1$s\&quot; deleted&lt;/string>"
+        errorLine2="            ~~~~~~~~~~~~~~~~~~~~~~~~">
+        <location
+            file="src/main/res/values/strings.xml"
+            line="77"
+            column="13"/>
+    </issue>
+
+    <issue
+        id="UnusedResources"
+        message="The resource `R.string.could_not_find_task_with_name` appears to be unused"
+        errorLine1="    &lt;string name=&quot;could_not_find_task_with_name&quot;>Could not find task with name \&quot;%1$s\&quot;. Available tasks: %2$s&lt;/string>"
+        errorLine2="            ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~">
+        <location
+            file="src/main/res/values/strings.xml"
+            line="78"
+            column="13"/>
+    </issue>
+
+    <issue
+        id="UnusedResources"
+        message="The resource `R.string.enjoy_smoke_break` appears to be unused"
+        errorLine1="    &lt;string name=&quot;enjoy_smoke_break&quot;>Enjoy your smoke break!&lt;/string>"
+        errorLine2="            ~~~~~~~~~~~~~~~~~~~~~~~~">
+        <location
+            file="src/main/res/values/strings.xml"
+            line="81"
+            column="13"/>
+    </issue>
+
+    <issue
+        id="UnusedResources"
+        message="The resource `R.string.bless_you` appears to be unused"
+        errorLine1="    &lt;string name=&quot;bless_you&quot;>Bless you!&lt;/string>"
+        errorLine2="            ~~~~~~~~~~~~~~~~">
+        <location
+            file="src/main/res/values/strings.xml"
+            line="82"
+            column="13"/>
+    </issue>
+
+    <issue
+        id="UnusedResources"
+        message="The resource `R.string.urination_detected` appears to be unused"
+        errorLine1="    &lt;string name=&quot;urination_detected&quot;>Urination detected!&lt;/string>"
+        errorLine2="            ~~~~~~~~~~~~~~~~~~~~~~~~~">
+        <location
+            file="src/main/res/values/strings.xml"
+            line="83"
+            column="13"/>
+    </issue>
+
+    <issue
+        id="UnusedResources"
+        message="The resource `R.string.please_select_tasks_to_export` appears to be unused"
+        errorLine1="    &lt;string name=&quot;please_select_tasks_to_export&quot;>Please select tasks to export&lt;/string>"
+        errorLine2="            ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~">
+        <location
+            file="src/main/res/values/strings.xml"
+            line="86"
+            column="13"/>
+    </issue>
+
+    <issue
+        id="UnusedResources"
+        message="The resource `R.string.exported_tasks` appears to be unused"
+        errorLine1="    &lt;string name=&quot;exported_tasks&quot;>Exported %1$d tasks as %2$s&lt;/string>"
+        errorLine2="            ~~~~~~~~~~~~~~~~~~~~~">
+        <location
+            file="src/main/res/values/strings.xml"
+            line="87"
+            column="13"/>
+    </issue>
+
+    <issue
+        id="UnusedResources"
+        message="The resource `R.string.export_failed` appears to be unused"
+        errorLine1="    &lt;string name=&quot;export_failed&quot;>Export failed: %1$s&lt;/string>"
+        errorLine2="            ~~~~~~~~~~~~~~~~~~~~">
+        <location
+            file="src/main/res/values/strings.xml"
+            line="88"
+            column="13"/>
+    </issue>
+
+    <issue
+        id="UnusedResources"
+        message="The resource `R.string.creating_sample_tasks` appears to be unused"
+        errorLine1="    &lt;string name=&quot;creating_sample_tasks&quot;>Creating sample tasks for testing...&lt;/string>"
+        errorLine2="            ~~~~~~~~~~~~~~~~~~~~~~~~~~~~">
+        <location
+            file="src/main/res/values/strings.xml"
+            line="89"
+            column="13"/>
+    </issue>
+
+    <issue
+        id="UnusedResources"
+        message="The resource `R.string.created_sample_tasks` appears to be unused"
+        errorLine1="    &lt;string name=&quot;created_sample_tasks&quot;>Created %1$d sample tasks&lt;/string>"
+        errorLine2="            ~~~~~~~~~~~~~~~~~~~~~~~~~~~">
+        <location
+            file="src/main/res/values/strings.xml"
+            line="90"
+            column="13"/>
+    </issue>
+
+    <issue
+        id="UnusedResources"
+        message="The resource `R.string.error_saving_export` appears to be unused"
+        errorLine1="    &lt;string name=&quot;error_saving_export&quot;>Error saving export: %1$s&lt;/string>"
+        errorLine2="            ~~~~~~~~~~~~~~~~~~~~~~~~~~">
+        <location
+            file="src/main/res/values/strings.xml"
+            line="91"
+            column="13"/>
+    </issue>
+
+    <issue
+        id="UnusedResources"
+        message="The resource `R.string.file_saved_to` appears to be unused"
+        errorLine1="    &lt;string name=&quot;file_saved_to&quot;>File saved to: %1$s&lt;/string>"
+        errorLine2="            ~~~~~~~~~~~~~~~~~~~~">
+        <location
+            file="src/main/res/values/strings.xml"
+            line="92"
+            column="13"/>
+    </issue>
+
+    <issue
+        id="UnusedResources"
+        message="The resource `R.string.choose_export_format` appears to be unused"
+        errorLine1="    &lt;string name=&quot;choose_export_format&quot;>Choose Export Format&lt;/string>"
+        errorLine2="            ~~~~~~~~~~~~~~~~~~~~~~~~~~~">
+        <location
+            file="src/main/res/values/strings.xml"
+            line="93"
+            column="13"/>
+    </issue>
+
+    <issue
+        id="UnusedResources"
+        message="The resource `R.string.you_picked_year` appears to be unused"
+        errorLine1="    &lt;string name=&quot;you_picked_year&quot;>You picked %1$s&lt;/string>"
+        errorLine2="            ~~~~~~~~~~~~~~~~~~~~~~">
+        <location
+            file="src/main/res/values/strings.xml"
+            line="113"
+            column="13"/>
+    </issue>
+
+    <issue
+        id="UnusedResources"
+        message="The resource `R.string.you_picked_month` appears to be unused"
+        errorLine1="    &lt;string name=&quot;you_picked_month&quot;>You picked %1$s&lt;/string>"
+        errorLine2="            ~~~~~~~~~~~~~~~~~~~~~~~">
+        <location
+            file="src/main/res/values/strings.xml"
+            line="114"
+            column="13"/>
+    </issue>
+
+    <issue
+        id="UnusedResources"
+        message="The resource `R.string.error_initializing` appears to be unused"
+        errorLine1="    &lt;string name=&quot;error_initializing&quot;>Error initializing: %1$s&lt;/string>"
+        errorLine2="            ~~~~~~~~~~~~~~~~~~~~~~~~~">
+        <location
+            file="src/main/res/values/strings.xml"
+            line="137"
+            column="13"/>
+    </issue>
+
+    <issue
+        id="UnusedResources"
+        message="The resource `R.string.bathroom_break_detected` appears to be unused"
+        errorLine1="    &lt;string name=&quot;bathroom_break_detected&quot;>Bathroom Break Detected&lt;/string>"
+        errorLine2="            ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~">
+        <location
+            file="src/main/res/values/strings.xml"
+            line="151"
+            column="13"/>
+    </issue>
+
+    <issue
+        id="UnusedResources"
+        message="The resource `R.string.start_bathroom_break_question` appears to be unused"
+        errorLine1="    &lt;string name=&quot;start_bathroom_break_question&quot;>Would you like to start a bathroom break?&lt;/string>"
+        errorLine2="            ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~">
+        <location
+            file="src/main/res/values/strings.xml"
+            line="152"
+            column="13"/>
+    </issue>
+
+    <issue
+        id="UnusedResources"
+        message="The resource `R.string.start_break` appears to be unused"
+        errorLine1="    &lt;string name=&quot;start_break&quot;>Start Break&lt;/string>"
+        errorLine2="            ~~~~~~~~~~~~~~~~~~">
+        <location
+            file="src/main/res/values/strings.xml"
+            line="153"
+            column="13"/>
+    </issue>
+
+    <issue
+        id="UnusedResources"
+        message="The resource `R.string.february` appears to be unused"
+        errorLine1="    &lt;string name=&quot;february&quot;>February&lt;/string>"
+        errorLine2="            ~~~~~~~~~~~~~~~">
+        <location
+            file="src/main/res/values/strings.xml"
+            line="157"
+            column="13"/>
+    </issue>
+
+    <issue
+        id="UnusedResources"
+        message="The resource `R.string.march` appears to be unused"
+        errorLine1="    &lt;string name=&quot;march&quot;>March&lt;/string>"
+        errorLine2="            ~~~~~~~~~~~~">
+        <location
+            file="src/main/res/values/strings.xml"
+            line="158"
+            column="13"/>
+    </issue>
+
+    <issue
+        id="UnusedResources"
+        message="The resource `R.string.april` appears to be unused"
+        errorLine1="    &lt;string name=&quot;april&quot;>April&lt;/string>"
+        errorLine2="            ~~~~~~~~~~~~">
+        <location
+            file="src/main/res/values/strings.xml"
+            line="159"
+            column="13"/>
+    </issue>
+
+    <issue
+        id="UnusedResources"
+        message="The resource `R.string.may` appears to be unused"
+        errorLine1="    &lt;string name=&quot;may&quot;>May&lt;/string>"
+        errorLine2="            ~~~~~~~~~~">
+        <location
+            file="src/main/res/values/strings.xml"
+            line="160"
+            column="13"/>
+    </issue>
+
+    <issue
+        id="UnusedResources"
+        message="The resource `R.string.june` appears to be unused"
+        errorLine1="    &lt;string name=&quot;june&quot;>June&lt;/string>"
+        errorLine2="            ~~~~~~~~~~~">
+        <location
+            file="src/main/res/values/strings.xml"
+            line="161"
+            column="13"/>
+    </issue>
+
+    <issue
+        id="UnusedResources"
+        message="The resource `R.string.july` appears to be unused"
+        errorLine1="    &lt;string name=&quot;july&quot;>July&lt;/string>"
+        errorLine2="            ~~~~~~~~~~~">
+        <location
+            file="src/main/res/values/strings.xml"
+            line="162"
+            column="13"/>
+    </issue>
+
+    <issue
+        id="UnusedResources"
+        message="The resource `R.string.august` appears to be unused"
+        errorLine1="    &lt;string name=&quot;august&quot;>August&lt;/string>"
+        errorLine2="            ~~~~~~~~~~~~~">
+        <location
+            file="src/main/res/values/strings.xml"
+            line="163"
+            column="13"/>
+    </issue>
+
+    <issue
+        id="UnusedResources"
+        message="The resource `R.string.september` appears to be unused"
+        errorLine1="    &lt;string name=&quot;september&quot;>September&lt;/string>"
+        errorLine2="            ~~~~~~~~~~~~~~~~">
+        <location
+            file="src/main/res/values/strings.xml"
+            line="164"
+            column="13"/>
+    </issue>
+
+    <issue
+        id="UnusedResources"
+        message="The resource `R.string.october` appears to be unused"
+        errorLine1="    &lt;string name=&quot;october&quot;>October&lt;/string>"
+        errorLine2="            ~~~~~~~~~~~~~~">
+        <location
+            file="src/main/res/values/strings.xml"
+            line="165"
+            column="13"/>
+    </issue>
+
+    <issue
+        id="UnusedResources"
+        message="The resource `R.string.november` appears to be unused"
+        errorLine1="    &lt;string name=&quot;november&quot;>November&lt;/string>"
+        errorLine2="            ~~~~~~~~~~~~~~~">
+        <location
+            file="src/main/res/values/strings.xml"
+            line="166"
+            column="13"/>
+    </issue>
+
+    <issue
+        id="UnusedResources"
+        message="The resource `R.string.december` appears to be unused"
+        errorLine1="    &lt;string name=&quot;december&quot;>December&lt;/string>"
+        errorLine2="            ~~~~~~~~~~~~~~~">
+        <location
+            file="src/main/res/values/strings.xml"
+            line="167"
+            column="13"/>
+    </issue>
+
+    <issue
+        id="UnusedResources"
+        message="The resource `R.string.uncompleted` appears to be unused"
+        errorLine1="    &lt;string name=&quot;uncompleted&quot;>Uncompleted&lt;/string>"
+        errorLine2="            ~~~~~~~~~~~~~~~~~~">
+        <location
+            file="src/main/res/values/strings_statistics.xml"
+            line="11"
+            column="13"/>
+    </issue>
+
+    <issue
+        id="UnusedResources"
+        message="The resource `R.string.on_time` appears to be unused"
+        errorLine1="    &lt;string name=&quot;on_time&quot;>On Time&lt;/string>"
+        errorLine2="            ~~~~~~~~~~~~~~">
+        <location
+            file="src/main/res/values/strings_statistics.xml"
+            line="12"
+            column="13"/>
+    </issue>
+
+    <issue
+        id="UnusedResources"
+        message="The resource `R.string.late` appears to be unused"
+        errorLine1="    &lt;string name=&quot;late&quot;>Late&lt;/string>"
+        errorLine2="            ~~~~~~~~~~~">
+        <location
+            file="src/main/res/values/strings_statistics.xml"
+            line="13"
+            column="13"/>
+    </issue>
+
+    <issue
+        id="UnusedResources"
+        message="The resource `R.string.early` appears to be unused"
+        errorLine1="    &lt;string name=&quot;early&quot;>Early&lt;/string>"
+        errorLine2="            ~~~~~~~~~~~~">
+        <location
+            file="src/main/res/values/strings_statistics.xml"
+            line="14"
+            column="13"/>
+    </issue>
+
+    <issue
+        id="UnusedResources"
+        message="The resource `R.string.voice` appears to be unused"
+        errorLine1="    &lt;string name=&quot;voice&quot;>Voice&lt;/string>"
+        errorLine2="            ~~~~~~~~~~~~">
+        <location
+            file="src/main/res/values/strings_statistics.xml"
+            line="15"
+            column="13"/>
+    </issue>
+
+    <issue
+        id="UnusedResources"
+        message="The resource `R.string.gesture` appears to be unused"
+        errorLine1="    &lt;string name=&quot;gesture&quot;>Gesture&lt;/string>"
+        errorLine2="            ~~~~~~~~~~~~~~">
+        <location
+            file="src/main/res/values/strings_statistics.xml"
+            line="16"
+            column="13"/>
+    </issue>
+
+    <issue
+        id="UnusedResources"
+        message="The resource `R.string.no_data_available` appears to be unused"
+        errorLine1="    &lt;string name=&quot;no_data_available&quot;>No data available&lt;/string>"
+        errorLine2="            ~~~~~~~~~~~~~~~~~~~~~~~~">
+        <location
+            file="src/main/res/values/strings_statistics.xml"
+            line="17"
+            column="13"/>
+    </issue>
+
+    <issue
+        id="UnusedResources"
+        message="The resource `R.string.completion_stats_format` appears to be unused"
+        errorLine1="    &lt;string name=&quot;completion_stats_format&quot;>Completed: %1$s / Uncompleted: %2$s&lt;/string>"
+        errorLine2="            ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~">
+        <location
+            file="src/main/res/values/strings_statistics.xml"
+            line="18"
+            column="13"/>
+    </issue>
+
+    <issue
+        id="TypographyEllipsis"
+        message="Replace &quot;...&quot; with ellipsis character (…, &amp;#8230;) ?"
+        errorLine1="    &lt;string name=&quot;creating_sample_tasks&quot;>Création d\&apos;exemples de tâches pour les tests...&lt;/string>"
+        errorLine2="                                         ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~">
+        <location
+            file="src/main/res/values-fr/strings.xml"
+            line="89"
+            column="42"/>
+    </issue>
+
+    <issue
+        id="TypographyEllipsis"
+        message="Replace &quot;...&quot; with ellipsis character (…, &amp;#8230;) ?"
+        errorLine1="    &lt;string name=&quot;creating_sample_tasks&quot;>Voorbeeldtaken maken voor testen...&lt;/string>"
+        errorLine2="                                         ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~">
+        <location
+            file="src/main/res/values-nl/strings.xml"
+            line="89"
+            column="42"/>
+    </issue>
+
+    <issue
+        id="TypographyEllipsis"
+        message="Replace &quot;...&quot; with ellipsis character (…, &amp;#8230;) ?"
+        errorLine1="    &lt;string name=&quot;creating_sample_tasks&quot;>Creating sample tasks for testing...&lt;/string>"
+        errorLine2="                                         ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~">
+        <location
+            file="src/main/res/values/strings.xml"
+            line="89"
+            column="42"/>
+    </issue>
+
+    <issue
+        id="ButtonOrder"
+        message="OK button should be on the right (was &quot;Ok | Complete | Delete&quot;, should be &quot;Delete | Complete | Ok&quot;)"
+        errorLine1="        &lt;Button"
+        errorLine2="         ~~~~~~">
+        <location
+            file="src/main/res/layout/gesture_dialog_existing_task.xml"
+            line="37"
+            column="10"/>
+    </issue>
+
+    <issue
+        id="ButtonStyle"
+        message="Buttons in button bars should be borderless; use `style=&quot;?android:attr/buttonBarButtonStyle&quot;` (and `?android:attr/buttonBarStyle` on the parent)"
+        errorLine1="        &lt;Button"
+        errorLine2="         ~~~~~~">
+        <location
+            file="src/main/res/layout/activity_database_test.xml"
+            line="23"
+            column="10"/>
+    </issue>
+
+    <issue
+        id="ButtonStyle"
+        message="Buttons in button bars should be borderless; use `style=&quot;?android:attr/buttonBarButtonStyle&quot;` (and `?android:attr/buttonBarStyle` on the parent)"
+        errorLine1="        &lt;Button"
+        errorLine2="         ~~~~~~">
+        <location
+            file="src/main/res/layout/activity_database_test.xml"
+            line="31"
+            column="10"/>
+    </issue>
+
+    <issue
+        id="ButtonStyle"
+        message="Buttons in button bars should be borderless; use `style=&quot;?android:attr/buttonBarButtonStyle&quot;` (and `?android:attr/buttonBarStyle` on the parent)"
+        errorLine1="        &lt;Button"
+        errorLine2="         ~~~~~~">
+        <location
+            file="src/main/res/layout/activity_database_test.xml"
+            line="40"
+            column="10"/>
+    </issue>
+
+    <issue
+        id="ButtonStyle"
+        message="Buttons in button bars should be borderless; use `style=&quot;?android:attr/buttonBarButtonStyle&quot;` (and `?android:attr/buttonBarStyle` on the parent)"
+        errorLine1="                &lt;Button"
+        errorLine2="                 ~~~~~~">
+        <location
+            file="src/main/res/layout/activity_export_page.xml"
+            line="33"
+            column="18"/>
+    </issue>
+
+    <issue
+        id="ButtonStyle"
+        message="Buttons in button bars should be borderless; use `style=&quot;?android:attr/buttonBarButtonStyle&quot;` (and `?android:attr/buttonBarStyle` on the parent)"
+        errorLine1="                &lt;Button"
+        errorLine2="                 ~~~~~~">
+        <location
+            file="src/main/res/layout/activity_export_page.xml"
+            line="41"
+            column="18"/>
+    </issue>
+
+    <issue
+        id="ButtonStyle"
+        message="Buttons in button bars should be borderless; use `style=&quot;?android:attr/buttonBarButtonStyle&quot;` (and `?android:attr/buttonBarStyle` on the parent)"
+        errorLine1="        &lt;Button"
+        errorLine2="         ~~~~~~">
+        <location
+            file="src/main/res/layout/activity_settings.xml"
+            line="366"
+            column="10"/>
+    </issue>
+
+    <issue
+        id="ButtonStyle"
+        message="Buttons in button bars should be borderless; use `style=&quot;?android:attr/buttonBarButtonStyle&quot;` (and `?android:attr/buttonBarStyle` on the parent)"
+        errorLine1="        &lt;Button"
+        errorLine2="         ~~~~~~">
+        <location
+            file="src/main/res/layout/activity_settings.xml"
+            line="379"
+            column="10"/>
+    </issue>
+
+    <issue
+        id="ButtonStyle"
+        message="Buttons in button bars should be borderless; use `style=&quot;?android:attr/buttonBarButtonStyle&quot;` (and `?android:attr/buttonBarStyle` on the parent)"
+        errorLine1="        &lt;Button"
+        errorLine2="         ~~~~~~">
+        <location
+            file="src/main/res/layout/activity_settings.xml"
+            line="393"
+            column="10"/>
+    </issue>
+
+    <issue
+        id="ButtonStyle"
+        message="Buttons in button bars should be borderless; use `style=&quot;?android:attr/buttonBarButtonStyle&quot;` (and `?android:attr/buttonBarStyle` on the parent)"
+        errorLine1="        &lt;Button"
+        errorLine2="         ~~~~~~">
+        <location
+            file="src/main/res/layout/dialog_bathroom_break.xml"
+            line="32"
+            column="10"/>
+    </issue>
+
+    <issue
+        id="ButtonStyle"
+        message="Buttons in button bars should be borderless; use `style=&quot;?android:attr/buttonBarButtonStyle&quot;` (and `?android:attr/buttonBarStyle` on the parent)"
+        errorLine1="        &lt;Button"
+        errorLine2="         ~~~~~~">
+        <location
+            file="src/main/res/layout/dialog_bathroom_break.xml"
+            line="40"
+            column="10"/>
+    </issue>
+
+    <issue
+        id="ButtonStyle"
+        message="Buttons in button bars should be borderless; use `style=&quot;?android:attr/buttonBarButtonStyle&quot;` (and `?android:attr/buttonBarStyle` on the parent)"
+        errorLine1="        &lt;Button"
+        errorLine2="         ~~~~~~">
+        <location
+            file="src/main/res/layout/gesture_dialog_existing_task.xml"
+            line="37"
+            column="10"/>
+    </issue>
+
+    <issue
+        id="ButtonStyle"
+        message="Buttons in button bars should be borderless; use `style=&quot;?android:attr/buttonBarButtonStyle&quot;` (and `?android:attr/buttonBarStyle` on the parent)"
+        errorLine1="        &lt;Button"
+        errorLine2="         ~~~~~~">
+        <location
+            file="src/main/res/layout/gesture_dialog_existing_task.xml"
+            line="47"
+            column="10"/>
+    </issue>
+
+    <issue
+        id="ButtonStyle"
+        message="Buttons in button bars should be borderless; use `style=&quot;?android:attr/buttonBarButtonStyle&quot;` (and `?android:attr/buttonBarStyle` on the parent)"
+        errorLine1="        &lt;Button"
+        errorLine2="         ~~~~~~">
+        <location
+            file="src/main/res/layout/gesture_dialog_existing_task.xml"
+            line="57"
+            column="10"/>
+    </issue>
+
+    <issue
+        id="ButtonStyle"
+        message="Buttons in button bars should be borderless; use `style=&quot;?android:attr/buttonBarButtonStyle&quot;` (and `?android:attr/buttonBarStyle` on the parent)"
+        errorLine1="        &lt;Button"
+        errorLine2="         ~~~~~~">
+        <location
+            file="src/main/res/layout/gesture_dialog_new_task_step_1.xml"
+            line="45"
+            column="10"/>
+    </issue>
+
+    <issue
+        id="ButtonStyle"
+        message="Buttons in button bars should be borderless; use `style=&quot;?android:attr/buttonBarButtonStyle&quot;` (and `?android:attr/buttonBarStyle` on the parent)"
+        errorLine1="        &lt;Button"
+        errorLine2="         ~~~~~~">
+        <location
+            file="src/main/res/layout/gesture_dialog_new_task_step_1.xml"
+            line="55"
+            column="10"/>
+    </issue>
+
+    <issue
+        id="ButtonStyle"
+        message="Buttons in button bars should be borderless; use `style=&quot;?android:attr/buttonBarButtonStyle&quot;` (and `?android:attr/buttonBarStyle` on the parent)"
+        errorLine1="        &lt;Button"
+        errorLine2="         ~~~~~~">
+        <location
+            file="src/main/res/layout/gesture_dialog_new_task_step_2.xml"
+            line="35"
+            column="10"/>
+    </issue>
+
+    <issue
+        id="ButtonStyle"
+        message="Buttons in button bars should be borderless; use `style=&quot;?android:attr/buttonBarButtonStyle&quot;` (and `?android:attr/buttonBarStyle` on the parent)"
+        errorLine1="        &lt;Button"
+        errorLine2="         ~~~~~~">
+        <location
+            file="src/main/res/layout/gesture_dialog_new_task_step_2.xml"
+            line="45"
+            column="10"/>
+    </issue>
+
+    <issue
+        id="ButtonStyle"
+        message="Buttons in button bars should be borderless; use `style=&quot;?android:attr/buttonBarButtonStyle&quot;` (and `?android:attr/buttonBarStyle` on the parent)"
+        errorLine1="        &lt;Button"
+        errorLine2="         ~~~~~~">
+        <location
+            file="src/main/res/layout/gesture_dialog_new_task_step_3.xml"
+            line="35"
+            column="10"/>
+    </issue>
+
+    <issue
+        id="ButtonStyle"
+        message="Buttons in button bars should be borderless; use `style=&quot;?android:attr/buttonBarButtonStyle&quot;` (and `?android:attr/buttonBarStyle` on the parent)"
+        errorLine1="        &lt;Button"
+        errorLine2="         ~~~~~~">
+        <location
+            file="src/main/res/layout/gesture_dialog_new_task_step_3.xml"
+            line="45"
+            column="10"/>
+    </issue>
+
+    <issue
+        id="ButtonStyle"
+        message="Buttons in button bars should be borderless; use `style=&quot;?android:attr/buttonBarButtonStyle&quot;` (and `?android:attr/buttonBarStyle` on the parent)"
+        errorLine1="        &lt;Button"
+        errorLine2="         ~~~~~~">
+        <location
+            file="src/main/res/layout/gesture_dialog_new_task_step_4.xml"
+            line="48"
+            column="10"/>
+    </issue>
+
+    <issue
+        id="ButtonStyle"
+        message="Buttons in button bars should be borderless; use `style=&quot;?android:attr/buttonBarButtonStyle&quot;` (and `?android:attr/buttonBarStyle` on the parent)"
+        errorLine1="        &lt;Button"
+        errorLine2="         ~~~~~~">
+        <location
+            file="src/main/res/layout/gesture_dialog_new_task_step_4.xml"
+            line="58"
+            column="10"/>
+    </issue>
+
+    <issue
+        id="TextFields"
+        message="This text field does not specify an `inputType`"
+        errorLine1="            &lt;EditText"
+        errorLine2="             ~~~~~~~~">
+        <location
+            file="src/main/res/layout/activity_database_tester.xml"
+            line="46"
+            column="14"/>
+    </issue>
+
+    <issue
+        id="TextFields"
+        message="This text field does not specify an `inputType`"
+        errorLine1="            &lt;EditText"
+        errorLine2="             ~~~~~~~~">
+        <location
+            file="src/main/res/layout/activity_database_tester.xml"
+            line="175"
+            column="14"/>
+    </issue>
+
+    <issue
+        id="SmallSp"
+        message="Avoid using sizes smaller than `11sp`: `10sp`"
+        errorLine1="        android:textSize=&quot;10sp&quot;"
+        errorLine2="        ~~~~~~~~~~~~~~~~~~~~~~~">
+        <location
+            file="src/main/res/layout/activity_dashboard.xml"
+            line="115"
+            column="9"/>
+    </issue>
+
+    <issue
+        id="SmallSp"
+        message="Avoid using sizes smaller than `11sp`: `10sp`"
+        errorLine1="        android:textSize=&quot;10sp&quot;"
+        errorLine2="        ~~~~~~~~~~~~~~~~~~~~~~~">
+        <location
+            file="src/main/res/layout/activity_dashboard.xml"
+            line="130"
+            column="9"/>
+    </issue>
+
+    <issue
+        id="SmallSp"
+        message="Avoid using sizes smaller than `11sp`: `10sp`"
+        errorLine1="        android:textSize=&quot;10sp&quot;"
+        errorLine2="        ~~~~~~~~~~~~~~~~~~~~~~~">
+        <location
+            file="src/main/res/layout/activity_dashboard.xml"
+            line="145"
+            column="9"/>
+    </issue>
+
+    <issue
+        id="SmallSp"
+        message="Avoid using sizes smaller than `11sp`: `10sp`"
+        errorLine1="        android:textSize=&quot;10sp&quot;"
+        errorLine2="        ~~~~~~~~~~~~~~~~~~~~~~~">
+        <location
+            file="src/main/res/layout/activity_dashboard.xml"
+            line="160"
+            column="9"/>
+    </issue>
+
+    <issue
+        id="SmallSp"
+        message="Avoid using sizes smaller than `11sp`: `10sp`"
+        errorLine1="        android:textSize=&quot;10sp&quot;"
+        errorLine2="        ~~~~~~~~~~~~~~~~~~~~~~~">
+        <location
+            file="src/main/res/layout/activity_dashboard.xml"
+            line="175"
+            column="9"/>
+    </issue>
+
+    <issue
+        id="SmallSp"
+        message="Avoid using sizes smaller than `11sp`: `10sp`"
+        errorLine1="        android:textSize=&quot;10sp&quot;"
+        errorLine2="        ~~~~~~~~~~~~~~~~~~~~~~~">
+        <location
+            file="src/main/res/layout/activity_dashboard.xml"
+            line="190"
+            column="9"/>
+    </issue>
+
+    <issue
+        id="SmallSp"
+        message="Avoid using sizes smaller than `11sp`: `10sp`"
+        errorLine1="        android:textSize=&quot;10sp&quot;"
+        errorLine2="        ~~~~~~~~~~~~~~~~~~~~~~~">
+        <location
+            file="src/main/res/layout/activity_dashboard.xml"
+            line="205"
+            column="9"/>
+    </issue>
+
+    <issue
+        id="SmallSp"
+        message="Avoid using sizes smaller than `11sp`: `9sp`"
+        errorLine1="        android:textSize=&quot;9sp&quot;"
+        errorLine2="        ~~~~~~~~~~~~~~~~~~~~~~">
+        <location
+            file="src/main/res/layout/activity_dashboard.xml"
+            line="220"
+            column="9"/>
+    </issue>
+
+    <issue
+        id="SmallSp"
+        message="Avoid using sizes smaller than `11sp`: `9sp`"
+        errorLine1="        android:textSize=&quot;9sp&quot;"
+        errorLine2="        ~~~~~~~~~~~~~~~~~~~~~~">
+        <location
+            file="src/main/res/layout/activity_dashboard.xml"
+            line="235"
+            column="9"/>
+    </issue>
+
+    <issue
+        id="SmallSp"
+        message="Avoid using sizes smaller than `11sp`: `9sp`"
+        errorLine1="        android:textSize=&quot;9sp&quot;"
+        errorLine2="        ~~~~~~~~~~~~~~~~~~~~~~">
+        <location
+            file="src/main/res/layout/activity_dashboard.xml"
+            line="250"
+            column="9"/>
+    </issue>
+
+    <issue
+        id="SmallSp"
+        message="Avoid using sizes smaller than `11sp`: `9sp`"
+        errorLine1="        android:textSize=&quot;9sp&quot;"
+        errorLine2="        ~~~~~~~~~~~~~~~~~~~~~~">
+        <location
+            file="src/main/res/layout/activity_dashboard.xml"
+            line="265"
+            column="9"/>
+    </issue>
+
+    <issue
+        id="SmallSp"
+        message="Avoid using sizes smaller than `11sp`: `9sp`"
+        errorLine1="        android:textSize=&quot;9sp&quot;"
+        errorLine2="        ~~~~~~~~~~~~~~~~~~~~~~">
+        <location
+            file="src/main/res/layout/activity_dashboard.xml"
+            line="280"
+            column="9"/>
+    </issue>
+
+    <issue
+        id="SmallSp"
+        message="Avoid using sizes smaller than `11sp`: `9sp`"
+        errorLine1="        android:textSize=&quot;9sp&quot;"
+        errorLine2="        ~~~~~~~~~~~~~~~~~~~~~~">
+        <location
+            file="src/main/res/layout/activity_dashboard.xml"
+            line="295"
+            column="9"/>
+    </issue>
+
+    <issue
+        id="SmallSp"
+        message="Avoid using sizes smaller than `11sp`: `9sp`"
+        errorLine1="        android:textSize=&quot;9sp&quot;"
+        errorLine2="        ~~~~~~~~~~~~~~~~~~~~~~">
+        <location
+            file="src/main/res/layout/activity_dashboard.xml"
+            line="310"
+            column="9"/>
+    </issue>
+
+    <issue
+        id="SmallSp"
+        message="Avoid using sizes smaller than `11sp`: `9sp`"
+        errorLine1="        android:textSize=&quot;9sp&quot;"
+        errorLine2="        ~~~~~~~~~~~~~~~~~~~~~~">
+        <location
+            file="src/main/res/layout/activity_dashboard.xml"
+            line="325"
+            column="9"/>
+    </issue>
+
+    <issue
+        id="SmallSp"
+        message="Avoid using sizes smaller than `11sp`: `9sp`"
+        errorLine1="        android:textSize=&quot;9sp&quot;"
+        errorLine2="        ~~~~~~~~~~~~~~~~~~~~~~">
+        <location
+            file="src/main/res/layout/activity_dashboard.xml"
+            line="340"
+            column="9"/>
+    </issue>
+
+    <issue
+        id="SmallSp"
+        message="Avoid using sizes smaller than `11sp`: `9sp`"
+        errorLine1="        android:textSize=&quot;9sp&quot;"
+        errorLine2="        ~~~~~~~~~~~~~~~~~~~~~~">
+        <location
+            file="src/main/res/layout/activity_dashboard.xml"
+            line="355"
+            column="9"/>
+    </issue>
+
+    <issue
+        id="SmallSp"
+        message="Avoid using sizes smaller than `11sp`: `9sp`"
+        errorLine1="        android:textSize=&quot;9sp&quot;"
+        errorLine2="        ~~~~~~~~~~~~~~~~~~~~~~">
+        <location
+            file="src/main/res/layout/activity_dashboard.xml"
+            line="370"
+            column="9"/>
+    </issue>
+
+    <issue
+        id="SmallSp"
+        message="Avoid using sizes smaller than `11sp`: `9sp`"
+        errorLine1="        android:textSize=&quot;9sp&quot;"
+        errorLine2="        ~~~~~~~~~~~~~~~~~~~~~~">
+        <location
+            file="src/main/res/layout/activity_dashboard.xml"
+            line="385"
+            column="9"/>
+    </issue>
+
+    <issue
+        id="Autofill"
+        message="Missing `autofillHints` attribute"
+        errorLine1="            &lt;EditText"
+        errorLine2="             ~~~~~~~~">
+        <location
+            file="src/main/res/layout/activity_database_tester.xml"
+            line="46"
+            column="14"/>
+    </issue>
+
+    <issue
+        id="Autofill"
+        message="Missing `autofillHints` attribute"
+        errorLine1="            &lt;EditText"
+        errorLine2="             ~~~~~~~~">
+        <location
+            file="src/main/res/layout/activity_database_tester.xml"
+            line="148"
+            column="14"/>
+    </issue>
+
+    <issue
+        id="Autofill"
+        message="Missing `autofillHints` attribute"
+        errorLine1="            &lt;EditText"
+        errorLine2="             ~~~~~~~~">
+        <location
+            file="src/main/res/layout/activity_database_tester.xml"
+            line="175"
+            column="14"/>
+    </issue>
+
+    <issue
+        id="Autofill"
+        message="Missing `autofillHints` attribute"
+        errorLine1="    &lt;EditText"
+        errorLine2="     ~~~~~~~~">
+        <location
+            file="src/main/res/layout/gesture_dialog_new_task_step_1.xml"
+            line="8"
+            column="6"/>
+    </issue>
+
+    <issue
+        id="Autofill"
+        message="Missing `autofillHints` attribute"
+        errorLine1="        &lt;EditText"
+        errorLine2="         ~~~~~~~~">
+        <location
+            file="src/main/res/layout/gesture_dialog_new_task_step_4.xml"
+            line="21"
+            column="10"/>
+    </issue>
+
+    <issue
+        id="Autofill"
+        message="Missing `autofillHints` attribute"
+        errorLine1="        &lt;EditText"
+        errorLine2="         ~~~~~~~~">
+        <location
+            file="src/main/res/layout/gesture_dialog_new_task_step_4.xml"
+            line="31"
+            column="10"/>
+    </issue>
+
+    <issue
+        id="ButtonCase"
+        message="The standard Android way to capitalize Ok is &quot;OK&quot; (tip: use `@android:string/ok` instead)"
+        errorLine1="    &lt;string name=&quot;ok&quot;>Ok&lt;/string>"
+        errorLine2="                      ~~">
+        <location
+            file="src/main/res/values/strings.xml"
+            line="47"
+            column="23"/>
+    </issue>
+
+    <issue
+        id="UseKtx"
+        message="Use the KTX extension function `SharedPreferences.edit` instead?"
+        errorLine1="                    sharedPreferences.edit().putInt(&quot;audio_mode&quot;, SettingsActivity.AUDIO_MODE_VOICE_COMMANDS).apply()"
+        errorLine2="                    ~~~~~~~~~~~~~~~~~~~~~~~~">
+        <location
+            file="src/main/java/com/b1gbr0ther/DashboardActivity.kt"
+            line="81"
+            column="21"/>
+    </issue>
+
+    <issue
+        id="UseKtx"
+        message="Use the KTX extension function `SharedPreferences.edit` instead?"
+        errorLine1="        val editor = sharedPreferences.edit()"
+        errorLine2="                     ~~~~~~~~~~~~~~~~~~~~~~~~">
+        <location
+            file="src/main/java/com/b1gbr0ther/LocaleHelper.kt"
+            line="44"
+            column="22"/>
+    </issue>
+
+    <issue
+        id="UseKtx"
+        message="Use the KTX extension function `SharedPreferences.edit` instead?"
+        errorLine1="        prefs.edit().clear().apply()"
+        errorLine2="        ~~~~~~~~~~~~">
+        <location
+            file="src/main/java/com/b1gbr0ther/SessionTracker.kt"
+            line="115"
+            column="9"/>
+    </issue>
+
+    <issue
+        id="UseKtx"
+        message="Use the KTX extension function `SharedPreferences.edit` instead?"
+        errorLine1="                    sharedPreferences.edit().putInt(&quot;audio_mode&quot;, AUDIO_MODE_OFF).apply()"
+        errorLine2="                    ~~~~~~~~~~~~~~~~~~~~~~~~">
+        <location
+            file="src/main/java/com/b1gbr0ther/SettingsActivity.kt"
+            line="312"
+            column="21"/>
+    </issue>
+
+    <issue
+        id="UseKtx"
+        message="Use the KTX extension function `SharedPreferences.edit` instead?"
+        errorLine1="                        sharedPreferences.edit().putInt(&quot;audio_mode&quot;, AUDIO_MODE_OFF).apply()"
+        errorLine2="                        ~~~~~~~~~~~~~~~~~~~~~~~~">
+        <location
+            file="src/main/java/com/b1gbr0ther/SettingsActivity.kt"
+            line="338"
+            column="25"/>
+    </issue>
+
+    <issue
+        id="UseKtx"
+        message="Use the KTX extension function `SharedPreferences.edit` instead?"
+        errorLine1="            sharedPreferences.edit().putInt(&quot;audio_mode&quot;, AUDIO_MODE_VOICE_COMMANDS).apply()"
+        errorLine2="            ~~~~~~~~~~~~~~~~~~~~~~~~">
+        <location
+            file="src/main/java/com/b1gbr0ther/SettingsActivity.kt"
+            line="346"
+            column="13"/>
+    </issue>
+
+    <issue
+        id="UseKtx"
+        message="Use the KTX extension function `SharedPreferences.edit` instead?"
+        errorLine1="                        sharedPreferences.edit().putInt(&quot;audio_mode&quot;, AUDIO_MODE_OFF).apply()"
+        errorLine2="                        ~~~~~~~~~~~~~~~~~~~~~~~~">
+        <location
+            file="src/main/java/com/b1gbr0ther/SettingsActivity.kt"
+            line="363"
+            column="25"/>
+    </issue>
+
+    <issue
+        id="UseKtx"
+        message="Use the KTX extension function `SharedPreferences.edit` instead?"
+        errorLine1="            sharedPreferences.edit().putInt(&quot;audio_mode&quot;, AUDIO_MODE_SOUND_DETECTION).apply()"
+        errorLine2="            ~~~~~~~~~~~~~~~~~~~~~~~~">
+        <location
+            file="src/main/java/com/b1gbr0ther/SettingsActivity.kt"
+            line="371"
+            column="13"/>
+    </issue>
+
+    <issue
+        id="UseKtx"
+        message="Use the KTX extension function `SharedPreferences.edit` instead?"
+        errorLine1="                sharedPreferences.edit().putInt(&quot;audio_mode&quot;, AUDIO_MODE_OFF).apply()"
+        errorLine2="                ~~~~~~~~~~~~~~~~~~~~~~~~">
+        <location
+            file="src/main/java/com/b1gbr0ther/SettingsActivity.kt"
+            line="385"
+            column="17"/>
+    </issue>
+
+    <issue
+        id="UseKtx"
+        message="Use the KTX extension function `SharedPreferences.edit` instead?"
+        errorLine1="        sharedPreferences.edit().putBoolean(&quot;notifications&quot;, enabled).apply()"
+        errorLine2="        ~~~~~~~~~~~~~~~~~~~~~~~~">
+        <location
+            file="src/main/java/com/b1gbr0ther/SettingsActivity.kt"
+            line="457"
+            column="9"/>
+    </issue>
+
+    <issue
+        id="UseKtx"
+        message="Use the KTX extension function `SharedPreferences.edit` instead?"
+        errorLine1="                            sharedPreferences.edit().putInt(&quot;audio_mode&quot;, AUDIO_MODE_OFF).apply()"
+        errorLine2="                            ~~~~~~~~~~~~~~~~~~~~~~~~">
+        <location
+            file="src/main/java/com/b1gbr0ther/SettingsActivity.kt"
+            line="480"
+            column="29"/>
+    </issue>
+
+    <issue
+        id="UseKtx"
+        message="Use the KTX extension function `SharedPreferences.edit` instead?"
+        errorLine1="                    sharedPreferences.edit().putInt(&quot;audio_mode&quot;, AUDIO_MODE_OFF).apply()"
+        errorLine2="                    ~~~~~~~~~~~~~~~~~~~~~~~~">
+        <location
+            file="src/main/java/com/b1gbr0ther/SettingsActivity.kt"
+            line="492"
+            column="21"/>
+    </issue>
+
+    <issue
+        id="UseKtx"
+        message="Use the KTX extension function `SharedPreferences.edit` instead?"
+        errorLine1="        val editor = sharedPreferences.edit()"
+        errorLine2="                     ~~~~~~~~~~~~~~~~~~~~~~~~">
+        <location
+            file="src/main/java/com/b1gbr0ther/SettingsActivity.kt"
+            line="540"
+            column="22"/>
+    </issue>
+
+    <issue
+        id="UseKtx"
+        message="Use the KTX extension function `SharedPreferences.edit` instead?"
+        errorLine1="            sharedPreferences.edit().putInt(&quot;audio_mode&quot;, AUDIO_MODE_OFF).apply()"
+        errorLine2="            ~~~~~~~~~~~~~~~~~~~~~~~~">
+        <location
+            file="src/main/java/com/b1gbr0ther/SettingsActivity.kt"
+            line="628"
+            column="13"/>
+    </issue>
+
+    <issue
+        id="UseKtx"
+        message="Use the KTX extension function `SharedPreferences.edit` instead?"
+        errorLine1="            sharedPreferences.edit()"
+        errorLine2="            ~~~~~~~~~~~~~~~~~~~~~~~~">
+        <location
+            file="src/main/java/com/b1gbr0ther/SettingsActivity.kt"
+            line="634"
+            column="13"/>
+    </issue>
+
+    <issue
+        id="UseKtx"
+        message="Use the KTX extension function `String.toColorInt` instead?"
+        errorLine1="                                Color.parseColor(&quot;#4CAF50&quot;),  // Green"
+        errorLine2="                                ~~~~~~~~~~~~~~~~~~~~~~~~~~~">
+        <location
+            file="src/main/java/com/b1gbr0ther/StatisticsActivity.kt"
+            line="146"
+            column="33"/>
+    </issue>
+
+    <issue
+        id="UseKtx"
+        message="Use the KTX extension function `String.toColorInt` instead?"
+        errorLine1="                                Color.parseColor(&quot;#4CAF50&quot;),  // Green"
+        errorLine2="                                ~~~~~~~~~~~~~~~~~~~~~~~~~~~">
+        <location
+            file="src/main/java/com/b1gbr0ther/StatisticsActivity.kt"
+            line="146"
+            column="33"/>
+    </issue>
+
+    <issue
+        id="UseKtx"
+        message="Use the KTX extension function `String.toColorInt` instead?"
+        errorLine1="                                Color.parseColor(&quot;#F44336&quot;)    // Red"
+        errorLine2="                                ~~~~~~~~~~~~~~~~~~~~~~~~~~~">
+        <location
+            file="src/main/java/com/b1gbr0ther/StatisticsActivity.kt"
+            line="147"
+            column="33"/>
+    </issue>
+
+    <issue
+        id="UseKtx"
+        message="Use the KTX extension function `String.toColorInt` instead?"
+        errorLine1="                                Color.parseColor(&quot;#F44336&quot;)    // Red"
+        errorLine2="                                ~~~~~~~~~~~~~~~~~~~~~~~~~~~">
+        <location
+            file="src/main/java/com/b1gbr0ther/StatisticsActivity.kt"
+            line="147"
+            column="33"/>
+    </issue>
+
+    <issue
+        id="UseKtx"
+        message="Use the KTX extension function `String.toColorInt` instead?"
+        errorLine1="                                    Color.parseColor(&quot;#4CAF50&quot;),  // Green"
+        errorLine2="                                    ~~~~~~~~~~~~~~~~~~~~~~~~~~~">
+        <location
+            file="src/main/java/com/b1gbr0ther/StatisticsActivity.kt"
+            line="180"
+            column="37"/>
+    </issue>
+
+    <issue
+        id="UseKtx"
+        message="Use the KTX extension function `String.toColorInt` instead?"
+        errorLine1="                                    Color.parseColor(&quot;#4CAF50&quot;),  // Green"
+        errorLine2="                                    ~~~~~~~~~~~~~~~~~~~~~~~~~~~">
+        <location
+            file="src/main/java/com/b1gbr0ther/StatisticsActivity.kt"
+            line="180"
+            column="37"/>
+    </issue>
+
+    <issue
+        id="UseKtx"
+        message="Use the KTX extension function `String.toColorInt` instead?"
+        errorLine1="                                    Color.parseColor(&quot;#2196F3&quot;),  // Blue"
+        errorLine2="                                    ~~~~~~~~~~~~~~~~~~~~~~~~~~~">
+        <location
+            file="src/main/java/com/b1gbr0ther/StatisticsActivity.kt"
+            line="181"
+            column="37"/>
+    </issue>
+
+    <issue
+        id="UseKtx"
+        message="Use the KTX extension function `String.toColorInt` instead?"
+        errorLine1="                                    Color.parseColor(&quot;#2196F3&quot;),  // Blue"
+        errorLine2="                                    ~~~~~~~~~~~~~~~~~~~~~~~~~~~">
+        <location
+            file="src/main/java/com/b1gbr0ther/StatisticsActivity.kt"
+            line="181"
+            column="37"/>
+    </issue>
+
+    <issue
+        id="UseKtx"
+        message="Use the KTX extension function `String.toColorInt` instead?"
+        errorLine1="                                    Color.parseColor(&quot;#F44336&quot;)   // Red"
+        errorLine2="                                    ~~~~~~~~~~~~~~~~~~~~~~~~~~~">
+        <location
+            file="src/main/java/com/b1gbr0ther/StatisticsActivity.kt"
+            line="182"
+            column="37"/>
+    </issue>
+
+    <issue
+        id="UseKtx"
+        message="Use the KTX extension function `String.toColorInt` instead?"
+        errorLine1="                                    Color.parseColor(&quot;#F44336&quot;)   // Red"
+        errorLine2="                                    ~~~~~~~~~~~~~~~~~~~~~~~~~~~">
+        <location
+            file="src/main/java/com/b1gbr0ther/StatisticsActivity.kt"
+            line="182"
+            column="37"/>
+    </issue>
+
+    <issue
+        id="UseKtx"
+        message="Use the KTX extension function `String.toColorInt` instead?"
+        errorLine1="                                Color.parseColor(&quot;#9C27B0&quot;),  // Purple"
+        errorLine2="                                ~~~~~~~~~~~~~~~~~~~~~~~~~~~">
+        <location
+            file="src/main/java/com/b1gbr0ther/StatisticsActivity.kt"
+            line="213"
+            column="33"/>
+    </issue>
+
+    <issue
+        id="UseKtx"
+        message="Use the KTX extension function `String.toColorInt` instead?"
+        errorLine1="                                Color.parseColor(&quot;#9C27B0&quot;),  // Purple"
+        errorLine2="                                ~~~~~~~~~~~~~~~~~~~~~~~~~~~">
+        <location
+            file="src/main/java/com/b1gbr0ther/StatisticsActivity.kt"
+            line="213"
+            column="33"/>
+    </issue>
+
+    <issue
+        id="UseKtx"
+        message="Use the KTX extension function `String.toColorInt` instead?"
+        errorLine1="                                Color.parseColor(&quot;#FF9800&quot;)    // Orange"
+        errorLine2="                                ~~~~~~~~~~~~~~~~~~~~~~~~~~~">
+        <location
+            file="src/main/java/com/b1gbr0ther/StatisticsActivity.kt"
+            line="214"
+            column="33"/>
+    </issue>
+
+    <issue
+        id="UseKtx"
+        message="Use the KTX extension function `String.toColorInt` instead?"
+        errorLine1="                                Color.parseColor(&quot;#FF9800&quot;)    // Orange"
+        errorLine2="                                ~~~~~~~~~~~~~~~~~~~~~~~~~~~">
+        <location
+            file="src/main/java/com/b1gbr0ther/StatisticsActivity.kt"
+            line="214"
+            column="33"/>
+    </issue>
+
+    <issue
+        id="UseKtx"
+        message="Use the KTX extension function `SharedPreferences.edit` instead?"
+        errorLine1="        sharedPreferences.edit().putInt(THEME_KEY, themeMode).apply()"
+        errorLine2="        ~~~~~~~~~~~~~~~~~~~~~~~~">
+        <location
+            file="src/main/java/com/b1gbr0ther/ThemeManager.kt"
+            line="34"
+            column="9"/>
+    </issue>
+
+    <issue
+        id="UseTomlInstead"
+        message="Use version catalog instead"
+        errorLine1="    implementation(&quot;com.github.PhilJay:MPAndroidChart:v3.1.0&quot;)"
+        errorLine2="                   ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~">
+        <location
+            file="build.gradle.kts"
+            line="55"
+            column="20"/>
+    </issue>
+
+    <issue
+        id="UseTomlInstead"
+        message="Use version catalog instead"
+        errorLine1="    implementation(&quot;edu.emory.mathcs:JTransforms:2.4&quot;)"
+        errorLine2="                   ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~">
+        <location
+            file="build.gradle.kts"
+            line="77"
+            column="20"/>
+    </issue>
+
+    <issue
+        id="UseTomlInstead"
+        message="Use version catalog instead"
+        errorLine1="    implementation(&quot;com.googlecode.soundlibs:mp3spi:1.9.5.4&quot;)"
+        errorLine2="                   ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~">
+        <location
+            file="build.gradle.kts"
+            line="80"
+            column="20"/>
+    </issue>
+
+    <issue
+        id="UseTomlInstead"
+        message="Use version catalog instead"
+        errorLine1="    implementation(&quot;androidx.navigation:navigation-fragment-ktx:2.7.7&quot;)"
+        errorLine2="                   ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~">
+        <location
+            file="build.gradle.kts"
+            line="83"
+            column="20"/>
+    </issue>
+
+    <issue
+        id="UseTomlInstead"
+        message="Use version catalog instead"
+        errorLine1="    implementation(&quot;androidx.navigation:navigation-ui-ktx:2.7.7&quot;)"
+        errorLine2="                   ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~">
+        <location
+            file="build.gradle.kts"
+            line="84"
+            column="20"/>
+    </issue>
+
+    <issue
+        id="ContentDescription"
+        message="Missing `contentDescription` attribute on image"
+        errorLine1="        &lt;ImageView"
+        errorLine2="         ~~~~~~~~~">
+        <location
+            file="src/main/res/layout/menu_bar.xml"
+            line="24"
+            column="10"/>
+    </issue>
+
+    <issue
+        id="ContentDescription"
+        message="Missing `contentDescription` attribute on image"
+        errorLine1="        &lt;ImageView"
+        errorLine2="         ~~~~~~~~~">
+        <location
+            file="src/main/res/layout/menu_bar.xml"
+            line="47"
+            column="10"/>
+    </issue>
+
+    <issue
+        id="ContentDescription"
+        message="Missing `contentDescription` attribute on image"
+        errorLine1="        &lt;ImageView"
+        errorLine2="         ~~~~~~~~~">
+        <location
+            file="src/main/res/layout/menu_bar.xml"
+            line="71"
+            column="10"/>
+    </issue>
+
+    <issue
+        id="ContentDescription"
+        message="Missing `contentDescription` attribute on image"
+        errorLine1="        &lt;ImageView"
+        errorLine2="         ~~~~~~~~~">
+        <location
+            file="src/main/res/layout/menu_bar.xml"
+            line="95"
+            column="10"/>
+    </issue>
+
+    <issue
+        id="SetTextI18n"
+        message="String literal in `setText` can not be translated. Use Android resources instead."
+        errorLine1="                            simulateWakeWordButton.text = &quot;Start Audio&quot;"
+        errorLine2="                                                           ~~~~~~~~~~~">
+        <location
+            file="src/main/java/com/b1gbr0ther/DashboardActivity.kt"
+            line="277"
+            column="60"/>
+    </issue>
+
+    <issue
+        id="SetTextI18n"
+        message="String literal in `setText` can not be translated. Use Android resources instead."
+        errorLine1="                            statusTextView.text = &quot;Audio features disabled&quot;"
+        errorLine2="                                                   ~~~~~~~~~~~~~~~~~~~~~~~">
+        <location
+            file="src/main/java/com/b1gbr0ther/DashboardActivity.kt"
+            line="304"
+            column="52"/>
+    </issue>
+
+    <issue
+        id="SetTextI18n"
+        message="String literal in `setText` can not be translated. Use Android resources instead."
+        errorLine1="                            simulateWakeWordButton.text = &quot;Start Audio&quot;"
+        errorLine2="                                                           ~~~~~~~~~~~">
+        <location
+            file="src/main/java/com/b1gbr0ther/DashboardActivity.kt"
+            line="305"
+            column="60"/>
+    </issue>
+
+    <issue
+        id="SetTextI18n"
+        message="String literal in `setText` can not be translated. Use Android resources instead."
+        errorLine1="            statusTextView.text = &quot;Audio features disabled - select a mode in settings&quot;"
+        errorLine2="                                   ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~">
+        <location
+            file="src/main/java/com/b1gbr0ther/DashboardActivity.kt"
+            line="358"
+            column="36"/>
+    </issue>
+
+    <issue
+        id="SetTextI18n"
+        message="String literal in `setText` can not be translated. Use Android resources instead."
+        errorLine1="            simulateWakeWordButton.text = &quot;Start Audio&quot;"
+        errorLine2="                                           ~~~~~~~~~~~">
+        <location
+            file="src/main/java/com/b1gbr0ther/DashboardActivity.kt"
+            line="359"
+            column="44"/>
+    </issue>
+
+    <issue
+        id="SetTextI18n"
+        message="Do not concatenate text displayed with `setText`. Use resource string with placeholders."
+        errorLine1="            statusTextView.text = &quot;$modeText permission required&quot;"
+        errorLine2="                                  ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~">
+        <location
+            file="src/main/java/com/b1gbr0ther/DashboardActivity.kt"
+            line="368"
+            column="35"/>
+    </issue>
+
+    <issue
+        id="SetTextI18n"
+        message="String literal in `setText` can not be translated. Use Android resources instead."
+        errorLine1="            statusTextView.text = &quot;$modeText permission required&quot;"
+        errorLine2="                                            ~~~~~~~~~~~~~~~~~~~~">
+        <location
+            file="src/main/java/com/b1gbr0ther/DashboardActivity.kt"
+            line="368"
+            column="45"/>
+    </issue>
+
+    <issue
+        id="SetTextI18n"
+        message="String literal in `setText` can not be translated. Use Android resources instead."
+        errorLine1="            simulateWakeWordButton.text = &quot;Start Audio&quot;"
+        errorLine2="                                           ~~~~~~~~~~~">
+        <location
+            file="src/main/java/com/b1gbr0ther/DashboardActivity.kt"
+            line="369"
+            column="44"/>
+    </issue>
+
+    <issue
+        id="SetTextI18n"
+        message="String literal in `setText` can not be translated. Use Android resources instead."
+        errorLine1="                    statusTextView.text = &quot;Press button to start voice commands&quot;"
+        errorLine2="                                           ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~">
+        <location
+            file="src/main/java/com/b1gbr0ther/DashboardActivity.kt"
+            line="375"
+            column="44"/>
+    </issue>
+
+    <issue
+        id="SetTextI18n"
+        message="String literal in `setText` can not be translated. Use Android resources instead."
+        errorLine1="                    simulateWakeWordButton.text = &quot;Start Voice Commands&quot;"
+        errorLine2="                                                   ~~~~~~~~~~~~~~~~~~~~">
+        <location
+            file="src/main/java/com/b1gbr0ther/DashboardActivity.kt"
+            line="376"
+            column="52"/>
+    </issue>
+
+    <issue
+        id="SetTextI18n"
+        message="String literal in `setText` can not be translated. Use Android resources instead."
+        errorLine1="                    statusTextView.text = &quot;Press button to start sound detection&quot;"
+        errorLine2="                                           ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~">
+        <location
+            file="src/main/java/com/b1gbr0ther/DashboardActivity.kt"
+            line="379"
+            column="44"/>
+    </issue>
+
+    <issue
+        id="SetTextI18n"
+        message="String literal in `setText` can not be translated. Use Android resources instead."
+        errorLine1="                    simulateWakeWordButton.text = &quot;Start Sound Detection&quot;"
+        errorLine2="                                                   ~~~~~~~~~~~~~~~~~~~~~">
+        <location
+            file="src/main/java/com/b1gbr0ther/DashboardActivity.kt"
+            line="380"
+            column="52"/>
+    </issue>
+
+    <issue
+        id="SetTextI18n"
+        message="String literal in `setText` can not be translated. Use Android resources instead."
+        errorLine1="                    statusTextView.text = &quot;Audio mode not configured&quot;"
+        errorLine2="                                           ~~~~~~~~~~~~~~~~~~~~~~~~~">
+        <location
+            file="src/main/java/com/b1gbr0ther/DashboardActivity.kt"
+            line="383"
+            column="44"/>
+    </issue>
+
+    <issue
+        id="SetTextI18n"
+        message="String literal in `setText` can not be translated. Use Android resources instead."
+        errorLine1="                    simulateWakeWordButton.text = &quot;Start Audio&quot;"
+        errorLine2="                                                   ~~~~~~~~~~~">
+        <location
+            file="src/main/java/com/b1gbr0ther/DashboardActivity.kt"
+            line="384"
+            column="52"/>
+    </issue>
+
+    <issue
+        id="SetTextI18n"
+        message="String literal in `setText` can not be translated. Use Android resources instead."
+        errorLine1="        statusTextView.text = &quot;Voice recognition stopped&quot;"
+        errorLine2="                               ~~~~~~~~~~~~~~~~~~~~~~~~~">
+        <location
+            file="src/main/java/com/b1gbr0ther/DashboardActivity.kt"
+            line="626"
+            column="32"/>
+    </issue>
+
+    <issue
+        id="SetTextI18n"
+        message="Do not concatenate text displayed with `setText`. Use resource string with placeholders."
+        errorLine1="                resultTextView.text = formattedText + currentText"
+        errorLine2="                                      ~~~~~~~~~~~~~~~~~~~~~~~~~~~">
+        <location
+            file="src/main/java/com/b1gbr0ther/DatabaseTestActivity.kt"
+            line="229"
+            column="39"/>
+    </issue>
+
+    <issue
+        id="SetTextI18n"
+        message="Do not concatenate text displayed with `setText`. Use resource string with placeholders."
+        errorLine1="                    startDateButton.text = &quot;Start: ${selectedDate}&quot;"
+        errorLine2="                                           ~~~~~~~~~~~~~~~~~~~~~~~~">
+        <location
+            file="src/main/java/com/b1gbr0ther/ExportPage.kt"
+            line="118"
+            column="44"/>
+    </issue>
+
+    <issue
+        id="SetTextI18n"
+        message="String literal in `setText` can not be translated. Use Android resources instead."
+        errorLine1="                    startDateButton.text = &quot;Start: ${selectedDate}&quot;"
+        errorLine2="                                            ~~~~~~~">
+        <location
+            file="src/main/java/com/b1gbr0ther/ExportPage.kt"
+            line="118"
+            column="45"/>
+    </issue>
+
+    <issue
+        id="SetTextI18n"
+        message="Do not concatenate text displayed with `setText`. Use resource string with placeholders."
+        errorLine1="                    endDateButton.text = &quot;End: ${selectedDate}&quot;"
+        errorLine2="                                         ~~~~~~~~~~~~~~~~~~~~~~">
+        <location
+            file="src/main/java/com/b1gbr0ther/ExportPage.kt"
+            line="121"
+            column="42"/>
+    </issue>
+
+    <issue
+        id="SetTextI18n"
+        message="String literal in `setText` can not be translated. Use Android resources instead."
+        errorLine1="                    endDateButton.text = &quot;End: ${selectedDate}&quot;"
+        errorLine2="                                          ~~~~~">
+        <location
+            file="src/main/java/com/b1gbr0ther/ExportPage.kt"
+            line="121"
+            column="43"/>
+    </issue>
+
+    <issue
+        id="SetTextI18n"
+        message="Do not concatenate text displayed with `setText`. Use resource string with placeholders."
+        errorLine1="        exportButton.text = &quot;Export Selected ($selectedCount/$totalCount)&quot;"
+        errorLine2="                            ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~">
+        <location
+            file="src/main/java/com/b1gbr0ther/ExportPage.kt"
+            line="163"
+            column="29"/>
+    </issue>
+
+    <issue
+        id="SetTextI18n"
+        message="String literal in `setText` can not be translated. Use Android resources instead."
+        errorLine1="        exportButton.text = &quot;Export Selected ($selectedCount/$totalCount)&quot;"
+        errorLine2="                             ~~~~~~~~~~~~~~~~~">
+        <location
+            file="src/main/java/com/b1gbr0ther/ExportPage.kt"
+            line="163"
+            column="30"/>
+    </issue>
+
+    <issue
+        id="SetTextI18n"
+        message="Do not concatenate text displayed with `setText`. Use resource string with placeholders."
+        errorLine1="        volumeValueText.text = &quot;$volume%&quot;"
+        errorLine2="                               ~~~~~~~~~~">
+        <location
+            file="src/main/java/com/b1gbr0ther/SettingsActivity.kt"
+            line="201"
+            column="32"/>
+    </issue>
+
+    <issue
+        id="SetTextI18n"
+        message="Do not concatenate text displayed with `setText`. Use resource string with placeholders."
+        errorLine1="        sensitivityValueText.text = &quot;$sensitivity%&quot;"
+        errorLine2="                                    ~~~~~~~~~~~~~~~">
+        <location
+            file="src/main/java/com/b1gbr0ther/SettingsActivity.kt"
+            line="205"
+            column="37"/>
+    </issue>
+
+    <issue
+        id="SetTextI18n"
+        message="Do not concatenate text displayed with `setText`. Use resource string with placeholders."
+        errorLine1="                volumeValueText.text = &quot;$progress%&quot;"
+        errorLine2="                                       ~~~~~~~~~~~~">
+        <location
+            file="src/main/java/com/b1gbr0ther/SettingsActivity.kt"
+            line="269"
+            column="40"/>
+    </issue>
+
+    <issue
+        id="SetTextI18n"
+        message="Do not concatenate text displayed with `setText`. Use resource string with placeholders."
+        errorLine1="                sensitivityValueText.text = &quot;$progress%&quot;"
+        errorLine2="                                            ~~~~~~~~~~~~">
+        <location
+            file="src/main/java/com/b1gbr0ther/SettingsActivity.kt"
+            line="277"
+            column="45"/>
+    </issue>
+
+    <issue
+        id="SetTextI18n"
+        message="String literal in `setText` can not be translated. Use Android resources instead."
+        errorLine1="        volumeValueText.text = &quot;50%&quot;"
+        errorLine2="                                ~~~">
+        <location
+            file="src/main/java/com/b1gbr0ther/SettingsActivity.kt"
+            line="528"
+            column="33"/>
+    </issue>
+
+    <issue
+        id="SetTextI18n"
+        message="String literal in `setText` can not be translated. Use Android resources instead."
+        errorLine1="        sensitivityValueText.text = &quot;75%&quot;"
+        errorLine2="                                     ~~~">
+        <location
+            file="src/main/java/com/b1gbr0ther/SettingsActivity.kt"
+            line="530"
+            column="38"/>
+    </issue>
+
+    <issue
+        id="SetTextI18n"
+        message="Do not concatenate text displayed with `setText`. Use resource string with placeholders."
+        errorLine1="                    completionRateText.text = &quot;$completionRate%&quot;"
+        errorLine2="                                              ~~~~~~~~~~~~~~~~~~">
+        <location
+            file="src/main/java/com/b1gbr0ther/StatisticsActivity.kt"
+            line="132"
+            column="47"/>
+    </issue>
+
+    <issue
+        id="SetTextI18n"
+        message="Do not concatenate text displayed with `setText`. Use resource string with placeholders."
+        errorLine1="                    completionStatsText.text = &quot;Completed: ${numberFormat.format(completedCount)} / Uncompleted: ${numberFormat.format(uncompletedCount)}&quot;"
+        errorLine2="                                               ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~">
+        <location
+            file="src/main/java/com/b1gbr0ther/StatisticsActivity.kt"
+            line="135"
+            column="48"/>
+    </issue>
+
+    <issue
+        id="SetTextI18n"
+        message="String literal in `setText` can not be translated. Use Android resources instead."
+        errorLine1="                    completionStatsText.text = &quot;Completed: ${numberFormat.format(completedCount)} / Uncompleted: ${numberFormat.format(uncompletedCount)}&quot;"
+        errorLine2="                                                ~~~~~~~~~~~">
+        <location
+            file="src/main/java/com/b1gbr0ther/StatisticsActivity.kt"
+            line="135"
+            column="49"/>
+    </issue>
+
+    <issue
+        id="SetTextI18n"
+        message="String literal in `setText` can not be translated. Use Android resources instead."
+        errorLine1="                    completionStatsText.text = &quot;Completed: ${numberFormat.format(completedCount)} / Uncompleted: ${numberFormat.format(uncompletedCount)}&quot;"
+        errorLine2="                                                                                                 ~~~~~~~~~~~~~~~~">
+        <location
+            file="src/main/java/com/b1gbr0ther/StatisticsActivity.kt"
+            line="135"
+            column="98"/>
+    </issue>
+
+    <issue
+        id="SetTextI18n"
+        message="Do not concatenate text displayed with `setText`. Use resource string with placeholders."
+        errorLine1="        holder.timeText.text = &quot;${task.startTime.format(dateFormatter)} - ${task.endTime.format(dateFormatter)}&quot;"
+        errorLine2="                               ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~">
+        <location
+            file="src/main/java/com/b1gbr0ther/ui/TaskAdapter.kt"
+            line="39"
+            column="32"/>
+    </issue>
+
+    <issue
+        id="SetTextI18n"
+        message="Number formatting does not take into account locale settings. Consider using `String.format` instead."
+        errorLine1="            tvTaskId.text = task.id.toString()"
+        errorLine2="                            ~~~~~~~~~~~~~~~~~~">
+        <location
+            file="src/main/java/com/b1gbr0ther/adapters/TaskAdapter.kt"
+            line="51"
+            column="29"/>
+    </issue>
+
+    <issue
+        id="SetTextI18n"
+        message="Number formatting does not take into account locale settings. Consider using `String.format` instead."
+        errorLine1="    yearButton.text = currentYearMonth.year.toString()"
+        errorLine2="                      ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~">
+        <location
+            file="src/main/java/com/b1gbr0ther/TimesheetActivity.kt"
+            line="84"
+            column="23"/>
+    </issue>
+
+    <issue
+        id="SetTextI18n"
+        message="Number formatting does not take into account locale settings. Consider using `String.format` instead."
+        errorLine1="      block.findViewById&lt;TextView>(R.id.dayNumberText).text = day.toString()"
+        errorLine2="                                                              ~~~~~~~~~~~~~~">
+        <location
+            file="src/main/java/com/b1gbr0ther/TimesheetActivity.kt"
+            line="103"
+            column="63"/>
+    </issue>
+
+    <issue
+        id="SetTextI18n"
+        message="Do not concatenate text displayed with `setText`. Use resource string with placeholders."
+        errorLine1="      block.findViewById&lt;TextView>(R.id.hoursWorkedText).text = &quot;${(1..8).random()}h&quot;"
+        errorLine2="                                                                ~~~~~~~~~~~~~~~~~~~~~">
+        <location
+            file="src/main/java/com/b1gbr0ther/TimesheetActivity.kt"
+            line="104"
+            column="65"/>
+    </issue>
+
+    <issue
+        id="SetTextI18n"
+        message="Number formatting does not take into account locale settings. Consider using `String.format` instead."
+        errorLine1="      button.text = year.toString()"
+        errorLine2="                    ~~~~~~~~~~~~~~~">
+        <location
+            file="src/main/java/com/b1gbr0ther/TimesheetActivity.kt"
+            line="127"
+            column="21"/>
+    </issue>
+
+    <issue
+        id="SetTextI18n"
+        message="Do not concatenate text displayed with `setText`. Use resource string with placeholders."
+        errorLine1="    title.text = &quot;Tasks on $monthName $day&quot;"
+        errorLine2="                 ~~~~~~~~~~~~~~~~~~~~~~~~~~">
+        <location
+            file="src/main/java/com/b1gbr0ther/TimesheetActivity.kt"
+            line="208"
+            column="18"/>
+    </issue>
+
+    <issue
+        id="SetTextI18n"
+        message="String literal in `setText` can not be translated. Use Android resources instead."
+        errorLine1="    title.text = &quot;Tasks on $monthName $day&quot;"
+        errorLine2="                  ~~~~~~~~~">
+        <location
+            file="src/main/java/com/b1gbr0ther/TimesheetActivity.kt"
+            line="208"
+            column="19"/>
+    </issue>
+
+    <issue
+        id="SetTextI18n"
+        message="Do not concatenate text displayed with `setText`. Use resource string with placeholders."
+        errorLine1="        text = &quot;$name - $duration&quot;"
+        errorLine2="               ~~~~~~~~~~~~~~~~~~~">
+        <location
+            file="src/main/java/com/b1gbr0ther/TimesheetActivity.kt"
+            line="220"
+            column="16"/>
+    </issue>
+
+    <issue
+        id="SetTextI18n"
+        message="Do not concatenate text displayed with `setText`. Use resource string with placeholders."
+        errorLine1="        hoursText.text = &quot;$hours h&quot;"
+        errorLine2="                         ~~~~~~~~~~">
+        <location
+            file="src/main/java/com/b1gbr0ther/TimesheetDayComponent.kt"
+            line="30"
+            column="26"/>
+    </issue>
+
+    <issue
+        id="HardcodedText"
+        message="Hardcoded string &quot;B1g Br0ther&quot;, should use `@string` resource"
+        errorLine1="        android:text=&quot;B1g Br0ther&quot;"
+        errorLine2="        ~~~~~~~~~~~~~~~~~~~~~~~~~~">
+        <location
+            file="src/main/res/layout/activity_dashboard.xml"
+            line="21"
+            column="9"/>
+    </issue>
+
+    <issue
+        id="HardcodedText"
+        message="Hardcoded string &quot;Database Testing&quot;, should use `@string` resource"
+        errorLine1="        android:text=&quot;Database Testing&quot;"
+        errorLine2="        ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~">
+        <location
+            file="src/main/res/layout/activity_database_launcher.xml"
+            line="14"
+            column="9"/>
+    </issue>
+
+    <issue
+        id="HardcodedText"
+        message="Hardcoded string &quot;Launch Database Tester&quot;, should use `@string` resource"
+        errorLine1="        android:text=&quot;Launch Database Tester&quot;"
+        errorLine2="        ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~">
+        <location
+            file="src/main/res/layout/activity_database_launcher.xml"
+            line="28"
+            column="9"/>
+    </issue>
+
+    <issue
+        id="HardcodedText"
+        message="Hardcoded string &quot;Database operation results will appear here&quot;, should use `@string` resource"
+        errorLine1="            android:hint=&quot;Database operation results will appear here&quot;/>"
+        errorLine2="            ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~">
+        <location
+            file="src/main/res/layout/activity_database_test.xml"
+            line="68"
+            column="13"/>
+    </issue>
+
+    <issue
+        id="HardcodedText"
+        message="Hardcoded string &quot;Database Tester&quot;, should use `@string` resource"
+        errorLine1="            android:text=&quot;Database Tester&quot;"
+        errorLine2="            ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~">
+        <location
+            file="src/main/res/layout/activity_database_tester.xml"
+            line="18"
+            column="13"/>
+    </issue>
+
+    <issue
+        id="HardcodedText"
+        message="Hardcoded string &quot;Create New Task&quot;, should use `@string` resource"
+        errorLine1="            android:text=&quot;Create New Task&quot;"
+        errorLine2="            ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~">
+        <location
+            file="src/main/res/layout/activity_database_tester.xml"
+            line="28"
+            column="13"/>
+    </issue>
+
+    <issue
+        id="HardcodedText"
+        message="Hardcoded string &quot;Task Name&quot;, should use `@string` resource"
+        errorLine1="                android:text=&quot;Task Name&quot;"
+        errorLine2="                ~~~~~~~~~~~~~~~~~~~~~~~~">
+        <location
+            file="src/main/res/layout/activity_database_tester.xml"
+            line="43"
+            column="17"/>
+    </issue>
+
+    <issue
+        id="HardcodedText"
+        message="Hardcoded string &quot;Enter task name&quot;, should use `@string` resource"
+        errorLine1="                android:hint=&quot;Enter task name&quot;/>"
+        errorLine2="                ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~">
+        <location
+            file="src/main/res/layout/activity_database_tester.xml"
+            line="50"
+            column="17"/>
+    </issue>
+
+    <issue
+        id="HardcodedText"
+        message="Hardcoded string &quot;Creation Method:&quot;, should use `@string` resource"
+        errorLine1="                android:text=&quot;Creation Method:&quot;"
+        errorLine2="                ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~">
+        <location
+            file="src/main/res/layout/activity_database_tester.xml"
+            line="61"
+            column="17"/>
+    </issue>
+
+    <issue
+        id="HardcodedText"
+        message="Hardcoded string &quot;Gesture&quot;, should use `@string` resource"
+        errorLine1="                    android:text=&quot;Gesture&quot;"
+        errorLine2="                    ~~~~~~~~~~~~~~~~~~~~~~">
+        <location
+            file="src/main/res/layout/activity_database_tester.xml"
+            line="75"
+            column="21"/>
+    </issue>
+
+    <issue
+        id="HardcodedText"
+        message="Hardcoded string &quot;Voice&quot;, should use `@string` resource"
+        errorLine1="                    android:text=&quot;Voice&quot;/>"
+        errorLine2="                    ~~~~~~~~~~~~~~~~~~~~">
+        <location
+            file="src/main/res/layout/activity_database_tester.xml"
+            line="82"
+            column="21"/>
+    </issue>
+
+    <issue
+        id="HardcodedText"
+        message="Hardcoded string &quot;Preplanned&quot;, should use `@string` resource"
+        errorLine1="                android:text=&quot;Preplanned&quot;/>"
+        errorLine2="                ~~~~~~~~~~~~~~~~~~~~~~~~~">
+        <location
+            file="src/main/res/layout/activity_database_tester.xml"
+            line="96"
+            column="17"/>
+    </issue>
+
+    <issue
+        id="HardcodedText"
+        message="Hardcoded string &quot;Completed&quot;, should use `@string` resource"
+        errorLine1="                android:text=&quot;Completed&quot;"
+        errorLine2="                ~~~~~~~~~~~~~~~~~~~~~~~~">
+        <location
+            file="src/main/res/layout/activity_database_tester.xml"
+            line="102"
+            column="17"/>
+    </issue>
+
+    <issue
+        id="HardcodedText"
+        message="Hardcoded string &quot;Break&quot;, should use `@string` resource"
+        errorLine1="                android:text=&quot;Break&quot;"
+        errorLine2="                ~~~~~~~~~~~~~~~~~~~~">
+        <location
+            file="src/main/res/layout/activity_database_tester.xml"
+            line="109"
+            column="17"/>
+    </issue>
+
+    <issue
+        id="HardcodedText"
+        message="Hardcoded string &quot;Create Task&quot;, should use `@string` resource"
+        errorLine1="            android:text=&quot;Create Task&quot;"
+        errorLine2="            ~~~~~~~~~~~~~~~~~~~~~~~~~~">
+        <location
+            file="src/main/res/layout/activity_database_tester.xml"
+            line="117"
+            column="13"/>
+    </issue>
+
+    <issue
+        id="HardcodedText"
+        message="Hardcoded string &quot;Update Existing Task&quot;, should use `@string` resource"
+        errorLine1="            android:text=&quot;Update Existing Task&quot;"
+        errorLine2="            ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~">
+        <location
+            file="src/main/res/layout/activity_database_tester.xml"
+            line="131"
+            column="13"/>
+    </issue>
+
+    <issue
+        id="HardcodedText"
+        message="Hardcoded string &quot;Task ID&quot;, should use `@string` resource"
+        errorLine1="                android:text=&quot;Task ID&quot;"
+        errorLine2="                ~~~~~~~~~~~~~~~~~~~~~~">
+        <location
+            file="src/main/res/layout/activity_database_tester.xml"
+            line="145"
+            column="17"/>
+    </issue>
+
+    <issue
+        id="HardcodedText"
+        message="Hardcoded string &quot;Enter task ID&quot;, should use `@string` resource"
+        errorLine1="                android:hint=&quot;Enter task ID&quot;"
+        errorLine2="                ~~~~~~~~~~~~~~~~~~~~~~~~~~~~">
+        <location
+            file="src/main/res/layout/activity_database_tester.xml"
+            line="152"
+            column="17"/>
+    </issue>
+
+    <issue
+        id="HardcodedText"
+        message="Hardcoded string &quot;Load Task&quot;, should use `@string` resource"
+        errorLine1="            android:text=&quot;Load Task&quot;"
+        errorLine2="            ~~~~~~~~~~~~~~~~~~~~~~~~">
+        <location
+            file="src/main/res/layout/activity_database_tester.xml"
+            line="160"
+            column="13"/>
+    </issue>
+
+    <issue
+        id="HardcodedText"
+        message="Hardcoded string &quot;New Task Name&quot;, should use `@string` resource"
+        errorLine1="                android:text=&quot;New Task Name&quot;"
+        errorLine2="                ~~~~~~~~~~~~~~~~~~~~~~~~~~~~">
+        <location
+            file="src/main/res/layout/activity_database_tester.xml"
+            line="172"
+            column="17"/>
+    </issue>
+
+    <issue
+        id="HardcodedText"
+        message="Hardcoded string &quot;Enter new task name&quot;, should use `@string` resource"
+        errorLine1="                android:hint=&quot;Enter new task name&quot;/>"
+        errorLine2="                ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~">
+        <location
+            file="src/main/res/layout/activity_database_tester.xml"
+            line="179"
+            column="17"/>
+    </issue>
+
+    <issue
+        id="HardcodedText"
+        message="Hardcoded string &quot;Preplanned&quot;, should use `@string` resource"
+        errorLine1="                android:text=&quot;Preplanned&quot;/>"
+        errorLine2="                ~~~~~~~~~~~~~~~~~~~~~~~~~">
+        <location
+            file="src/main/res/layout/activity_database_tester.xml"
+            line="192"
+            column="17"/>
+    </issue>
+
+    <issue
+        id="HardcodedText"
+        message="Hardcoded string &quot;Completed&quot;, should use `@string` resource"
+        errorLine1="                android:text=&quot;Completed&quot;"
+        errorLine2="                ~~~~~~~~~~~~~~~~~~~~~~~~">
+        <location
+            file="src/main/res/layout/activity_database_tester.xml"
+            line="198"
+            column="17"/>
+    </issue>
+
+    <issue
+        id="HardcodedText"
+        message="Hardcoded string &quot;Break&quot;, should use `@string` resource"
+        errorLine1="                android:text=&quot;Break&quot;"
+        errorLine2="                ~~~~~~~~~~~~~~~~~~~~">
+        <location
+            file="src/main/res/layout/activity_database_tester.xml"
+            line="205"
+            column="17"/>
+    </issue>
+
+    <issue
+        id="HardcodedText"
+        message="Hardcoded string &quot;Update Task&quot;, should use `@string` resource"
+        errorLine1="            android:text=&quot;Update Task&quot;"
+        errorLine2="            ~~~~~~~~~~~~~~~~~~~~~~~~~~">
+        <location
+            file="src/main/res/layout/activity_database_tester.xml"
+            line="213"
+            column="13"/>
+    </issue>
+
+    <issue
+        id="HardcodedText"
+        message="Hardcoded string &quot;Task List&quot;, should use `@string` resource"
+        errorLine1="            android:text=&quot;Task List&quot;"
+        errorLine2="            ~~~~~~~~~~~~~~~~~~~~~~~~">
+        <location
+            file="src/main/res/layout/activity_database_tester.xml"
+            line="227"
+            column="13"/>
+    </issue>
+
+    <issue
+        id="HardcodedText"
+        message="Hardcoded string &quot;Refresh Task List&quot;, should use `@string` resource"
+        errorLine1="            android:text=&quot;Refresh Task List&quot;"
+        errorLine2="            ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~">
+        <location
+            file="src/main/res/layout/activity_database_tester.xml"
+            line="236"
+            column="13"/>
+    </issue>
+
+    <issue
+        id="HardcodedText"
+        message="Hardcoded string &quot;Statistics&quot;, should use `@string` resource"
+        errorLine1="        android:text=&quot;Statistics&quot; />"
+        errorLine2="        ~~~~~~~~~~~~~~~~~~~~~~~~~">
+        <location
+            file="src/main/res/layout/activity_main.xml"
+            line="43"
+            column="9"/>
+    </issue>
+
+    <issue
+        id="HardcodedText"
+        message="Hardcoded string &quot;Choose your audio detection mode:&quot;, should use `@string` resource"
+        errorLine1="                android:text=&quot;Choose your audio detection mode:&quot;"
+        errorLine2="                ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~">
+        <location
+            file="src/main/res/layout/activity_settings.xml"
+            line="116"
+            column="17"/>
+    </issue>
+
+    <issue
+        id="HardcodedText"
+        message="Hardcoded string &quot;Voice Commands - Listen for spoken commands&quot;, should use `@string` resource"
+        errorLine1="                    android:text=&quot;Voice Commands - Listen for spoken commands&quot;"
+        errorLine2="                    ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~">
+        <location
+            file="src/main/res/layout/activity_settings.xml"
+            line="142"
+            column="21"/>
+    </issue>
+
+    <issue
+        id="HardcodedText"
+        message="Hardcoded string &quot;Sound Detection - Continuous sneeze/blow detection&quot;, should use `@string` resource"
+        errorLine1="                    android:text=&quot;Sound Detection - Continuous sneeze/blow detection&quot;"
+        errorLine2="                    ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~">
+        <location
+            file="src/main/res/layout/activity_settings.xml"
+            line="151"
+            column="21"/>
+    </issue>
+
+    <issue
+        id="HardcodedText"
+        message="Hardcoded string &quot;Completed&quot;, should use `@string` resource"
+        errorLine1="                            android:text=&quot;Completed&quot;"
+        errorLine2="                            ~~~~~~~~~~~~~~~~~~~~~~~~">
+        <location
+            file="src/main/res/layout/activity_statistics.xml"
+            line="100"
+            column="29"/>
+    </issue>
+
+    <issue
+        id="HardcodedText"
+        message="Hardcoded string &quot;Uncompleted&quot;, should use `@string` resource"
+        errorLine1="                            android:text=&quot;Uncompleted&quot;"
+        errorLine2="                            ~~~~~~~~~~~~~~~~~~~~~~~~~~">
+        <location
+            file="src/main/res/layout/activity_statistics.xml"
+            line="121"
+            column="29"/>
+    </issue>
+
+    <issue
+        id="HardcodedText"
+        message="Hardcoded string &quot;0&quot;, should use `@string` resource"
+        errorLine1="                        android:text=&quot;0&quot;"
+        errorLine2="                        ~~~~~~~~~~~~~~~~">
+        <location
+            file="src/main/res/layout/activity_statistics.xml"
+            line="241"
+            column="25"/>
+    </issue>
+
+    <issue
+        id="HardcodedText"
+        message="Hardcoded string &quot;0&quot;, should use `@string` resource"
+        errorLine1="                        android:text=&quot;0&quot;"
+        errorLine2="                        ~~~~~~~~~~~~~~~~">
+        <location
+            file="src/main/res/layout/activity_statistics.xml"
+            line="264"
+            column="25"/>
+    </issue>
+
+    <issue
+        id="HardcodedText"
+        message="Hardcoded string &quot;0%&quot;, should use `@string` resource"
+        errorLine1="                        android:text=&quot;0%&quot;"
+        errorLine2="                        ~~~~~~~~~~~~~~~~~">
+        <location
+            file="src/main/res/layout/activity_statistics.xml"
+            line="286"
+            column="25"/>
+    </issue>
+
+    <issue
+        id="HardcodedText"
+        message="Hardcoded string &quot;Please input task name&quot;, should use `@string` resource"
+        errorLine1="        android:hint=&quot;Please input task name&quot;/>"
+        errorLine2="        ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~">
+        <location
+            file="src/main/res/layout/gesture_dialog_new_task_step_1.xml"
+            line="15"
+            column="9"/>
+    </issue>
+
+    <issue
+        id="HardcodedText"
+        message="Hardcoded string &quot;Hours&quot;, should use `@string` resource"
+        errorLine1="            android:hint=&quot;Hours&quot;/>"
+        errorLine2="            ~~~~~~~~~~~~~~~~~~~~">
+        <location
+            file="src/main/res/layout/gesture_dialog_new_task_step_4.xml"
+            line="29"
+            column="13"/>
+    </issue>
+
+    <issue
+        id="HardcodedText"
+        message="Hardcoded string &quot;Minutes&quot;, should use `@string` resource"
+        errorLine1="            android:hint=&quot;Minutes&quot;/>"
+        errorLine2="            ~~~~~~~~~~~~~~~~~~~~~~">
+        <location
+            file="src/main/res/layout/gesture_dialog_new_task_step_4.xml"
+            line="39"
+            column="13"/>
+    </issue>
+
+    <issue
+        id="HardcodedText"
+        message="Hardcoded string &quot;ID: &quot;, should use `@string` resource"
+        errorLine1="                android:text=&quot;ID: &quot;"
+        errorLine2="                ~~~~~~~~~~~~~~~~~~~">
+        <location
+            file="src/main/res/layout/item_task.xml"
+            line="24"
+            column="17"/>
+    </issue>
+
+    <issue
+        id="HardcodedText"
+        message="Hardcoded string &quot;1&quot;, should use `@string` resource"
+        errorLine1="                android:text=&quot;1&quot; />"
+        errorLine2="                ~~~~~~~~~~~~~~~~">
+        <location
+            file="src/main/res/layout/item_task.xml"
+            line="31"
+            column="17"/>
+    </issue>
+
+    <issue
+        id="HardcodedText"
+        message="Hardcoded string &quot;Name: &quot;, should use `@string` resource"
+        errorLine1="                android:text=&quot;Name: &quot;"
+        errorLine2="                ~~~~~~~~~~~~~~~~~~~~~">
+        <location
+            file="src/main/res/layout/item_task.xml"
+            line="37"
+            column="17"/>
+    </issue>
+
+    <issue
+        id="HardcodedText"
+        message="Hardcoded string &quot;Task Name&quot;, should use `@string` resource"
+        errorLine1="                android:text=&quot;Task Name&quot; />"
+        errorLine2="                ~~~~~~~~~~~~~~~~~~~~~~~~">
+        <location
+            file="src/main/res/layout/item_task.xml"
+            line="44"
+            column="17"/>
+    </issue>
+
+    <issue
+        id="HardcodedText"
+        message="Hardcoded string &quot;Created by: &quot;, should use `@string` resource"
+        errorLine1="                android:text=&quot;Created by: &quot;"
+        errorLine2="                ~~~~~~~~~~~~~~~~~~~~~~~~~~~">
+        <location
+            file="src/main/res/layout/item_task.xml"
+            line="56"
+            column="17"/>
+    </issue>
+
+    <issue
+        id="HardcodedText"
+        message="Hardcoded string &quot;Gesture&quot;, should use `@string` resource"
+        errorLine1="                android:text=&quot;Gesture&quot; />"
+        errorLine2="                ~~~~~~~~~~~~~~~~~~~~~~">
+        <location
+            file="src/main/res/layout/item_task.xml"
+            line="63"
+            column="17"/>
+    </issue>
+
+    <issue
+        id="HardcodedText"
+        message="Hardcoded string &quot;Preplanned&quot;, should use `@string` resource"
+        errorLine1="                android:text=&quot;Preplanned&quot;"
+        errorLine2="                ~~~~~~~~~~~~~~~~~~~~~~~~~">
+        <location
+            file="src/main/res/layout/item_task.xml"
+            line="76"
+            column="17"/>
+    </issue>
+
+    <issue
+        id="HardcodedText"
+        message="Hardcoded string &quot;Completed&quot;, should use `@string` resource"
+        errorLine1="                android:text=&quot;Completed&quot;"
+        errorLine2="                ~~~~~~~~~~~~~~~~~~~~~~~~">
+        <location
+            file="src/main/res/layout/item_task.xml"
+            line="84"
+            column="17"/>
+    </issue>
+
+    <issue
+        id="HardcodedText"
+        message="Hardcoded string &quot;Break&quot;, should use `@string` resource"
+        errorLine1="                android:text=&quot;Break&quot;"
+        errorLine2="                ~~~~~~~~~~~~~~~~~~~~">
+        <location
+            file="src/main/res/layout/item_task.xml"
+            line="93"
+            column="17"/>
+    </issue>
+
+    <issue
+        id="HardcodedText"
+        message="Hardcoded string &quot;Delete&quot;, should use `@string` resource"
+        errorLine1="            android:text=&quot;Delete&quot;"
+        errorLine2="            ~~~~~~~~~~~~~~~~~~~~~">
+        <location
+            file="src/main/res/layout/item_task.xml"
+            line="103"
+            column="13"/>
+    </issue>
+
+    <issue
+        id="RtlHardcoded"
+        message="Consider replacing `android:paddingLeft` with `android:paddingStart=&quot;12dp&quot;` to better support right-to-left layouts"
+        errorLine1="        android:paddingLeft=&quot;12dp&quot;"
+        errorLine2="        ~~~~~~~~~~~~~~~~~~~">
+        <location
+            file="src/main/res/layout/activity_dashboard.xml"
+            line="17"
+            column="9"/>
+    </issue>
+
+    <issue
+        id="RtlHardcoded"
+        message="Consider replacing `android:paddingLeft` with `android:paddingStart=&quot;12dp&quot;` to better support right-to-left layouts"
+        errorLine1="        android:paddingLeft=&quot;12dp&quot;"
+        errorLine2="        ~~~~~~~~~~~~~~~~~~~">
+        <location
+            file="src/main/res/layout/activity_dashboard.xml"
+            line="38"
+            column="9"/>
+    </issue>
+
+    <issue
+        id="RtlHardcoded"
+        message="Consider replacing `android:paddingLeft` with `android:paddingStart=&quot;12dp&quot;` to better support right-to-left layouts"
+        errorLine1="        android:paddingLeft=&quot;12dp&quot;"
+        errorLine2="        ~~~~~~~~~~~~~~~~~~~">
+        <location
+            file="src/main/res/layout/activity_statistics.xml"
+            line="17"
+            column="9"/>
+    </issue>
+
+    <issue
+        id="RtlHardcoded"
+        message="Consider replacing `android:paddingLeft` with `android:paddingStart=&quot;12dp&quot;` to better support right-to-left layouts"
+        errorLine1="        android:paddingLeft=&quot;12dp&quot;"
+        errorLine2="        ~~~~~~~~~~~~~~~~~~~">
+        <location
+            file="src/main/res/layout/activity_timesheet.xml"
+            line="16"
+            column="9"/>
+    </issue>
+
+</issues>

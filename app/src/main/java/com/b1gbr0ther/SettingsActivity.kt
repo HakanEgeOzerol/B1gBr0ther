@@ -218,8 +218,8 @@ class SettingsActivity : AppCompatActivity() {
             val newTheme = if (isChecked) ThemeManager.THEME_DARK else ThemeManager.THEME_LIGHT
             android.util.Log.d("SettingsActivity", "Theme switch changed: isChecked=$isChecked -> theme=$newTheme")
             ThemeManager.setTheme(this, newTheme)
-            applyTheme()
-            updateThemeLabel()
+            // Recreate activity to immediately apply the new theme
+            recreate()
         }
         
         updateLanguageLabel()
@@ -348,6 +348,31 @@ class SettingsActivity : AppCompatActivity() {
         }
     }
 
+    private fun requestSoundDetectionPermission() {
+        if (ContextCompat.checkSelfPermission(this, Manifest.permission.RECORD_AUDIO) != PackageManager.PERMISSION_GRANTED) {
+            if (ActivityCompat.shouldShowRequestPermissionRationale(this, Manifest.permission.RECORD_AUDIO)) {
+                // Show an explanation to the user
+                AlertDialog.Builder(this)
+                    .setTitle("Microphone Permission Required")
+                    .setMessage("Sound detection requires microphone access to listen for sneezes and other sounds.")
+                    .setPositiveButton("Grant Permission") { _, _ ->
+                        ActivityCompat.requestPermissions(this, arrayOf(Manifest.permission.RECORD_AUDIO), PERMISSION_REQUEST_RECORD_AUDIO)
+                    }
+                    .setNegativeButton("Cancel") { _, _ ->
+                        radioAudioOff.isChecked = true
+                        sharedPreferences.edit().putInt("audio_mode", AUDIO_MODE_OFF).apply()
+                    }
+                    .show()
+            } else {
+                ActivityCompat.requestPermissions(this, arrayOf(Manifest.permission.RECORD_AUDIO), PERMISSION_REQUEST_RECORD_AUDIO)
+            }
+        } else {
+            // Permission already granted
+            sharedPreferences.edit().putInt("audio_mode", AUDIO_MODE_SOUND_DETECTION).apply()
+            Toast.makeText(this, "Sound Detection enabled", Toast.LENGTH_SHORT).show()
+        }
+    }
+
     private fun showPermissionDeniedDialog() {
         AlertDialog.Builder(this)
             .setTitle("Permission Required")
@@ -356,8 +381,8 @@ class SettingsActivity : AppCompatActivity() {
                 openAppSettings()
             }
             .setNegativeButton("Cancel") { _, _ ->
-                voiceRecognitionSwitch.isChecked = false
-                saveVoiceRecognitionSetting(false)
+                radioAudioOff.isChecked = true
+                sharedPreferences.edit().putInt("audio_mode", AUDIO_MODE_OFF).apply()
             }
             .create()
             .show()
@@ -433,13 +458,6 @@ class SettingsActivity : AppCompatActivity() {
         setResult(RESULT_OK)
     }
 
-    private fun openAppSettings() {
-        Intent(Settings.ACTION_APPLICATION_DETAILS_SETTINGS).apply {
-            data = Uri.fromParts("package", packageName, null)
-            startActivity(this)
-        }
-    }
-
     override fun onRequestPermissionsResult(requestCode: Int, permissions: Array<out String>, grantResults: IntArray) {
         super.onRequestPermissionsResult(requestCode, permissions, grantResults)
         
@@ -510,12 +528,13 @@ class SettingsActivity : AppCompatActivity() {
         volumeValueText.text = "50%"
         sensitivitySeekBar.progress = 75
         sensitivityValueText.text = "75%"
-        darkThemeSwitch.isChecked = false
-        // Reset language to English
+        
+        // Reset theme and language
+        ThemeManager.setTheme(this, ThemeManager.THEME_LIGHT)
         LocaleHelper.setLocale(this, "en")
         
-        updateThemeLabel()
-        updateLanguageLabel()
+        // Recreate activity to immediately apply the new theme and language
+        recreate()
     }
 
     private fun saveSettings() {
@@ -528,7 +547,7 @@ class SettingsActivity : AppCompatActivity() {
         editor.putBoolean("sneeze_detection", sneezeDetectionSwitch.isChecked)
         editor.putInt("volume", volumeSeekBar.progress)
         editor.putInt("sensitivity", sensitivitySeekBar.progress)
-        editor.putBoolean("dutch_language", languageSwitch.isChecked)
+        // Language is now managed by LocaleHelper, no need to save boolean
         
         editor.apply()
         
@@ -556,6 +575,7 @@ class SettingsActivity : AppCompatActivity() {
         android.util.Log.w("SettingsDebug", "===================")
     }
     
+    @Suppress("ResourceType")
     private fun debugThemeColors() {
         try {
             val typedArray = theme.obtainStyledAttributes(intArrayOf(
@@ -594,55 +614,6 @@ class SettingsActivity : AppCompatActivity() {
             }
             .setNegativeButton(getString(R.string.cancel)) { dialog, _ ->
                 dialog.dismiss()
-            }
-            .show()
-    }
-
-    private fun showPermissionDeniedDialog() {
-        AlertDialog.Builder(this)
-            .setTitle("Permission Required")
-            .setMessage("Audio features cannot work without microphone access. Would you like to open settings to grant the permission?")
-            .setPositiveButton("Open Settings") { _, _ ->
-                openAppSettings()
-            }
-            .setNegativeButton("Cancel") { _, _ ->
-                radioAudioOff.isChecked = true
-                sharedPreferences.edit().putInt("audio_mode", AUDIO_MODE_OFF).apply()
-            }
-            .show()
-    }
-
-    private fun enforceSettingsConsistency() {
-        // With RadioGroup, mutual exclusivity is guaranteed by the UI component
-        // Just ensure we have a valid audio mode setting
-        val audioMode = getAudioMode(sharedPreferences)
-        android.util.Log.d("SettingsActivity", "Checking settings consistency: audioMode=$audioMode")
-        
-        if (audioMode !in arrayOf(AUDIO_MODE_OFF, AUDIO_MODE_VOICE_COMMANDS, AUDIO_MODE_SOUND_DETECTION)) {
-            android.util.Log.w("SettingsActivity", "Invalid audio mode detected, resetting to OFF")
-            sharedPreferences.edit().putInt("audio_mode", AUDIO_MODE_OFF).apply()
-        }
-        
-        val isFirstRun = sharedPreferences.getBoolean("first_run", true)
-        if (isFirstRun) {
-            android.util.Log.i("SettingsActivity", "First run detected - ensuring audio mode is OFF")
-            sharedPreferences.edit()
-                .putInt("audio_mode", AUDIO_MODE_OFF)
-                .putBoolean("first_run", false)
-                .apply()
-        }
-    }
-
-    private fun showPermissionDeniedDialog() {
-        AlertDialog.Builder(this)
-            .setTitle("Permission Required")
-            .setMessage("Audio features cannot work without microphone access. Would you like to open settings to grant the permission?")
-            .setPositiveButton("Open Settings") { _, _ ->
-                openAppSettings()
-            }
-            .setNegativeButton("Cancel") { _, _ ->
-                radioAudioOff.isChecked = true
-                sharedPreferences.edit().putInt("audio_mode", AUDIO_MODE_OFF).apply()
             }
             .show()
     }

@@ -77,6 +77,7 @@ class DatabaseTestActivity : AppCompatActivity() {
                 taskName = "Test Task ${System.currentTimeMillis()}",
                 startTime = LocalDateTime.now(),
                 endTime = LocalDateTime.now().plusHours(1),
+                creationMethod = com.b1gbr0ther.CreationMethod.Gesture,
                 isPreplanned = false,
                 isCompleted = false,
                 isBreak = false

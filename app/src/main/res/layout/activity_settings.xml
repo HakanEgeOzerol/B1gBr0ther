@@ -110,26 +110,50 @@
                 android:textStyle="bold"
                 android:layout_marginBottom="8dp" />
 
-            <LinearLayout
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="Choose your audio detection mode:"
+                android:textColor="?android:textColorSecondary"
+                android:textSize="14sp"
+                android:layout_marginBottom="12dp" />
+
+            <RadioGroup
+                android:id="@+id/audioModeRadioGroup"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:orientation="horizontal"
                 android:layout_marginBottom="16dp">
 
-                <TextView
-                    android:layout_width="0dp"
+                <RadioButton
+                    android:id="@+id/radioAudioOff"
+                    android:layout_width="match_parent"
                     android:layout_height="wrap_content"
                     android:layout_weight="1"
                     android:text="@string/enable_voice_commands"
                     android:textColor="?android:textColorPrimary"
-                    android:textSize="16sp" />
-
-                <Switch
-                    android:id="@+id/voiceRecognitionSwitch"
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
+                    android:textSize="16sp"
+                    android:padding="8dp"
                     android:checked="true" />
-            </LinearLayout>
+
+                <RadioButton
+                    android:id="@+id/radioVoiceCommands"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:text="Voice Commands - Listen for spoken commands"
+                    android:textColor="?android:textColorPrimary"
+                    android:textSize="16sp"
+                    android:padding="8dp" />
+
+                <RadioButton
+                    android:id="@+id/radioSoundDetection"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:text="Sound Detection - Continuous sneeze/blow detection"
+                    android:textColor="?android:textColorPrimary"
+                    android:textSize="16sp"
+                    android:padding="8dp" />
+
+            </RadioGroup>
 
             <!-- Notifications Section -->
             <TextView

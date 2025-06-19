@@ -1,6 +1,13 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
-    <string name="completed">Completed</string>
+    <string name="statistics_title">Statistics</string>
+    <string name="task_completion">Task Completion</string>
+    <string name="task_timing">Task Timing</string>
+    <string name="creation_methods">Creation Methods</string>
+    <string name="quick_stats">Quick Stats</string>
+    <string name="total_tasks">Total Tasks</string>
+    <string name="tasks_completed">Tasks Completed</string>
+    <string name="completion_rate">Completion Rate</string>
     <string name="uncompleted">Uncompleted</string>
     <string name="on_time">On Time</string>
     <string name="late">Late</string>

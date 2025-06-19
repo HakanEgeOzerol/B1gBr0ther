@@ -65,7 +65,7 @@ class StatisticsActivity : AppCompatActivity() {
             setUsePercentValues(true)
             setEntryLabelTextSize(12f)
             setEntryLabelColor(Color.BLACK)
-            centerText = getString(R.string.completion)
+            centerText = getString(R.string.task_completion)
             setCenterTextSize(14f)
             legend.isEnabled = false
             setHoleColor(Color.TRANSPARENT)
