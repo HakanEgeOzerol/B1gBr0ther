@@ -197,17 +197,13 @@ class VoiceRecognizerManager(
             else -> "Unknown error: $error"
         }
 
-        // Check audio mode setting for context-specific logging
         val sharedPreferences = context.getSharedPreferences("B1gBr0therSettings", Context.MODE_PRIVATE)
         val audioMode = SettingsActivity.getAudioMode(sharedPreferences)
 
-        // Reduce log spam for expected errors in Sound Detection Mode
         if (audioMode == SettingsActivity.AUDIO_MODE_SOUND_DETECTION && 
             (error == SpeechRecognizer.ERROR_NO_MATCH || error == SpeechRecognizer.ERROR_SPEECH_TIMEOUT)) {
-            // These are expected in sound detection mode - only log at debug level
             Log.d(TAG, "Sound Detection Mode - expected error: $error ($msg)")
         } else {
-            // Log other errors at warning level
             Log.w(TAG, "Recognition error: $error ($msg)")
         }
 
@@ -229,15 +225,12 @@ class VoiceRecognizerManager(
             if (isVoiceRecognitionActive && !isProcessingCommand) {
                 
                 if (audioMode == SettingsActivity.AUDIO_MODE_SOUND_DETECTION) {
-                    // Sound Detection Mode - CRITICAL: Don't restart on every error!
-                    // Only restart on actual audio failures, not timeout/no-match
                     if (error == SpeechRecognizer.ERROR_AUDIO || 
                         error == SpeechRecognizer.ERROR_RECOGNIZER_BUSY) {
                         Log.d(TAG, "Sound Detection Mode - restarting after audio error")
                         scheduleNoCommandTimeout()
                         handler.postDelayed({ restartRecognition() }, 3000L)
                     } else {
-                        // For timeout/no-match errors in Sound Detection Mode, just continue
                         Log.d(TAG, "Sound Detection Mode - ignoring non-critical error: $error")
                     }
                 } else {
@@ -264,7 +257,6 @@ class VoiceRecognizerManager(
                     Log.d(TAG, "onReadyForSpeech called - mode: $audioMode")
                     onStatusUpdate("Ready for speech")
                     
-                    // CRITICAL: Only initialize detectors in Sound Detection Mode
                     if (audioMode == SettingsActivity.AUDIO_MODE_SOUND_DETECTION) {
                         Log.d(TAG, "Sound Detection Mode - initializing detectors")
                         blowDetector.reset()
@@ -287,38 +279,30 @@ class VoiceRecognizerManager(
                 val sharedPreferences = context.getSharedPreferences("B1gBr0therSettings", Context.MODE_PRIVATE)
                 val audioMode = SettingsActivity.getAudioMode(sharedPreferences)
                 
-                // Only log high audio levels to reduce spam, but include mode info
                 if (rmsdB > 8.0f) {
                     Log.d(TAG, "High RMS Level: $rmsdB dB (Mode: $audioMode)")
                 }
-                
-                // CRITICAL: Only process audio detection in Sound Detection Mode
                 if (audioMode == SettingsActivity.AUDIO_MODE_SOUND_DETECTION) {
-                    // Process blow detection with more logging
                     val blowResult = blowDetector.processAudioSample(rmsdB, System.currentTimeMillis())
                     if (blowResult) {
-                        Log.i(TAG, "BLOW DETECTED! Triggering callback and stopping recognition...")
+                        Log.i(TAG, "BLOW DETECTED!")
                         onBlowDetected?.invoke()
-                        // Stop recognition after blow detection to prevent stuck state
                         handler.postDelayed({ stopRecognition() }, 1000L)
-                        return // Exit early to prevent further processing
+                        return
                     }
                     
-                    // Process sneeze detection with detailed logging
                     val sneezeResult = sneezeDetector.processAudioSample(rmsdB, System.currentTimeMillis())
-                    if (rmsdB > 10.0f) { // Log sneeze detection attempts for high audio
+                    if (rmsdB > 10.0f) {
                         Log.d(TAG, "SneezeDetector processing: rmsdB=$rmsdB, result=$sneezeResult")
                     }
                     if (sneezeResult) {
-                        Log.i(TAG, "SNEEZE DETECTED! Triggering callback and stopping recognition...")
+                        Log.i(TAG, "SNEEZE DETECTED!")
                         onSneezeDetected?.invoke()
-                        // Stop recognition after sneeze detection to prevent stuck state
                         handler.postDelayed({ stopRecognition() }, 1000L)
-                        return // Exit early to prevent further processing
+                        return
                     }
                 } else {
-                    // Voice Commands Mode - completely skip audio detection (no detector calls at all)
-                    if (rmsdB > 10.0f) { // Only log very high audio in voice mode to confirm separation
+                    if (rmsdB > 10.0f) {
                         Log.d(TAG, "Voice Commands Mode - ignoring audio detection (rmsdB=$rmsdB)")
                     }
                 }
@@ -361,17 +345,12 @@ class VoiceRecognizerManager(
                         onResult(spoken)
                         stopRecognition()
                     } else {
-                        // Sound Detection Mode - ignore voice commands, just continue listening
                         Log.d(TAG, "Sound Detection Mode - ignoring voice command: $spoken")
-                        // CRITICAL: Don't restart on every voice result! This causes the constant restarting
-                        // Just continue the current session without restarting
                     }
                 } else {
                     // No speech detected
                     if (isVoiceRecognitionActive && !isProcessingCommand) {
                         if (audioMode == SettingsActivity.AUDIO_MODE_SOUND_DETECTION) {
-                            // Sound Detection Mode - CRITICAL: Don't restart continuously!
-                            // Let the session continue naturally without forced restarts
                             Log.d(TAG, "Sound Detection Mode - no speech, continuing current session")
                         } else {
                             // Voice Commands Mode - check timeout

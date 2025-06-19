@@ -585,7 +585,6 @@ class SettingsActivity : AppCompatActivity() {
             sharedPreferences.edit().putInt("audio_mode", AUDIO_MODE_OFF).apply()
         }
         
-        // For fresh installs, explicitly ensure we start with OFF mode
         val isFirstRun = sharedPreferences.getBoolean("first_run", true)
         if (isFirstRun) {
             android.util.Log.i("SettingsActivity", "First run detected - ensuring audio mode is OFF")

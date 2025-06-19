@@ -74,15 +74,13 @@ class DashboardActivity : AppCompatActivity() {
     private val requestPermissionLauncher =
         registerForActivityResult(ActivityResultContracts.RequestPermission()) { granted ->
             if (granted) {
-                // When permission is granted for the first time, default to Voice Commands mode
                 val sharedPreferences = getSharedPreferences("B1gBr0therSettings", MODE_PRIVATE)
                 val currentMode = SettingsActivity.getAudioMode(sharedPreferences)
                 
-                // If currently OFF (first time setup), default to Voice Commands
                 if (currentMode == SettingsActivity.AUDIO_MODE_OFF) {
                     sharedPreferences.edit().putInt("audio_mode", SettingsActivity.AUDIO_MODE_VOICE_COMMANDS).apply()
                     Toast.makeText(this, "Voice Commands enabled by default", Toast.LENGTH_SHORT).show()
-                    updateVoiceRecognitionStatus() // Update UI to reflect new mode
+                    updateVoiceRecognitionStatus()
                 } else {
                     startVoiceRecognition()
                 }
@@ -142,7 +140,6 @@ class DashboardActivity : AppCompatActivity() {
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         
-        // Apply saved app theme before setting content view
         ThemeManager.applyTheme(this)
         appliedTheme = ThemeManager.getCurrentTheme(this)
         
@@ -150,7 +147,7 @@ class DashboardActivity : AppCompatActivity() {
         setContentView(R.layout.activity_dashboard)
 
         databaseManager = DatabaseManager(applicationContext)
-        loadAllTasks() // Call the function to load tasks
+        loadAllTasks()
 
         val menu = findViewById<MenuBar>(R.id.menuBar)
         menu.setActivePage(1) // 1 is for Dashboard
