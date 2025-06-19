@@ -17,6 +17,7 @@ import android.widget.LinearLayout
 import android.widget.TextView
 import androidx.activity.enableEdgeToEdge
 import androidx.appcompat.app.AppCompatActivity
+import androidx.core.content.edit
 import androidx.core.view.ViewCompat
 import androidx.core.view.WindowInsetsCompat
 import java.time.YearMonth
@@ -91,8 +92,6 @@ class TimesheetActivity : AppCompatActivity() {
     val calendarGrid = findViewById<GridLayout>(R.id.calendarGridDays)
     calendarGrid.removeAllViews()
 
-    val inflater = LayoutInflater.from(this)
-    val startDayOfWeek = currentYearMonth.atDay(1).dayOfWeek.value - 1
     val daysInMonth = currentYearMonth.lengthOfMonth()
 
     val dbManager = DatabaseManager(this)
@@ -127,7 +126,6 @@ class TimesheetActivity : AppCompatActivity() {
   private fun showYearOverlay() {
     val overlayView = layoutInflater.inflate(R.layout.year_overlay, null)
     val container = overlayView.findViewById<LinearLayout>(R.id.yearButtonContainer)
-    var selectedYear: Int? = null
 
     val dialog = AlertDialog.Builder(this)
       .setView(overlayView)
@@ -140,8 +138,7 @@ class TimesheetActivity : AppCompatActivity() {
       button.text = year.toString()
 
       button.setOnClickListener {
-        selectedYear = year
-        Toast.makeText(this, getString(R.string.you_picked_year, year), Toast.LENGTH_SHORT).show()
+        Toast.makeText(this, getString(R.string.you_picked_year, year.toString()), Toast.LENGTH_SHORT).show()
         setCurrentYear(year)
         dialog.dismiss()
       }
@@ -153,7 +150,7 @@ class TimesheetActivity : AppCompatActivity() {
     dialog.window?.clearFlags(WindowManager.LayoutParams.FLAG_DIM_BEHIND)
     dialog.show()
 
-    //force custom width and position, cus for some reason doing it in the xml doesnt work??
+    //force custom width and position, cus for some reason doing it in the xml doesn't work??
     val window = dialog.window
     window?.setLayout(350, ViewGroup.LayoutParams.WRAP_CONTENT)
     window?.setGravity(Gravity.TOP or Gravity.START)
@@ -166,7 +163,6 @@ class TimesheetActivity : AppCompatActivity() {
   private fun showMonthOverlay() {
     val overlayView = layoutInflater.inflate(R.layout.month_overlay, null)
     val container = overlayView.findViewById<LinearLayout>(R.id.monthButtonContainer)
-    val chosenText = overlayView.findViewById<TextView>(R.id.monthChosenText)
 
     val dialog = AlertDialog.Builder(this)
       .setView(overlayView)
@@ -197,7 +193,7 @@ class TimesheetActivity : AppCompatActivity() {
 
     dialog.show()
 
-    //force custom width and position, cus for some reason doing it in the xml doesnt work??
+    //force custom width and position, cus for some reason doing it in the xml doesn't work??
     val window = dialog.window
     window?.setLayout(350, ViewGroup.LayoutParams.WRAP_CONTENT)
     window?.setGravity(Gravity.TOP or Gravity.START)
@@ -255,10 +251,10 @@ class TimesheetActivity : AppCompatActivity() {
 
   private fun saveSelectedMonthYear() {
     val prefs = getSharedPreferences("TimesheetPrefs", MODE_PRIVATE)
-    val editor = prefs.edit()
-    editor.putInt("selectedYear", currentYearMonth.year)
-    editor.putInt("selectedMonth", currentYearMonth.monthValue)
-    editor.apply()
+    prefs.edit {
+      putInt("selectedYear", currentYearMonth.year)
+      putInt("selectedMonth", currentYearMonth.monthValue)
+    }
   }
 
   private fun loadSelectedMonthYear(): YearMonth {

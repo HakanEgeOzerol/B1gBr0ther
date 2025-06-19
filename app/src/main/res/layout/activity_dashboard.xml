@@ -31,7 +31,7 @@
 
     <Button
         android:id="@+id/btnManualPage"
-        android:layout_width="126dp"
+        android:layout_width="140dp"
         android:layout_height="37dp"
         android:background="@drawable/rounded_corners"
         android:backgroundTint="?colorPrimary"
