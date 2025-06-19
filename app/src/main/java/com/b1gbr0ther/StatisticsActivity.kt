@@ -1,5 +1,6 @@
 package com.b1gbr0ther
 
+import android.content.Context
 import android.graphics.Color
 import android.os.Bundle
 import android.widget.TextView
@@ -31,6 +32,10 @@ class StatisticsActivity : AppCompatActivity() {
     private lateinit var databaseManager: DatabaseManager
     private val numberFormat = NumberFormat.getNumberInstance(Locale.getDefault())
     private val mainScope = CoroutineScope(Dispatchers.Main)
+
+    override fun attachBaseContext(newBase: Context) {
+        super.attachBaseContext(LocaleHelper.onAttach(newBase))
+    }
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)

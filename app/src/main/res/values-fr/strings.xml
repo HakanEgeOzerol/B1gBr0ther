@@ -34,9 +34,7 @@
     <string name="save">Sauvegarder</string>
     
     <!-- Permission dialogs -->
-    <string name="microphone_permission_required">Permission microphone requise</string>
     <string name="microphone_permission_message">La reconnaissance vocale nécessite l\'accès au microphone pour fonctionner. Souhaitez-vous accorder cette permission?</string>
-    <string name="permission_required">Permission requise</string>
     <string name="microphone_permission_denied_message">La reconnaissance vocale ne peut pas fonctionner sans accès au microphone. Souhaitez-vous ouvrir les paramètres pour accorder la permission?</string>
     <string name="notification_permission_required">Permission de notification requise</string>
     <string name="notification_permission_message">Les notifications push nécessitent une permission de notification pour fonctionner. Souhaitez-vous accorder cette permission?</string>
@@ -51,27 +49,13 @@
     
     <!-- Toast messages -->
     <string name="voice_recognition_enabled">Reconnaissance vocale activée</string>
-    <string name="voice_recognition_disabled_permission">Reconnaissance vocale désactivée: Permission refusée</string>
+    <string name="voice_recognition_disabled_permission_denied">Reconnaissance vocale désactivée: Permission refusée</string>
     <string name="push_notifications_enabled">Notifications push activées</string>
     <string name="push_notifications_disabled_permission">Notifications push désactivées: Permission refusée</string>
     <string name="settings_reset_to_defaults">Paramètres réinitialisés aux valeurs par défaut</string>
     <string name="settings_saved_successfully">Paramètres sauvegardés avec succès</string>
     <string name="microphone_permission_required_for_voice">La permission microphone est requise pour les commandes vocales</string>
     <string name="notifications_disabled_warning">Les notifications sont désactivées. Certaines fonctionnalités peuvent ne pas fonctionner correctement.</string>
-    <string name="command_not_recognized">Commande non reconnue: %1$s</string>
-    <string name="tracking_started_for_task">Suivi démarré pour: %1$s</string>
-    <string name="no_tasks_available">Aucune tâche disponible à suivre</string>
-    <string name="already_tracking_task">Déjà en train de suivre une tâche</string>
-    <string name="task_already_completed">La tâche \'%1$s\' est déjà terminée</string>
-    <string name="task_not_found">Tâche \'%1$s\' non trouvée. Tâches disponibles: %2$s</string>
-    <string name="no_active_tracking_session">Aucune session de suivi active</string>
-    <string name="no_task_being_tracked">Aucune tâche n\'était suivie</string>
-    <string name="could_not_find_tracked_task">Impossible de trouver la tâche suivie</string>
-    <string name="start_tracking_first">Démarrer le suivi d\'abord</string>
-    <string name="already_on_break">Déjà en pause</string>
-    <string name="break_started">Pause démarrée</string>
-    <string name="no_active_break">Aucune pause active</string>
-    <string name="break_ended">Pause terminée</string>
     <string name="task_saved_to_database">Tâche sauvegardée dans la base de données avec ID: %1$d</string>
     <string name="task_marked_completed">Tâche marquée comme terminée</string>
     <string name="task_deleted">Tâche supprimée</string>
@@ -198,7 +182,6 @@
     <string name="hour_22">22</string>
     
     <!-- Voice recognition -->
-    <string name="voice_recognition_ready">Reconnaissance vocale prête</string>
     <string name="start_voice_recognition">Démarrer la reconnaissance vocale</string>
     
     <!-- Timesheet component placeholders -->
@@ -235,7 +218,7 @@
     <string name="not_tracking_any_task">Aucune tâche en cours de suivi</string>
     
     <!-- Dashboard audio status messages -->
-    <string name="audio_features_disabled">Fonctionnalités audio désactivées - sélectionnez un mode dans les paramètres</string>
+    <string name="audio_features_disabled">Audio désactivé - sélectionnez un mode</string>
     <string name="start_audio">Démarrer l\'audio</string>
     <string name="voice_commands">Commandes vocales</string>
     <string name="sound_detection">Détection sonore</string>
@@ -252,8 +235,51 @@
     <string name="voice_recognition_stopped">Reconnaissance vocale arrêtée</string>
     
     <!-- Dashboard tracking action messages -->
-    <string name="task_completed_time_tracked">Tâche '%1$s' terminée. Temps suivi: %2$dh %3$dm</string>
+    <string name="task_completed_time_tracked">Tâche \'%1$s\' terminée. Temps suivi: %2$dh %3$dm</string>
     <string name="currently_busy_with_task">Actuellement occupé avec une tâche</string>
+    <string name="command_not_recognized">Commande non reconnue: %1$s</string>
+    <string name="tracking_started_for">Suivi commencé pour: %1$s</string>
+    <string name="no_tasks_available_to_track">Aucune tâche disponible à suivre</string>
+    <string name="already_tracking_a_task">Déjà en train de suivre une tâche</string>
+    <string name="task_already_completed">Tâche \'%1$s\' déjà terminée</string>
+    <string name="task_not_found_available">Tâche \'%1$s\' introuvable. Tâches disponibles: %2$s</string>
+    <string name="no_active_tracking_session">Aucune session de suivi active</string>
+    <string name="no_task_was_being_tracked">Aucune tâche n\'était suivie</string>
+    <string name="could_not_find_tracked_task">Impossible de trouver la tâche suivie</string>
+    <string name="start_tracking_first">Commencez le suivi d\'abord</string>
+    <string name="already_on_a_break">Déjà en pause</string>
+    <string name="break_started">Pause commencée</string>
+    <string name="no_active_break">Aucune pause active</string>
+    <string name="break_ended">Pause terminée</string>
+    
+    <!-- Voice recognition status messages -->
+    <string name="audio_permission_required">Permission audio requise</string>
+    <string name="microphone_permission_required">Permission microphone requise</string>
+    <string name="voice_recognition_disabled_settings">La reconnaissance vocale est désactivée dans les paramètres</string>
+    <string name="voice_recognition_ready">Reconnaissance vocale prête</string>
+    <string name="sound_detection_ready">Détection sonore prête</string>
+    <string name="audio_ready">Audio prêt</string>
+    <string name="listening_say_command">Écoute... (dites votre commande)</string>
+    <string name="listening_for_sounds">Écoute des sons...</string>
+    <string name="listening">Écoute...</string>
+    <string name="ready_for_speech">Prêt pour la parole</string>
+    <string name="voice_recognition_timeout_stopping">Timeout de reconnaissance vocale - arrêt</string>
+    <string name="speech_recognition_not_available">Reconnaissance vocale non disponible sur cet appareil</string>
+    <string name="voice_recognition_disabled_permission">La reconnaissance vocale est désactivée ou permission non accordée</string>
+    
+    <!-- Voice recognition error messages -->
+    <string name="audio_recording_error">Erreur d\'enregistrement audio</string>
+    <string name="insufficient_permissions">Permissions insuffisantes</string>
+    <string name="network_error">Erreur réseau</string>
+    <string name="network_timeout">Timeout réseau</string>
+    <string name="recognizer_busy">Reconnaisseur occupé</string>
+    <string name="server_error">Erreur serveur</string>
+    <string name="language_not_supported">Langue non supportée</string>
+    <string name="unknown_error">Erreur inconnue: %1$d</string>
+    <string name="voice_recognition_stopped_error">Reconnaissance vocale arrêtée: %1$s</string>
+    <string name="speech_started">Parole commencée</string>
+    <string name="processing_speech">Traitement de la parole...</string>
+    <string name="partial_result">Partiel: %1$s</string>
     
     <!-- Timesheet activity messages -->
     <string name="start_date_format">Début: %1$s</string>

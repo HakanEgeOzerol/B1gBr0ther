@@ -34,9 +34,7 @@
     <string name="save">Opslaan</string>
     
     <!-- Permission dialogs -->
-    <string name="microphone_permission_required">Microfoon toestemming vereist</string>
     <string name="microphone_permission_message">Spraakherkenning heeft microfoon toegang nodig om te werken. Wilt u deze toestemming verlenen?</string>
-    <string name="permission_required">Toestemming vereist</string>
     <string name="microphone_permission_denied_message">Spraakherkenning kan niet werken zonder microfoon toegang. Wilt u instellingen openen om de toestemming te verlenen?</string>
     <string name="notification_permission_required">Melding toestemming vereist</string>
     <string name="notification_permission_message">Push meldingen hebben melding toestemming nodig om te werken. Wilt u deze toestemming verlenen?</string>
@@ -51,27 +49,13 @@
     
     <!-- Toast messages -->
     <string name="voice_recognition_enabled">Spraakherkenning ingeschakeld</string>
-    <string name="voice_recognition_disabled_permission">Spraakherkenning uitgeschakeld: Toestemming geweigerd</string>
+    <string name="voice_recognition_disabled_permission_denied">Spraakherkenning uitgeschakeld: Toestemming geweigerd</string>
     <string name="push_notifications_enabled">Push meldingen ingeschakeld</string>
     <string name="push_notifications_disabled_permission">Push meldingen uitgeschakeld: Toestemming geweigerd</string>
     <string name="settings_reset_to_defaults">Instellingen hersteld naar standaardwaarden</string>
     <string name="settings_saved_successfully">Instellingen succesvol opgeslagen</string>
     <string name="microphone_permission_required_for_voice">Microfoon toestemming is vereist voor spraakopdrachten</string>
     <string name="notifications_disabled_warning">Meldingen zijn uitgeschakeld. Sommige functies werken mogelijk niet goed.</string>
-    <string name="command_not_recognized">Opdracht niet herkend: %1$s</string>
-    <string name="tracking_started_for_task">Tracking gestart voor: %1$s</string>
-    <string name="no_tasks_available">Geen taken beschikbaar om te volgen</string>
-    <string name="already_tracking_task">Al bezig met het volgen van een taak</string>
-    <string name="task_already_completed">Taak \"%1$s\" is al voltooid</string>
-    <string name="task_not_found">Taak \"%1$s\" niet gevonden. Beschikbare taken: %2$s</string>
-    <string name="no_active_tracking_session">Geen actieve tracking sessie</string>
-    <string name="no_task_being_tracked">Geen taak werd gevolgd</string>
-    <string name="could_not_find_tracked_task">Kon de gevolgde taak niet vinden</string>
-    <string name="start_tracking_first">Start eerst tracking</string>
-    <string name="already_on_break">Al op pauze</string>
-    <string name="break_started">Pauze gestart</string>
-    <string name="no_active_break">Geen actieve pauze</string>
-    <string name="break_ended">Pauze beëindigd</string>
     <string name="task_saved_to_database">Taak opgeslagen in database met ID: %1$d</string>
     <string name="task_marked_completed">Taak gemarkeerd als voltooid</string>
     <string name="task_deleted">Taak verwijderd</string>
@@ -198,7 +182,6 @@
     <string name="hour_22">22</string>
     
     <!-- Voice recognition -->
-    <string name="voice_recognition_ready">Spraakherkenning gereed</string>
     <string name="start_voice_recognition">Spraakherkenning starten</string>
     
     <!-- Timesheet component placeholders -->
@@ -235,7 +218,7 @@
     <string name="not_tracking_any_task">Geen taak aan het volgen</string>
     
     <!-- Dashboard audio status messages -->
-    <string name="audio_features_disabled">Audio functies uitgeschakeld - selecteer een modus in instellingen</string>
+    <string name="audio_features_disabled">Audio uitgeschakeld - selecteer een modus</string>
     <string name="start_audio">Audio starten</string>
     <string name="voice_commands">Spraakopdrachten</string>
     <string name="sound_detection">Geluidsdetectie</string>
@@ -252,8 +235,51 @@
     <string name="voice_recognition_stopped">Spraakherkenning gestopt</string>
     
     <!-- Dashboard tracking action messages -->
-    <string name="task_completed_time_tracked">Taak '%1$s' voltooid. Tijd gevolgd: %2$du %3$dm</string>
+    <string name="task_completed_time_tracked">Taak \'%1$s\' voltooid. Tijd gevolgd: %2$du %3$dm</string>
     <string name="currently_busy_with_task">Momenteel bezig met een taak</string>
+    <string name="command_not_recognized">Commando niet herkend: %1$s</string>
+    <string name="tracking_started_for">Tijdregistratie gestart voor: %1$s</string>
+    <string name="no_tasks_available_to_track">Geen taken beschikbaar om te volgen</string>
+    <string name="already_tracking_a_task">Al bezig met het volgen van een taak</string>
+    <string name="task_already_completed">Taak \'%1$s\' is al voltooid</string>
+    <string name="task_not_found_available">Taak \'%1$s\' niet gevonden. Beschikbare taken: %2$s</string>
+    <string name="no_active_tracking_session">Geen actieve volgsessie</string>
+    <string name="no_task_was_being_tracked">Er werd geen taak gevolgd</string>
+    <string name="could_not_find_tracked_task">Kon de gevolgde taak niet vinden</string>
+    <string name="start_tracking_first">Start eerst met volgen</string>
+    <string name="already_on_a_break">Al met pauze</string>
+    <string name="break_started">Pauze gestart</string>
+    <string name="no_active_break">Geen actieve pauze</string>
+    <string name="break_ended">Pauze beëindigd</string>
+    
+    <!-- Voice recognition status messages -->
+    <string name="audio_permission_required">Audio toestemming vereist</string>
+    <string name="microphone_permission_required">Microfoon toestemming vereist</string>
+    <string name="voice_recognition_disabled_settings">Spraakherkenning is uitgeschakeld in instellingen</string>
+    <string name="voice_recognition_ready">Spraakherkenning gereed</string>
+    <string name="sound_detection_ready">Geluidsdetectie gereed</string>
+    <string name="audio_ready">Audio gereed</string>
+    <string name="listening_say_command">Luisteren... (zeg je commando)</string>
+    <string name="listening_for_sounds">Luisteren naar geluiden...</string>
+    <string name="listening">Luisteren...</string>
+    <string name="ready_for_speech">Klaar voor spraak</string>
+    <string name="voice_recognition_timeout_stopping">Spraakherkenning timeout - stoppen</string>
+    <string name="speech_recognition_not_available">Spraakherkenning niet beschikbaar op dit apparaat</string>
+    <string name="voice_recognition_disabled_permission">Spraakherkenning is uitgeschakeld of toestemming niet verleend</string>
+    
+    <!-- Voice recognition error messages -->
+    <string name="audio_recording_error">Audio opname fout</string>
+    <string name="insufficient_permissions">Onvoldoende toestemmingen</string>
+    <string name="network_error">Netwerkfout</string>
+    <string name="network_timeout">Netwerk timeout</string>
+    <string name="recognizer_busy">Herkenner bezet</string>
+    <string name="server_error">Serverfout</string>
+    <string name="language_not_supported">Taal niet ondersteund</string>
+    <string name="unknown_error">Onbekende fout: %1$d</string>
+    <string name="voice_recognition_stopped_error">Spraakherkenning gestopt: %1$s</string>
+    <string name="speech_started">Spraak gestart</string>
+    <string name="processing_speech">Spraak verwerken...</string>
+    <string name="partial_result">Gedeeltelijk: %1$s</string>
     
     <!-- Timesheet activity messages -->
     <string name="start_date_format">Start: %1$s</string>
@@ -261,12 +287,7 @@
     
     <!-- Statistics chart labels -->
     <string name="no_task_data_available">Geen taakgegevens beschikbaar</string>
-    <string name="early">Vroeg</string>
-    <string name="on_time">Op tijd</string>
-    <string name="late">Laat</string>
     <string name="no_timing_data_available">Geen tijdgegevens beschikbaar</string>
     <string name="no_task_creation_data_available">Geen taakcreatiegegevens beschikbaar</string>
-    <string name="voice">Spraak</string>
-    <string name="gesture">Gebaar</string>
 
 </resources> 

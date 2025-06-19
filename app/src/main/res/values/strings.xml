@@ -34,9 +34,7 @@
     <string name="save">Save</string>
     
     <!-- Permission dialogs -->
-    <string name="microphone_permission_required">Microphone Permission Required</string>
     <string name="microphone_permission_message">Voice recognition requires microphone access to work. Would you like to grant this permission?</string>
-    <string name="permission_required">Permission Required</string>
     <string name="microphone_permission_denied_message">Voice recognition cannot work without microphone access. Would you like to open settings to grant the permission?</string>
     <string name="notification_permission_required">Notification Permission Required</string>
     <string name="notification_permission_message">Push notifications require notification permission to work. Would you like to grant this permission?</string>
@@ -51,27 +49,13 @@
     
     <!-- Toast messages -->
     <string name="voice_recognition_enabled">Voice recognition enabled</string>
-    <string name="voice_recognition_disabled_permission">Voice recognition disabled: Permission denied</string>
+    <string name="voice_recognition_disabled_permission_denied">Voice recognition disabled: Permission denied</string>
     <string name="push_notifications_enabled">Push notifications enabled</string>
     <string name="push_notifications_disabled_permission">Push notifications disabled: Permission denied</string>
     <string name="settings_reset_to_defaults">Settings reset to defaults</string>
     <string name="settings_saved_successfully">Settings saved successfully</string>
     <string name="microphone_permission_required_for_voice">Microphone permission is required for voice commands</string>
     <string name="notifications_disabled_warning">Notifications are disabled. Some features may not work properly.</string>
-    <string name="command_not_recognized">Command not recognized: %1$s</string>
-    <string name="tracking_started_for_task">Tracking started for: %1$s</string>
-    <string name="no_tasks_available">No tasks available to track</string>
-    <string name="already_tracking_task">Already tracking a task</string>
-    <string name="task_already_completed">Task \"%1$s\" is already completed</string>
-    <string name="task_not_found">Task \"%1$s\" not found. Available tasks: %2$s</string>
-    <string name="no_active_tracking_session">No active tracking session</string>
-    <string name="no_task_being_tracked">No task was being tracked</string>
-    <string name="could_not_find_tracked_task">Could not find the task being tracked</string>
-    <string name="start_tracking_first">Start tracking first</string>
-    <string name="already_on_break">Already on a break</string>
-    <string name="break_started">Break started</string>
-    <string name="no_active_break">No active break</string>
-    <string name="break_ended">Break ended</string>
     <string name="task_saved_to_database">Task saved to database with ID: %1$d</string>
     <string name="task_marked_completed">Task marked as completed</string>
     <string name="task_deleted">Task deleted</string>
@@ -198,12 +182,22 @@
     <string name="hour_22">22</string>
     
     <!-- Voice recognition -->
-    <string name="voice_recognition_ready">Voice recognition ready</string>
     <string name="start_voice_recognition">Start Voice Recognition</string>
     
     <!-- Timesheet component placeholders -->
     <string name="day_number_placeholder">1</string>
     <string name="hours_worked_placeholder">4h</string>
+    
+    <!-- Statistics -->
+    <string name="statistics_title">Statistics</string>
+    <string name="task_completion">Task completion</string>
+    <string name="task_timing">Task timing</string>
+    <string name="creation_methods">Creation methods</string>
+    <string name="quick_stats">Quick stats</string>
+    <string name="total_tasks">Total tasks</string>
+    <string name="tasks_completed">Tasks completed</string>
+    <string name="completion_rate">Completion rate</string>
+    <string name="uncompleted">Uncompleted</string>
     
     <!-- Additional export strings -->
     <string name="export_selected_format">Export Selected (%1$d/%2$d)</string>
@@ -217,7 +211,7 @@
     <string name="not_tracking_any_task">Not tracking any task</string>
     
     <!-- Dashboard audio status messages -->
-    <string name="audio_features_disabled">Audio features disabled - select a mode in settings</string>
+    <string name="audio_features_disabled">Audio disabled - select a mode</string>
     <string name="start_audio">Start Audio</string>
     <string name="voice_commands">Voice commands</string>
     <string name="sound_detection">Sound detection</string>
@@ -234,8 +228,51 @@
     <string name="voice_recognition_stopped">Voice recognition stopped</string>
     
     <!-- Dashboard tracking action messages -->
-    <string name="task_completed_time_tracked">Task '%1$s' completed. Time tracked: %2$dh %3$dm</string>
+    <string name="task_completed_time_tracked">Task \'%1$s\' completed. Time tracked: %2$dh %3$dm</string>
     <string name="currently_busy_with_task">Currently busy with a task</string>
+    <string name="command_not_recognized">Command not recognized: %1$s</string>
+    <string name="tracking_started_for">Tracking started for: %1$s</string>
+    <string name="no_tasks_available_to_track">No tasks available to track</string>
+    <string name="already_tracking_a_task">Already tracking a task</string>
+    <string name="task_already_completed">Task \'%1$s\' is already completed</string>
+    <string name="task_not_found_available">Task \'%1$s\' not found. Available tasks: %2$s</string>
+    <string name="no_active_tracking_session">No active tracking session</string>
+    <string name="no_task_was_being_tracked">No task was being tracked</string>
+    <string name="could_not_find_tracked_task">Could not find the task being tracked</string>
+    <string name="start_tracking_first">Start tracking first</string>
+    <string name="already_on_a_break">Already on a break</string>
+    <string name="break_started">Break started</string>
+    <string name="no_active_break">No active break</string>
+    <string name="break_ended">Break ended</string>
+    
+    <!-- Voice recognition status messages -->
+    <string name="audio_permission_required">Audio permission required</string>
+    <string name="microphone_permission_required">Microphone permission required</string>
+    <string name="voice_recognition_disabled_settings">Voice recognition is disabled in settings</string>
+    <string name="voice_recognition_ready">Voice recognition ready</string>
+    <string name="sound_detection_ready">Sound detection ready</string>
+    <string name="audio_ready">Audio ready</string>
+    <string name="listening_say_command">Listening... (say your command)</string>
+    <string name="listening_for_sounds">Listening for sounds...</string>
+    <string name="listening">Listening...</string>
+    <string name="ready_for_speech">Ready for speech</string>
+    <string name="voice_recognition_timeout_stopping">Voice recognition timeout - stopping</string>
+    <string name="speech_recognition_not_available">Speech recognition not available on this device</string>
+    <string name="voice_recognition_disabled_permission">Voice recognition is disabled or permission not granted</string>
+    
+    <!-- Voice recognition error messages -->
+    <string name="audio_recording_error">Audio recording error</string>
+    <string name="insufficient_permissions">Insufficient permissions</string>
+    <string name="network_error">Network error</string>
+    <string name="network_timeout">Network timeout</string>
+    <string name="recognizer_busy">Recognizer busy</string>
+    <string name="server_error">Server error</string>
+    <string name="language_not_supported">Language not supported</string>
+    <string name="unknown_error">Unknown error: %1$d</string>
+    <string name="voice_recognition_stopped_error">Voice recognition stopped: %1$s</string>
+    <string name="speech_started">Speech started</string>
+    <string name="processing_speech">Processing speech...</string>
+    <string name="partial_result">Partial: %1$s</string>
     
     <!-- Timesheet activity messages -->
     <string name="start_date_format">Start: %1$s</string>
@@ -250,5 +287,7 @@
     <string name="no_task_creation_data_available">No task creation data available</string>
     <string name="voice">Voice</string>
     <string name="gesture">Gesture</string>
+    <string name="no_data_available">No data available</string>
+    <string name="completion_stats_format">Completed: %1$s / Uncompleted: %2$s</string>
     
 </resources>

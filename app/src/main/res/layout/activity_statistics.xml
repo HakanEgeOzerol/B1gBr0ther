@@ -97,7 +97,7 @@
                         <TextView
                             android:layout_width="wrap_content"
                             android:layout_height="wrap_content"
-                            android:text="Completed"
+                            android:text="@string/completed"
                             android:textColor="@color/white"
                             android:layout_marginStart="4dp" />
                     </LinearLayout>
@@ -118,7 +118,7 @@
                         <TextView
                             android:layout_width="wrap_content"
                             android:layout_height="wrap_content"
-                            android:text="Uncompleted"
+                            android:text="@string/uncompleted"
                             android:textColor="@color/white"
                             android:layout_marginStart="4dp" />
                     </LinearLayout>
