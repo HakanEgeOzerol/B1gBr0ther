@@ -35,8 +35,8 @@ class TimesheetActivity : AppCompatActivity() {
     super.onCreate(savedInstanceState)
     
     // Apply saved theme before setting content view
-    ThemeManager.applyTheme(this)
-    appliedTheme = ThemeManager.getCurrentTheme(this)
+//    ThemeManager.applyTheme(this)
+//    appliedTheme = ThemeManager.getCurrentTheme(this)
     
     enableEdgeToEdge()
     setContentView(R.layout.activity_timesheet)
