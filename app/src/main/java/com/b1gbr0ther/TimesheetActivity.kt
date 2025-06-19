@@ -152,7 +152,7 @@ class TimesheetActivity : AppCompatActivity() {
 
     //force custom width and position, cus for some reason doing it in the xml doesn't work??
     val window = dialog.window
-    window?.setLayout(350, ViewGroup.LayoutParams.WRAP_CONTENT)
+    window?.setLayout(ViewGroup.LayoutParams.WRAP_CONTENT, ViewGroup.LayoutParams.WRAP_CONTENT)
     window?.setGravity(Gravity.TOP or Gravity.START)
     window?.attributes = window?.attributes?.apply {
       x = 40 //change position x axis
@@ -195,7 +195,7 @@ class TimesheetActivity : AppCompatActivity() {
 
     //force custom width and position, cus for some reason doing it in the xml doesn't work??
     val window = dialog.window
-    window?.setLayout(350, ViewGroup.LayoutParams.WRAP_CONTENT)
+    window?.setLayout(ViewGroup.LayoutParams.WRAP_CONTENT, ViewGroup.LayoutParams.WRAP_CONTENT)
     window?.setGravity(Gravity.TOP or Gravity.START)
     window?.attributes = window?.attributes?.apply {
       x = 690
