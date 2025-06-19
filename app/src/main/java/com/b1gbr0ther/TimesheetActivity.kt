@@ -111,10 +111,6 @@ class TimesheetActivity : AppCompatActivity() {
         hoursMap[day] = (hoursMap[day] ?: 0) + hours
       }
 
-      block.setOnClickListener {
-        showDayTasksOverlay(day, currentYearMonth.month.getDisplayName(TextStyle.FULL, Locale.getDefault()))
-      }
-
       for (day in 1..daysInMonth) {
         val block = TimesheetDayComponent(this)
         block.setDayNumber(day.toString())
