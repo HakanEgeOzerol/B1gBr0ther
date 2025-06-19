@@ -647,7 +647,7 @@ class DashboardActivity : AppCompatActivity() {
         val cancelButton = dialog.findViewById<Button>(R.id.Cancel)
 
         continueButton.setOnClickListener{
-            val taskDate = LocalDate.of(datePicker.year, datePicker.month, datePicker.dayOfMonth)
+            var taskDate = LocalDate.of(datePicker.year, datePicker.month, datePicker.dayOfMonth)
 
             dialog.dismiss()
             setStartTimeDialog(name, taskDate)
