@@ -19,18 +19,26 @@ class GestureRecognizer {
     }
 
     fun analyzeGesture(): GestureType {
-        val first = sampleWindow.firstOrNull() ?: return GestureType.SHAKE
-        val last = sampleWindow.lastOrNull() ?: return GestureType.SHAKE
+        val first = sampleWindow.firstOrNull() ?: return GestureType.UNIDENTIFIED
+        val last = sampleWindow.lastOrNull() ?: return GestureType.UNIDENTIFIED
 
         val dx = last.x - first.x
         val dy = last.y - first.y
 
         if (abs(dx) > 5 && abs(dx) > abs(dy)) {//Horizontal
-            return GestureType.LEFT
+            return if (dx < 0){
+                GestureType.LEFT
+            } else{
+                GestureType.RIGHT
+            }
         } else if (abs(dy) > abs(dx) && abs(dy) > 5) {//Vertical
-            return GestureType.UP
+            return if (dy < 0){
+                GestureType.DOWN
+            } else{
+                GestureType.UP
+            }
         }
 
-        return GestureType.SQUARE
+        return GestureType.SHAKE
     }
 }
