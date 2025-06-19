@@ -212,8 +212,8 @@ class DashboardActivity : AppCompatActivity() {
 
         handler.post(timerRunnable)
 
-        findViewById<Button>(R.id.btnDatabaseTest).setOnClickListener {
-            val intent = Intent(this, DatabaseTesterActivity::class.java)
+        findViewById<Button>(R.id.btnManualPage).setOnClickListener {
+            val intent = Intent(this, ManualPage::class.java)
             startActivity(intent)
         }
 
