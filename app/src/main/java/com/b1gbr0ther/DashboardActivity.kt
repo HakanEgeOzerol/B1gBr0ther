@@ -32,7 +32,6 @@ import java.time.LocalDateTime
 import java.util.Objects
 import kotlin.math.floor
 import kotlin.math.sqrt
-import com.b1gbr0ther.data.database.entities.Task
 import com.b1gbr0ther.gestureRecognition.GestureRecognizer
 import com.b1gbr0ther.gestureRecognition.GestureType
 import com.b1gbr0ther.notifications.TaskNotificationManager
