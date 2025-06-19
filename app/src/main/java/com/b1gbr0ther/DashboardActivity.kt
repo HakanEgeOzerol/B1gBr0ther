@@ -13,7 +13,6 @@ import android.os.Build
 import android.os.Bundle
 import android.os.Handler
 import android.os.Looper
-import android.util.Log
 import android.widget.Button
 import android.widget.CheckBox
 import android.widget.DatePicker
@@ -33,6 +32,8 @@ import java.util.Objects
 import kotlin.math.floor
 import kotlin.math.sqrt
 import com.b1gbr0ther.data.database.entities.Task
+import com.b1gbr0ther.gestureRecognition.GestureRecognizer
+import com.b1gbr0ther.gestureRecognition.GestureType
 import com.b1gbr0ther.notifications.TaskNotificationManager
 import java.time.LocalDate
 import java.time.LocalTime
@@ -55,6 +56,8 @@ class DashboardActivity : AppCompatActivity() {
     private lateinit var commandHandler: VoiceCommandHandler
 
     private var sensorManager: SensorManager? = null
+    private val gestureRecognizer = GestureRecognizer()
+    private val shakeThreshold = 17f
     private var isDialogShown = false
     private var acceleration = 0f
     private var currentAcceleration = 0f
@@ -447,7 +450,6 @@ class DashboardActivity : AppCompatActivity() {
 
     private val sensorListener: SensorEventListener = object : SensorEventListener {
         override fun onSensorChanged(event: SensorEvent) {
-
             // Fetching x,y,z values
             val (x, y, z) = event.values
 
@@ -459,14 +461,23 @@ class DashboardActivity : AppCompatActivity() {
             val delta: Float = currentAcceleration - lastAcceleration
             acceleration = acceleration * 0.9f + delta
 
+            var timeStamp = System.currentTimeMillis()
+            gestureRecognizer.addSensorData(x, y, z, timeStamp)
 
-            if (acceleration > 17 && !isDialogShown && !isActiveTask()) {
+            var analyzedGesture = GestureType.UNIDENTIFIED
+
+
+            if (acceleration > shakeThreshold && !isDialogShown && !isActiveTask()) {
                 isDialogShown = true
+                analyzedGesture = gestureRecognizer.analyzeGesture()
+                Toast.makeText(applicationContext, analyzedGesture.name, Toast.LENGTH_SHORT).show()
                 createInputTaskDialog()
             }
-            else if (acceleration>17 &&!isDialogShown && isActiveTask()){
+            else if (acceleration > shakeThreshold && !isDialogShown && isActiveTask()){
                 isDialogShown = true
                 createExistingTaskDialog()
+                analyzedGesture = gestureRecognizer.analyzeGesture()
+                Toast.makeText(applicationContext, analyzedGesture.name, Toast.LENGTH_SHORT).show()
             }
         }
         override fun onAccuracyChanged(sensor: Sensor, accuracy: Int) {}
