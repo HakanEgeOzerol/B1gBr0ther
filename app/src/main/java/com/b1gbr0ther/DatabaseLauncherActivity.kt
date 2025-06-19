@@ -12,6 +12,10 @@ import androidx.appcompat.app.AppCompatActivity
 class DatabaseLauncherActivity : AppCompatActivity() {
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
+        
+        // Apply saved theme before setting content view
+        ThemeManager.applyTheme(this)
+        
         setContentView(R.layout.activity_database_launcher)
         
         // Set up the button to launch the database tester

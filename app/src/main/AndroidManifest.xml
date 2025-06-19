@@ -38,7 +38,7 @@
         <activity
             android:name=".TimesheetActivity"
             android:exported="true"
-            android:theme="@style/Theme.B1gBr0ther"
+            android:theme="@style/Theme.B1gBr0ther.Light"
             android:label="Timesheet">
         </activity>
         <activity

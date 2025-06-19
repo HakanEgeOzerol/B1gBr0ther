@@ -51,6 +51,10 @@ class DatabaseTesterActivity : AppCompatActivity() {
     
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
+        
+        // Apply saved theme before setting content view
+        ThemeManager.applyTheme(this)
+        
         setContentView(R.layout.activity_database_tester)
         
         // Initialize database manager

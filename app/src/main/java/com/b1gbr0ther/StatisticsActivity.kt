@@ -32,6 +32,15 @@ class StatisticsActivity : AppCompatActivity() {
     private lateinit var databaseManager: DatabaseManager
     private val numberFormat = NumberFormat.getNumberInstance(Locale.getDefault())
     private val mainScope = CoroutineScope(Dispatchers.Main)
+    
+    // Track the theme that was applied when this activity was created
+    private var appliedTheme: Int = -1
+
+    private fun getCurrentTextColor(): Int {
+        val typedValue = android.util.TypedValue()
+        theme.resolveAttribute(android.R.attr.textColorPrimary, typedValue, true)
+        return typedValue.data
+    }
 
     override fun attachBaseContext(newBase: Context) {
         super.attachBaseContext(LocaleHelper.onAttach(newBase))
@@ -39,6 +48,10 @@ class StatisticsActivity : AppCompatActivity() {
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
+        
+        // Apply saved theme before setting content view
+        ThemeManager.applyTheme(this)
+        appliedTheme = ThemeManager.getCurrentTheme(this)
         
         // Enable edge-to-edge display
         enableEdgeToEdge()
@@ -62,6 +75,17 @@ class StatisticsActivity : AppCompatActivity() {
         setupCharts()
         loadStatistics()
     }
+    
+    override fun onResume() {
+        super.onResume()
+        
+        // Check if theme has changed since this activity was created
+        val currentTheme = ThemeManager.getCurrentTheme(this)
+        if (appliedTheme != -1 && currentTheme != appliedTheme) {
+            // Theme has changed, recreate the activity to apply new theme
+            recreate()
+        }
+    }
 
     private fun setupCharts() {
         // Set up completion chart
@@ -69,7 +93,7 @@ class StatisticsActivity : AppCompatActivity() {
             description.isEnabled = false
             setUsePercentValues(true)
             setEntryLabelTextSize(12f)
-            setEntryLabelColor(Color.BLACK)
+            setEntryLabelColor(getCurrentTextColor())
             centerText = getString(R.string.task_completion)
             setCenterTextSize(14f)
             legend.isEnabled = false
@@ -77,7 +101,7 @@ class StatisticsActivity : AppCompatActivity() {
             setTransparentCircleAlpha(0)
             animateY(1400, Easing.EaseInOutQuad)
             setNoDataText(getString(R.string.no_task_data_available))
-            setNoDataTextColor(Color.BLACK)
+            setNoDataTextColor(getCurrentTextColor())
         }
         
         // Set up timing chart
@@ -99,7 +123,7 @@ class StatisticsActivity : AppCompatActivity() {
             setFitBars(true)
             animateY(1400)
             setNoDataText(getString(R.string.no_timing_data_available))
-            setNoDataTextColor(Color.BLACK)
+            setNoDataTextColor(getCurrentTextColor())
         }
         
         // Set up creation method chart
@@ -107,7 +131,7 @@ class StatisticsActivity : AppCompatActivity() {
             description.isEnabled = false
             setUsePercentValues(true)
             setEntryLabelTextSize(12f)
-            setEntryLabelColor(Color.BLACK)
+            setEntryLabelColor(getCurrentTextColor())
             centerText = getString(R.string.creation_methods)
             setCenterTextSize(14f)
             legend.isEnabled = false
@@ -115,7 +139,7 @@ class StatisticsActivity : AppCompatActivity() {
             setTransparentCircleAlpha(0)
             animateY(1400, Easing.EaseInOutQuad)
             setNoDataText(getString(R.string.no_task_creation_data_available))
-            setNoDataTextColor(Color.BLACK)
+            setNoDataTextColor(getCurrentTextColor())
         }
     }
 
@@ -187,7 +211,7 @@ class StatisticsActivity : AppCompatActivity() {
                                     Color.parseColor("#F44336")   // Red
                                 )
                                 valueTextSize = 12f
-                                valueTextColor = Color.BLACK
+                                valueTextColor = getCurrentTextColor()
                             }
                             
                             timingChart.data = BarData(barDataSet).apply {
