@@ -575,6 +575,11 @@ class DashboardActivity : AppCompatActivity() {
         startActivity(intent)
     }
 
+    fun showStatisticsPage() {
+        val intent = Intent(this, StatisticsActivity::class.java)
+        startActivity(intent)
+    }
+
     fun getDatabaseManager(): DatabaseManager {
         return databaseManager
     }

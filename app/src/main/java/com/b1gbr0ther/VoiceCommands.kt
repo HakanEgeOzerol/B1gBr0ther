@@ -84,6 +84,19 @@ object VoiceCommandAliases {
             "show my time",
             "view my time",
             "show schedule"
+        ),
+        "show statistics" to listOf(
+            "show statistics",
+            "open statistics",
+            "view statistics",
+            "statistics page",
+            "show stats",
+            "open stats",
+            "view stats",
+            "stats page",
+            "show my statistics",
+            "show my stats",
+            "statistics"
         )
     )
 }
