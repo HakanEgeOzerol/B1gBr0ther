@@ -2,6 +2,8 @@ package com.b1gbr0ther
 
 import android.content.Context
 import android.content.Intent
+import android.annotation.SuppressLint
+import com.b1gbr0ther.data.database.DatabaseManager
 import android.os.Bundle
 import android.view.LayoutInflater
 import android.widget.Toast
@@ -23,8 +25,7 @@ import java.util.Locale
 
 class TimesheetActivity : AppCompatActivity() {
 
-  private var currentYearMonth: YearMonth = YearMonth.of(2021, 5)
-  private var appliedTheme: Int = -1
+  private lateinit var currentYearMonth: YearMonth
 
   override fun attachBaseContext(newBase: Context) {
     super.attachBaseContext(LocaleHelper.onAttach(newBase))
@@ -49,7 +50,7 @@ class TimesheetActivity : AppCompatActivity() {
       insets
     }
 
-    currentYearMonth = YearMonth.of(2021, 5) // change this to work with database
+    currentYearMonth = loadSelectedMonthYear()
     updateCalendarUI()
 
     val yearButton = findViewById<Button>(R.id.yearSelector)
@@ -71,11 +72,13 @@ class TimesheetActivity : AppCompatActivity() {
 
   private fun setCurrentMonth(month: Int) {
     currentYearMonth = YearMonth.of(currentYearMonth.year, month)
+    saveSelectedMonthYear()
     updateCalendarUI()
   }
 
   private fun setCurrentYear(year: Int) {
     currentYearMonth = YearMonth.of(year, currentYearMonth.monthValue)
+    saveSelectedMonthYear()
     updateCalendarUI()
   }
 
@@ -93,21 +96,36 @@ class TimesheetActivity : AppCompatActivity() {
     val startDayOfWeek = currentYearMonth.atDay(1).dayOfWeek.value - 1
     val daysInMonth = currentYearMonth.lengthOfMonth()
 
-    for (i in 0 until startDayOfWeek) {
-      val emptyView = inflater.inflate(R.layout.empty_day, calendarGrid, false)
-      calendarGrid.addView(emptyView)
-    }
+    val dbManager = DatabaseManager(this)
+    val startOfMonth = currentYearMonth.atDay(1).atStartOfDay()
+    val endOfMonth = currentYearMonth.atEndOfMonth().atTime(23, 59)
 
-    for (day in 1..daysInMonth) {
-      val block = inflater.inflate(R.layout.component_timesheet_day, calendarGrid, false)
-      block.findViewById<TextView>(R.id.dayNumberText).text = day.toString()
-      block.findViewById<TextView>(R.id.hoursWorkedText).text = "${(1..8).random()}h"
+    dbManager.getTasksByTimeRange(startOfMonth, endOfMonth) { tasks ->
+      val completedTasks = tasks.filter { it.isCompleted }
+      val hoursMap = mutableMapOf<Int, Int>()
+
+      completedTasks.forEach { task ->
+        val day = task.startTime.dayOfMonth
+        val duration = java.time.Duration.between(task.startTime, task.endTime).toMinutes()
+        val hours = (duration / 60.0).toInt()
+        hoursMap[day] = (hoursMap[day] ?: 0) + hours
+      }
 
       block.setOnClickListener {
         showDayTasksOverlay(day, currentYearMonth.month.getDisplayName(TextStyle.FULL, Locale.getDefault()))
       }
 
-      calendarGrid.addView(block)
+      for (day in 1..daysInMonth) {
+        val block = TimesheetDayComponent(this)
+        block.setDayNumber(day.toString())
+        block.setHoursWorked((hoursMap[day] ?: 0).toString())
+
+        block.setOnClickListener {
+          showDayTasksOverlay(day, currentYearMonth.month.getDisplayName(TextStyle.FULL, Locale.ENGLISH))
+        }
+
+        calendarGrid.addView(block)
+      }
     }
   }
 
@@ -146,7 +164,7 @@ class TimesheetActivity : AppCompatActivity() {
     window?.setGravity(Gravity.TOP or Gravity.START)
     window?.attributes = window?.attributes?.apply {
       x = 40 //change position x axis
-      y = 230 // change position y axiss
+      y = 230 // change position y axis
     }
   }
 
@@ -194,10 +212,10 @@ class TimesheetActivity : AppCompatActivity() {
     }
   }
 
-  //this is for the overlay of the day
-  private fun showDayTasksOverlay(day: Int, monthName : String) {
+  @SuppressLint("SetTextI18n")
+  private fun showDayTasksOverlay(day: Int, monthName: String) {
     val dialogView = layoutInflater.inflate(R.layout.day_overlay, null)
-    val dialog = android.app.AlertDialog.Builder(this)
+    val dialog = AlertDialog.Builder(this)
       .setView(dialogView)
       .setCancelable(true)
       .create()
@@ -208,37 +226,50 @@ class TimesheetActivity : AppCompatActivity() {
     val title = dialogView.findViewById<TextView>(R.id.overlayTitle)
     title.text = getString(R.string.tasks_on_date, "$monthName $day")
 
-    // Dummy task data, replace this with tasks and hours fetched form db
-    val tasks = listOf(
-      "Making the design" to "1h",
-      "Building the frontend" to "1h",
-      "Building the backend" to "1h 30m",
-      "Writing unit tests" to "30m"
-    )
+    val dbManager = DatabaseManager(this)
+    val selectedDate = currentYearMonth.atDay(day)
+    val startOfDay = selectedDate.atStartOfDay()
+    val endOfDay = selectedDate.atTime(23, 59)
 
-    for ((name, duration) in tasks) {
-      val taskRow = TextView(this).apply {
-        text = "$name - $duration"
-        setPadding(8, 8, 8, 8)
-        textSize = 16f
-        setTextColor(android.graphics.Color.BLACK)
+    dbManager.getTasksByTimeRange(startOfDay, endOfDay) { tasks ->
+      val completedTasks = tasks.filter { it.isCompleted }
+      container.removeAllViews()
+
+      completedTasks.forEach { task ->
+        val duration = java.time.Duration.between(task.startTime, task.endTime)
+        val hours = duration.toHours()
+        val minutes = duration.toMinutes() % 60
+        val durationStr = buildString {
+          if (hours > 0) append("${hours}h ")
+          if (minutes > 0) append("${minutes}m")
+        }
+
+        val taskRow = TextView(this).apply {
+          text = "${task.taskName} - $durationStr"
+          setPadding(8, 8, 8, 8)
+          textSize = 16f
+          setTextColor(android.graphics.Color.BLACK)
+        }
+
+        container.addView(taskRow)
       }
-      container.addView(taskRow)
-    }
 
-    dialog.show()
-  }
-  
-  override fun onResume() {
-    super.onResume()
-    
-    // Check if theme has changed and recreate if needed
-    val currentTheme = ThemeManager.getCurrentTheme(this)
-    if (appliedTheme != -1 && appliedTheme != currentTheme) {
-      android.util.Log.d("TimesheetActivity", "Theme changed from $appliedTheme to $currentTheme - recreating activity")
-      recreate()
-      return
+      dialog.show()
     }
-    appliedTheme = currentTheme
+  }
+
+  private fun saveSelectedMonthYear() {
+    val prefs = getSharedPreferences("TimesheetPrefs", MODE_PRIVATE)
+    val editor = prefs.edit()
+    editor.putInt("selectedYear", currentYearMonth.year)
+    editor.putInt("selectedMonth", currentYearMonth.monthValue)
+    editor.apply()
+  }
+
+  private fun loadSelectedMonthYear(): YearMonth {
+    val prefs = getSharedPreferences("TimesheetPrefs", MODE_PRIVATE)
+    val year = prefs.getInt("selectedYear", 2021) //default year is 2021
+    val month = prefs.getInt("selectedMonth", 5)  //default month is May
+    return YearMonth.of(year, month)
   }
 }

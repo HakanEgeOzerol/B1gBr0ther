@@ -30,7 +30,7 @@
         app:layout_constraintVertical_bias="0.042" />
 
     <Button
-        android:id="@+id/btnDatabaseTest"
+        android:id="@+id/btnManualPage"
         android:layout_width="126dp"
         android:layout_height="37dp"
         android:background="@drawable/rounded_corners"
