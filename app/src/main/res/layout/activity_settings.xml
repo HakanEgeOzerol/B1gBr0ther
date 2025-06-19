@@ -11,7 +11,7 @@
         android:id="@+id/settingsTitle"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:text="Settings"
+        android:text="@string/settings_title"
         android:textColor="?android:textColorPrimary"
         android:textSize="24sp"
         android:textStyle="bold"
@@ -43,7 +43,7 @@
             <TextView
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:text="Appearance &amp; Language"
+                android:text="@string/appearance_language"
                 android:textColor="?android:textColorPrimary"
                 android:textSize="18sp"
                 android:textStyle="bold"
@@ -61,7 +61,7 @@
                     android:layout_width="0dp"
                     android:layout_height="wrap_content"
                     android:layout_weight="1"
-                    android:text="Theme: Light Mode"
+                    android:text="@string/theme_light_mode"
                     android:textColor="?android:textColorPrimary"
                     android:textSize="16sp" />
 
@@ -83,22 +83,28 @@
                     android:layout_width="0dp"
                     android:layout_height="wrap_content"
                     android:layout_weight="1"
-                    android:text="Language: English"
+                    android:text="@string/language_english"
                     android:textColor="?android:textColorPrimary"
                     android:textSize="16sp" />
 
-                <Switch
-                    android:id="@+id/languageSwitch"
+                <Button
+                    android:id="@+id/languageButton"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    android:checked="false" />
+                    android:text="@string/language_english"
+                    android:background="@drawable/rounded_corners"
+                    android:backgroundTint="?colorPrimary"
+                    android:textColor="?attr/buttonTextColor"
+                    android:textSize="14sp"
+                    android:minWidth="80dp"
+                    android:padding="8dp" />
             </LinearLayout>
 
             <!-- Voice Recognition Section -->
             <TextView
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:text="Audio Mode"
+                android:text="@string/voice_recognition"
                 android:textColor="?android:textColorPrimary"
                 android:textSize="18sp"
                 android:textStyle="bold"
@@ -122,7 +128,8 @@
                     android:id="@+id/radioAudioOff"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
-                    android:text="Off - No audio detection"
+                    android:layout_weight="1"
+                    android:text="@string/audio_off"
                     android:textColor="?android:textColorPrimary"
                     android:textSize="16sp"
                     android:padding="8dp"
@@ -152,7 +159,7 @@
             <TextView
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:text="Notifications"
+                android:text="@string/notifications"
                 android:textColor="?android:textColorPrimary"
                 android:textSize="18sp"
                 android:textStyle="bold"
@@ -168,7 +175,7 @@
                     android:layout_width="0dp"
                     android:layout_height="wrap_content"
                     android:layout_weight="1"
-                    android:text="Enable Task Notifications"
+                    android:text="@string/enable_task_notifications"
                     android:textColor="?android:textColorPrimary"
                     android:textSize="16sp" />
 
@@ -183,7 +190,7 @@
             <TextView
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:text="Motion &amp; Gesture Detection"
+                android:text="@string/motion_gesture_detection"
                 android:textColor="?android:textColorPrimary"
                 android:textSize="18sp"
                 android:textStyle="bold"
@@ -199,7 +206,7 @@
                     android:layout_width="0dp"
                     android:layout_height="wrap_content"
                     android:layout_weight="1"
-                    android:text="Enable Accelerometer Detection"
+                    android:text="@string/enable_accelerometer_detection"
                     android:textColor="?android:textColorPrimary"
                     android:textSize="16sp" />
 
@@ -220,7 +227,7 @@
                     android:layout_width="0dp"
                     android:layout_height="wrap_content"
                     android:layout_weight="1"
-                    android:text="Enable Blow Detection"
+                    android:text="@string/enable_blow_detection"
                     android:textColor="?android:textColorPrimary"
                     android:textSize="16sp" />
 
@@ -241,7 +248,7 @@
                     android:layout_width="0dp"
                     android:layout_height="wrap_content"
                     android:layout_weight="1"
-                    android:text="Enable Sneeze Detection"
+                    android:text="@string/enable_sneeze_detection"
                     android:textColor="?android:textColorPrimary"
                     android:textSize="16sp" />
 
@@ -252,94 +259,7 @@
                     android:checked="true" />
             </LinearLayout>
 
-            <!-- Audio Settings Section -->
-            <TextView
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:text="Audio Settings"
-                android:textColor="?android:textColorPrimary"
-                android:textSize="18sp"
-                android:textStyle="bold"
-                android:layout_marginBottom="8dp" />
 
-            <LinearLayout
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:orientation="vertical"
-                android:layout_marginBottom="16dp">
-
-                <LinearLayout
-                    android:layout_width="match_parent"
-                    android:layout_height="wrap_content"
-                    android:orientation="horizontal"
-                    android:layout_marginBottom="8dp">
-
-                    <TextView
-                        android:layout_width="0dp"
-                        android:layout_height="wrap_content"
-                        android:layout_weight="1"
-                        android:text="Microphone Volume"
-                        android:textColor="?android:textColorPrimary"
-                        android:textSize="16sp" />
-
-                    <TextView
-                        android:id="@+id/volumeValueText"
-                        android:layout_width="wrap_content"
-                        android:layout_height="wrap_content"
-                        android:text="50%"
-                        android:textColor="?android:textColorPrimary"
-                        android:textSize="16sp"
-                        android:minWidth="50dp"
-                        android:gravity="end" />
-                </LinearLayout>
-
-                <SeekBar
-                    android:id="@+id/volumeSeekBar"
-                    android:layout_width="match_parent"
-                    android:layout_height="wrap_content"
-                    android:max="100"
-                    android:progress="50" />
-            </LinearLayout>
-
-            <!-- Sensitivity Settings Section -->
-            <LinearLayout
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:orientation="vertical"
-                android:layout_marginBottom="16dp">
-
-                <LinearLayout
-                    android:layout_width="match_parent"
-                    android:layout_height="wrap_content"
-                    android:orientation="horizontal"
-                    android:layout_marginBottom="8dp">
-
-                    <TextView
-                        android:layout_width="0dp"
-                        android:layout_height="wrap_content"
-                        android:layout_weight="1"
-                        android:text="Detection Sensitivity"
-                        android:textColor="?android:textColorPrimary"
-                        android:textSize="16sp" />
-
-                    <TextView
-                        android:id="@+id/sensitivityValueText"
-                        android:layout_width="wrap_content"
-                        android:layout_height="wrap_content"
-                        android:text="75%"
-                        android:textColor="?android:textColorPrimary"
-                        android:textSize="16sp"
-                        android:minWidth="50dp"
-                        android:gravity="end" />
-                </LinearLayout>
-
-                <SeekBar
-                    android:id="@+id/sensitivitySeekBar"
-                    android:layout_width="match_parent"
-                    android:layout_height="wrap_content"
-                    android:max="100"
-                    android:progress="75" />
-            </LinearLayout>
 
 
         </LinearLayout>
@@ -364,7 +284,7 @@
             android:layout_marginEnd="8dp"
             android:background="@drawable/rounded_corners"
             android:backgroundTint="?colorPrimary"
-            android:text="Back"
+            android:text="@string/back"
             android:textAllCaps="false"
             android:textColor="#FFFFFFFF"
             android:textSize="16sp" />
@@ -378,7 +298,7 @@
             android:layout_marginEnd="4dp"
             android:background="@drawable/rounded_corners"
             android:backgroundTint="?colorPrimary"
-            android:text="Reset"
+            android:text="@string/reset"
             android:textAllCaps="false"
             android:textColor="#FFFFFFFF"
             android:textSize="16sp" />
@@ -391,7 +311,7 @@
             android:layout_marginStart="8dp"
             android:background="@drawable/rounded_corners"
             android:backgroundTint="?colorPrimary"
-            android:text="Save"
+            android:text="@string/save"
             android:textAllCaps="false"
             android:textColor="#FFFFFFFF"
             android:textSize="16sp" />

@@ -1,6 +1,7 @@
 package com.b1gbr0ther
 
 import android.app.DatePickerDialog
+import android.content.Context
 import android.content.DialogInterface
 import android.os.Bundle
 import android.view.View
@@ -41,6 +42,10 @@ class ExportPage : AppCompatActivity() {
     private var endDate: LocalDate? = null
     private var allTasks: List<Task> = emptyList()
     private var appliedTheme: Int = -1
+
+    override fun attachBaseContext(newBase: Context) {
+        super.attachBaseContext(LocaleHelper.onAttach(newBase))
+    }
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -155,14 +160,14 @@ class ExportPage : AppCompatActivity() {
     private fun updateExportButtonText() {
         val selectedCount = taskAdapter.getSelectedCount()
         val totalCount = taskAdapter.itemCount
-        exportButton.text = "Export Selected ($selectedCount/$totalCount)"
+        exportButton.text = getString(R.string.export_selected_format, selectedCount, totalCount)
     }
 
     private fun handleExport() {
         val selectedTasks = taskAdapter.getSelectedTasks()
         
         if (selectedTasks.isEmpty()) {
-            Toast.makeText(this, "Please select tasks to export", Toast.LENGTH_SHORT).show()
+            Toast.makeText(this, getString(R.string.please_select_tasks_to_export), Toast.LENGTH_SHORT).show()
             return
         }
         
@@ -171,15 +176,15 @@ class ExportPage : AppCompatActivity() {
     
     private fun showTemplateSelectionDialog(tasksToExport: List<Task>) {
         val templates = templateManager.getAllTemplates()
-        val templateNames = templates.map { "${it.getFileExtension().uppercase()} Format" }.toTypedArray()
+        val templateNames = templates.map { getString(R.string.format_suffix, it.getFileExtension().uppercase()) }.toTypedArray()
         
         AlertDialog.Builder(this)
-            .setTitle("Choose Export Format")
+            .setTitle(getString(R.string.choose_export_format))
             .setItems(templateNames) { _, which ->
                 val selectedTemplate = templates[which]
                 exportTasks(tasksToExport, selectedTemplate)
             }
-            .setNegativeButton("Cancel", null)
+            .setNegativeButton(getString(R.string.cancel), null)
             .show()
     }
     
@@ -187,14 +192,14 @@ class ExportPage : AppCompatActivity() {
         try {
             val exportedData = template.format(tasks)
             saveExportedData(exportedData, tasks, template.getFileExtension(), template.getMimeType())
-            Toast.makeText(this, "Exported ${tasks.size} tasks as ${template.getFileExtension().uppercase()}", Toast.LENGTH_SHORT).show()
+            Toast.makeText(this, getString(R.string.exported_tasks, tasks.size, template.getFileExtension().uppercase()), Toast.LENGTH_SHORT).show()
         } catch (e: Exception) {
-            Toast.makeText(this, "Export failed: ${e.message}", Toast.LENGTH_LONG).show()
+            Toast.makeText(this, getString(R.string.export_failed, e.message), Toast.LENGTH_LONG).show()
         }
     }
 
     private fun createSampleTasks(onComplete: () -> Unit) {
-        Toast.makeText(this, "Creating sample tasks for testing...", Toast.LENGTH_SHORT).show()
+        Toast.makeText(this, getString(R.string.creating_sample_tasks), Toast.LENGTH_SHORT).show()
         
         val sampleTasks = listOf(
             com.b1gbr0ther.data.database.entities.Task(
@@ -231,7 +236,7 @@ class ExportPage : AppCompatActivity() {
             databaseManager.createTask(task) {
                 tasksCreated++
                 if (tasksCreated == sampleTasks.size) {
-                    Toast.makeText(this, "Created ${sampleTasks.size} sample tasks", Toast.LENGTH_SHORT).show()
+                    Toast.makeText(this, getString(R.string.created_sample_tasks, sampleTasks.size), Toast.LENGTH_SHORT).show()
                     onComplete()
                 }
             }
@@ -253,7 +258,7 @@ class ExportPage : AppCompatActivity() {
             shareExportedFile(exportFile, mimeType)
             
         } catch (e: Exception) {
-            Toast.makeText(this, "Error saving export: ${e.message}", Toast.LENGTH_LONG).show()
+            Toast.makeText(this, getString(R.string.error_saving_export, e.message), Toast.LENGTH_LONG).show()
         }
     }
     
@@ -268,14 +273,14 @@ class ExportPage : AppCompatActivity() {
             val shareIntent = android.content.Intent(android.content.Intent.ACTION_SEND).apply {
                 type = mimeType
                 putExtra(android.content.Intent.EXTRA_STREAM, uri)
-                putExtra(android.content.Intent.EXTRA_SUBJECT, "Task Export")
+                putExtra(android.content.Intent.EXTRA_SUBJECT, getString(R.string.task_export_subject))
                 addFlags(android.content.Intent.FLAG_GRANT_READ_URI_PERMISSION)
             }
             
-            startActivity(android.content.Intent.createChooser(shareIntent, "Share export file"))
+            startActivity(android.content.Intent.createChooser(shareIntent, getString(R.string.share_export_file)))
             
         } catch (e: Exception) {
-            Toast.makeText(this, "File saved to: ${file.absolutePath}", Toast.LENGTH_LONG).show()
+            Toast.makeText(this, getString(R.string.file_saved_to, file.absolutePath), Toast.LENGTH_LONG).show()
         }
     }
 

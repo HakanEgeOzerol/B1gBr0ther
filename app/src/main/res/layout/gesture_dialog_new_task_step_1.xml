@@ -21,7 +21,7 @@
         android:weightSum="2">
 
         <TextView
-            android:text="Are you planning ahread?"
+            android:text="@string/planning_ahead"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_weight="1"
@@ -29,7 +29,7 @@
 
         <CheckBox
             android:id="@+id/checkBoxNewTask"
-            android:text="Yes"
+            android:text="@string/yes"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_weight="1"
@@ -50,7 +50,7 @@
             android:layout_margin="4dp"
             android:layout_weight="1"
             android:textAlignment="center"
-            android:text="Cancel">
+            android:text="@string/cancel">
         </Button>
         <Button
             android:id="@+id/StartTaskCreation"
@@ -61,7 +61,7 @@
             android:layout_margin="4dp"
             android:layout_weight="1"
             android:textAlignment="center"
-            android:text="Start">
+            android:text="@string/start">
         </Button>
     </LinearLayout>
 </LinearLayout>

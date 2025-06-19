@@ -1,20 +1,293 @@
 <resources>
     <string name="app_name">B1gBr0ther</string>
+    
+    <!-- Status strings -->
     <string name="status_working">Working</string>
     <string name="status_on_break">On Break</string>
     <string name="status_not_tracking">Not Busy With A Task</string>
     <string name="tracking_started">Tracking started</string>
     <string name="tracking_stopped">Tracking stopped</string>
-    <string name="completion">Completion</string>
-    <string name="creation_methods">Creation Methods</string>
+    
+    <!-- Settings Activity -->
+    <string name="settings_title">Settings</string>
+    <string name="appearance_language">Appearance &amp; Language</string>
+    <string name="theme_light_mode">Theme: Light Mode (Purple)</string>
+    <string name="theme_dark_mode">Theme: Dark Mode (Gray)</string>
+    <string name="language_label">Language: %1$s</string>
+    <string name="language_english">English</string>
+    <string name="language_dutch">Dutch</string>
+    <string name="choose_language">Choose Language</string>
+    <string name="voice_recognition">Voice Recognition</string>
+    <string name="audio_off">Off</string>
+    <string name="enable_voice_commands">Enable Voice Commands</string>
+    <string name="notifications">Notifications</string>
+    <string name="enable_task_notifications">Enable Task Notifications</string>
+    <string name="motion_gesture_detection">Motion &amp; Gesture Detection</string>
+    <string name="enable_accelerometer_detection">Enable Accelerometer Detection</string>
+    <string name="enable_blow_detection">Enable Blow Detection</string>
+    <string name="enable_sneeze_detection">Enable Sneeze Detection</string>
+    <string name="audio_settings">Audio Settings</string>
+    <string name="microphone_volume">Microphone Volume</string>
+    <string name="detection_sensitivity">Detection Sensitivity</string>
+    <string name="back">Back</string>
+    <string name="reset">Reset</string>
+    <string name="save">Save</string>
+    
+    <!-- Permission dialogs -->
+    <string name="microphone_permission_message">Voice recognition requires microphone access to work. Would you like to grant this permission?</string>
+    <string name="microphone_permission_denied_message">Voice recognition cannot work without microphone access. Would you like to open settings to grant the permission?</string>
+    <string name="notification_permission_required">Notification Permission Required</string>
+    <string name="notification_permission_message">Push notifications require notification permission to work. Would you like to grant this permission?</string>
+    <string name="notification_permission_denied_message">Push notifications cannot work without notification permission. Would you like to open settings to grant the permission?</string>
+    <string name="open_settings">Open Settings</string>
+    <string name="yes">Yes</string>
+    <string name="no">No</string>
+    <string name="cancel">Cancel</string>
+    <string name="ok">Ok</string>
+    <string name="continue_text">Continue</string>
+    <string name="start">Start</string>
+    
+    <!-- Toast messages -->
+    <string name="voice_recognition_enabled">Voice recognition enabled</string>
+    <string name="voice_recognition_disabled_permission_denied">Voice recognition disabled: Permission denied</string>
+    <string name="push_notifications_enabled">Push notifications enabled</string>
+    <string name="push_notifications_disabled_permission">Push notifications disabled: Permission denied</string>
+    <string name="settings_reset_to_defaults">Settings reset to defaults</string>
+    <string name="settings_saved_successfully">Settings saved successfully</string>
+    <string name="microphone_permission_required_for_voice">Microphone permission is required for voice commands</string>
+    <string name="notifications_disabled_warning">Notifications are disabled. Some features may not work properly.</string>
+    <string name="task_saved_to_database">Task saved to database with ID: %1$d</string>
+    <string name="task_marked_completed">Task marked as completed</string>
+    <string name="task_deleted">Task deleted</string>
+    <string name="task_name_deleted">Task \"%1$s\" deleted</string>
+    <string name="could_not_find_task_with_name">Could not find task with name \"%1$s\". Available tasks: %2$s</string>
+    
+    <!-- Voice recognition messages -->
+    <string name="enjoy_smoke_break">Enjoy your smoke break!</string>
+    <string name="bless_you">Bless you!</string>
+    <string name="urination_detected">Urination detected!</string>
+    
+    <!-- Export messages -->
+    <string name="please_select_tasks_to_export">Please select tasks to export</string>
+    <string name="exported_tasks">Exported %1$d tasks as %2$s</string>
+    <string name="export_failed">Export failed: %1$s</string>
+    <string name="creating_sample_tasks">Creating sample tasks for testing...</string>
+    <string name="created_sample_tasks">Created %1$d sample tasks</string>
+    <string name="error_saving_export">Error saving export: %1$s</string>
+    <string name="file_saved_to">File saved to: %1$s</string>
+    <string name="choose_export_format">Choose Export Format</string>
+    
+    <!-- Dashboard -->
+    <string name="dashboard">Dashboard</string>
+    <string name="test_db">Test DB</string>
+    <string name="go_to_gestures">Go to gestures</string>
+    <string name="test_database">Test Database</string>
+    
+    <!-- Days of week -->
+    <string name="monday_short">Mon</string>
+    <string name="tuesday_short">Tue</string>
+    <string name="wednesday_short">Wed</string>
+    <string name="thursday_short">Thu</string>
+    <string name="friday_short">Fri</string>
+    <string name="saturday_short">Sat</string>
+    <string name="sunday_short">Sun</string>
+    
+    <!-- Timesheet -->
+    <string name="select_year">Select a year</string>
+    <string name="pick_month">Pick a month</string>
+    <string name="you_picked_year">You picked %1$s</string>
+    <string name="you_picked_month">You picked %1$s</string>
+    <string name="tasks_on_date">Tasks on %1$s</string>
+    
+    <!-- Manual -->
+    <string name="manual_how_to">Manual / How To</string>
+    
+    <!-- Export Page -->
+    <string name="start_date">Start Date</string>
+    <string name="end_date">End Date</string>
+    <string name="completed">Completed</string>
+    <string name="breaks">Breaks</string>
+    <string name="preplanned">Preplanned</string>
+    <string name="export_selected_recordings">Export Selected Recordings</string>
+    <string name="task_name">Task Name</string>
+    <string name="time_range">Time Range</string>
+    <string name="status">Status</string>
+    
+    <!-- Database Test -->
+    <string name="database_test">Database Test</string>
+    <string name="insert_task">Insert Task</string>
+    <string name="update_task">Update Task</string>
+    <string name="delete_task">Delete Task</string>
+    <string name="get_all_tasks">Get All Tasks</string>
+    <string name="error_initializing">Error initializing: %1$s</string>
+    
+    <!-- Gesture Dialogs -->
+    <string name="input_time_required">Please input time required for the task</string>
+    <string name="input_start_time">Please input start time</string>
+    <string name="input_start_date">Please input start date</string>
+    <string name="planning_ahead">Are you planning ahead?</string>
+    <string name="task_in_progress">There is a task in progress</string>
+    <string name="time_left_completion">Time left until completion</string>
+    <string name="placeholder">Placeholder</string>
+    <string name="complete">Complete</string>
+    <string name="delete">Delete</string>
+    
+    <!-- Bathroom Break Dialog -->
+    <string name="bathroom_break_detected">Bathroom Break Detected</string>
+    <string name="start_bathroom_break_question">Would you like to start a bathroom break?</string>
+    <string name="start_break">Start Break</string>
+    
+    <!-- Month names -->
+    <string name="january">January</string>
+    <string name="february">February</string>
+    <string name="march">March</string>
+    <string name="april">April</string>
+    <string name="may">May</string>
+    <string name="june">June</string>
+    <string name="july">July</string>
+    <string name="august">August</string>
+    <string name="september">September</string>
+    <string name="october">October</string>
+    <string name="november">November</string>
+    <string name="december">December</string>
+    
+    <!-- Day letters -->
+    <string name="monday_letter">M</string>
+    <string name="tuesday_letter">T</string>  
+    <string name="wednesday_letter">W</string>
+    <string name="thursday_letter">T</string>
+    <string name="friday_letter">F</string>
+    <string name="saturday_letter">S</string>
+    <string name="sunday_letter">S</string>
+    
+    <!-- Additional strings -->
+    <string name="default_timer">00:00</string>
+    <string name="default_year">2025</string>
+    <string name="percent_50">50%</string>
+    <string name="percent_75">75%</string>
+    <string name="manual_yes_test">• Yes Test</string>
+    
+    <!-- Hour labels -->
+    <string name="hour_00">00</string>
+    <string name="hour_02">02</string>
+    <string name="hour_04">04</string>
+    <string name="hour_06">06</string>
+    <string name="hour_08">08</string>
+    <string name="hour_10">10</string>
+    <string name="hour_12">12</string>
+    <string name="hour_14">14</string>
+    <string name="hour_16">16</string>
+    <string name="hour_18">18</string>
+    <string name="hour_20">20</string>
+    <string name="hour_22">22</string>
+    
+    <!-- Voice recognition -->
+    <string name="start_voice_recognition">Start Voice Recognition</string>
+    
+    <!-- Timesheet component placeholders -->
+    <string name="day_number_placeholder">1</string>
+    <string name="hours_worked_placeholder">4h</string>
+    
+    <!-- Statistics -->
     <string name="statistics_title">Statistics</string>
-    <string name="task_completion">Task Completion</string>
-    <string name="task_timing">Task Timing</string>
-    <string name="timing_statistics">Timing Statistics</string>
-    <string name="creation_method_statistics">Creation Method Statistics</string>
-    <string name="total_tasks">Total Tasks</string>
-    <string name="completed_tasks">Completed Tasks</string>
-    <string name="completion_rate">Completion Rate</string>
-    <string name="quick_stats">Quick Stats</string>
-    <string name="tasks_completed">Tasks Completed</string>
+    <string name="task_completion">Task completion</string>
+    <string name="task_timing">Task timing</string>
+    <string name="creation_methods">Creation methods</string>
+    <string name="quick_stats">Quick stats</string>
+    <string name="total_tasks">Total tasks</string>
+    <string name="tasks_completed">Tasks completed</string>
+    <string name="completion_rate">Completion rate</string>
+    <string name="uncompleted">Uncompleted</string>
+    
+    <!-- Additional export strings -->
+    <string name="export_selected_format">Export Selected (%1$d/%2$d)</string>
+    <string name="format_suffix">%1$s Format</string>
+    <string name="task_export_subject">Task Export</string>
+    <string name="share_export_file">Share export file</string>
+    
+    <!-- Dashboard tracking messages -->
+    <string name="on_break">On break</string>
+    <string name="currently_tracking">Currently tracking: %1$s</string>
+    <string name="not_tracking_any_task">Not tracking any task</string>
+    
+    <!-- Dashboard audio status messages -->
+    <string name="audio_features_disabled">Audio disabled - select a mode</string>
+    <string name="start_audio">Start Audio</string>
+    <string name="voice_commands">Voice commands</string>
+    <string name="sound_detection">Sound detection</string>
+    <string name="audio">Audio</string>
+    <string name="permission_required">%1$s permission required</string>
+    <string name="press_button_start_voice_commands">Press button to start voice commands</string>
+    <string name="start_voice_commands">Start Voice Commands</string>
+    <string name="press_button_start_sound_detection">Press button to start sound detection</string>
+    <string name="start_sound_detection">Start Sound Detection</string>
+    <string name="audio_mode_not_configured">Audio mode not configured</string>
+    <string name="stop_voice_commands">Stop Voice Commands</string>
+    <string name="stop_sound_detection">Stop Sound Detection</string>
+    <string name="stop_audio">Stop Audio</string>
+    <string name="voice_recognition_stopped">Voice recognition stopped</string>
+    
+    <!-- Dashboard tracking action messages -->
+    <string name="task_completed_time_tracked">Task \'%1$s\' completed. Time tracked: %2$dh %3$dm</string>
+    <string name="currently_busy_with_task">Currently busy with a task</string>
+    <string name="command_not_recognized">Command not recognized: %1$s</string>
+    <string name="tracking_started_for">Tracking started for: %1$s</string>
+    <string name="no_tasks_available_to_track">No tasks available to track</string>
+    <string name="already_tracking_a_task">Already tracking a task</string>
+    <string name="task_already_completed">Task \'%1$s\' is already completed</string>
+    <string name="task_not_found_available">Task \'%1$s\' not found. Available tasks: %2$s</string>
+    <string name="no_active_tracking_session">No active tracking session</string>
+    <string name="no_task_was_being_tracked">No task was being tracked</string>
+    <string name="could_not_find_tracked_task">Could not find the task being tracked</string>
+    <string name="start_tracking_first">Start tracking first</string>
+    <string name="already_on_a_break">Already on a break</string>
+    <string name="break_started">Break started</string>
+    <string name="no_active_break">No active break</string>
+    <string name="break_ended">Break ended</string>
+    
+    <!-- Voice recognition status messages -->
+    <string name="audio_permission_required">Audio permission required</string>
+    <string name="microphone_permission_required">Microphone permission required</string>
+    <string name="voice_recognition_disabled_settings">Voice recognition is disabled in settings</string>
+    <string name="voice_recognition_ready">Voice recognition ready</string>
+    <string name="sound_detection_ready">Sound detection ready</string>
+    <string name="audio_ready">Audio ready</string>
+    <string name="listening_say_command">Listening... (say your command)</string>
+    <string name="listening_for_sounds">Listening for sounds...</string>
+    <string name="listening">Listening...</string>
+    <string name="ready_for_speech">Ready for speech</string>
+    <string name="voice_recognition_timeout_stopping">Voice recognition timeout - stopping</string>
+    <string name="speech_recognition_not_available">Speech recognition not available on this device</string>
+    <string name="voice_recognition_disabled_permission">Voice recognition is disabled or permission not granted</string>
+    
+    <!-- Voice recognition error messages -->
+    <string name="audio_recording_error">Audio recording error</string>
+    <string name="insufficient_permissions">Insufficient permissions</string>
+    <string name="network_error">Network error</string>
+    <string name="network_timeout">Network timeout</string>
+    <string name="recognizer_busy">Recognizer busy</string>
+    <string name="server_error">Server error</string>
+    <string name="language_not_supported">Language not supported</string>
+    <string name="unknown_error">Unknown error: %1$d</string>
+    <string name="voice_recognition_stopped_error">Voice recognition stopped: %1$s</string>
+    <string name="speech_started">Speech started</string>
+    <string name="processing_speech">Processing speech...</string>
+    <string name="partial_result">Partial: %1$s</string>
+    
+    <!-- Timesheet activity messages -->
+    <string name="start_date_format">Start: %1$s</string>
+    <string name="end_date_format">End: %1$s</string>
+    
+    <!-- Statistics chart labels -->
+    <string name="no_task_data_available">No task data available</string>
+    <string name="early">Early</string>
+    <string name="on_time">On time</string>
+    <string name="late">Late</string>
+    <string name="no_timing_data_available">No timing data available</string>
+    <string name="no_task_creation_data_available">No task creation data available</string>
+    <string name="voice">Voice</string>
+    <string name="gesture">Gesture</string>
+    <string name="no_data_available">No data available</string>
+    <string name="completion_stats_format">Completed: %1$s / Uncompleted: %2$s</string>
+    
 </resources>

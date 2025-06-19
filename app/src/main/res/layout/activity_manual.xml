@@ -12,7 +12,7 @@
         android:id="@+id/title"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:text="Manual / How To"
+        android:text="@string/manual_how_to"
         android:textColor="?colorPrimary"
         android:textSize="20sp"
         android:textStyle="bold"
@@ -34,103 +34,13 @@
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintEnd_toEndOf="parent">
 
-        <ScrollView
+        <TextView
             android:layout_width="match_parent"
-            android:layout_height="match_parent">
-
-            <LinearLayout
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:orientation="vertical"
-                android:padding="16dp">
-
-                <TextView
-                    android:layout_width="match_parent"
-                    android:layout_height="wrap_content"
-                    android:text="Voice Commands"
-                    android:textColor="?colorPrimary"
-                    android:textSize="18sp"
-                    android:textStyle="bold"
-                    android:layout_marginBottom="8dp"/>
-
-                <TextView
-                    android:layout_width="match_parent"
-                    android:layout_height="wrap_content"
-                    android:text="The app supports voice commands for hands-free operation. Here are the available commands:"
-                    android:textColor="?android:textColorPrimary"
-                    android:textSize="16sp"
-                    android:layout_marginBottom="16dp"/>
-
-                <TextView
-                    android:layout_width="match_parent"
-                    android:layout_height="wrap_content"
-                    android:text="Task Management:"
-                    android:textColor="?colorPrimary"
-                    android:textSize="16sp"
-                    android:textStyle="bold"
-                    android:layout_marginBottom="8dp"/>
-
-                <TextView
-                    android:layout_width="match_parent"
-                    android:layout_height="wrap_content"
-                    android:text="• Start tracking [task name] - Begin tracking time for a task\n• Stop tracking - End the current task tracking\n• Start break - Begin a break\n• Stop break - End the current break"
-                    android:textColor="?android:textColorPrimary"
-                    android:textSize="16sp"
-                    android:layout_marginBottom="16dp"/>
-
-                <TextView
-                    android:layout_width="match_parent"
-                    android:layout_height="wrap_content"
-                    android:text="Navigation:"
-                    android:textColor="?colorPrimary"
-                    android:textSize="16sp"
-                    android:textStyle="bold"
-                    android:layout_marginBottom="8dp"/>
-
-                <TextView
-                    android:layout_width="match_parent"
-                    android:layout_height="wrap_content"
-                    android:text="• Show timesheet - View your timesheet\n• Show export - Open the export page\n• Show manual - Open this help page\n• Show statistics - View your work statistics (Coming Soon)"
-                    android:textColor="?android:textColorPrimary"
-                    android:textSize="16sp"
-                    android:layout_marginBottom="16dp"/>
-
-                <TextView
-                    android:layout_width="match_parent"
-                    android:layout_height="wrap_content"
-                    android:text="Note: Voice commands can be enabled/disabled in the Settings page. The app will recognize variations of these commands for natural interaction."
-                    android:textColor="?android:textColorSecondary"
-                    android:textSize="14sp"
-                    android:textStyle="italic"
-                    android:layout_marginBottom="24dp"/>
-
-                <TextView
-                    android:layout_width="match_parent"
-                    android:layout_height="wrap_content"
-                    android:text="Upcoming Features"
-                    android:textColor="?colorPrimary"
-                    android:textSize="18sp"
-                    android:textStyle="bold"
-                    android:layout_marginBottom="8dp"/>
-
-                <TextView
-                    android:layout_width="match_parent"
-                    android:layout_height="wrap_content"
-                    android:text="• Statistics Page - Detailed insights into your work patterns and productivity\n• More voice commands for enhanced control\n• Additional customization options\n• And much more!"
-                    android:textColor="?android:textColorPrimary"
-                    android:textSize="16sp"
-                    android:layout_marginBottom="16dp"/>
-
-                <TextView
-                    android:layout_width="match_parent"
-                    android:layout_height="wrap_content"
-                    android:text="Note: We're constantly working to improve the app and add new features. Stay tuned for updates!"
-                    android:textColor="?android:textColorSecondary"
-                    android:textSize="14sp"
-                    android:textStyle="italic"/>
-
-            </LinearLayout>
-        </ScrollView>
+            android:layout_height="wrap_content"
+            android:padding="16dp"
+            android:text="@string/manual_yes_test"
+            android:textColor="?android:textColorPrimary"
+            android:textSize="16sp" />
     </androidx.cardview.widget.CardView>
 
     <com.b1gbr0ther.MenuBar

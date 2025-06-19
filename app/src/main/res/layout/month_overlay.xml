@@ -13,7 +13,7 @@
       android:layout_width="wrap_content"
       android:layout_height="wrap_content"
       android:layout_marginBottom="8dp"
-      android:text="Pick a month"
+      android:text="@string/pick_month"
       android:textColor="#FFFFFF"
       android:textSize="16sp" />
 

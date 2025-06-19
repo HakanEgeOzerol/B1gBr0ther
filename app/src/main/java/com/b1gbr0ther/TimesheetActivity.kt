@@ -1,5 +1,6 @@
 package com.b1gbr0ther
 
+import android.content.Context
 import android.content.Intent
 import android.annotation.SuppressLint
 import com.b1gbr0ther.data.database.DatabaseManager
@@ -25,6 +26,10 @@ import java.util.Locale
 class TimesheetActivity : AppCompatActivity() {
 
   private lateinit var currentYearMonth: YearMonth
+
+  override fun attachBaseContext(newBase: Context) {
+    super.attachBaseContext(LocaleHelper.onAttach(newBase))
+  }
 
   override fun onCreate(savedInstanceState: Bundle?) {
     super.onCreate(savedInstanceState)
@@ -82,7 +87,7 @@ class TimesheetActivity : AppCompatActivity() {
     yearButton.text = currentYearMonth.year.toString()
 
     val monthButton = findViewById<Button>(R.id.monthSelector)
-    monthButton.text = currentYearMonth.month.getDisplayName(TextStyle.FULL, Locale.ENGLISH)
+    monthButton.text = currentYearMonth.month.getDisplayName(TextStyle.FULL, Locale.getDefault())
 
     val calendarGrid = findViewById<GridLayout>(R.id.calendarGridDays)
     calendarGrid.removeAllViews()
@@ -106,9 +111,8 @@ class TimesheetActivity : AppCompatActivity() {
         hoursMap[day] = (hoursMap[day] ?: 0) + hours
       }
 
-      repeat(startDayOfWeek) {
-        val emptyView = inflater.inflate(R.layout.empty_day, calendarGrid, false)
-        calendarGrid.addView(emptyView)
+      block.setOnClickListener {
+        showDayTasksOverlay(day, currentYearMonth.month.getDisplayName(TextStyle.FULL, Locale.getDefault()))
       }
 
       for (day in 1..daysInMonth) {
@@ -142,7 +146,7 @@ class TimesheetActivity : AppCompatActivity() {
 
       button.setOnClickListener {
         selectedYear = year
-        Toast.makeText(this, "You picked $year", Toast.LENGTH_SHORT).show()
+        Toast.makeText(this, getString(R.string.you_picked_year, year), Toast.LENGTH_SHORT).show()
         setCurrentYear(year)
         dialog.dismiss()
       }
@@ -175,8 +179,9 @@ class TimesheetActivity : AppCompatActivity() {
       .create()
 
     val months = listOf(
-      "January", "February", "March", "April", "May", "June",
-      "July", "August", "September", "October", "November", "December"
+      getString(R.string.january), getString(R.string.february), getString(R.string.march), getString(R.string.april), 
+      getString(R.string.may), getString(R.string.june), getString(R.string.july), getString(R.string.august), 
+      getString(R.string.september), getString(R.string.october), getString(R.string.november), getString(R.string.december)
     )
 
     for ((index, name) in months.withIndex()) {
@@ -184,7 +189,7 @@ class TimesheetActivity : AppCompatActivity() {
       button.text = name
 
       button.setOnClickListener {
-        Toast.makeText(this, "You picked $name", Toast.LENGTH_SHORT).show()
+        Toast.makeText(this, getString(R.string.you_picked_month, name), Toast.LENGTH_SHORT).show()
         setCurrentMonth(index + 1)
         dialog.dismiss()
       }
@@ -219,7 +224,7 @@ class TimesheetActivity : AppCompatActivity() {
 
     val container = dialogView.findViewById<LinearLayout>(R.id.taskContainer)
     val title = dialogView.findViewById<TextView>(R.id.overlayTitle)
-    title.text = "Tasks on $monthName $day"
+    title.text = getString(R.string.tasks_on_date, "$monthName $day")
 
     val dbManager = DatabaseManager(this)
     val selectedDate = currentYearMonth.atDay(day)
