@@ -21,7 +21,7 @@ import java.util.Locale
 
 class TimesheetActivity : AppCompatActivity() {
 
-  private var currentYearMonth: YearMonth = YearMonth.of(2021, 5)
+  private lateinit var currentYearMonth: YearMonth
 
   override fun onCreate(savedInstanceState: Bundle?) {
     super.onCreate(savedInstanceState)
@@ -223,8 +223,8 @@ class TimesheetActivity : AppCompatActivity() {
 
   private fun loadSelectedMonthYear(): YearMonth {
     val prefs = getSharedPreferences("TimesheetPrefs", MODE_PRIVATE)
-    val year = prefs.getInt("selectedYear", 2021)
-    val month = prefs.getInt("selectedMonth", 5)
+    val year = prefs.getInt("selectedYear", 2021) //default year is 2021
+    val month = prefs.getInt("selectedMonth", 5)  //default month is May
     return YearMonth.of(year, month)
   }
 
