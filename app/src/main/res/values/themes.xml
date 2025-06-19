@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
     <!-- Light Theme (Original Purple Theme) -->
-    <style name="Theme.B1gBr0ther.Light" parent="Theme.AppCompat.Light.NoActionBar">
+    <style name="Theme.B1gBr0ther.Light" parent="Theme.MaterialComponents.DayNight.NoActionBar">
         <item name="colorPrimary">#5F4B66</item>
         <item name="colorPrimaryDark">#4A3D52</item>
         <item name="colorAccent">#5F4B66</item>
@@ -12,8 +12,7 @@
         <item name="cardBackgroundColor">#8797AF</item>
         <item name="buttonTextColor">#C1A8B5</item>
     </style>
-
-    <style name="Theme.B1gBr0ther" parent="android:Theme.Material.Light.NoActionBar">
+    <style name="Theme.B1gBr0ther" parent="Theme.B1gBr0ther.Light">
         <!-- System bar colors -->
         <item name="android:statusBarColor">@color/dashboard_background</item>
         <item name="android:navigationBarColor">@color/dashboard_background</item>
@@ -21,7 +20,7 @@
         <item name="android:windowLightNavigationBar">false</item>
     </style>
     <!-- Dark Theme (Dark Purple/Gray Theme) -->
-    <style name="Theme.B1gBr0ther.Dark" parent="Theme.AppCompat.NoActionBar">
+    <style name="Theme.B1gBr0ther.Dark" parent="Theme.MaterialComponents.DayNight.NoActionBar">
         <item name="colorPrimary">#6C6C6C</item>
         <item name="colorPrimaryDark">#424242</item>
         <item name="colorAccent">#6C6C6C</item>
