@@ -79,7 +79,7 @@
     
     <!-- Dashboard -->
     <string name="dashboard">Dashboard</string>
-    <string name="test_db">Test DB</string>
+    <string name="test_db">Manual</string>
     <string name="go_to_gestures">Go to gestures</string>
     <string name="test_database">Test Database</string>
     
@@ -101,6 +101,25 @@
     
     <!-- Manual -->
     <string name="manual_how_to">Manual / How To</string>
+    <string name="manual_content">Voice Commands Guide:\n\n
+1. Start Tracking a Task:\n
+   • Say \"Start tracking [task name]\" or \"Begin tracking [task name]\"\n
+   • Example: \"Start tracking coding\" or \"Begin tracking meeting\"\n
+   • This will start timing your specified task\n\n
+2. Stop Tracking:\n
+   • Say \"Stop tracking\", \"End tracking\", or \"I\'m done\"\n
+   • This will stop timing your current task\n\n
+3. Break Management:\n
+   • Start Break: Say \"Take a break\" or \"Start break\"\n
+   • End Break: Say \"Stop break\" or \"Back to work\"\n\n
+4. Navigation Commands:\n
+   • Show Export Page: \"Show export\" or \"Export data\"\n
+   • Show Manual: \"Show manual\" or \"Show help\"\n
+   • Show Timesheet: \"Show timesheet\" or \"View my hours\"\n
+   • Show Statistics: \"Show statistics\" or \"Show stats\"\n\n
+5. Task Management:\n
+   • Delete Task: \"Delete task [task name]\" or \"Remove task [task name]\"\n\n
+Note: The app recognizes various similar phrases for each command. Feel free to speak naturally!</string>
     
     <!-- Export Page -->
     <string name="start_date">Start Date</string>
