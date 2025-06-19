@@ -79,7 +79,7 @@
     
     <!-- Dashboard -->
     <string name="dashboard">Tableau de bord</string>
-    <string name="test_db">Test DB</string>
+    <string name="test_db">Manuel</string>
     <string name="go_to_gestures">Aller aux gestes</string>
     <string name="test_database">Test Base de données</string>
     
@@ -101,6 +101,7 @@
     
     <!-- Manual -->
     <string name="manual_how_to">Manuel / Comment faire</string>
+    <string name="manual_content">Bientôt ajouté</string>
     
     <!-- Export Page -->
     <string name="start_date">Date de début</string>
