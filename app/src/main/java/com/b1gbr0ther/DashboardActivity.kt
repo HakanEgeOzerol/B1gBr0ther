@@ -449,9 +449,8 @@ class DashboardActivity : AppCompatActivity() {
         override fun onSensorChanged(event: SensorEvent) {
 
             // Fetching x,y,z values
-            val x = event.values[0]
-            val y = event.values[1]
-            val z = event.values[2]
+            val (x, y, z) = event.values
+
             lastAcceleration = currentAcceleration
 
             // Getting current accelerations
