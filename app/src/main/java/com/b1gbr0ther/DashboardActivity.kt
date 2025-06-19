@@ -847,7 +847,7 @@ class DashboardActivity : AppCompatActivity() {
         val cancelButton = dialog.findViewById<Button>(R.id.Cancel)
 
         continueButton.setOnClickListener{
-            var taskDate = LocalDate.of(datePicker.year, datePicker.month, datePicker.dayOfMonth)
+            var taskDate = LocalDate.of(datePicker.year, datePicker.month + 1, datePicker.dayOfMonth)
 
             dialog.dismiss()
             setStartTimeDialog(name, taskDate)
@@ -937,17 +937,12 @@ class DashboardActivity : AppCompatActivity() {
                 estimatedCompletion = estimatedCompletion.plusHours(3)
             }
 
-            if (startTime.isAfter(LocalDateTime.now())){//Defaults to 3 hours
-                estimatedCompletion = LocalDateTime.now().plusHours(3)
-                startTime = LocalDateTime.now()
-            }
-
             val newTask = Task(name, startTime, estimatedCompletion, CreationMethod.Gesture, isPreplanned)
 
             databaseManager.createAppTask(newTask) { taskId ->
                 Toast.makeText(this, "Task saved to database with ID: $taskId", Toast.LENGTH_SHORT).show()
 
-                if (startTime == LocalDateTime.now()) {
+                if (!isPreplanned) {
                     currentTaskName = name
                     currentTaskId = taskId
                     timeTracker.startTracking()
