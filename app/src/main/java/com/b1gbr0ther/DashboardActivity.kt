@@ -32,6 +32,9 @@ import java.time.LocalDateTime
 import java.util.Objects
 import kotlin.math.floor
 import kotlin.math.sqrt
+import com.b1gbr0ther.data.database.entities.Task
+import com.b1gbr0ther.gestureRecognition.GestureRecognizer
+import com.b1gbr0ther.gestureRecognition.GestureType
 import com.b1gbr0ther.notifications.TaskNotificationManager
 import java.time.LocalDate
 import java.time.LocalTime
@@ -61,6 +64,8 @@ class DashboardActivity : AppCompatActivity() {
     private lateinit var commandHandler: VoiceCommandHandler
 
     private var sensorManager: SensorManager? = null
+    private val gestureRecognizer = GestureRecognizer()
+    private val shakeThreshold = 15f
     private var isDialogShown = false
     private var acceleration = 0f
     private var currentAcceleration = 0f
@@ -630,11 +635,9 @@ class DashboardActivity : AppCompatActivity() {
 
     private val sensorListener: SensorEventListener = object : SensorEventListener {
         override fun onSensorChanged(event: SensorEvent) {
-
             // Fetching x,y,z values
-            val x = event.values[0]
-            val y = event.values[1]
-            val z = event.values[2]
+            val (x, y, z) = event.values
+
             lastAcceleration = currentAcceleration
 
             // Getting current accelerations
@@ -643,14 +646,24 @@ class DashboardActivity : AppCompatActivity() {
             val delta: Float = currentAcceleration - lastAcceleration
             acceleration = acceleration * 0.9f + delta
 
+            val timeStamp = System.currentTimeMillis()
+            gestureRecognizer.addSensorData(x, y, z, timeStamp)
 
-            if (acceleration > 17 && !isDialogShown && !isActiveTask()) {
+            var analyzedGesture = GestureType.UNIDENTIFIED
+
+            if (acceleration > shakeThreshold && !isDialogShown && !isActiveTask()) {
+                updateAllTasks()
                 isDialogShown = true
+                analyzedGesture = gestureRecognizer.analyzeGesture()
+                Toast.makeText(applicationContext, analyzedGesture.name, Toast.LENGTH_SHORT).show()
                 createInputTaskDialog()
             }
-            else if (acceleration>17 &&!isDialogShown && isActiveTask()){
+            else if (acceleration > shakeThreshold && !isDialogShown && isActiveTask()){
+                updateAllTasks()
                 isDialogShown = true
                 createExistingTaskDialog()
+                analyzedGesture = gestureRecognizer.analyzeGesture()
+                Toast.makeText(applicationContext, analyzedGesture.name, Toast.LENGTH_SHORT).show()
             }
         }
         override fun onAccuracyChanged(sensor: Sensor, accuracy: Int) {}
@@ -728,7 +741,22 @@ class DashboardActivity : AppCompatActivity() {
 
         // Mark task as completed
         completeButton?.setOnClickListener {
-            markTaskAsCompleted(currentTaskId)
+            val activeId = getIdOfActiveTask()
+            //This dbmanager activity completes the task
+            databaseManager.getTask(activeId.toLong()) { task ->
+                if (task != null && !task.isCompleted) {
+                    task.isCompleted = true
+                    task.endTime = LocalDateTime.now()
+
+                    databaseManager.updateTask(task) {
+                        // Reset notification count when task is completed
+                        notificationManager.resetNotificationCount(task.id)
+                    }
+                } else {
+                    Toast.makeText(this, "Could not find the task", Toast.LENGTH_SHORT).show()
+                }
+            }
+
             isDialogShown = false
             dialog.dismiss()
             updateAllTasks()
@@ -736,7 +764,8 @@ class DashboardActivity : AppCompatActivity() {
 
         // Delete the task
         deleteButton?.setOnClickListener {
-            deleteTask(currentTaskId)
+            val activeID = getIdOfActiveTask()
+            deleteTask(activeID.toLong())
             isDialogShown = false
             dialog.dismiss()
             updateAllTasks()
@@ -803,7 +832,7 @@ class DashboardActivity : AppCompatActivity() {
         val cancelButton = dialog.findViewById<Button>(R.id.Cancel)
 
         continueButton.setOnClickListener{
-            val taskDate = LocalDate.of(datePicker.year, datePicker.month, datePicker.dayOfMonth)
+            var taskDate = LocalDate.of(datePicker.year, datePicker.month, datePicker.dayOfMonth)
 
             dialog.dismiss()
             setStartTimeDialog(name, taskDate)
@@ -893,9 +922,9 @@ class DashboardActivity : AppCompatActivity() {
                 estimatedCompletion = estimatedCompletion.plusHours(3)
             }
 
-            if (startTime.isBefore(LocalDateTime.now())){//Defaults to 3 hours
+            if (startTime.isAfter(LocalDateTime.now())){//Defaults to 3 hours
                 estimatedCompletion = LocalDateTime.now().plusHours(3)
-                startTime = LocalDateTime.now()//This is still buged to some extent, the plan for the future no longer works as intended
+                startTime = LocalDateTime.now()
             }
 
             val newTask = Task(name, startTime, estimatedCompletion, CreationMethod.Gesture, isPreplanned)
@@ -957,26 +986,6 @@ class DashboardActivity : AppCompatActivity() {
         return listOf(convertedDays, convertedHours, convertedMinutes, convertedSeconds)
     }
 
-    /**
-     * Mark a task as completed in the database
-     */
-    private fun markTaskAsCompleted(taskId: Long) {
-        databaseManager.getTask(taskId) { task ->
-            if (task != null) {
-                // Update the task
-                task.isCompleted = true
-
-                // Save the updated task
-                databaseManager.updateTask(task) {
-                    Toast.makeText(this, "Task marked as completed", Toast.LENGTH_SHORT).show()
-                }
-            }
-        }
-    }
-
-    /**
-     * Delete a task from the database
-     */
     private fun deleteTask(taskId: Long) {
         databaseManager.deleteTask(taskId) {
             Toast.makeText(this, "Task deleted", Toast.LENGTH_SHORT).show()
@@ -1059,12 +1068,3 @@ class DashboardActivity : AppCompatActivity() {
         }
     }
 }
-
-//Known bugs in gesture
-// on dismis the dialog would not show (not buttons) v
-//Cant leave empty spaces v
-//Start date can be after end date v
-//isPrePlanned is not set v
-//The tasks are created 1 month THOUGH it should not be the case
-//Consistency with identifying curent task needs to be improved
-//allegedly thats it?

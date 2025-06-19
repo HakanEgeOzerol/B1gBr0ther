@@ -133,4 +133,6 @@ interface TaskDao {
      */
     @Query("SELECT * FROM tasks WHERE isPreplanned = 1")
     suspend fun getPreplannedTasks(): List<Task>
+
+
 }
