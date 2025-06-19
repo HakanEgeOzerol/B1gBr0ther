@@ -35,7 +35,7 @@
                     android:layout_width="0dp"
                     android:layout_height="wrap_content"
                     android:layout_weight="1"
-                    android:text="Start Date"
+                    android:text="@string/start_date"
                     android:layout_marginEnd="4dp"/>
                     
                 <Button
@@ -43,7 +43,7 @@
                     android:layout_width="0dp"
                     android:layout_height="wrap_content"
                     android:layout_weight="1"
-                    android:text="End Date"
+                    android:text="@string/end_date"
                     android:layout_marginStart="4dp"/>
             </LinearLayout>
             
@@ -59,21 +59,21 @@
                     android:layout_width="0dp"
                     android:layout_height="wrap_content"
                     android:layout_weight="1"
-                    android:text="Completed"/>
+                    android:text="@string/completed"/>
                     
                 <CheckBox
                     android:id="@+id/breaksCheckbox"
                     android:layout_width="0dp"
                     android:layout_height="wrap_content"
                     android:layout_weight="1"
-                    android:text="Breaks"/>
+                    android:text="@string/breaks"/>
                     
                 <CheckBox
                     android:id="@+id/preplannedCheckbox"
                     android:layout_width="0dp"
                     android:layout_height="wrap_content"
                     android:layout_weight="1"
-                    android:text="Preplanned"/>
+                    android:text="@string/preplanned"/>
             </LinearLayout>
         </LinearLayout>
     </androidx.cardview.widget.CardView>
@@ -102,7 +102,7 @@
         android:layout_marginBottom="16dp"
         android:background="@drawable/rounded_corners"
         android:backgroundTint="?colorPrimary"
-        android:text="Export Selected Recordings"
+        android:text="@string/export_selected_recordings"
         android:textAllCaps="false"
         android:textColor="?attr/buttonTextColor"
         android:textSize="16sp"

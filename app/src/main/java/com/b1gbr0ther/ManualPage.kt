@@ -1,5 +1,6 @@
 package com.b1gbr0ther
 
+import android.content.Context
 import android.os.Bundle
 import androidx.activity.enableEdgeToEdge
 import androidx.appcompat.app.AppCompatActivity
@@ -9,6 +10,10 @@ import androidx.core.view.WindowInsetsCompat
 class ManualPage : AppCompatActivity() {
     private lateinit var menuBar: MenuBar
     private var appliedTheme: Int = -1
+
+    override fun attachBaseContext(newBase: Context) {
+        super.attachBaseContext(LocaleHelper.onAttach(newBase))
+    }
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)

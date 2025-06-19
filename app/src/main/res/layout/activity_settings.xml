@@ -11,7 +11,7 @@
         android:id="@+id/settingsTitle"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:text="Settings"
+        android:text="@string/settings_title"
         android:textColor="?android:textColorPrimary"
         android:textSize="24sp"
         android:textStyle="bold"
@@ -43,7 +43,7 @@
             <TextView
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:text="Appearance &amp; Language"
+                android:text="@string/appearance_language"
                 android:textColor="?android:textColorPrimary"
                 android:textSize="18sp"
                 android:textStyle="bold"
@@ -61,7 +61,7 @@
                     android:layout_width="0dp"
                     android:layout_height="wrap_content"
                     android:layout_weight="1"
-                    android:text="Theme: Light Mode"
+                    android:text="@string/theme_light_mode"
                     android:textColor="?android:textColorPrimary"
                     android:textSize="16sp" />
 
@@ -83,76 +83,28 @@
                     android:layout_width="0dp"
                     android:layout_height="wrap_content"
                     android:layout_weight="1"
-                    android:text="Language: English"
+                    android:text="@string/language_english"
                     android:textColor="?android:textColorPrimary"
                     android:textSize="16sp" />
 
-                <Switch
-                    android:id="@+id/languageSwitch"
+                <Button
+                    android:id="@+id/languageButton"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    android:checked="false" />
+                    android:text="@string/language_english"
+                    android:background="@drawable/rounded_corners"
+                    android:backgroundTint="?colorPrimary"
+                    android:textColor="?attr/buttonTextColor"
+                    android:textSize="14sp"
+                    android:minWidth="80dp"
+                    android:padding="8dp" />
             </LinearLayout>
 
             <!-- Voice Recognition Section -->
             <TextView
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:text="Audio Mode"
-                android:textColor="?android:textColorPrimary"
-                android:textSize="18sp"
-                android:textStyle="bold"
-                android:layout_marginBottom="8dp" />
-
-            <TextView
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:text="Choose your audio detection mode:"
-                android:textColor="?android:textColorSecondary"
-                android:textSize="14sp"
-                android:layout_marginBottom="12dp" />
-
-            <RadioGroup
-                android:id="@+id/audioModeRadioGroup"
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:layout_marginBottom="16dp">
-
-                <RadioButton
-                    android:id="@+id/radioAudioOff"
-                    android:layout_width="match_parent"
-                    android:layout_height="wrap_content"
-                    android:text="Off - No audio detection"
-                    android:textColor="?android:textColorPrimary"
-                    android:textSize="16sp"
-                    android:padding="8dp"
-                    android:checked="true" />
-
-                <RadioButton
-                    android:id="@+id/radioVoiceCommands"
-                    android:layout_width="match_parent"
-                    android:layout_height="wrap_content"
-                    android:text="Voice Commands - Listen for spoken commands"
-                    android:textColor="?android:textColorPrimary"
-                    android:textSize="16sp"
-                    android:padding="8dp" />
-
-                <RadioButton
-                    android:id="@+id/radioSoundDetection"
-                    android:layout_width="match_parent"
-                    android:layout_height="wrap_content"
-                    android:text="Sound Detection - Continuous sneeze/blow detection"
-                    android:textColor="?android:textColorPrimary"
-                    android:textSize="16sp"
-                    android:padding="8dp" />
-
-            </RadioGroup>
-
-            <!-- Notifications Section -->
-            <TextView
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:text="Notifications"
+                android:text="@string/voice_recognition"
                 android:textColor="?android:textColorPrimary"
                 android:textSize="18sp"
                 android:textStyle="bold"
@@ -168,7 +120,38 @@
                     android:layout_width="0dp"
                     android:layout_height="wrap_content"
                     android:layout_weight="1"
-                    android:text="Enable Task Notifications"
+                    android:text="@string/enable_voice_commands"
+                    android:textColor="?android:textColorPrimary"
+                    android:textSize="16sp" />
+
+                <Switch
+                    android:id="@+id/voiceRecognitionSwitch"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:checked="true" />
+            </LinearLayout>
+
+            <!-- Notifications Section -->
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="@string/notifications"
+                android:textColor="?android:textColorPrimary"
+                android:textSize="18sp"
+                android:textStyle="bold"
+                android:layout_marginBottom="8dp" />
+
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:orientation="horizontal"
+                android:layout_marginBottom="16dp">
+
+                <TextView
+                    android:layout_width="0dp"
+                    android:layout_height="wrap_content"
+                    android:layout_weight="1"
+                    android:text="@string/enable_task_notifications"
                     android:textColor="?android:textColorPrimary"
                     android:textSize="16sp" />
 
@@ -183,7 +166,7 @@
             <TextView
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:text="Motion &amp; Gesture Detection"
+                android:text="@string/motion_gesture_detection"
                 android:textColor="?android:textColorPrimary"
                 android:textSize="18sp"
                 android:textStyle="bold"
@@ -199,7 +182,7 @@
                     android:layout_width="0dp"
                     android:layout_height="wrap_content"
                     android:layout_weight="1"
-                    android:text="Enable Accelerometer Detection"
+                    android:text="@string/enable_accelerometer_detection"
                     android:textColor="?android:textColorPrimary"
                     android:textSize="16sp" />
 
@@ -220,7 +203,7 @@
                     android:layout_width="0dp"
                     android:layout_height="wrap_content"
                     android:layout_weight="1"
-                    android:text="Enable Blow Detection"
+                    android:text="@string/enable_blow_detection"
                     android:textColor="?android:textColorPrimary"
                     android:textSize="16sp" />
 
@@ -241,7 +224,7 @@
                     android:layout_width="0dp"
                     android:layout_height="wrap_content"
                     android:layout_weight="1"
-                    android:text="Enable Sneeze Detection"
+                    android:text="@string/enable_sneeze_detection"
                     android:textColor="?android:textColorPrimary"
                     android:textSize="16sp" />
 
@@ -256,7 +239,7 @@
             <TextView
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:text="Audio Settings"
+                android:text="@string/audio_settings"
                 android:textColor="?android:textColorPrimary"
                 android:textSize="18sp"
                 android:textStyle="bold"
@@ -278,7 +261,7 @@
                         android:layout_width="0dp"
                         android:layout_height="wrap_content"
                         android:layout_weight="1"
-                        android:text="Microphone Volume"
+                        android:text="@string/microphone_volume"
                         android:textColor="?android:textColorPrimary"
                         android:textSize="16sp" />
 
@@ -286,7 +269,7 @@
                         android:id="@+id/volumeValueText"
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
-                        android:text="50%"
+                        android:text="@string/percent_50"
                         android:textColor="?android:textColorPrimary"
                         android:textSize="16sp"
                         android:minWidth="50dp"
@@ -318,7 +301,7 @@
                         android:layout_width="0dp"
                         android:layout_height="wrap_content"
                         android:layout_weight="1"
-                        android:text="Detection Sensitivity"
+                        android:text="@string/detection_sensitivity"
                         android:textColor="?android:textColorPrimary"
                         android:textSize="16sp" />
 
@@ -326,7 +309,7 @@
                         android:id="@+id/sensitivityValueText"
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
-                        android:text="75%"
+                        android:text="@string/percent_75"
                         android:textColor="?android:textColorPrimary"
                         android:textSize="16sp"
                         android:minWidth="50dp"
@@ -364,7 +347,7 @@
             android:layout_marginEnd="8dp"
             android:background="@drawable/rounded_corners"
             android:backgroundTint="?colorPrimary"
-            android:text="Back"
+            android:text="@string/back"
             android:textAllCaps="false"
             android:textColor="#FFFFFFFF"
             android:textSize="16sp" />
@@ -378,7 +361,7 @@
             android:layout_marginEnd="4dp"
             android:background="@drawable/rounded_corners"
             android:backgroundTint="?colorPrimary"
-            android:text="Reset"
+            android:text="@string/reset"
             android:textAllCaps="false"
             android:textColor="#FFFFFFFF"
             android:textSize="16sp" />
@@ -391,7 +374,7 @@
             android:layout_marginStart="8dp"
             android:background="@drawable/rounded_corners"
             android:backgroundTint="?colorPrimary"
-            android:text="Save"
+            android:text="@string/save"
             android:textAllCaps="false"
             android:textColor="#FFFFFFFF"
             android:textSize="16sp" />

@@ -9,7 +9,7 @@
     <TextView
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:text="Bathroom Break Detected"
+        android:text="@string/bathroom_break_detected"
         android:textSize="20sp"
         android:textStyle="bold"
         android:gravity="center"
@@ -18,7 +18,7 @@
     <TextView
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:text="Would you like to start a bathroom break?"
+        android:text="@string/start_bathroom_break_question"
         android:textSize="16sp"
         android:gravity="center"
         android:layout_marginBottom="24dp"/>
@@ -33,7 +33,7 @@
             android:id="@+id/btnCancelBreak"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:text="Cancel"
+            android:text="@string/cancel"
             android:layout_marginEnd="8dp"
             android:backgroundTint="#8797AF"/>
 
@@ -41,7 +41,7 @@
             android:id="@+id/btnConfirmBreak"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:text="Start Break"
+            android:text="@string/start_break"
             android:layout_marginStart="8dp"
             android:backgroundTint="#5F4B66"/>
 

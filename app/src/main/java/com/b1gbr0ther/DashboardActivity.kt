@@ -85,14 +85,14 @@ class DashboardActivity : AppCompatActivity() {
                     startVoiceRecognition()
                 }
             } else {
-                Toast.makeText(this, "Microphone permission is required for voice commands", Toast.LENGTH_SHORT).show()
+                Toast.makeText(this, getString(R.string.microphone_permission_required_for_voice), Toast.LENGTH_SHORT).show()
             }
         }
 
     private val requestNotificationPermissionLauncher =
         registerForActivityResult(ActivityResultContracts.RequestPermission()) { isGranted: Boolean ->
             if (!isGranted) {
-                Toast.makeText(this, "Notifications are disabled. Some features may not work properly.", Toast.LENGTH_LONG).show()
+                Toast.makeText(this, getString(R.string.notifications_disabled_warning), Toast.LENGTH_LONG).show()
             }
         }
 
@@ -135,6 +135,10 @@ class DashboardActivity : AppCompatActivity() {
             currentTaskId = -1L
             updateCurrentTask("Not tracking any task")
         }
+    }
+
+    override fun attachBaseContext(newBase: Context) {
+        super.attachBaseContext(LocaleHelper.onAttach(newBase))
     }
 
     override fun onCreate(savedInstanceState: Bundle?) {

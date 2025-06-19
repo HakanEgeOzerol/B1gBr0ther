@@ -1,0 +1,207 @@
+<resources>
+    <string name="app_name">B1gBr0ther</string>
+    
+    <!-- Status strings -->
+    <string name="status_working">En cours de travail</string>
+    <string name="status_on_break">En pause</string>
+    <string name="status_not_tracking">Pas occupé avec une tâche</string>
+    <string name="tracking_started">Suivi démarré</string>
+    <string name="tracking_stopped">Suivi arrêté</string>
+    
+    <!-- Settings Activity -->
+    <string name="settings_title">Paramètres</string>
+    <string name="appearance_language">Apparence &amp; Langue</string>
+    <string name="theme_light_mode">Thème: Mode clair (Violet)</string>
+    <string name="theme_dark_mode">Thème: Mode sombre (Gris)</string>
+    <string name="language_label">Langue: %1$s</string>
+    <string name="language_english">Anglais</string>
+    <string name="language_dutch">Néerlandais</string>
+    <string name="choose_language">Choisir la langue</string>
+    <string name="voice_recognition">Reconnaissance vocale</string>
+    <string name="enable_voice_commands">Activer les commandes vocales</string>
+    <string name="notifications">Notifications</string>
+    <string name="enable_task_notifications">Activer les notifications de tâches</string>
+    <string name="motion_gesture_detection">Détection de mouvement &amp; geste</string>
+    <string name="enable_accelerometer_detection">Activer la détection accéléromètre</string>
+    <string name="enable_blow_detection">Activer la détection de souffle</string>
+    <string name="enable_sneeze_detection">Activer la détection d\'éternuement</string>
+    <string name="audio_settings">Paramètres audio</string>
+    <string name="microphone_volume">Volume du microphone</string>
+    <string name="detection_sensitivity">Sensibilité de détection</string>
+    <string name="back">Retour</string>
+    <string name="reset">Réinitialiser</string>
+    <string name="save">Sauvegarder</string>
+    
+    <!-- Permission dialogs -->
+    <string name="microphone_permission_required">Permission microphone requise</string>
+    <string name="microphone_permission_message">La reconnaissance vocale nécessite l\'accès au microphone pour fonctionner. Souhaitez-vous accorder cette permission?</string>
+    <string name="permission_required">Permission requise</string>
+    <string name="microphone_permission_denied_message">La reconnaissance vocale ne peut pas fonctionner sans accès au microphone. Souhaitez-vous ouvrir les paramètres pour accorder la permission?</string>
+    <string name="notification_permission_required">Permission de notification requise</string>
+    <string name="notification_permission_message">Les notifications push nécessitent une permission de notification pour fonctionner. Souhaitez-vous accorder cette permission?</string>
+    <string name="notification_permission_denied_message">Les notifications push ne peuvent pas fonctionner sans permission de notification. Souhaitez-vous ouvrir les paramètres pour accorder la permission?</string>
+    <string name="open_settings">Ouvrir les paramètres</string>
+    <string name="yes">Oui</string>
+    <string name="no">Non</string>
+    <string name="cancel">Annuler</string>
+    <string name="ok">OK</string>
+    <string name="continue_text">Continuer</string>
+    <string name="start">Démarrer</string>
+    
+    <!-- Toast messages -->
+    <string name="voice_recognition_enabled">Reconnaissance vocale activée</string>
+    <string name="voice_recognition_disabled_permission">Reconnaissance vocale désactivée: Permission refusée</string>
+    <string name="push_notifications_enabled">Notifications push activées</string>
+    <string name="push_notifications_disabled_permission">Notifications push désactivées: Permission refusée</string>
+    <string name="settings_reset_to_defaults">Paramètres réinitialisés aux valeurs par défaut</string>
+    <string name="settings_saved_successfully">Paramètres sauvegardés avec succès</string>
+    <string name="microphone_permission_required_for_voice">La permission microphone est requise pour les commandes vocales</string>
+    <string name="notifications_disabled_warning">Les notifications sont désactivées. Certaines fonctionnalités peuvent ne pas fonctionner correctement.</string>
+    <string name="command_not_recognized">Commande non reconnue: %1$s</string>
+    <string name="tracking_started_for_task">Suivi démarré pour: %1$s</string>
+    <string name="no_tasks_available">Aucune tâche disponible à suivre</string>
+    <string name="already_tracking_task">Déjà en train de suivre une tâche</string>
+    <string name="task_already_completed">La tâche \'%1$s\' est déjà terminée</string>
+    <string name="task_not_found">Tâche \'%1$s\' non trouvée. Tâches disponibles: %2$s</string>
+    <string name="no_active_tracking_session">Aucune session de suivi active</string>
+    <string name="no_task_being_tracked">Aucune tâche n\'était suivie</string>
+    <string name="could_not_find_tracked_task">Impossible de trouver la tâche suivie</string>
+    <string name="start_tracking_first">Démarrer le suivi d\'abord</string>
+    <string name="already_on_break">Déjà en pause</string>
+    <string name="break_started">Pause démarrée</string>
+    <string name="no_active_break">Aucune pause active</string>
+    <string name="break_ended">Pause terminée</string>
+    <string name="task_saved_to_database">Tâche sauvegardée dans la base de données avec ID: %1$d</string>
+    <string name="task_marked_completed">Tâche marquée comme terminée</string>
+    <string name="task_deleted">Tâche supprimée</string>
+    <string name="task_name_deleted">Tâche \'%1$s\' supprimée</string>
+    <string name="could_not_find_task_with_name">Impossible de trouver la tâche avec le nom \'%1$s\'. Tâches disponibles: %2$s</string>
+    
+    <!-- Voice recognition messages -->
+    <string name="enjoy_smoke_break">Profitez de votre pause cigarette!</string>
+    <string name="bless_you">À vos souhaits!</string>
+    <string name="urination_detected">Miction détectée!</string>
+    
+    <!-- Export messages -->
+    <string name="please_select_tasks_to_export">Veuillez sélectionner les tâches à exporter</string>
+    <string name="exported_tasks">%1$d tâches exportées en %2$s</string>
+    <string name="export_failed">L\'export a échoué: %1$s</string>
+    <string name="creating_sample_tasks">Création d\'exemples de tâches pour les tests...</string>
+    <string name="created_sample_tasks">%1$d exemples de tâches créées</string>
+    <string name="error_saving_export">Erreur lors de la sauvegarde de l\'export: %1$s</string>
+    <string name="file_saved_to">Fichier sauvegardé vers: %1$s</string>
+    <string name="choose_export_format">Choisir le format d\'export</string>
+    
+    <!-- Dashboard -->
+    <string name="dashboard">Tableau de bord</string>
+    <string name="test_db">Test DB</string>
+    <string name="go_to_gestures">Aller aux gestes</string>
+    <string name="test_database">Test Base de données</string>
+    
+    <!-- Days of week -->
+    <string name="monday_short">Lun</string>
+    <string name="tuesday_short">Mar</string>
+    <string name="wednesday_short">Mer</string>
+    <string name="thursday_short">Jeu</string>
+    <string name="friday_short">Ven</string>
+    <string name="saturday_short">Sam</string>
+    <string name="sunday_short">Dim</string>
+    
+    <!-- Timesheet -->
+    <string name="select_year">Sélectionner une année</string>
+    <string name="pick_month">Choisir un mois</string>
+    <string name="you_picked_year">Vous avez choisi %1$s</string>
+    <string name="you_picked_month">Vous avez choisi %1$s</string>
+    <string name="tasks_on_date">Tâches du %1$s</string>
+    
+    <!-- Manual -->
+    <string name="manual_how_to">Manuel / Comment faire</string>
+    
+    <!-- Export Page -->
+    <string name="start_date">Date de début</string>
+    <string name="end_date">Date de fin</string>
+    <string name="completed">Terminé</string>
+    <string name="breaks">Pauses</string>
+    <string name="preplanned">Préplanifié</string>
+    <string name="export_selected_recordings">Exporter les enregistrements sélectionnés</string>
+    <string name="task_name">Nom de la tâche</string>
+    <string name="time_range">Plage horaire</string>
+    <string name="status">Statut</string>
+    
+    <!-- Database Test -->
+    <string name="database_test">Test Base de données</string>
+    <string name="insert_task">Insérer une tâche</string>
+    <string name="update_task">Mettre à jour la tâche</string>
+    <string name="delete_task">Supprimer la tâche</string>
+    <string name="get_all_tasks">Obtenir toutes les tâches</string>
+    <string name="error_initializing">Erreur d\'initialisation: %1$s</string>
+    
+    <!-- Gesture Dialogs -->
+    <string name="input_time_required">Veuillez saisir le temps requis pour la tâche</string>
+    <string name="input_start_time">Veuillez saisir l\'heure de début</string>
+    <string name="input_start_date">Veuillez saisir la date de début</string>
+    <string name="planning_ahead">Planifiez-vous à l\'avance?</string>
+    <string name="task_in_progress">Une tâche est en cours</string>
+    <string name="time_left_completion">Temps restant jusqu\'à l\'achèvement</string>
+    <string name="placeholder">Espace réservé</string>
+    <string name="complete">Terminer</string>
+    <string name="delete">Supprimer</string>
+    
+    <!-- Bathroom Break Dialog -->
+    <string name="bathroom_break_detected">Pause toilette détectée</string>
+    <string name="start_bathroom_break_question">Souhaitez-vous commencer une pause toilette?</string>
+    <string name="start_break">Commencer la pause</string>
+    
+    <!-- Month names -->
+    <string name="january">Janvier</string>
+    <string name="february">Février</string>
+    <string name="march">Mars</string>
+    <string name="april">Avril</string>
+    <string name="may">Mai</string>
+    <string name="june">Juin</string>
+    <string name="july">Juillet</string>
+    <string name="august">Août</string>
+    <string name="september">Septembre</string>
+    <string name="october">Octobre</string>
+    <string name="november">Novembre</string>
+    <string name="december">Décembre</string>
+    
+    <!-- Day letters -->
+    <string name="monday_letter">L</string>
+    <string name="tuesday_letter">M</string>  
+    <string name="wednesday_letter">M</string>
+    <string name="thursday_letter">J</string>
+    <string name="friday_letter">V</string>
+    <string name="saturday_letter">S</string>
+    <string name="sunday_letter">D</string>
+    
+    <!-- Additional strings -->
+    <string name="default_timer">00:00</string>
+    <string name="default_year">2025</string>
+    <string name="percent_50">50%</string>
+    <string name="percent_75">75%</string>
+    <string name="manual_yes_test">• Oui Test</string>
+    
+    <!-- Hour labels -->
+    <string name="hour_00">00</string>
+    <string name="hour_02">02</string>
+    <string name="hour_04">04</string>
+    <string name="hour_06">06</string>
+    <string name="hour_08">08</string>
+    <string name="hour_10">10</string>
+    <string name="hour_12">12</string>
+    <string name="hour_14">14</string>
+    <string name="hour_16">16</string>
+    <string name="hour_18">18</string>
+    <string name="hour_20">20</string>
+    <string name="hour_22">22</string>
+    
+    <!-- Voice recognition -->
+    <string name="voice_recognition_ready">Reconnaissance vocale prête</string>
+    <string name="start_voice_recognition">Démarrer la reconnaissance vocale</string>
+    
+    <!-- Timesheet component placeholders -->
+    <string name="day_number_placeholder">1</string>
+    <string name="hours_worked_placeholder">4h</string>
+    
+</resources> 
