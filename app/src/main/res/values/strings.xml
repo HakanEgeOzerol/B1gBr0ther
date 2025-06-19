@@ -79,7 +79,7 @@
     
     <!-- Dashboard -->
     <string name="dashboard">Dashboard</string>
-    <string name="test_db">Test DB</string>
+    <string name="test_db">Manual</string>
     <string name="go_to_gestures">Go to gestures</string>
     <string name="test_database">Test Database</string>
     
