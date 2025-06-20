@@ -1,6 +1,7 @@
 package com.b1gbr0ther
 
 import java.time.LocalDateTime
+import com.b1gbr0ther.TimingStatus
 
 enum class CreationMethod
 {
@@ -13,6 +14,7 @@ class Task constructor(
     private var startTime: LocalDateTime,
     private var endTime: LocalDateTime,
     private var creationMethod: CreationMethod,
+    private var timingStatus: TimingStatus,
     private var isPreplanned: Boolean? = false,
     private var isCompleted: Boolean? = false,
     private var isBreak: Boolean? = false,
@@ -47,6 +49,14 @@ class Task constructor(
     fun getEndTime():LocalDateTime
     {
         return this.endTime
+    }
+
+    fun getTimingStatus(): TimingStatus {
+        return this.timingStatus
+    }
+
+    fun setTimingStatus(status: TimingStatus) {
+        this.timingStatus = status
     }
 
     fun setCreationMethod(creationMethod: CreationMethod)

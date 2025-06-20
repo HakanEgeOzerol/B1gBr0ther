@@ -26,6 +26,9 @@ import java.util.Locale
 
 class TimesheetActivity : AppCompatActivity() {
 
+  private lateinit var databaseManager: com.b1gbr0ther.data.database.DatabaseManager
+  private var dailyHoursMap: Map<java.time.LocalDate, Float> = emptyMap()
+
   private lateinit var currentYearMonth: YearMonth
 
   override fun attachBaseContext(newBase: Context) {
@@ -41,6 +44,13 @@ class TimesheetActivity : AppCompatActivity() {
     enableEdgeToEdge()
     setContentView(R.layout.activity_timesheet)
 
+    databaseManager = com.b1gbr0ther.data.database.DatabaseManager(applicationContext)
+
+    // first determine which month to load
+    currentYearMonth = java.time.YearMonth.now()
+    // load data for current month then build UI
+    loadMonthDataAndRender()
+
     val menu = findViewById<MenuBar>(R.id.menuBar)
     menu.setActivePage(2)
 
@@ -50,8 +60,7 @@ class TimesheetActivity : AppCompatActivity() {
       insets
     }
 
-    currentYearMonth = loadSelectedMonthYear()
-    updateCalendarUI()
+    // updateCalendarUI() will be called after DB load
 
     val yearButton = findViewById<Button>(R.id.yearSelector)
     val monthButton = findViewById<Button>(R.id.monthSelector)
@@ -71,15 +80,20 @@ class TimesheetActivity : AppCompatActivity() {
   }
 
   private fun setCurrentMonth(month: Int) {
-    currentYearMonth = YearMonth.of(currentYearMonth.year, month)
-    saveSelectedMonthYear()
-    updateCalendarUI()
+    currentYearMonth = java.time.YearMonth.of(currentYearMonth.year, month)
+    loadMonthDataAndRender()
   }
 
   private fun setCurrentYear(year: Int) {
-    currentYearMonth = YearMonth.of(year, currentYearMonth.monthValue)
-    saveSelectedMonthYear()
-    updateCalendarUI()
+    currentYearMonth = java.time.YearMonth.of(year, currentYearMonth.monthValue)
+    loadMonthDataAndRender()
+  }
+
+  private fun loadMonthDataAndRender() {
+    databaseManager.getDailyWorkHoursForMonth(currentYearMonth) { map ->
+      dailyHoursMap = map
+      updateCalendarUI()
+    }
   }
 
   private fun updateCalendarUI() {
@@ -93,33 +107,34 @@ class TimesheetActivity : AppCompatActivity() {
     calendarGrid.removeAllViews()
 
     val daysInMonth = currentYearMonth.lengthOfMonth()
+    val firstDay = currentYearMonth.atDay(1)
+    val startDayOfWeek = firstDay.dayOfWeek.value % 7 // Convert to 0-based (Sunday = 0, Monday = 1, etc.)
 
-    val dbManager = DatabaseManager(this)
-    val startOfMonth = currentYearMonth.atDay(1).atStartOfDay()
-    val endOfMonth = currentYearMonth.atEndOfMonth().atTime(23, 59)
+    val maxHours = if (dailyHoursMap.isNotEmpty()) dailyHoursMap.values.maxOrNull() ?: 0f else 0f
+    for (i in 0 until startDayOfWeek) {
+      val emptyView = layoutInflater.inflate(R.layout.empty_day, calendarGrid, false)
+      calendarGrid.addView(emptyView)
+    }
 
-    dbManager.getTasksByTimeRange(startOfMonth, endOfMonth) { tasks ->
-      val completedTasks = tasks.filter { it.isCompleted }
-      val hoursMap = mutableMapOf<Int, Int>()
+    for (day in 1..daysInMonth) {
+      val block = layoutInflater.inflate(R.layout.component_timesheet_day, calendarGrid, false)
+      block.findViewById<TextView>(R.id.dayNumberText).text = day.toString()
+      val date = currentYearMonth.atDay(day)
+      val hrs = dailyHoursMap[date] ?: 0f
+      block.findViewById<TextView>(R.id.hoursWorkedText).text = if (hrs > 0f) String.format("%.1fh", hrs) else "-"
 
-      completedTasks.forEach { task ->
-        val day = task.startTime.dayOfMonth
-        val duration = java.time.Duration.between(task.startTime, task.endTime).toMinutes()
-        val hours = (duration / 60.0).toInt()
-        hoursMap[day] = (hoursMap[day] ?: 0) + hours
+      // set heat-map background intensity
+      val ratio = if (maxHours > 0) (hrs / maxHours).coerceIn(0f, 1f) else 0f
+      val alpha = (40 + ratio * 215).toInt() // 40 (very light) to 255 (opaque)
+      val heatColor = android.graphics.Color.argb(alpha, 76, 175, 80) // material green 500 with variable alpha
+      block.setBackgroundColor(heatColor)
+
+      block.setOnClickListener {
+        val theDate = currentYearMonth.atDay(day)
+        showDayTasksOverlay(theDate)
       }
 
-      for (day in 1..daysInMonth) {
-        val block = TimesheetDayComponent(this)
-        block.setDayNumber(day.toString())
-        block.setHoursWorked((hoursMap[day] ?: 0).toString())
-
-        block.setOnClickListener {
-          showDayTasksOverlay(day, currentYearMonth.month.getDisplayName(TextStyle.FULL, Locale.ENGLISH))
-        }
-
-        calendarGrid.addView(block)
-      }
+      calendarGrid.addView(block)
     }
   }
 
@@ -203,8 +218,8 @@ class TimesheetActivity : AppCompatActivity() {
     }
   }
 
-  @SuppressLint("SetTextI18n")
-  private fun showDayTasksOverlay(day: Int, monthName: String) {
+  //this is for the overlay of the day
+  private fun showDayTasksOverlay(date: java.time.LocalDate) {
     val dialogView = layoutInflater.inflate(R.layout.day_overlay, null)
     val dialog = AlertDialog.Builder(this)
       .setView(dialogView)
@@ -215,38 +230,34 @@ class TimesheetActivity : AppCompatActivity() {
 
     val container = dialogView.findViewById<LinearLayout>(R.id.taskContainer)
     val title = dialogView.findViewById<TextView>(R.id.overlayTitle)
-    title.text = getString(R.string.tasks_on_date, "$monthName $day")
+    title.text = "Tasks on ${date.month.name.lowercase().replaceFirstChar{it.uppercase()}} ${date.dayOfMonth}"
 
-    val dbManager = DatabaseManager(this)
-    val selectedDate = currentYearMonth.atDay(day)
-    val startOfDay = selectedDate.atStartOfDay()
-    val endOfDay = selectedDate.atTime(23, 59)
-
-    dbManager.getTasksByTimeRange(startOfDay, endOfDay) { tasks ->
-      val completedTasks = tasks.filter { it.isCompleted }
-      container.removeAllViews()
-
-      completedTasks.forEach { task ->
-        val duration = java.time.Duration.between(task.startTime, task.endTime)
-        val hours = duration.toHours()
-        val minutes = duration.toMinutes() % 60
-        val durationStr = buildString {
-          if (hours > 0) append("${hours}h ")
-          if (minutes > 0) append("${minutes}m")
+    // Fetch tasks from DB
+    databaseManager.getTasksForDate(date) { tasks ->
+      if (tasks.isEmpty()) {
+        val empty = android.widget.TextView(this).apply {
+          text = "No tasks"
+          setPadding(8,8,8,8)
         }
-
-        val taskRow = TextView(this).apply {
-          text = "${task.taskName} - $durationStr"
-          setPadding(8, 8, 8, 8)
-          textSize = 16f
-          setTextColor(android.graphics.Color.BLACK)
+        container.addView(empty)
+      } else {
+        for (task in tasks) {
+          val durationMin = java.time.Duration.between(task.startTime, task.endTime).toMinutes()
+          val hrs = durationMin / 60
+          val mins = durationMin % 60
+          val durationStr = if (hrs > 0) "${hrs}h ${mins}m" else "${mins}m"
+          val taskRow = android.widget.TextView(this).apply {
+            text = "${task.taskName} - $durationStr"
+            setPadding(8,8,8,8)
+            textSize = 16f
+            setTextColor(android.graphics.Color.BLACK)
+          }
+          container.addView(taskRow)
         }
-
-        container.addView(taskRow)
       }
-
-      dialog.show()
     }
+
+    dialog.show()
   }
 
   private fun saveSelectedMonthYear() {
