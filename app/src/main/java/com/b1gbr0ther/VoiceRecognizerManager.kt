@@ -17,6 +17,7 @@ import android.widget.Toast
 import java.util.Locale
 import kotlinx.coroutines.*
 import android.util.Log
+import com.b1gbr0ther.easteregg.DoodleJumpActivity
 
 class VoiceRecognizerManager(
     private val context: Context,
@@ -385,15 +386,27 @@ class VoiceRecognizerManager(
     }
 
     fun showSmokeBreakDialog(activity: Activity, onConfirm: () -> Unit) {
+        // Skip notifications if Doodle Jump game is running
+        if (DoodleJumpActivity.isGameRunning()) {
+            return
+        }
         Toast.makeText(activity, activity.getString(R.string.enjoy_smoke_break), Toast.LENGTH_SHORT).show()
         onConfirm()
     }
 
     fun sayBlessYou(activity: Activity) {
+        // Skip notifications if Doodle Jump game is running
+        if (DoodleJumpActivity.isGameRunning()) {
+            return
+        }
         Toast.makeText(activity, activity.getString(R.string.bless_you), Toast.LENGTH_SHORT).show()
     }
 
     fun sayUrination(activity: Activity) {
+        // Skip notifications if Doodle Jump game is running
+        if (DoodleJumpActivity.isGameRunning()) {
+            return
+        }
         Toast.makeText(activity, activity.getString(R.string.urination_detected), Toast.LENGTH_SHORT).show()
     }
 

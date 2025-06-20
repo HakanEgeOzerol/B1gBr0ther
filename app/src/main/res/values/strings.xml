@@ -209,14 +209,26 @@ Note: The app recognizes various similar phrases for each command. Feel free to 
     
     <!-- Statistics -->
     <string name="statistics_title">Statistics</string>
-    <string name="task_completion">Task completion</string>
-    <string name="task_timing">Task timing</string>
-    <string name="creation_methods">Creation methods</string>
-    <string name="quick_stats">Quick stats</string>
-    <string name="total_tasks">Total tasks</string>
-    <string name="tasks_completed">Tasks completed</string>
-    <string name="completion_rate">Completion rate</string>
+    <string name="task_completion">Task Completion</string>
+    <string name="task_timing">Task Timing</string>
+    <string name="creation_methods">Creation Methods</string>
+    <string name="quick_stats">Quick Stats</string>
+    <string name="total_tasks">Total Tasks</string>
+    <string name="tasks_completed">Tasks Completed</string>
+    <string name="completion_rate">Completion Rate</string>
     <string name="uncompleted">Uncompleted</string>
+    
+    <!-- Doodle Jump Game -->
+    <string name="game_background">Background</string>
+    <string name="game_score">Score: %1$d</string>
+    <string name="game_player">Player</string>
+    <string name="game_over">GAME OVER</string>
+    <string name="game_your_score">Your Score: %1$d</string>
+    <string name="game_high_scores">HIGH SCORES</string>
+    <string name="game_no_scores">No scores recorded</string>
+    <string name="game_play_again">PLAY AGAIN</string>
+    <string name="game_exit">EXIT</string>
+    <string name="game_pause">| |</string>
     
     <!-- Additional export strings -->
     <string name="export_selected_format">Export Selected (%1$d/%2$d)</string>

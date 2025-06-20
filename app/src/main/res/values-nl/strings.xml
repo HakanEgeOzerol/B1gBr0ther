@@ -290,5 +290,16 @@
     <string name="no_task_data_available">Geen taakgegevens beschikbaar</string>
     <string name="no_timing_data_available">Geen tijdgegevens beschikbaar</string>
     <string name="no_task_creation_data_available">Geen taakcreatiegegevens beschikbaar</string>
-
+    
+    <!-- Doodle Jump Game -->
+    <string name="game_background">Achtergrond</string>
+    <string name="game_score">Score: %1$d</string>
+    <string name="game_player">Speler</string>
+    <string name="game_over">SPEL VOORBIJ</string>
+    <string name="game_your_score">Jouw Score: %1$d</string>
+    <string name="game_high_scores">HOOGSTE SCORES</string>
+    <string name="game_no_scores">Geen scores opgeslagen</string>
+    <string name="game_play_again">OPNIEUW SPELEN</string>
+    <string name="game_exit">VERLATEN</string>
+    <string name="game_pause">| |</string>
 </resources> 
