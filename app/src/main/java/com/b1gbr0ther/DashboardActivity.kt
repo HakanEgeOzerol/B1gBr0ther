@@ -76,7 +76,7 @@ class DashboardActivity : AppCompatActivity() {
     private var allTasks: List<Task> = emptyList()
     private var allTasksId: List<Int> = emptyList()
     private var activeTaskId: Int = -1
-    private val mediaPlayer = MediaPlayer.create(this, R.raw.pipes)
+//    private val mediaPlayer = MediaPlayer.create(applicationContext, R.raw.pipes)
 
     private var mockStartTime = 0L
 
@@ -1172,6 +1172,6 @@ class DashboardActivity : AppCompatActivity() {
     }
 
     private fun playPipeFallingEasterEgg(){
-        mediaPlayer.start()
+//        mediaPlayer.start()
     }
 }
