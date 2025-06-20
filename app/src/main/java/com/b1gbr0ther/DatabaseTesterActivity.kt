@@ -6,6 +6,7 @@ import android.widget.CheckBox
 import android.widget.EditText
 import android.widget.RadioButton
 import android.widget.RadioGroup
+import com.b1gbr0ther.TimingStatus
 import android.widget.Toast
 import androidx.appcompat.app.AppCompatActivity
 import androidx.recyclerview.widget.LinearLayoutManager
@@ -28,6 +29,9 @@ class DatabaseTesterActivity : AppCompatActivity() {
     private lateinit var rgCreationMethod: RadioGroup
     private lateinit var rbGesture: RadioButton
     private lateinit var rbVoice: RadioButton
+    private lateinit var rbEarly: RadioButton
+    private lateinit var rbOnTime: RadioButton
+    private lateinit var rbLate: RadioButton
     private lateinit var cbPreplanned: CheckBox
     private lateinit var cbCompleted: CheckBox
     private lateinit var cbBreak: CheckBox
@@ -75,6 +79,9 @@ class DatabaseTesterActivity : AppCompatActivity() {
         rgCreationMethod = findViewById(R.id.rgCreationMethod)
         rbGesture = findViewById(R.id.rbGesture)
         rbVoice = findViewById(R.id.rbVoice)
+        rbEarly = findViewById(R.id.rbEarly)
+        rbOnTime = findViewById(R.id.rbOnTime)
+        rbLate = findViewById(R.id.rbLate)
         cbPreplanned = findViewById(R.id.cbPreplanned)
         cbCompleted = findViewById(R.id.cbCompleted)
         cbBreak = findViewById(R.id.cbBreak)
@@ -139,6 +146,13 @@ class DatabaseTesterActivity : AppCompatActivity() {
         // Get creation method
         val creationMethod = if (rbGesture.isChecked) CreationMethod.Gesture else CreationMethod.Voice
         
+        // Determine timing status
+        val timingStatus = when {
+            rbEarly.isChecked -> TimingStatus.EARLY
+            rbLate.isChecked -> TimingStatus.LATE
+            else -> TimingStatus.ON_TIME
+        }
+        
         // Create task entity
         val task = Task(
             id = 0, // Will be auto-generated
@@ -146,6 +160,7 @@ class DatabaseTesterActivity : AppCompatActivity() {
             startTime = LocalDateTime.now(),
             endTime = LocalDateTime.now().plusHours(1),
             creationMethod = creationMethod,
+            timingStatus = timingStatus,
             isPreplanned = cbPreplanned.isChecked,
             isCompleted = cbCompleted.isChecked,
             isBreak = cbBreak.isChecked

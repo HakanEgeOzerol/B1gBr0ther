@@ -4,6 +4,7 @@ import androidx.room.Entity
 import androidx.room.PrimaryKey
 import androidx.room.TypeConverters
 import com.b1gbr0ther.CreationMethod
+import com.b1gbr0ther.TimingStatus
 import com.b1gbr0ther.data.database.converters.LocalDateTimeConverter
 import java.time.LocalDateTime
 
@@ -22,7 +23,8 @@ data class Task(
     var creationMethod: CreationMethod,
     var isPreplanned: Boolean = false,
     var isCompleted: Boolean = false,
-    var isBreak: Boolean = false
+    var isBreak: Boolean = false,
+    var timingStatus: TimingStatus = TimingStatus.ON_TIME
 ) {
     // Empty constructor required by Room
     constructor() : this(
@@ -33,7 +35,8 @@ data class Task(
         CreationMethod.Gesture,  // Default value for creationMethod
         false,
         false,
-        false
+        false,
+        TimingStatus.ON_TIME
     )
     
     // Copy constructor for updates
@@ -45,7 +48,8 @@ data class Task(
         other.creationMethod,
         other.isPreplanned,
         other.isCompleted,
-        other.isBreak
+        other.isBreak,
+        other.timingStatus
     )
     
     /**
@@ -57,6 +61,7 @@ data class Task(
             startTime,
             endTime,
             creationMethod,
+            timingStatus,
             isPreplanned,
             isCompleted,
             isBreak
@@ -74,6 +79,7 @@ data class Task(
                 startTime = appTask.getStartTime(),
                 endTime = appTask.getEndTime(),
                 creationMethod = appTask.getCreationMethod(),
+                timingStatus = appTask.getTimingStatus(),
                 isPreplanned = appTask.getIsPreplanned() ?: false,
                 isCompleted = appTask.getIsCompleted() ?: false,
                 isBreak = appTask.getIsBreak() ?: false

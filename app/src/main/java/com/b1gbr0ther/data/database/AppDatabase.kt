@@ -13,7 +13,7 @@ import com.b1gbr0ther.data.database.entities.Task
  * Main database class for the B1gBr0ther app.
  * This is the primary access point for the Room database.
  */
-@Database(entities = [Task::class], version = 3, exportSchema = false)
+@Database(entities = [Task::class], version = 4, exportSchema = false)
 @TypeConverters(LocalDateTimeConverter::class)
 abstract class AppDatabase : RoomDatabase() {
     /**
