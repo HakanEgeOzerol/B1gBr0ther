@@ -992,14 +992,8 @@ class DashboardActivity : AppCompatActivity() {
                 timingStatus, isPreplanned)
 
             databaseManager.createAppTask(newTask) { taskId ->
-                Toast.makeText(this, "Task saved to database with ID: $taskId", Toast.LENGTH_SHORT).show()
-
-                if (!isPreplanned) {
-                    currentTaskName = name
-                    currentTaskId = taskId
-                    timeTracker.startTracking()
-                    updateCurrentTaskDisplay()
-                }
+                Toast.makeText(this, "Task '$name' created.", Toast.LENGTH_SHORT).show()
+                updateCurrentTaskDisplay()
             }
 
             isDialogShown = false

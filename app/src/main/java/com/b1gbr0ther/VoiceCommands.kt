@@ -97,6 +97,84 @@ object VoiceCommandAliases {
             "show my statistics",
             "show my stats",
             "statistics"
+        ),
+        "export csv" to listOf(
+            "export csv",
+            "export to csv",
+            "save as csv",
+            "download csv",
+            "csv export",
+            "export data csv",
+            "save data csv",
+            "download data csv",
+            "export tasks csv",
+            "save tasks csv"
+        ),
+        "export json" to listOf(
+            "export json",
+            "export to json",
+            "save as json",
+            "download json",
+            "json export",
+            "export data json",
+            "save data json",
+            "download data json",
+            "export tasks json",
+            "save tasks json"
+        ),
+        "export html" to listOf(
+            "export html",
+            "export to html",
+            "save as html",
+            "download html",
+            "html export",
+            "export data html",
+            "save data html",
+            "download data html",
+            "export tasks html",
+            "save tasks html"
+        ),
+        "export markdown" to listOf(
+            "export markdown",
+            "export to markdown",
+            "save as markdown",
+            "download markdown",
+            "markdown export",
+            "export data markdown",
+            "save data markdown",
+            "download data markdown",
+            "export tasks markdown",
+            "save tasks markdown",
+            "export md",
+            "export to md",
+            "save as md"
+        ),
+        "export xml" to listOf(
+            "export xml",
+            "export to xml",
+            "save as xml",
+            "download xml",
+            "xml export",
+            "export data xml",
+            "save data xml",
+            "download data xml",
+            "export tasks xml",
+            "save tasks xml"
+        ),
+        "export text" to listOf(
+            "export text",
+            "export to text",
+            "save as text",
+            "download text",
+            "text export",
+            "export data text",
+            "save data text",
+            "download data text",
+            "export tasks text",
+            "save tasks text",
+            "export plain text",
+            "export to plain text",
+            "save as plain text"
         )
     )
 }

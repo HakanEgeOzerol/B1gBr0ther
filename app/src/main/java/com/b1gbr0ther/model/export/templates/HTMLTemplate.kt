@@ -7,9 +7,12 @@ class HTMLTemplate : ExportTemplate {
         val rows = tasks.joinToString("\n") { task ->
             """
             <tr>
+                <td>${task.id}</td>
                 <td>${task.taskName}</td>
                 <td>${task.startTime}</td>
                 <td>${task.endTime}</td>
+                <td>${task.creationMethod}</td>
+                <td>${task.timingStatus}</td>
                 <td>${task.isPreplanned}</td>
                 <td>${task.isCompleted}</td>
                 <td>${task.isBreak}</td>
@@ -23,7 +26,7 @@ class HTMLTemplate : ExportTemplate {
             <h2>Exported Tasks</h2>
             <table border="1" cellpadding="5" cellspacing="0">
                 <tr>
-                    <th>Name</th><th>Start</th><th>End</th><th>Preplanned</th><th>Completed</th><th>Break</th>
+                    <th>ID</th><th>Name</th><th>Start</th><th>End</th><th>Creation Method</th><th>Timing Status</th><th>Preplanned</th><th>Completed</th><th>Break</th>
                 </tr>
                 $rows
             </table>

@@ -7,9 +7,12 @@ class XMLTemplate : ExportTemplate {
         val entries = tasks.joinToString("\n") { task ->
             """
             <task>
+                <id>${task.id}</id>
                 <name>${task.taskName}</name>
                 <start>${task.startTime}</start>
                 <end>${task.endTime}</end>
+                <creationMethod>${task.creationMethod}</creationMethod>
+                <timingStatus>${task.timingStatus}</timingStatus>
                 <preplanned>${task.isPreplanned}</preplanned>
                 <completed>${task.isCompleted}</completed>
                 <break>${task.isBreak}</break>

@@ -1,5 +1,6 @@
 package com.b1gbr0ther.easteregg
 
+import android.app.Activity
 import android.content.Context
 import android.content.pm.ActivityInfo
 import android.hardware.Sensor
@@ -18,12 +19,12 @@ import androidx.compose.material3.ButtonDefaults
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.LaunchedEffect
-import androidx.compose.runtime.remember
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.drawWithCache
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.graphics.ImageBitmap
+import androidx.compose.ui.graphics.asImageBitmap
 import androidx.compose.ui.layout.ContentScale
 import androidx.compose.ui.platform.LocalConfiguration
 import androidx.compose.ui.platform.LocalContext
@@ -33,11 +34,14 @@ import androidx.compose.ui.res.imageResource
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.text.style.TextAlign
-import androidx.compose.ui.tooling.preview.Preview
-import androidx.compose.ui.unit.*
+import androidx.compose.ui.unit.Dp
+import androidx.compose.ui.unit.IntOffset
+import androidx.compose.ui.unit.IntSize
+import androidx.compose.ui.unit.dp
+import androidx.compose.ui.unit.sp
 import com.b1gbr0ther.LocaleHelper
-import com.b1gbr0ther.ThemeManager
 import com.b1gbr0ther.R
+import com.b1gbr0ther.ThemeManager
 
 class DoodleJumpActivity : ComponentActivity(), SensorEventListener {
 
@@ -48,7 +52,7 @@ class DoodleJumpActivity : ComponentActivity(), SensorEventListener {
     companion object {
         @Volatile
         private var isGameActive = false
-        
+
         fun isGameRunning(): Boolean = isGameActive
     }
 
@@ -78,7 +82,10 @@ class DoodleJumpActivity : ComponentActivity(), SensorEventListener {
     override fun onResume() {
         super.onResume()
         isGameActive = true
-        gameViewModel.resumeGame()
+        // Resume game only if it's not game over
+        if (!gameViewModel.isGameOver) {
+            gameViewModel.resumeGame()
+        }
         // Register accelerometer listener with safety check
         accelerometer?.let {
             sensorManager.registerListener(
@@ -92,6 +99,7 @@ class DoodleJumpActivity : ComponentActivity(), SensorEventListener {
     override fun onPause() {
         super.onPause()
         isGameActive = false
+        gameViewModel.pauseGame()
         // Disable sensor when app is paused
         sensorManager.unregisterListener(this)
     }
@@ -124,6 +132,7 @@ fun GameScreen(gameViewModel: GameViewModel, context: Context) {
     val playerY = gameViewModel.playerY
     val density = LocalDensity.current
     val isGameOver = gameViewModel.isGameOver
+    val isPaused = gameViewModel.isPaused
     val configuration = LocalConfiguration.current
     val screenWidth = configuration.screenWidthDp.dp
     val screenHeight = configuration.screenHeightDp.dp
@@ -163,7 +172,6 @@ fun GameScreen(gameViewModel: GameViewModel, context: Context) {
                 platformHeightPx
             )
             gameViewModel.clearPlatforms()
-
             generateInitialPlatforms(screenWidthPx, screenHeightPx, platformWidthPx)
         }
 
@@ -178,25 +186,25 @@ fun GameScreen(gameViewModel: GameViewModel, context: Context) {
             modifier = Modifier.fillMaxSize(),
             contentScale = ContentScale.FillBounds
         )
-        
-        Button(
-            onClick = {
-                gameViewModel.pauseGame()
-            },
-            colors = ButtonDefaults.buttonColors(
-                containerColor = colorResource(id = R.color.game_pause_button)
-            ),
-            modifier = Modifier
-                .size(width = 80.dp, height = 50.dp)
-                .align(Alignment.TopEnd)
-                .offset(x = -20.dp, y = 40.dp)
-        ) {
-            Text(
-                text = context.getString(R.string.game_pause),
-                color = colorResource(id = R.color.game_pause_text),
-                fontSize = 18.sp,
-                fontWeight = FontWeight.Bold
-            )
+
+        if (!isPaused && !isGameOver) {
+            Button(
+                onClick = { gameViewModel.pauseGame() },
+                colors = ButtonDefaults.buttonColors(
+                    containerColor = colorResource(id = R.color.game_pause_button)
+                ),
+                modifier = Modifier
+                    .size(width = 80.dp, height = 50.dp)
+                    .align(Alignment.TopEnd)
+                    .offset(x = (-20).dp, y = 40.dp)
+            ) {
+                Text(
+                    text = context.getString(R.string.game_pause),
+                    color = colorResource(id = R.color.game_pause_text),
+                    fontSize = 18.sp,
+                    fontWeight = FontWeight.Bold
+                )
+            }
         }
 
         // Improved score display with better visibility
@@ -239,8 +247,7 @@ fun GameScreen(gameViewModel: GameViewModel, context: Context) {
         }
 
         if (!isGameOver) {
-            val spriteResId =
-                if (gameViewModel.isFacingRight) R.drawable.doodle_right else R.drawable.doodle_left
+            val spriteResId = if (gameViewModel.isFacingRight) R.drawable.doodle_right else R.drawable.doodle_left
             Image(
                 painter = painterResource(id = spriteResId),
                 contentDescription = context.getString(R.string.game_player),
@@ -248,123 +255,176 @@ fun GameScreen(gameViewModel: GameViewModel, context: Context) {
                     .size(width = 80.dp, height = 80.dp)
                     .offset(
                         x = with(density) { playerX.toDp() },
-                        y = with(density) { (playerY - 70f).toDp() }
+                        y = with(density) { playerY.toDp() }
                     )
             )
         }
 
         if (isGameOver) {
-            Box(
-                modifier = Modifier
-                    .fillMaxSize()
-                    .background(colorResource(id = R.color.game_overlay_background)),
-                contentAlignment = Alignment.Center
+            GameOverScreen(
+                score = score,
+                highScores = gameViewModel.highScores.toList(),
+                onRestart = { gameViewModel.restartGame() },
+                onExit = { (context as? Activity)?.finish() },
+                context = context
+            )
+        }
+
+        if (isPaused) {
+            PauseMenu(
+                gameViewModel = gameViewModel,
+                onExit = { (context as? Activity)?.finish() },
+                context = context
+            )
+        }
+    }
+}
+
+@Composable
+fun PauseMenu(
+    gameViewModel: GameViewModel,
+    onExit: () -> Unit,
+    context: Context
+) {
+    Box(
+        modifier = Modifier
+            .fillMaxSize()
+            .background(Color.Black.copy(alpha = 0.6f)),
+        contentAlignment = Alignment.Center
+    ) {
+        Column(
+            horizontalAlignment = Alignment.CenterHorizontally,
+            verticalArrangement = Arrangement.spacedBy(20.dp)
+        ) {
+            Text(
+                text = context.getString(R.string.game_paused_title),
+                color = Color.White,
+                fontSize = 32.sp,
+                fontWeight = FontWeight.Bold
+            )
+
+            // Resume button
+            Button(
+                onClick = { gameViewModel.resumeGame() },
+                colors = ButtonDefaults.buttonColors(
+                    containerColor = colorResource(id = R.color.game_play_again_button)
+                ),
+                modifier = Modifier.size(width = 200.dp, height = 60.dp)
             ) {
-                Column(
-                    horizontalAlignment = Alignment.CenterHorizontally,
-                    verticalArrangement = Arrangement.Center,
-                    modifier = Modifier.padding(16.dp)
-                ) {
+                Text(
+                    text = context.getString(R.string.game_resume),
+                    color = Color.White,
+                    fontSize = 22.sp
+                )
+            }
+
+            // Exit button
+            Button(
+                onClick = onExit,
+                colors = ButtonDefaults.buttonColors(
+                    containerColor = colorResource(id = R.color.game_exit_button)
+                ),
+                modifier = Modifier.size(width = 200.dp, height = 60.dp)
+            ) {
+                Text(
+                    text = context.getString(R.string.game_exit_to_app),
+                    color = Color.White,
+                    fontSize = 22.sp
+                )
+            }
+        }
+    }
+}
+
+@Composable
+fun GameOverScreen(
+    score: Int,
+    highScores: List<Int>,
+    onRestart: () -> Unit,
+    onExit: () -> Unit,
+    context: Context
+) {
+    Box(
+        modifier = Modifier
+            .fillMaxSize()
+            .background(colorResource(id = R.color.game_overlay_background))
+            .padding(16.dp),
+        contentAlignment = Alignment.Center
+    ) {
+        Column(
+            horizontalAlignment = Alignment.CenterHorizontally,
+            verticalArrangement = Arrangement.Center
+        ) {
+            Text(
+                text = context.getString(R.string.game_over),
+                fontSize = 48.sp,
+                fontWeight = FontWeight.ExtraBold,
+                color = colorResource(id = R.color.game_over_text),
+                textAlign = TextAlign.Center
+            )
+            Spacer(modifier = Modifier.height(16.dp))
+            Text(
+                text = context.getString(R.string.game_your_score, score),
+                fontSize = 28.sp,
+                color = colorResource(id = R.color.game_score_display)
+            )
+            Spacer(modifier = Modifier.height(24.dp))
+
+            // High Scores Display
+            Column(horizontalAlignment = Alignment.CenterHorizontally) {
+                Text(
+                    text = context.getString(R.string.game_high_scores),
+                    fontSize = 24.sp,
+                    fontWeight = FontWeight.Bold,
+                    color = colorResource(id = R.color.game_high_scores_title)
+                )
+                Spacer(modifier = Modifier.height(10.dp))
+
+                if (highScores.isEmpty()) {
                     Text(
-                        text = context.getString(R.string.game_over),
-                        color = colorResource(id = R.color.game_over_text),
-                        fontSize = 40.sp,
-                        fontWeight = FontWeight.Bold
+                        text = context.getString(R.string.game_no_scores),
+                        fontSize = 18.sp,
+                        color = colorResource(id = R.color.game_no_scores_text)
                     )
-
-                    Spacer(modifier = Modifier.height(20.dp))
-
-                    Text(
-                        text = context.getString(R.string.game_your_score, score),
-                        color = colorResource(id = R.color.game_score_display),
-                        fontSize = 30.sp,
-                        fontWeight = FontWeight.Bold
-                    )
-
-                    Spacer(modifier = Modifier.height(30.dp))
-
-                    Text(
-                        text = context.getString(R.string.game_high_scores),
-                        color = colorResource(id = R.color.game_high_scores_title),
-                        fontSize = 24.sp,
-                        fontWeight = FontWeight.Bold
-                    )
-
-                    Spacer(modifier = Modifier.height(10.dp))
-
-                    if (gameViewModel.highScores.isEmpty()) {
+                } else {
+                    highScores.forEachIndexed { index, highScore ->
                         Text(
-                            text = context.getString(R.string.game_no_scores),
-                            color = colorResource(id = R.color.game_no_scores_text),
-                            fontSize = 18.sp
-                        )
-                    } else {
-                        gameViewModel.highScores.forEachIndexed { index, highScore ->
-                            Text(
-                                text = "${index + 1}. $highScore",
-                                color = if (highScore == score) 
-                                    colorResource(id = R.color.game_current_score_highlight) 
-                                else 
-                                    colorResource(id = R.color.game_other_scores),
-                                fontSize = 20.sp,
-                                fontWeight = if (highScore == score) FontWeight.Bold else FontWeight.Normal
-                            )
-
-                            Spacer(modifier = Modifier.height(5.dp))
-                        }
-                    }
-
-                    Spacer(modifier = Modifier.height(30.dp))
-
-                    Button(
-                        onClick = {
-                            with(density) {
-                                gameViewModel.clearPlatforms()
-
-                                val screenWidthPx = screenWidth.toPx()
-                                val screenHeightPx = screenHeight.toPx()
-                                val platformWidthPx = 90.dp.toPx()
-
-                                generateInitialPlatforms(
-                                    screenWidthPx,
-                                    screenHeightPx,
-                                    platformWidthPx
-                                )
-                            }
-                            gameViewModel.restartGame()
-                        },
-                        colors = ButtonDefaults.buttonColors(
-                            containerColor = colorResource(id = R.color.game_play_again_button)
-                        ),
-                        modifier = Modifier.size(width = 200.dp, height = 60.dp)
-                    ) {
-                        Text(
-                            text = context.getString(R.string.game_play_again),
-                            color = colorResource(id = R.color.game_button_text),
-                            fontSize = 24.sp,
-                            fontWeight = FontWeight.Bold
-                        )
-                    }
-                    
-                    Spacer(modifier = Modifier.height(20.dp))
-
-                    Button(
-                        onClick = { 
-                            (context as? ComponentActivity)?.finish()
-                        },
-                        colors = ButtonDefaults.buttonColors(
-                            containerColor = colorResource(id = R.color.game_exit_button)
-                        ),
-                        modifier = Modifier.size(width = 200.dp, height = 60.dp)
-                    ) {
-                        Text(
-                            text = context.getString(R.string.game_exit),
-                            color = colorResource(id = R.color.game_button_text),
-                            fontSize = 24.sp,
-                            fontWeight = FontWeight.Bold
+                            text = "${index + 1}. $highScore",
+                            fontSize = 18.sp,
+                            color = if (highScore == score) colorResource(id = R.color.game_current_score_highlight)
+                            else colorResource(id = R.color.game_other_scores)
                         )
                     }
                 }
+            }
+
+            Spacer(modifier = Modifier.height(30.dp))
+            Button(
+                onClick = onRestart,
+                colors = ButtonDefaults.buttonColors(
+                    containerColor = colorResource(id = R.color.game_play_again_button)
+                ),
+                modifier = Modifier.size(width = 200.dp, height = 60.dp)
+            ) {
+                Text(
+                    text = context.getString(R.string.game_play_again),
+                    color = colorResource(id = R.color.game_button_text),
+                    fontSize = 22.sp
+                )
+            }
+            Spacer(modifier = Modifier.height(10.dp))
+            Button(
+                onClick = onExit,
+                colors = ButtonDefaults.buttonColors(
+                    containerColor = colorResource(id = R.color.game_exit_button)
+                ),
+                modifier = Modifier.size(width = 200.dp, height = 60.dp)
+            ) {
+                Text(
+                    text = context.getString(R.string.game_exit),
+                    color = colorResource(id = R.color.game_button_text),
+                    fontSize = 22.sp
+                )
             }
         }
     }
@@ -379,15 +439,14 @@ fun SpriteSheetImage(
     srcHeight: Int,
     modifier: Modifier = Modifier
 ) {
-    val context = LocalContext.current
+    val imageBitmap = ImageBitmap.imageResource(id = spriteSheetResId)
 
     Box(
         modifier = modifier
             .drawWithCache {
-                val bitmap = ImageBitmap.imageResource(context.resources, spriteSheetResId)
                 onDrawBehind {
                     drawImage(
-                        image = bitmap,
+                        image = imageBitmap,
                         srcOffset = IntOffset(srcX, srcY),
                         srcSize = IntSize(srcWidth, srcHeight),
                         dstSize = IntSize(size.width.toInt(), size.height.toInt())
@@ -396,11 +455,3 @@ fun SpriteSheetImage(
             }
     )
 }
-
-@Preview(showBackground = true)
-@Composable
-fun GameScreenPreview() {
-    val previewViewModel = remember { GameViewModel() }
-    val previewContext = LocalContext.current
-    GameScreen(previewViewModel, previewContext)
-} 
