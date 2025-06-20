@@ -106,32 +106,144 @@
     
     <!-- Manual -->
     <string name="manual_how_to">Manual / How To</string>
-    <string name="manual_content">Voice Commands Guide:\n\n
-1. Start Tracking a Task:\n
-   • Say \"Start tracking [task name]\" or \"Begin tracking [task name]\"\n
-   • Example: \"Start tracking coding\" or \"Begin tracking meeting\"\n
-   • This will start timing your specified task\n\n
-2. Stop Tracking:\n
-   • Say \"Stop tracking\", \"End tracking\", or \"I\'m done\"\n
-   • This will stop timing your current task\n\n
-3. Break Management:\n
-   • Start Break: Say \"Take a break\" or \"Start break\"\n
-   • End Break: Say \"Stop break\" or \"Back to work\"\n\n
-4. Navigation Commands:\n
-   • Show Export Page: \"Show export\" or \"Export data\"\n
-   • Show Manual: \"Show manual\" or \"Show help\"\n
-   • Show Timesheet: \"Show timesheet\" or \"View my hours\"\n
-   • Show Statistics: \"Show statistics\" or \"Show stats\"\n\n
-5. Task Management:\n
-   • Delete Task: \"Delete task [task name]\" or \"Remove task [task name]\"\n\n
-Note: The app recognizes various similar phrases for each command. Feel free to speak naturally!\n\n
-6. Task Creation:\n
-    • In order to create a task you have to shake your phone at the dashboard page\n
-    • After shaking you would be prompted to input necessary information for the task to be created\n
-    • This process may last several steps, depending on if you are planning ahead\n
-7. Existing task\n
-    • If a task exists when the phone is shaken you would be prompted to manage it\n
-    • Either complete it or delete it</string>
+    <string name="manual_content">📱 B1gBr0ther - Complete User Manual\n\n
+🎯 OVERVIEW\n
+B1gBr0ther is a comprehensive time tracking and task management app that uses voice commands, gesture recognition, and smart audio detection to help you track your work efficiently.\n\n
+
+⏰ TIME TRACKING\n
+• Create and manage tasks with start/end times\n
+• Track time spent on different activities\n
+• Take breaks and monitor break time\n
+• View your progress with visual timers\n
+• Tasks auto-save to database\n\n
+
+🗣️ VOICE COMMANDS\n
+Enable in Settings → Audio Settings → Voice Commands\n\n
+Task Control:\n
+• \"Start tracking [task name]\" - Begin timing a task\n
+• \"Stop tracking\" / \"I\'m done\" - End current task\n
+• \"Take a break\" / \"Start break\" - Begin break time\n
+• \"Stop break\" / \"Back to work\" - End break\n
+• \"Delete task [name]\" - Remove a task\n\n
+Navigation:\n
+• \"Show export\" / \"Export data\" - Open export page\n
+• \"Show manual\" / \"Show help\" - Open this manual\n
+• \"Show timesheet\" / \"View my hours\" - View calendar\n
+• \"Show statistics\" / \"Show stats\" - View analytics\n\n
+Export Commands:\n
+• \"Export CSV\" / \"Export JSON\" / \"Export HTML\"\n
+• \"Export Markdown\" / \"Export XML\" / \"Export text\"\n\n
+
+🎵 SMART AUDIO DETECTION\n
+Enable in Settings → Audio Settings → Sound Detection\n\n
+• Blow Detection: Detects when you blow (offers smoke break)\n
+• Sneeze Detection: Says \"Bless you!\" when you sneeze\n
+• Bathroom Break Detection: Recognizes urination sounds\n
+• Adjustable sensitivity settings\n\n
+
+👋 GESTURE RECOGNITION\n
+Enable in Settings → Motion &amp; Gesture Detection\n\n
+• Shake Detection: Shake device to trigger actions\n
+• Directional Gestures: Left, right, up, down movements\n
+• Accelerometer-based: Uses device motion sensors\n
+• Create tasks through gesture dialogs\n\n
+
+📊 DASHBOARD\n
+Your main control center:\n
+• Real-time timer display\n
+• Current task status\n
+• Weekly time visualization grid\n
+• Quick access to all features\n
+• Voice recognition status indicator\n\n
+
+📅 TIMESHEET\n
+Monthly calendar view:\n
+• Heat-map shows work intensity per day\n
+• Click any day to see detailed task breakdown\n
+• Navigate between months and years\n
+• Color-coded based on hours worked\n\n
+
+📈 STATISTICS\n
+Comprehensive analytics:\n
+• Task completion pie charts\n
+• Timing analysis (early/on-time/late)\n
+• Creation method breakdown (voice vs gesture)\n
+• Quick stats: total tasks, completion rate\n\n
+
+📤 EXPORT FEATURES\n
+Export your data in multiple formats:\n
+• CSV - Spreadsheet compatible\n
+• JSON - Developer friendly\n
+• HTML - Web viewable\n
+• Markdown - Documentation format\n
+• XML - Structured data\n
+• Plain Text - Simple format\n\n
+Filtering Options:\n
+• Date range selection\n
+• Filter by completion status\n
+• Include/exclude breaks\n
+• Preplanned tasks filter\n\n
+
+⚙️ SETTINGS\n
+Customize your experience:\n\n
+Themes:\n
+• Light Mode (Purple theme)\n
+• Dark Mode (Gray theme)\n\n
+Languages:\n
+• English, Dutch, French supported\n
+• Automatic UI translation\n\n
+Audio Settings:\n
+• Off - No audio features\n
+• Voice Commands - Speech recognition\n
+• Sound Detection - Audio pattern recognition\n
+• Microphone permission required\n\n
+Notifications:\n
+• Task reminders and alerts\n
+• Completion notifications\n
+• Permission-based settings\n\n
+
+🎮 EASTER EGG\n
+Hidden Doodle Jump game:\n
+• Tilt device to control character\n
+• Jump on platforms to score points\n
+• High score tracking\n
+• Pause and resume functionality\n
+• Access through secret gesture combination\n\n
+
+🔧 DATABASE FEATURES\n
+• Local Room database storage\n
+• Task history preservation\n
+• Backup and restore capabilities\n
+• Performance optimized queries\n\n
+
+📱 NAVIGATION\n
+Bottom menu bar provides quick access:\n
+• Export (index 0)\n
+• Manual (index 1) \n
+• Dashboard (index 2)\n
+• Timesheet (index 3)\n
+• Statistics (index 4)\n\n
+
+💡 TIPS\n
+• Speak naturally - the app understands variations\n
+• Use gestures when voice isn\'t practical\n
+• Enable notifications for better task tracking\n
+• Export data regularly for backup\n
+• Check statistics to improve productivity\n
+• Adjust audio sensitivity in noisy environments\n\n
+
+🔒 PERMISSIONS\n
+Required permissions:\n
+• Microphone - Voice commands and sound detection\n
+• Notifications - Task alerts and reminders\n
+• Storage - Export file saving\n\n
+
+❓ TROUBLESHOOTING\n
+• Voice not working? Check microphone permission\n
+• Gestures not detected? Enable accelerometer\n
+• Export failing? Check storage permission\n
+• App crashes? Try reset settings to defaults\n\n
+For best experience, enable all features and grant required permissions!</string>
     
     <!-- Export Page -->
     <string name="start_date">Start Date</string>

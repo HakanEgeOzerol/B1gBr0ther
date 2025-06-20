@@ -106,7 +106,144 @@
     
     <!-- Manual -->
     <string name="manual_how_to">Manuel / Comment faire</string>
-    <string name="manual_content">Bientôt ajouté</string>
+    <string name="manual_content">📱 B1gBr0ther - Manuel Utilisateur Complet\n\n
+🎯 APERÇU\n
+B1gBr0ther est une application complète de suivi du temps et de gestion des tâches qui utilise des commandes vocales, la reconnaissance de gestes et la détection audio intelligente pour vous aider à suivre votre travail efficacement.\n\n
+
+⏰ SUIVI DU TEMPS\n
+• Créer et gérer des tâches avec heures de début/fin\n
+• Suivre le temps passé sur différentes activités\n
+• Prendre des pauses et surveiller le temps de pause\n
+• Voir votre progression avec des minuteurs visuels\n
+• Tâches sauvegardées automatiquement en base de données\n\n
+
+🗣️ COMMANDES VOCALES\n
+Activer dans Paramètres → Paramètres Audio → Commandes Vocales\n\n
+Contrôle des tâches:\n
+• \"Commencer suivi [nom tâche]\" - Commencer le chronométrage d\'une tâche\n
+• \"Arrêter suivi\" / \"J\'ai terminé\" - Terminer la tâche actuelle\n
+• \"Prendre une pause\" / \"Commencer pause\" - Débuter temps de pause\n
+• \"Arrêter pause\" / \"Retour au travail\" - Terminer la pause\n
+• \"Supprimer tâche [nom]\" - Supprimer une tâche\n\n
+Navigation:\n
+• \"Afficher export\" / \"Exporter données\" - Ouvrir page d\'export\n
+• \"Afficher manuel\" / \"Afficher aide\" - Ouvrir ce manuel\n
+• \"Afficher feuille temps\" / \"Voir mes heures\" - Voir calendrier\n
+• \"Afficher statistiques\" / \"Afficher stats\" - Voir analyses\n\n
+Commandes d\'export:\n
+• \"Exporter CSV\" / \"Exporter JSON\" / \"Exporter HTML\"\n
+• \"Exporter Markdown\" / \"Exporter XML\" / \"Exporter texte\"\n\n
+
+🎵 DÉTECTION AUDIO INTELLIGENTE\n
+Activer dans Paramètres → Paramètres Audio → Détection Sonore\n\n
+• Détection de souffle: Détecte quand vous soufflez (propose pause cigarette)\n
+• Détection d\'éternuement: Dit \"À vos souhaits!\" quand vous éternuez\n
+• Détection pause toilette: Reconnaît les sons d\'urination\n
+• Paramètres de sensibilité ajustables\n\n
+
+👋 RECONNAISSANCE DE GESTES\n
+Activer dans Paramètres → Détection Mouvement &amp; Gestes\n\n
+• Détection de secousse: Secouer l\'appareil pour déclencher actions\n
+• Gestes directionnels: Mouvements gauche, droite, haut, bas\n
+• Basé sur accéléromètre: Utilise capteurs de mouvement de l\'appareil\n
+• Créer tâches via dialogues de gestes\n\n
+
+📊 TABLEAU DE BORD\n
+Votre centre de contrôle principal:\n
+• Affichage minuteur en temps réel\n
+• Statut de la tâche actuelle\n
+• Grille de visualisation temps hebdomadaire\n
+• Accès rapide à toutes les fonctionnalités\n
+• Indicateur statut reconnaissance vocale\n\n
+
+📅 FEUILLE DE TEMPS\n
+Vue calendrier mensuel:\n
+• Carte thermique montre intensité travail par jour\n
+• Cliquer sur un jour pour voir détail des tâches\n
+• Naviguer entre mois et années\n
+• Codé couleur basé sur heures travaillées\n\n
+
+📈 STATISTIQUES\n
+Analyses complètes:\n
+• Graphiques circulaires achèvement tâches\n
+• Analyse timing (en avance/à l\'heure/en retard)\n
+• Répartition méthode création (voix vs geste)\n
+• Stats rapides: total tâches, taux d\'achèvement\n\n
+
+📤 FONCTIONNALITÉS D\'EXPORT\n
+Exportez vos données en plusieurs formats:\n
+• CSV - Compatible tableur\n
+• JSON - Convivial développeur\n
+• HTML - Visualisable web\n
+• Markdown - Format documentation\n
+• XML - Données structurées\n
+• Texte Brut - Format simple\n\n
+Options de filtrage:\n
+• Sélection plage de dates\n
+• Filtrer par statut d\'achèvement\n
+• Inclure/exclure pauses\n
+• Filtre tâches pré-planifiées\n\n
+
+⚙️ PARAMÈTRES\n
+Personnalisez votre expérience:\n\n
+Thèmes:\n
+• Mode Clair (Thème violet)\n
+• Mode Sombre (Thème gris)\n\n
+Langues:\n
+• Anglais, Néerlandais, Français supportés\n
+• Traduction UI automatique\n\n
+Paramètres Audio:\n
+• Désactivé - Aucune fonctionnalité audio\n
+• Commandes Vocales - Reconnaissance vocale\n
+• Détection Sonore - Reconnaissance motifs audio\n
+• Permission microphone requise\n\n
+Notifications:\n
+• Rappels et alertes de tâche\n
+• Notifications d\'achèvement\n
+• Paramètres basés permissions\n\n
+
+🎮 EASTER EGG\n
+Jeu Doodle Jump caché:\n
+• Incliner appareil pour contrôler personnage\n
+• Sauter sur plateformes pour marquer points\n
+• Suivi meilleurs scores\n
+• Fonctionnalité pause et reprise\n
+• Accès via combinaison gestes secrète\n\n
+
+🔧 FONCTIONNALITÉS BASE DE DONNÉES\n
+• Stockage base données Room locale\n
+• Préservation historique tâches\n
+• Capacités sauvegarde et restauration\n
+• Requêtes optimisées performance\n\n
+
+📱 NAVIGATION\n
+Barre menu inférieure offre accès rapide:\n
+• Export (index 0)\n
+• Manuel (index 1)\n
+• Tableau de bord (index 2)\n
+• Feuille temps (index 3)\n
+• Statistiques (index 4)\n\n
+
+💡 CONSEILS\n
+• Parlez naturellement - l\'app comprend les variations\n
+• Utilisez gestes quand voix pas pratique\n
+• Activez notifications pour meilleur suivi tâches\n
+• Exportez données régulièrement pour sauvegarde\n
+• Vérifiez statistiques pour améliorer productivité\n
+• Ajustez sensibilité audio dans environnements bruyants\n\n
+
+🔒 PERMISSIONS\n
+Permissions requises:\n
+• Microphone - Commandes vocales et détection sonore\n
+• Notifications - Alertes et rappels de tâche\n
+• Stockage - Sauvegarde fichiers d\'export\n\n
+
+❓ DÉPANNAGE\n
+• Voix ne fonctionne pas? Vérifiez permission microphone\n
+• Gestes non détectés? Activez accéléromètre\n
+• Export échoue? Vérifiez permission stockage\n
+• App plante? Essayez réinitialiser paramètres par défaut\n\n
+Pour meilleure expérience, activez toutes fonctionnalités et accordez permissions requises!</string>
     
     <!-- Export Page -->
     <string name="start_date">Date de début</string>
