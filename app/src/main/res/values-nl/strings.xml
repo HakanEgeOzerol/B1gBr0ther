@@ -106,7 +106,144 @@
     
     <!-- Manual -->
     <string name="manual_how_to">Handleiding / Hoe te</string>
-    <string name="manual_content">Binnenkort toegevoegd</string>
+    <string name="manual_content">📱 B1gBr0ther - Volledige Gebruikershandleiding\n\n
+🎯 OVERZICHT\n
+B1gBr0ther is een uitgebreide tijdregistratie- en taakbeheerapp die spraakcommando\'s, bewegingsherkenning en slimme audiodetectie gebruikt om u te helpen uw werk efficiënt bij te houden.\n\n
+
+⏰ TIJDREGISTRATIE\n
+• Taken maken en beheren met start-/eindtijden\n
+• Tijd bijhouden die aan verschillende activiteiten wordt besteed\n
+• Pauzes nemen en pauzetijd monitoren\n
+• Voortgang bekijken met visuele timers\n
+• Taken worden automatisch opgeslagen in database\n\n
+
+🗣️ SPRAAKCOMMANDO\'S\n
+Inschakelen via Instellingen → Audio-instellingen → Spraakcommando\'s\n\n
+Taakbeheer:\n
+• \"Start tracking [taaknaam]\" - Begin met het timen van een taak\n
+• \"Stop tracking\" / \"Ik ben klaar\" - Beëindig huidige taak\n
+• \"Neem een pauze\" / \"Start pauze\" - Begin pauzetijd\n
+• \"Stop pauze\" / \"Terug naar werk\" - Beëindig pauze\n
+• \"Verwijder taak [naam]\" - Verwijder een taak\n\n
+Navigatie:\n
+• \"Toon export\" / \"Exporteer data\" - Open exportpagina\n
+• \"Toon handleiding\" / \"Toon hulp\" - Open deze handleiding\n
+• \"Toon timesheet\" / \"Bekijk mijn uren\" - Bekijk kalender\n
+• \"Toon statistieken\" / \"Toon stats\" - Bekijk analyses\n\n
+Export Commando\'s:\n
+• \"Exporteer CSV\" / \"Exporteer JSON\" / \"Exporteer HTML\"\n
+• \"Exporteer Markdown\" / \"Exporteer XML\" / \"Exporteer tekst\"\n\n
+
+🎵 SLIMME AUDIODETECTIE\n
+Inschakelen via Instellingen → Audio-instellingen → Geluidsdetectie\n\n
+• Blaasdetectie: Detecteert wanneer u blaast (biedt rookpauze aan)\n
+• Niesdetectie: Zegt \"Gezondheid!\" wanneer u niest\n
+• Toiletpauze Detectie: Herkent urineergeluiden\n
+• Verstelbare gevoeligheidsinstellingen\n\n
+
+👋 BEWEGINGSHERKENNING\n
+Inschakelen via Instellingen → Bewegings- &amp; Bewegingsdetectie\n\n
+• Schuddetectie: Schud apparaat om acties te activeren\n
+• Richtingsbewegingen: Links, rechts, omhoog, omlaag bewegingen\n
+• Accelerometer-gebaseerd: Gebruikt bewegingssensoren van apparaat\n
+• Taken maken via bewegingsdialogen\n\n
+
+📊 DASHBOARD\n
+Uw hoofdbesturingscentrum:\n
+• Real-time timer weergave\n
+• Huidige taakstatus\n
+• Wekelijkse tijd visualisatieraster\n
+• Snelle toegang tot alle functies\n
+• Spraakherkenning status indicator\n\n
+
+📅 TIMESHEET\n
+Maandelijkse kalenderweergave:\n
+• Heatmap toont werkintensiteit per dag\n
+• Klik op elke dag voor gedetailleerde taakoverzicht\n
+• Navigeer tussen maanden en jaren\n
+• Kleurgecodeerd op basis van gewerkte uren\n\n
+
+📈 STATISTIEKEN\n
+Uitgebreide analyses:\n
+• Taakvoltooing taartdiagrammen\n
+• Timing analyse (vroeg/op tijd/laat)\n
+• Aanmaakmethode overzicht (spraak vs beweging)\n
+• Snelle stats: totaal taken, voltooiingspercentage\n\n
+
+📤 EXPORT FUNCTIES\n
+Exporteer uw data in meerdere formaten:\n
+• CSV - Spreadsheet compatibel\n
+• JSON - Ontwikkelaar vriendelijk\n
+• HTML - Web bekijkbaar\n
+• Markdown - Documentatie formaat\n
+• XML - Gestructureerde data\n
+• Platte Tekst - Eenvoudig formaat\n\n
+Filter Opties:\n
+• Datumbereik selectie\n
+• Filter op voltooiingsstatus\n
+• Pauzes in-/uitsluiten\n
+• Vooraf geplande taken filter\n\n
+
+⚙️ INSTELLINGEN\n
+Pas uw ervaring aan:\n\n
+Thema\'s:\n
+• Lichte Modus (Paars thema)\n
+• Donkere Modus (Grijs thema)\n\n
+Talen:\n
+• Engels, Nederlands, Frans ondersteund\n
+• Automatische UI vertaling\n\n
+Audio Instellingen:\n
+• Uit - Geen audiofuncties\n
+• Spraakcommando\'s - Spraakherkenning\n
+• Geluidsdetectie - Audio patroonherkenning\n
+• Microfoon toestemming vereist\n\n
+Meldingen:\n
+• Taakherinneringen en waarschuwingen\n
+• Voltooiingsmeldingen\n
+• Toestemming-gebaseerde instellingen\n\n
+
+🎮 EASTER EGG\n
+Verborgen Doodle Jump spel:\n
+• Kantel apparaat om karakter te besturen\n
+• Spring op platforms om punten te scoren\n
+• Hoge score bijhouden\n
+• Pauzeer en hervat functionaliteit\n
+• Toegang via geheime bewegingscombinatie\n\n
+
+🔧 DATABASE FUNCTIES\n
+• Locale Room database opslag\n
+• Taakgeschiedenis behoud\n
+• Backup en herstel mogelijkheden\n
+• Prestatie geoptimaliseerde queries\n\n
+
+📱 NAVIGATIE\n
+Onderste menubalk biedt snelle toegang:\n
+• Export (index 0)\n
+• Handleiding (index 1)\n
+• Dashboard (index 2)\n
+• Timesheet (index 3)\n
+• Statistieken (index 4)\n\n
+
+💡 TIPS\n
+• Spreek natuurlijk - de app begrijpt variaties\n
+• Gebruik bewegingen wanneer spraak niet praktisch is\n
+• Schakel meldingen in voor betere taakregistratie\n
+• Exporteer data regelmatig voor backup\n
+• Bekijk statistieken om productiviteit te verbeteren\n
+• Pas audiogevoeligheid aan in lawaaiige omgevingen\n\n
+
+🔒 TOESTEMMINGEN\n
+Vereiste toestemmingen:\n
+• Microfoon - Spraakcommando\'s en geluidsdetectie\n
+• Meldingen - Taakwaarschuwingen en herinneringen\n
+• Opslag - Export bestand opslaan\n\n
+
+❓ PROBLEEMOPLOSSING\n
+• Spraak werkt niet? Controleer microfoon toestemming\n
+• Bewegingen niet gedetecteerd? Schakel accelerometer in\n
+• Export mislukt? Controleer opslag toestemming\n
+• App crasht? Probeer instellingen resetten naar standaard\n\n
+Voor beste ervaring, schakel alle functies in en verleen vereiste toestemmingen!</string>
     
     <!-- Export Page -->
     <string name="start_date">Startdatum</string>
