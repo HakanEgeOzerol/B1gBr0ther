@@ -9,6 +9,7 @@ import android.hardware.Sensor
 import android.hardware.SensorEvent
 import android.hardware.SensorEventListener
 import android.hardware.SensorManager
+import android.media.MediaPlayer
 import android.os.Build
 import android.os.Bundle
 import android.os.Handler
@@ -75,6 +76,7 @@ class DashboardActivity : AppCompatActivity() {
     private var allTasks: List<Task> = emptyList()
     private var allTasksId: List<Int> = emptyList()
     private var activeTaskId: Int = -1
+    private val mediaPlayer = MediaPlayer.create(this, R.raw.pipes)
 
     private var mockStartTime = 0L
 
@@ -708,6 +710,7 @@ class DashboardActivity : AppCompatActivity() {
                 isDialogShown = true
                 analyzedGesture = gestureRecognizer.analyzeGesture()
                 Toast.makeText(applicationContext, analyzedGesture.name, Toast.LENGTH_SHORT).show()
+//                gestureAction(analyzedGesture, acceleration, isDialogShown, isActiveTask())
                 createInputTaskDialog()
             }
             else if (acceleration > shakeThreshold && !isDialogShown && isActiveTask()){
@@ -1125,5 +1128,50 @@ class DashboardActivity : AppCompatActivity() {
                 Toast.makeText(this, "Could not find task with name '$taskName'. Available tasks: ${tasks.map { it.taskName }.joinToString(", ")}", Toast.LENGTH_LONG).show()
             }
         }
+    }
+
+    private fun triggerEasterEgg() {
+        // Launch the Doodle Jump game
+        val intent = Intent(applicationContext, DoodleJumpActivity::class.java)
+        applicationContext.startActivity(intent)
+    }
+
+    private fun gestureAction(gesture: GestureType, acceleration: Float, isDialogShown: Boolean, isActiveTask: Boolean){
+        when (gesture){
+            GestureType.UP -> triggerEasterEgg()
+            GestureType.SHAKE -> showCorrectDialog(acceleration, isDialogShown, isActiveTask)
+            GestureType.DOWN -> playPipeFallingEasterEgg() //Pipe falling sound as an easter egg
+            GestureType.LEFT -> TODO() //Start audio rec
+            GestureType.RIGHT -> TODO() //Start audio rec
+            GestureType.CIRCLE -> return //Identification for squares and circles is not done. Possible extension in the future
+            GestureType.SQUARE -> return //Identification for squares and circles is not done. Possible extension in the future
+            else -> {
+                Toast.makeText(applicationContext, "Something went wrong, try again", Toast.LENGTH_SHORT).show()
+                return
+            }
+        }
+    }
+
+    private fun showCorrectDialog(acceleration: Float, isDialogShown: Boolean, isActiveTask: Boolean){
+        var analyzedGesture = GestureType.UNIDENTIFIED
+
+        if (acceleration > shakeThreshold && !isDialogShown && !isActiveTask()) {
+            updateAllTasks()
+            this.isDialogShown = true
+//            analyzedGesture = gestureRecognizer.analyzeGesture()
+//            Toast.makeText(applicationContext, analyzedGesture.name, Toast.LENGTH_SHORT).show()
+            createInputTaskDialog()
+        }
+        else if (acceleration > shakeThreshold && !isDialogShown && isActiveTask()){
+            updateAllTasks()
+            this.isDialogShown = true
+            createExistingTaskDialog()
+//            analyzedGesture = gestureRecognizer.analyzeGesture()
+//            Toast.makeText(applicationContext, analyzedGesture.name, Toast.LENGTH_SHORT).show()
+        }
+    }
+
+    private fun playPipeFallingEasterEgg(){
+        mediaPlayer.start()
     }
 }
