@@ -3,65 +3,83 @@
     android:layout_width="wrap_content"
     android:layout_height="wrap_content"
     android:background="#A7ADC6"
-    android:padding="4dp">
+    android:padding="16dp">
 
     <EditText
         android:id="@+id/TaskInput"
         android:inputType="text"
         android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:layout_margin="4dp"
+        android:layout_height="48dp"
+        android:layout_margin="8dp"
         android:fontFamily="sans-serif"
-        android:hint="Please input task name"/>
-
+        android:hint="@string/input_task_name_hint"
+        android:textColor="?android:attr/textColorPrimary"
+        android:textColorHint="?android:attr/textColorSecondary"
+        android:autofillHints="taskName"
+        android:minHeight="48dp"/>
 
     <LinearLayout
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:weightSum="2">
+        android:orientation="horizontal"
+        android:weightSum="2"
+        android:layout_marginTop="8dp"
+        android:layout_marginBottom="8dp">
 
         <TextView
             android:text="@string/planning_ahead"
-            android:layout_width="wrap_content"
+            android:layout_width="0dp"
             android:layout_height="wrap_content"
             android:layout_weight="1"
-            android:layout_margin="5dp"/>
+            android:layout_margin="8dp"
+            android:textColor="?android:attr/textColorPrimary"
+            android:minHeight="48dp"
+            android:gravity="center_vertical"/>
 
         <CheckBox
             android:id="@+id/checkBoxNewTask"
             android:text="@string/yes"
-            android:layout_width="wrap_content"
+            android:layout_width="0dp"
             android:layout_height="wrap_content"
             android:layout_weight="1"
-            android:layout_margin="5dp"/>
+            android:layout_margin="8dp"
+            android:textColor="?android:attr/textColorPrimary"
+            android:minHeight="48dp"/>
 
     </LinearLayout>
 
     <LinearLayout
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:weightSum="2">
+        android:orientation="horizontal"
+        android:weightSum="2"
+        android:layout_marginTop="8dp">
 
         <Button
             android:id="@+id/Cancel"
             android:layout_width="0dp"
             android:layout_height="wrap_content"
-            android:background="@drawable/rounded_corners"
-            android:layout_margin="4dp"
+            android:layout_margin="8dp"
             android:layout_weight="1"
-            android:textAlignment="center"
-            android:text="@string/cancel">
+            android:text="@string/cancel"
+            android:textColor="?attr/buttonTextColor"
+            android:background="@drawable/rounded_corners"
+            android:backgroundTint="?colorPrimary"
+            android:minHeight="48dp"
+            style="?android:attr/buttonBarButtonStyle">
         </Button>
         <Button
             android:id="@+id/StartTaskCreation"
             android:layout_width="0dp"
             android:layout_height="wrap_content"
-            android:background="@drawable/rounded_corners"
-            android:padding="4dp"
-            android:layout_margin="4dp"
+            android:layout_margin="8dp"
             android:layout_weight="1"
-            android:textAlignment="center"
-            android:text="@string/start">
+            android:text="@string/start"
+            android:textColor="?attr/buttonTextColor"
+            android:background="@drawable/rounded_corners"
+            android:backgroundTint="?colorPrimary"
+            android:minHeight="48dp"
+            style="?android:attr/buttonBarButtonStyle">
         </Button>
     </LinearLayout>
 </LinearLayout>

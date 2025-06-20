@@ -37,8 +37,10 @@
     <string name="microphone_permission_message">Voice recognition requires microphone access to work. Would you like to grant this permission?</string>
     <string name="microphone_permission_denied_message">Voice recognition cannot work without microphone access. Would you like to open settings to grant the permission?</string>
     <string name="notification_permission_required">Notification Permission Required</string>
-    <string name="notification_permission_message">Push notifications require notification permission to work. Would you like to grant this permission?</string>
-    <string name="notification_permission_denied_message">Push notifications cannot work without notification permission. Would you like to open settings to grant the permission?</string>
+    <string name="notification_permission_message">This app needs notification permission to send task reminders and alerts.</string>
+    <string name="notification_permission_denied_message">Notification permission was denied. You can enable it manually in Settings > Apps > B1gBr0ther > Notifications.</string>
+    <string name="notifications_disabled_warning">Notifications are disabled. You won\'t receive task reminders.</string>
+    <string name="notifications_disabled">Notifications disabled</string>
     <string name="open_settings">Open Settings</string>
     <string name="yes">Yes</string>
     <string name="no">No</string>
@@ -55,7 +57,6 @@
     <string name="settings_reset_to_defaults">Settings reset to defaults</string>
     <string name="settings_saved_successfully">Settings saved successfully</string>
     <string name="microphone_permission_required_for_voice">Microphone permission is required for voice commands</string>
-    <string name="notifications_disabled_warning">Notifications are disabled. Some features may not work properly.</string>
     <string name="task_saved_to_database">Task saved to database with ID: %1$d</string>
     <string name="task_marked_completed">Task marked as completed</string>
     <string name="task_deleted">Task deleted</string>
@@ -328,5 +329,10 @@ Note: The app recognizes various similar phrases for each command. Feel free to 
     <string name="gesture">Gesture</string>
     <string name="no_data_available">No data available</string>
     <string name="completion_stats_format">Completed: %1$s / Uncompleted: %2$s</string>
+    
+    <!-- Task input dialog strings -->
+    <string name="input_task_name_hint">Please input task name</string>
+    <string name="hours_hint">Hours</string>
+    <string name="minutes_hint">Minutes</string>
     
 </resources>

@@ -36,9 +36,9 @@
     <!-- Permission dialogs -->
     <string name="microphone_permission_message">Spraakherkenning heeft microfoon toegang nodig om te werken. Wilt u deze toestemming verlenen?</string>
     <string name="microphone_permission_denied_message">Spraakherkenning kan niet werken zonder microfoon toegang. Wilt u instellingen openen om de toestemming te verlenen?</string>
-    <string name="notification_permission_required">Melding toestemming vereist</string>
-    <string name="notification_permission_message">Push meldingen hebben melding toestemming nodig om te werken. Wilt u deze toestemming verlenen?</string>
-    <string name="notification_permission_denied_message">Push meldingen kunnen niet werken zonder melding toestemming. Wilt u instellingen openen om de toestemming te verlenen?</string>
+    <string name="notification_permission_required">Notificatie toestemming vereist</string>
+    <string name="notification_permission_message">Deze app heeft notificatie toestemming nodig om taak herinneringen en waarschuwingen te verzenden.</string>
+    <string name="notification_permission_denied_message">Notificatie toestemming werd geweigerd. Je kunt het handmatig inschakelen in Instellingen > Apps > B1gBr0ther > Notificaties.</string>
     <string name="open_settings">Instellingen openen</string>
     <string name="yes">Ja</string>
     <string name="no">Nee</string>
@@ -55,7 +55,8 @@
     <string name="settings_reset_to_defaults">Instellingen hersteld naar standaardwaarden</string>
     <string name="settings_saved_successfully">Instellingen succesvol opgeslagen</string>
     <string name="microphone_permission_required_for_voice">Microfoon toestemming is vereist voor spraakopdrachten</string>
-    <string name="notifications_disabled_warning">Meldingen zijn uitgeschakeld. Sommige functies werken mogelijk niet goed.</string>
+    <string name="notifications_disabled_warning">Notificaties zijn uitgeschakeld. Je ontvangt geen taak herinneringen.</string>
+    <string name="notifications_disabled">Notificaties uitgeschakeld</string>
     <string name="task_saved_to_database">Taak opgeslagen in database met ID: %1$d</string>
     <string name="task_marked_completed">Taak gemarkeerd als voltooid</string>
     <string name="task_deleted">Taak verwijderd</string>
@@ -130,7 +131,7 @@
     <string name="input_time_required">Voer de benodigde tijd voor de taak in</string>
     <string name="input_start_time">Voer starttijd in</string>
     <string name="input_start_date">Voer startdatum in</string>
-    <string name="planning_ahead">Ben je van tevoren aan het plannen?</string>
+    <string name="planning_ahead">Plan je vooruit?</string>
     <string name="task_in_progress">Er is een taak gaande</string>
     <string name="time_left_completion">Tijd over tot voltooiing</string>
     <string name="placeholder">Plaatshouder</string>
@@ -307,4 +308,9 @@
     <string name="game_play_again">OPNIEUW SPELEN</string>
     <string name="game_exit">VERLATEN</string>
     <string name="game_pause">| |</string>
+    
+    <!-- Task input dialog strings -->
+    <string name="input_task_name_hint">Voer taaknaam in</string>
+    <string name="hours_hint">Uren</string>
+    <string name="minutes_hint">Minuten</string>
 </resources> 

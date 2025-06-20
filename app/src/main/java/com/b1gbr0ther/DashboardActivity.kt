@@ -119,7 +119,7 @@ class DashboardActivity : AppCompatActivity() {
     private fun loadWeeklyWorkBlocks(chart: WeekTimeGridView) {
         val weekStart = LocalDate.now().with(DayOfWeek.MONDAY)
         databaseManager.getWorkBlocksForWeek(weekStart) { workBlocks ->
-            chart.setWorkData(workBlocks)
+            chart.setWorkData(workBlocks, weekStart)
         }
     }
 
@@ -1059,7 +1059,7 @@ class DashboardActivity : AppCompatActivity() {
 
     private fun startTaskChecker() {
         val handler = Handler(Looper.getMainLooper())
-        val checkInterval = 60000L // Check every minute
+        val checkInterval = 900000L // Check every 15 minutes (15 * 60 * 1000)
 
         val taskChecker = object : Runnable {
             override fun run() {

@@ -37,8 +37,8 @@
     <string name="microphone_permission_message">La reconnaissance vocale nécessite l\'accès au microphone pour fonctionner. Souhaitez-vous accorder cette permission?</string>
     <string name="microphone_permission_denied_message">La reconnaissance vocale ne peut pas fonctionner sans accès au microphone. Souhaitez-vous ouvrir les paramètres pour accorder la permission?</string>
     <string name="notification_permission_required">Permission de notification requise</string>
-    <string name="notification_permission_message">Les notifications push nécessitent une permission de notification pour fonctionner. Souhaitez-vous accorder cette permission?</string>
-    <string name="notification_permission_denied_message">Les notifications push ne peuvent pas fonctionner sans permission de notification. Souhaitez-vous ouvrir les paramètres pour accorder la permission?</string>
+    <string name="notification_permission_message">Cette application a besoin de la permission de notification pour envoyer des rappels et alertes de tâches.</string>
+    <string name="notification_permission_denied_message">La permission de notification a été refusée. Vous pouvez l\'activer manuellement dans Paramètres > Applications > B1gBr0ther > Notifications.</string>
     <string name="open_settings">Ouvrir les paramètres</string>
     <string name="yes">Oui</string>
     <string name="no">Non</string>
@@ -55,7 +55,8 @@
     <string name="settings_reset_to_defaults">Paramètres réinitialisés aux valeurs par défaut</string>
     <string name="settings_saved_successfully">Paramètres sauvegardés avec succès</string>
     <string name="microphone_permission_required_for_voice">La permission microphone est requise pour les commandes vocales</string>
-    <string name="notifications_disabled_warning">Les notifications sont désactivées. Certaines fonctionnalités peuvent ne pas fonctionner correctement.</string>
+    <string name="notifications_disabled_warning">Les notifications sont désactivées. Vous ne recevrez pas de rappels de tâches.</string>
+    <string name="notifications_disabled">Notifications désactivées</string>
     <string name="task_saved_to_database">Tâche sauvegardée dans la base de données avec ID: %1$d</string>
     <string name="task_marked_completed">Tâche marquée comme terminée</string>
     <string name="task_deleted">Tâche supprimée</string>
@@ -307,5 +308,10 @@
     <string name="game_play_again">REJOUER</string>
     <string name="game_exit">SORTIR</string>
     <string name="game_pause">| |</string>
+    
+    <!-- Task input dialog strings -->
+    <string name="input_task_name_hint">Veuillez saisir le nom de la tâche</string>
+    <string name="hours_hint">Heures</string>
+    <string name="minutes_hint">Minutes</string>
 
 </resources> 

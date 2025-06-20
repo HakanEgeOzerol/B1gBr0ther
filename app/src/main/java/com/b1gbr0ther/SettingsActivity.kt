@@ -226,6 +226,10 @@ class SettingsActivity : AppCompatActivity() {
         notificationsSwitch.setOnCheckedChangeListener { _, isChecked ->
             if (isChecked) {
                 requestNotificationPermission()
+            } else {
+                // Save the disabled state immediately
+                saveNotificationSetting(false)
+                Toast.makeText(this, getString(R.string.notifications_disabled), Toast.LENGTH_SHORT).show()
             }
         }
         
