@@ -38,7 +38,6 @@ import com.b1gbr0ther.gestureRecognition.GestureType
 import com.b1gbr0ther.notifications.TaskNotificationManager
 import java.time.LocalDate
 import java.time.LocalTime
-import com.b1gbr0ther.TimingStatus
 import java.time.DayOfWeek
 import com.b1gbr0ther.easteregg.DoodleJumpActivity
 
@@ -76,7 +75,6 @@ class DashboardActivity : AppCompatActivity() {
     private var allTasks: List<Task> = emptyList()
     private var allTasksId: List<Int> = emptyList()
     private var activeTaskId: Int = -1
-//    private val mediaPlayer = MediaPlayer.create(applicationContext, R.raw.pipes)
 
     private var mockStartTime = 0L
 
@@ -201,25 +199,7 @@ class DashboardActivity : AppCompatActivity() {
 
         val chart = findViewById<WeekTimeGridView>(R.id.weekGrid)
 
-        //0f = 24:00, 11f = 11:00, 23 = 23:00
-        // Load work blocks for the current week from the database
         loadWeeklyWorkBlocks(chart)
-        /*
-        val myWorkData = listOf(
-            WorkBlock(0, 8f, 12f, false),
-            WorkBlock(0, 12f, 13.5f, true),
-            WorkBlock(0, 13.5f, 17.5f, false),
-            WorkBlock(1, 9f, 11f, false),
-            WorkBlock(3, 15f, 19f, false),
-            WorkBlock(4, 8f, 15f, false),
-            WorkBlock(5, 14f, 16.5f, false),
-            WorkBlock(6, 9f, 13.5f, false),
-            WorkBlock(6, 23f, 23.99f, false),
-        )
-        // Data now loaded dynamically from database
-
-        */
-        // chart.setWorkData(myWorkData) -- retained for reference
 
 
         timerText = findViewById(R.id.timer)
@@ -706,20 +686,25 @@ class DashboardActivity : AppCompatActivity() {
             if (DoodleJumpActivity.isGameRunning()) {
                 return
             }
-            
+
             if (acceleration > shakeThreshold && !isDialogShown && !isActiveTask()) {
+                analyzedGesture = gestureRecognizer.analyzeGesture()
                 updateAllTasks()
                 isDialogShown = true
-                analyzedGesture = gestureRecognizer.analyzeGesture()
                 Toast.makeText(applicationContext, analyzedGesture.name, Toast.LENGTH_SHORT).show()
-//                gestureAction(analyzedGesture, acceleration, isDialogShown, isActiveTask())
+                if (analyzedGesture == GestureType.DOWN){
+                    playPipeFallingEasterEgg()
+                }
                 createInputTaskDialog()
             }
             else if (acceleration > shakeThreshold && !isDialogShown && isActiveTask()){
                 updateAllTasks()
                 isDialogShown = true
-                createExistingTaskDialog()
                 analyzedGesture = gestureRecognizer.analyzeGesture()
+                if (analyzedGesture == GestureType.DOWN){
+                    playPipeFallingEasterEgg()
+                }
+                createExistingTaskDialog()
                 Toast.makeText(applicationContext, analyzedGesture.name, Toast.LENGTH_SHORT).show()
             }
         }
@@ -1168,42 +1153,8 @@ class DashboardActivity : AppCompatActivity() {
         applicationContext.startActivity(intent)
     }
 
-    private fun gestureAction(gesture: GestureType, acceleration: Float, isDialogShown: Boolean, isActiveTask: Boolean){
-        when (gesture){
-            GestureType.UP -> triggerEasterEgg()
-            GestureType.SHAKE -> showCorrectDialog(acceleration, isDialogShown, isActiveTask)
-            GestureType.DOWN -> playPipeFallingEasterEgg() //Pipe falling sound as an easter egg
-            GestureType.LEFT -> TODO() //Start audio rec
-            GestureType.RIGHT -> TODO() //Start audio rec
-            GestureType.CIRCLE -> return //Identification for squares and circles is not done. Possible extension in the future
-            GestureType.SQUARE -> return //Identification for squares and circles is not done. Possible extension in the future
-            else -> {
-                Toast.makeText(applicationContext, "Something went wrong, try again", Toast.LENGTH_SHORT).show()
-                return
-            }
-        }
-    }
-
-    private fun showCorrectDialog(acceleration: Float, isDialogShown: Boolean, isActiveTask: Boolean){
-        var analyzedGesture = GestureType.UNIDENTIFIED
-
-        if (acceleration > shakeThreshold && !isDialogShown && !isActiveTask()) {
-            updateAllTasks()
-            this.isDialogShown = true
-//            analyzedGesture = gestureRecognizer.analyzeGesture()
-//            Toast.makeText(applicationContext, analyzedGesture.name, Toast.LENGTH_SHORT).show()
-            createInputTaskDialog()
-        }
-        else if (acceleration > shakeThreshold && !isDialogShown && isActiveTask()){
-            updateAllTasks()
-            this.isDialogShown = true
-            createExistingTaskDialog()
-//            analyzedGesture = gestureRecognizer.analyzeGesture()
-//            Toast.makeText(applicationContext, analyzedGesture.name, Toast.LENGTH_SHORT).show()
-        }
-    }
-
     private fun playPipeFallingEasterEgg(){
-//        mediaPlayer.start()
+        val mediaPlayer = MediaPlayer.create(applicationContext, R.raw.pipes)
+        mediaPlayer.start()
     }
 }
