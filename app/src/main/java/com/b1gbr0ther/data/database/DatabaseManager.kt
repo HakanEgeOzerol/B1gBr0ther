@@ -8,6 +8,10 @@ import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.launch
 import kotlinx.coroutines.withContext
 import java.time.LocalDateTime
+import java.time.LocalDate
+import java.time.YearMonth
+import java.time.Duration
+import com.b1gbr0ther.WorkBlock
 
 /**
  * Database manager class that handles CRUD operations for Tasks in the B1gBr0ther app.
@@ -17,6 +21,160 @@ class DatabaseManager(context: Context) {
     private val database = AppDatabase.getDatabase(context)
     private val taskRepository = TaskRepository(database.taskDao())
     private val coroutineScope = CoroutineScope(Dispatchers.IO)
+
+    /**
+     * Retrieve all tasks for the specified week and convert them into a list of WorkBlock objects
+     * that the dashboard calendar can render.
+     *
+     * @param weekStart The Monday of the week to load (use LocalDate.now().with(DayOfWeek.MONDAY)).
+     * @param callback  Callback delivering the resulting list on the main thread.
+     */
+    fun getWorkBlocksForWeek(weekStart: LocalDate, callback: (List<WorkBlock>) -> Unit) {
+        val weekStartDateTime = weekStart.atStartOfDay()
+        val weekEndDateTime = weekStart.plusDays(7).atStartOfDay()
+        coroutineScope.launch {
+            val tasks = taskRepository.getTasksByTimeRange(weekStartDateTime, weekEndDateTime)
+            val blocks = tasks.map { task ->
+                val start = task.startTime
+                val end = task.endTime
+                val dayIndex = start.dayOfWeek.value - 1 // DayOfWeek.MONDAY = 1 -> 0
+
+                val startHour = start.hour + start.minute / 60f + start.second / 3600f
+                val endHour = end.hour + end.minute / 60f + end.second / 3600f
+
+                WorkBlock(dayIndex, startHour, endHour, task.isBreak)
+            }
+            withContext(Dispatchers.Main) {
+                callback(blocks)
+            }
+        }
+    }
+
+    /**
+     * Return all tasks whose startTime falls on the given calendar date.
+     */
+    fun getTasksForDate(date: LocalDate, callback: (List<Task>) -> Unit) {
+        val start = date.atStartOfDay()
+        val end = date.plusDays(1).atStartOfDay()
+        coroutineScope.launch {
+            val tasks = taskRepository.getTasksByTimeRange(start, end)
+            withContext(Dispatchers.Main) { callback(tasks) }
+        }
+    }
+
+    /**
+     * For a whole month, compute worked hours (excluding breaks) for every day.
+     * Returns map { LocalDate -> hoursWorkedFloat }
+     */
+    fun getDailyWorkHoursForMonth(yearMonth: YearMonth, callback: (Map<LocalDate, Float>) -> Unit) {
+        val monthStart = yearMonth.atDay(1).atStartOfDay()
+        val monthEnd = yearMonth.plusMonths(1).atDay(1).atStartOfDay()
+        coroutineScope.launch {
+            val tasks = taskRepository.getTasksByTimeRange(monthStart, monthEnd)
+            val dailyMap = mutableMapOf<LocalDate, Float>()
+            for (task in tasks) {
+                if (task.isBreak) continue // ignore breaks in hours summary
+                val date = task.startTime.toLocalDate()
+                val durationMin = Duration.between(task.startTime, task.endTime).toMinutes()
+                val hours = durationMin / 60f
+                dailyMap[date] = (dailyMap[date] ?: 0f) + hours
+            }
+            withContext(Dispatchers.Main) { callback(dailyMap) }
+        }
+    }
+    
+    // ============================== Statistics Methods ==============================
+    
+    /**
+     * Get count of all completed tasks.
+     * @param callback Callback with the count of completed tasks
+     */
+    fun getCompletedTasksCount(callback: (Int) -> Unit) {
+        coroutineScope.launch {
+            val count = taskRepository.getCompletedTasksCount()
+            withContext(Dispatchers.Main) {
+                callback(count)
+            }
+        }
+    }
+    
+    /**
+     * Get count of tasks completed late.
+     * @param callback Callback with the count of late completed tasks
+     */
+    fun getLateCompletedTasksCount(callback: (Int) -> Unit) {
+        coroutineScope.launch {
+            val count = taskRepository.getLateCompletedTasksCount()
+            withContext(Dispatchers.Main) {
+                callback(count)
+            }
+        }
+    }
+    
+    /**
+     * Get count of tasks completed on time.
+     * @param callback Callback with the count of on-time completed tasks
+     */
+    fun getOnTimeCompletedTasksCount(callback: (Int) -> Unit) {
+        coroutineScope.launch {
+            val count = taskRepository.getOnTimeCompletedTasksCount()
+            withContext(Dispatchers.Main) {
+                callback(count)
+            }
+        }
+    }
+    
+    /**
+     * Get count of tasks completed early.
+     * @param callback Callback with the count of early completed tasks
+     */
+    fun getEarlyCompletedTasksCount(callback: (Int) -> Unit) {
+        coroutineScope.launch {
+            val count = taskRepository.getEarlyCompletedTasksCount()
+            withContext(Dispatchers.Main) {
+                callback(count)
+            }
+        }
+    }
+    
+    /**
+     * Get count of uncompleted tasks.
+     * @param callback Callback with the count of uncompleted tasks
+     */
+    fun getUncompletedTasksCount(callback: (Int) -> Unit) {
+        coroutineScope.launch {
+            val count = taskRepository.getUncompletedTasksCount()
+            withContext(Dispatchers.Main) {
+                callback(count)
+            }
+        }
+    }
+    
+    /**
+     * Get count of tasks created via voice command.
+     * @param callback Callback with the count of voice-created tasks
+     */
+    fun getVoiceCreatedTasksCount(callback: (Int) -> Unit) {
+        coroutineScope.launch {
+            val count = taskRepository.getVoiceCreatedTasksCount()
+            withContext(Dispatchers.Main) {
+                callback(count)
+            }
+        }
+    }
+    
+    /**
+     * Get count of tasks created via gesture.
+     * @param callback Callback with the count of gesture-created tasks
+     */
+    fun getGestureCreatedTasksCount(callback: (Int) -> Unit) {
+        coroutineScope.launch {
+            val count = taskRepository.getGestureCreatedTasksCount()
+            withContext(Dispatchers.Main) {
+                callback(count)
+            }
+        }
+    }
     
     // ============================== Task CRUD Operations ==============================
     

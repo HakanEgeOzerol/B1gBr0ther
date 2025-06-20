@@ -13,6 +13,8 @@ class JSONTemplate : ExportTemplate {
                 "taskName": "${task.taskName.replace("\"", "\\\"")}",
                 "startTime": "${task.startTime}",
                 "endTime": "${task.endTime}",
+                "creationMethod": "${task.creationMethod}",
+                "timingStatus": "${task.timingStatus}",
                 "isPreplanned": ${task.isPreplanned},
                 "isCompleted": ${task.isCompleted},
                 "isBreak": ${task.isBreak}

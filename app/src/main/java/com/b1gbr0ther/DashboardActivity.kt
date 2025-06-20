@@ -9,6 +9,8 @@ import android.hardware.Sensor
 import android.hardware.SensorEvent
 import android.hardware.SensorEventListener
 import android.hardware.SensorManager
+import android.media.MediaPlayer
+import android.os.Build
 import android.os.Bundle
 import android.os.Handler
 import android.os.Looper
@@ -25,16 +27,23 @@ import androidx.appcompat.app.AppCompatActivity
 import androidx.core.content.ContextCompat
 import androidx.core.view.ViewCompat
 import androidx.core.view.WindowInsetsCompat
-import com.b1gbr0ther.data.database.DatabaseManager
+import com.b1gbr0ther.data.database.DatabaseManager // Added DatabaseManager import
+import com.b1gbr0ther.data.database.entities.Task // Added Task entity import
 import java.time.LocalDateTime
 import java.util.Objects
 import kotlin.math.floor
 import kotlin.math.sqrt
-import com.b1gbr0ther.data.database.entities.Task
+import com.b1gbr0ther.gestureRecognition.GestureRecognizer
+import com.b1gbr0ther.gestureRecognition.GestureType
+import com.b1gbr0ther.notifications.TaskNotificationManager
 import java.time.LocalDate
 import java.time.LocalTime
+import java.time.DayOfWeek
+import com.b1gbr0ther.easteregg.DoodleJumpActivity
 
 class DashboardActivity : AppCompatActivity() {
+    private lateinit var databaseManager: DatabaseManager
+    private var allTasksList: List<Task> = emptyList()
     private lateinit var timerText: TextView
     private val handler = Handler(Looper.getMainLooper())
     private lateinit var timerRunnable: Runnable
@@ -42,15 +51,23 @@ class DashboardActivity : AppCompatActivity() {
     private lateinit var timeTracker: TimeTrackerInterface
     private lateinit var statusTextView: TextView
     private lateinit var simulateWakeWordButton: Button
-    private lateinit var databaseManager: DatabaseManager
+    private lateinit var notificationManager: TaskNotificationManager
     private var currentTaskName: String? = null
     private var currentTaskId: Long = -1
     private var lastSneezeTime: Long = 0
+
+    private fun loadAllTasks() {
+        databaseManager.getAllTasks { tasks ->
+            this.allTasksList = tasks
+        }
+    }
 
     private lateinit var voiceRecognizerManager: VoiceRecognizerManager
     private lateinit var commandHandler: VoiceCommandHandler
 
     private var sensorManager: SensorManager? = null
+    private val gestureRecognizer = GestureRecognizer()
+    private val shakeThreshold = 15f
     private var isDialogShown = false
     private var acceleration = 0f
     private var currentAcceleration = 0f
@@ -64,9 +81,25 @@ class DashboardActivity : AppCompatActivity() {
     private val requestPermissionLauncher =
         registerForActivityResult(ActivityResultContracts.RequestPermission()) { granted ->
             if (granted) {
-                startVoiceRecognition()
+                val sharedPreferences = getSharedPreferences("B1gBr0therSettings", MODE_PRIVATE)
+                val currentMode = SettingsActivity.getAudioMode(sharedPreferences)
+                
+                if (currentMode == SettingsActivity.AUDIO_MODE_OFF) {
+                    sharedPreferences.edit().putInt("audio_mode", SettingsActivity.AUDIO_MODE_VOICE_COMMANDS).apply()
+                    Toast.makeText(this, "Voice Commands enabled by default", Toast.LENGTH_SHORT).show()
+                    updateVoiceRecognitionStatus()
+                } else {
+                    startVoiceRecognition()
+                }
             } else {
-                Toast.makeText(this, "Microphone permission is required for voice commands", Toast.LENGTH_SHORT).show()
+                Toast.makeText(this, getString(R.string.microphone_permission_required_for_voice), Toast.LENGTH_SHORT).show()
+            }
+        }
+
+    private val requestNotificationPermissionLauncher =
+        registerForActivityResult(ActivityResultContracts.RequestPermission()) { isGranted: Boolean ->
+            if (!isGranted) {
+                Toast.makeText(this, getString(R.string.notifications_disabled_warning), Toast.LENGTH_LONG).show()
             }
         }
 
@@ -81,33 +114,63 @@ class DashboardActivity : AppCompatActivity() {
         currentTaskText.text = name
     }
 
+    private fun loadWeeklyWorkBlocks(chart: WeekTimeGridView) {
+        val weekStart = LocalDate.now().with(DayOfWeek.MONDAY)
+        databaseManager.getWorkBlocksForWeek(weekStart) { workBlocks ->
+            chart.setWorkData(workBlocks, weekStart)
+        }
+    }
+
     private fun updateCurrentTaskDisplay() {
         if (timeTracker.isTracking()) {
             if (timeTracker.isOnBreak()) {
-                updateCurrentTask("On break")
-            } else if (currentTaskName != null) {
-                updateCurrentTask("Currently tracking: $currentTaskName")
-            } else if (currentTaskId != -1L) {
-                databaseManager.getTask(currentTaskId) { task ->
-                    if (task != null) {
-                        currentTaskName = task.taskName
-                        updateCurrentTask("Currently tracking: ${task.taskName}")
+                updateCurrentTask(getString(R.string.on_break))
+            } else {
+                val taskId = timeTracker.getCurrentTaskId()
+                val taskName = timeTracker.getCurrentTaskName()
+
+                if (taskName != null) {
+                    currentTaskName = taskName
+                    currentTaskId = taskId
+                    updateCurrentTask(getString(R.string.currently_tracking, taskName))
+                } else if (taskId != -1L) {
+                    databaseManager.getTask(taskId) { task ->
+                        if (task != null) {
+                            currentTaskName = task.taskName
+                            currentTaskId = taskId
+                            timeTracker.setCurrentTask(taskId, task.taskName)
+                            updateCurrentTask(getString(R.string.currently_tracking, task.taskName))
+                        }
                     }
                 }
             }
         } else {
             currentTaskName = null
             currentTaskId = -1L
-            updateCurrentTask("Not tracking any task")
+            updateCurrentTask(getString(R.string.not_tracking_any_task))
         }
+    }
+
+    override fun attachBaseContext(newBase: Context) {
+        super.attachBaseContext(LocaleHelper.onAttach(newBase))
     }
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
+        
+        ThemeManager.applyTheme(this)
+        appliedTheme = ThemeManager.getCurrentTheme(this)
+        appliedLanguage = LocaleHelper.getCurrentLanguage(this)
+        
         enableEdgeToEdge()
         setContentView(R.layout.activity_dashboard)
 
         databaseManager = DatabaseManager(applicationContext)
+        loadAllTasks()
+
+        val menu = findViewById<MenuBar>(R.id.menuBar)
+        menu.setActivePage(1) // 1 is for Dashboard
+        notificationManager = TaskNotificationManager(applicationContext)
         updateAllTasks()
         sensorManager = getSystemService(Context.SENSOR_SERVICE) as SensorManager
 
@@ -121,12 +184,12 @@ class DashboardActivity : AppCompatActivity() {
         mockStartTime = System.currentTimeMillis()
 
         currentTaskText = findViewById(R.id.currentTaskText)
+
         statusTextView = findViewById(R.id.statusTextView)
         simulateWakeWordButton = findViewById(R.id.simulateWakeWordButton)
 
         initializeVoiceRecognition()
 
-        val menu = findViewById<MenuBar>(R.id.menuBar)
         menu.setActivePage(1)
         ViewCompat.setOnApplyWindowInsetsListener(findViewById(R.id.main)) { v, insets ->
             val systemBars = insets.getInsets(WindowInsetsCompat.Type.systemBars())
@@ -136,21 +199,8 @@ class DashboardActivity : AppCompatActivity() {
 
         val chart = findViewById<WeekTimeGridView>(R.id.weekGrid)
 
-        //0f = 24:00, 11f = 11:00, 23 = 23:00
-        val myWorkData = listOf(
-            WorkBlock(0, 8f, 12f, false),
-            WorkBlock(0, 12f, 13.5f, true),
-            WorkBlock(0, 13.5f, 17.5f, false),
-            WorkBlock(1, 9f, 11f, false),
-            WorkBlock(3, 15f, 19f, false),
-            WorkBlock(4, 8f, 15f, false),
-            WorkBlock(5, 14f, 16.5f, false),
-            WorkBlock(6, 9f, 13.5f, false),
-            WorkBlock(6, 23f, 23.99f, false),
-        )
-        //^^this is dummy data, replace this with data gathered from the database once the connection is there
+        loadWeeklyWorkBlocks(chart)
 
-        chart.setWorkData(myWorkData)
 
         timerText = findViewById(R.id.timer)
 
@@ -171,18 +221,36 @@ class DashboardActivity : AppCompatActivity() {
 
         handler.post(timerRunnable)
 
-        findViewById<Button>(R.id.btnDatabaseTest).setOnClickListener {
-            val intent = Intent(this, DatabaseTestActivity::class.java)
+        findViewById<Button>(R.id.btnManualPage).setOnClickListener {
+            val intent = Intent(this, ManualPage::class.java)
             startActivity(intent)
         }
 
         findViewById<Button>(R.id.b1gBr0therButton).setOnClickListener {
-            //Used to be gesture activity. Change it to something else or nothing
+            val intent = Intent(this, SettingsActivity::class.java)
+            startActivity(intent)
         }
 
         simulateWakeWordButton.setOnClickListener {
-            checkPermissionAndStartRecognition()
+            val sharedPreferences = getSharedPreferences("B1gBr0therSettings", MODE_PRIVATE)
+            val audioMode = SettingsActivity.getAudioMode(sharedPreferences)
+            
+            val stopText = when (audioMode) {
+                SettingsActivity.AUDIO_MODE_VOICE_COMMANDS -> getString(R.string.stop_voice_commands)
+                SettingsActivity.AUDIO_MODE_SOUND_DETECTION -> getString(R.string.stop_sound_detection)
+                else -> getString(R.string.stop_audio)
+            }
+            
+            if (simulateWakeWordButton.text == stopText) {
+                voiceRecognizerManager.stopRecognition()
+            } else {
+                checkPermissionAndStartRecognition()
+            }
         }
+
+        startTaskChecker()
+
+        checkNotificationPermission()
     }
 
     private fun initializeVoiceRecognition() {
@@ -191,6 +259,34 @@ class DashboardActivity : AppCompatActivity() {
             onStatusUpdate = { status ->
                 runOnUiThread {
                     statusTextView.text = status
+                    // Update button text based on voice recognition status and mode
+                    val sharedPreferences = getSharedPreferences("B1gBr0therSettings", MODE_PRIVATE)
+                    val audioMode = SettingsActivity.getAudioMode(sharedPreferences)
+                    
+                    val startText = when (audioMode) {
+                        SettingsActivity.AUDIO_MODE_VOICE_COMMANDS -> getString(R.string.start_voice_commands)
+                        SettingsActivity.AUDIO_MODE_SOUND_DETECTION -> getString(R.string.start_sound_detection)
+                        else -> getString(R.string.start_audio)
+                    }
+                    val stopText = when (audioMode) {
+                        SettingsActivity.AUDIO_MODE_VOICE_COMMANDS -> getString(R.string.stop_voice_commands)
+                        SettingsActivity.AUDIO_MODE_SOUND_DETECTION -> getString(R.string.stop_sound_detection)
+                        else -> getString(R.string.stop_audio)
+                    }
+                    
+                    when {
+                        status.contains("Listening") || status.contains("Ready for speech") || status.contains("Processing") -> {
+                            simulateWakeWordButton.text = stopText
+                        }
+                        status.contains("disabled") || status.contains("permission") -> {
+                            simulateWakeWordButton.text = getString(R.string.start_audio)
+                            simulateWakeWordButton.isEnabled = false
+                        }
+                        else -> {
+                            simulateWakeWordButton.text = startText
+                            simulateWakeWordButton.isEnabled = true
+                        }
+                    }
                 }
             },
             onResult = { result ->
@@ -198,29 +294,113 @@ class DashboardActivity : AppCompatActivity() {
             },
             onError = { error ->
                 runOnUiThread {
-                    Toast.makeText(this, error, Toast.LENGTH_SHORT).show()
+                    val sharedPreferences = getSharedPreferences("B1gBr0therSettings", MODE_PRIVATE)
+                    val audioMode = SettingsActivity.getAudioMode(sharedPreferences)
+                    
+                    val startText = when (audioMode) {
+                        SettingsActivity.AUDIO_MODE_VOICE_COMMANDS -> getString(R.string.start_voice_commands)
+                        SettingsActivity.AUDIO_MODE_SOUND_DETECTION -> getString(R.string.start_sound_detection)
+                        else -> getString(R.string.start_audio)
+                    }
+                    
+                    if (error == "Voice recognition is disabled in settings") {
+                        // Only show disabled if audio mode is actually off
+                        if (audioMode == SettingsActivity.AUDIO_MODE_OFF) {
+                            statusTextView.text = getString(R.string.audio_features_disabled)
+                            simulateWakeWordButton.text = getString(R.string.start_audio)
+                            simulateWakeWordButton.isEnabled = false
+                        } else {
+                            // If a mode is enabled, show the appropriate start text
+                            statusTextView.text = when (audioMode) {
+                                SettingsActivity.AUDIO_MODE_VOICE_COMMANDS -> getString(R.string.press_button_start_voice_commands)
+                                SettingsActivity.AUDIO_MODE_SOUND_DETECTION -> getString(R.string.press_button_start_sound_detection)
+                                else -> getString(R.string.press_button_start_voice_commands)
+                            }
+                            simulateWakeWordButton.text = startText
+                            simulateWakeWordButton.isEnabled = true
+                        }
+                    } else {
+                        Toast.makeText(this, error, Toast.LENGTH_SHORT).show()
+                        simulateWakeWordButton.text = startText
+                        simulateWakeWordButton.isEnabled = true
+                    }
                 }
             }
         )
 
         voiceRecognizerManager.setOnBlowDetected {
             runOnUiThread {
+                // Skip blow detection if Doodle Jump game is running
+                if (DoodleJumpActivity.isGameRunning()) {
+                    return@runOnUiThread
+                }
+                
                 if (timeTracker.isTracking() && !timeTracker.isOnBreak()) {
                     voiceRecognizerManager.showSmokeBreakDialog(this) {
                         startBreak()
                     }
+                } else {
+                    // Show blow detection even when not tracking
+                    Toast.makeText(this, "Blow detected! 💨", Toast.LENGTH_SHORT).show()
                 }
             }
         }
 
         voiceRecognizerManager.setOnSneezeDetected {
             runOnUiThread {
+                // Skip sneeze detection if Doodle Jump game is running
+                if (DoodleJumpActivity.isGameRunning()) {
+                    return@runOnUiThread
+                }
                 handleSneeze()
             }
         }
 
         commandHandler = VoiceCommandHandler(this)
-        statusTextView.text = "Voice recognition ready"
+        updateVoiceRecognitionStatus()
+    }
+
+    private fun updateVoiceRecognitionStatus() {
+        val sharedPreferences = getSharedPreferences("B1gBr0therSettings", MODE_PRIVATE)
+        val audioMode = SettingsActivity.getAudioMode(sharedPreferences)
+        val hasPermission = ContextCompat.checkSelfPermission(
+            this,
+            Manifest.permission.RECORD_AUDIO
+        ) == PackageManager.PERMISSION_GRANTED
+
+        if (audioMode == SettingsActivity.AUDIO_MODE_OFF) {
+            statusTextView.text = getString(R.string.audio_features_disabled)
+            simulateWakeWordButton.text = getString(R.string.start_audio)
+            simulateWakeWordButton.isEnabled = false
+            voiceRecognizerManager.stopRecognition()
+        } else if (!hasPermission) {
+            val modeText = when (audioMode) {
+                SettingsActivity.AUDIO_MODE_VOICE_COMMANDS -> getString(R.string.voice_commands)
+                SettingsActivity.AUDIO_MODE_SOUND_DETECTION -> getString(R.string.sound_detection)
+                else -> getString(R.string.audio)
+            }
+            statusTextView.text = getString(R.string.permission_required, modeText)
+            simulateWakeWordButton.text = getString(R.string.start_audio)
+            simulateWakeWordButton.isEnabled = false
+            voiceRecognizerManager.stopRecognition()
+        } else {
+            when (audioMode) {
+                SettingsActivity.AUDIO_MODE_VOICE_COMMANDS -> {
+                    statusTextView.text = getString(R.string.press_button_start_voice_commands)
+                    simulateWakeWordButton.text = getString(R.string.start_voice_commands)
+                }
+                SettingsActivity.AUDIO_MODE_SOUND_DETECTION -> {
+                    statusTextView.text = getString(R.string.press_button_start_sound_detection)
+                    simulateWakeWordButton.text = getString(R.string.start_sound_detection)
+                }
+                else -> {
+                    statusTextView.text = getString(R.string.audio_mode_not_configured)
+                    simulateWakeWordButton.text = getString(R.string.start_audio)
+                }
+            }
+            simulateWakeWordButton.isEnabled = true
+            // Don't automatically start recognition
+        }
     }
 
     private fun checkPermissionAndStartRecognition() {
@@ -238,9 +418,14 @@ class DashboardActivity : AppCompatActivity() {
 
     private fun handleVoiceResult(result: String) {
         runOnUiThread {
+            // Skip voice command processing if Doodle Jump game is running
+            if (DoodleJumpActivity.isGameRunning()) {
+                return@runOnUiThread
+            }
+            
             val recognized = commandHandler.handleCommand(result)
             if (!recognized) {
-                Toast.makeText(this, "Command not recognized: $result", Toast.LENGTH_SHORT).show()
+                Toast.makeText(this, getString(R.string.command_not_recognized, result), Toast.LENGTH_SHORT).show()
             }
         }
     }
@@ -251,46 +436,79 @@ class DashboardActivity : AppCompatActivity() {
                 if (tasks.isNotEmpty()) {
                     val lastTask = tasks.last()
                     timeTracker.startTracking()
-                    Toast.makeText(this, "Tracking started for: ${lastTask.taskName}", Toast.LENGTH_SHORT).show()
-                    updateCurrentTask("Currently tracking: ${lastTask.taskName}")
+                    currentTaskName = lastTask.taskName
+                    currentTaskId = lastTask.id
+                    timeTracker.setCurrentTask(lastTask.id, lastTask.taskName)
+                    Toast.makeText(this, getString(R.string.tracking_started_for, lastTask.taskName), Toast.LENGTH_SHORT).show()
+                    updateCurrentTask(getString(R.string.currently_tracking, lastTask.taskName))
                 } else {
-                    Toast.makeText(this, "No tasks available to track", Toast.LENGTH_SHORT).show()
+                    Toast.makeText(this, getString(R.string.no_tasks_available_to_track), Toast.LENGTH_SHORT).show()
                 }
             }
         } else {
-            Toast.makeText(this, "Already tracking a task", Toast.LENGTH_SHORT).show()
+            Toast.makeText(this, getString(R.string.already_tracking_a_task), Toast.LENGTH_SHORT).show()
         }
     }
 
     fun startTrackingWithTask(taskName: String) {
         if (!timeTracker.isTracking()) {
             databaseManager.getAllTasks { tasks ->
-                val matchingTask = tasks.find { it.taskName.equals(taskName, ignoreCase = true) && !it.isCompleted }
-                if (matchingTask != null && !matchingTask.isCompleted) {
-                    matchingTask.startTime = LocalDateTime.now()
-                    
-                    databaseManager.updateTask(matchingTask) {
-                        timeTracker.startTracking()
-                        currentTaskName = matchingTask.taskName
-                        currentTaskId = matchingTask.id
-                        Toast.makeText(this, "Tracking started for: ${matchingTask.taskName}", Toast.LENGTH_SHORT).show()
-                        updateCurrentTask("Currently tracking: ${matchingTask.taskName}")
+                // Enhanced task matching: tries exact, partial, reverse partial, and word-by-word matching
+                android.util.Log.d("VoiceCommand", "Looking for task: '$taskName'")
+                android.util.Log.d("VoiceCommand", "Available tasks: ${tasks.map { "${it.taskName} (completed: ${it.isCompleted})" }}")
+
+                var anyMatchingTask = tasks.find { it.taskName.equals(taskName, ignoreCase = true) }
+
+                if (anyMatchingTask == null) {
+                    anyMatchingTask = tasks.find {
+                        it.taskName.contains(taskName, ignoreCase = true)
                     }
-                } else if (matchingTask != null && matchingTask.isCompleted) {
-                    Toast.makeText(this, "Task '${matchingTask.taskName}' is already completed", Toast.LENGTH_SHORT).show()
+                }
+
+                if (anyMatchingTask == null) {
+                    anyMatchingTask = tasks.find { task ->
+                        taskName.contains(task.taskName, ignoreCase = true)
+                    }
+                }
+
+                if (anyMatchingTask == null) {
+                    val spokenWords = taskName.split(" ").filter { it.length > 2 }
+                    anyMatchingTask = tasks.find { task ->
+                        spokenWords.any { word ->
+                            task.taskName.contains(word, ignoreCase = true)
+                        }
+                    }
+                }
+
+                if (anyMatchingTask != null) {
+                    if (anyMatchingTask.isCompleted) {
+                        Toast.makeText(this, getString(R.string.cannot_track_completed_task, anyMatchingTask.taskName), Toast.LENGTH_SHORT).show()
+                    } else {
+                        anyMatchingTask.startTime = LocalDateTime.now()
+
+                        databaseManager.updateTask(anyMatchingTask) {
+                            timeTracker.startTracking()
+                            currentTaskName = anyMatchingTask.taskName
+                            currentTaskId = anyMatchingTask.id
+                            timeTracker.setCurrentTask(anyMatchingTask.id, anyMatchingTask.taskName)
+                            Toast.makeText(this, getString(R.string.tracking_started_for, anyMatchingTask.taskName), Toast.LENGTH_SHORT).show()
+                            updateCurrentTask(getString(R.string.currently_tracking, anyMatchingTask.taskName))
+                        }
+                    }
                 } else {
-                    Toast.makeText(this, "Task '$taskName' not found", Toast.LENGTH_SHORT).show()
+                    val availableTasks = tasks.filter { !it.isCompleted }.map { it.taskName }.joinToString(", ")
+                    Toast.makeText(this, getString(R.string.task_not_found_available, taskName, availableTasks), Toast.LENGTH_LONG).show()
                 }
             }
         } else {
-            Toast.makeText(this, "Already tracking a task", Toast.LENGTH_SHORT).show()
+            Toast.makeText(this, getString(R.string.already_tracking_a_task), Toast.LENGTH_SHORT).show()
         }
     }
 
     fun stopTracking() {
         val summary = timeTracker.stopTracking()
         if (summary == null) {
-            Toast.makeText(this, "No active tracking session", Toast.LENGTH_SHORT).show()
+            Toast.makeText(this, getString(R.string.no_active_tracking_session), Toast.LENGTH_SHORT).show()
             return
         }
 
@@ -298,7 +516,7 @@ class DashboardActivity : AppCompatActivity() {
         val minutesElapsed = ((summary.effectiveTimeMillis / (1000.0 * 60)) % 60).toLong()
 
         if (currentTaskId == -1L) {
-            Toast.makeText(this, "No task was being tracked", Toast.LENGTH_SHORT).show()
+            Toast.makeText(this, getString(R.string.no_task_was_being_tracked), Toast.LENGTH_SHORT).show()
             return
         }
 
@@ -310,37 +528,40 @@ class DashboardActivity : AppCompatActivity() {
                 databaseManager.updateTask(task) {
                     Toast.makeText(
                         this,
-                        "Task '${task.taskName}' completed. Time tracked: ${hoursElapsed}h ${minutesElapsed}m",
+                        getString(R.string.task_completed_time_tracked, task.taskName, hoursElapsed, minutesElapsed),
                         Toast.LENGTH_SHORT
                     ).show()
+
+                    // Reset notification count when task is completed
+                    notificationManager.resetNotificationCount(task.id)
                 }
             } else {
-                Toast.makeText(this, "Could not find the task being tracked", Toast.LENGTH_SHORT).show()
+                Toast.makeText(this, getString(R.string.could_not_find_tracked_task), Toast.LENGTH_SHORT).show()
             }
         }
 
         currentTaskName = null
         currentTaskId = -1L
-        updateCurrentTask("Not tracking any task")
+        updateCurrentTask(getString(R.string.not_tracking_any_task))
     }
 
     fun startBreak() {
         if (!timeTracker.isTracking()) {
-            Toast.makeText(this, "Start tracking first", Toast.LENGTH_SHORT).show()
+            Toast.makeText(this, getString(R.string.start_tracking_first), Toast.LENGTH_SHORT).show()
             return
         }
 
         if (timeTracker.isOnBreak()) {
-            Toast.makeText(this, "Already on a break", Toast.LENGTH_SHORT).show()
+            Toast.makeText(this, getString(R.string.already_on_a_break), Toast.LENGTH_SHORT).show()
         } else if (timeTracker.startBreak()) {
             databaseManager.getAllTasks { tasks ->
                 if (tasks.isNotEmpty()) {
                     val currentTask = tasks.last()
                     currentTask.isBreak = true
-                    
+
                     databaseManager.updateTask(currentTask) {
-                        Toast.makeText(this, "Break started", Toast.LENGTH_SHORT).show()
-                        updateCurrentTask("On break")
+                        Toast.makeText(this, getString(R.string.break_started), Toast.LENGTH_SHORT).show()
+                        updateCurrentTask(getString(R.string.on_break))
                     }
                 }
             }
@@ -349,21 +570,21 @@ class DashboardActivity : AppCompatActivity() {
 
     fun endBreak() {
         if (!timeTracker.isTracking()) {
-            Toast.makeText(this, "Start tracking first", Toast.LENGTH_SHORT).show()
+            Toast.makeText(this, getString(R.string.start_tracking_first), Toast.LENGTH_SHORT).show()
             return
         }
 
         if (!timeTracker.isOnBreak()) {
-            Toast.makeText(this, "No active break", Toast.LENGTH_SHORT).show()
+            Toast.makeText(this, getString(R.string.no_active_break), Toast.LENGTH_SHORT).show()
         } else if (timeTracker.endBreak()) {
             databaseManager.getAllTasks { tasks ->
                 if (tasks.isNotEmpty()) {
                     val currentTask = tasks.last()
                     currentTask.isBreak = false
-                    
+
                     databaseManager.updateTask(currentTask) {
-                        Toast.makeText(this, "Break ended", Toast.LENGTH_SHORT).show()
-                        updateCurrentTask("Currently busy with a task")
+                        Toast.makeText(this, getString(R.string.break_ended), Toast.LENGTH_SHORT).show()
+                        updateCurrentTask(getString(R.string.currently_busy_with_task))
                     }
                 }
             }
@@ -380,12 +601,38 @@ class DashboardActivity : AppCompatActivity() {
         startActivity(intent)
     }
 
+    fun showStatisticsPage() {
+        val intent = Intent(this, StatisticsActivity::class.java)
+        startActivity(intent)
+    }
+
     fun getDatabaseManager(): DatabaseManager {
         return databaseManager
     }
 
+    private var appliedTheme: Int = -1
+    private var appliedLanguage: String = ""
+
     override fun onResume() {
         super.onResume()
+
+        // Check if theme has changed and recreate if needed
+        val currentTheme = ThemeManager.getCurrentTheme(this)
+        if (appliedTheme != -1 && appliedTheme != currentTheme) {
+            android.util.Log.d("DashboardActivity", "Theme changed from $appliedTheme to $currentTheme - recreating activity")
+            recreate()
+            return
+        }
+        appliedTheme = currentTheme
+
+        // Check if language has changed and recreate if needed
+        val currentLanguage = LocaleHelper.getCurrentLanguage(this)
+        if (appliedLanguage.isNotEmpty() && appliedLanguage != currentLanguage) {
+            android.util.Log.d("DashboardActivity", "Language changed from $appliedLanguage to $currentLanguage - recreating activity")
+            recreate()
+            return
+        }
+        appliedLanguage = currentLanguage
 
         updateAllTasks()
 
@@ -397,29 +644,31 @@ class DashboardActivity : AppCompatActivity() {
             mockStartTime = System.currentTimeMillis()
             updateCurrentTaskDisplay()
         }
-        
-        statusTextView.text = "Voice recognition ready"
+
+        // Stop any running recognition to ensure clean state when returning from settings
+        if (::voiceRecognizerManager.isInitialized) {
+            voiceRecognizerManager.stopRecognition()
+        }
+        updateVoiceRecognitionStatus()
     }
 
     override fun onPause() {
         super.onPause()
-        voiceRecognizerManager.destroyRecognizer()
-        statusTextView.text = "Voice recognition stopped"
+        voiceRecognizerManager.stopRecognition()
+        statusTextView.text = getString(R.string.voice_recognition_stopped)
     }
 
     override fun onDestroy() {
         super.onDestroy()
         handler.removeCallbacks(timerRunnable)
-        voiceRecognizerManager.destroyRecognizer()
+        voiceRecognizerManager.stopRecognition()
     }
 
     private val sensorListener: SensorEventListener = object : SensorEventListener {
         override fun onSensorChanged(event: SensorEvent) {
-
             // Fetching x,y,z values
-            val x = event.values[0]
-            val y = event.values[1]
-            val z = event.values[2]
+            val (x, y, z) = event.values
+
             lastAcceleration = currentAcceleration
 
             // Getting current accelerations
@@ -428,14 +677,35 @@ class DashboardActivity : AppCompatActivity() {
             val delta: Float = currentAcceleration - lastAcceleration
             acceleration = acceleration * 0.9f + delta
 
+            val timeStamp = System.currentTimeMillis()
+            gestureRecognizer.addSensorData(x, y, z, timeStamp)
 
-            if (acceleration > 17 && !isDialogShown && !isActiveTask()) {
+            var analyzedGesture = GestureType.UNIDENTIFIED
+
+            // Skip gesture detection if Doodle Jump game is running
+            if (DoodleJumpActivity.isGameRunning()) {
+                return
+            }
+
+            if (acceleration > shakeThreshold && !isDialogShown && !isActiveTask()) {
+                analyzedGesture = gestureRecognizer.analyzeGesture()
+                updateAllTasks()
                 isDialogShown = true
+                Toast.makeText(applicationContext, analyzedGesture.name, Toast.LENGTH_SHORT).show()
+                if (analyzedGesture == GestureType.DOWN){
+                    playPipeFallingEasterEgg()
+                }
                 createInputTaskDialog()
             }
-            else if (acceleration>17 &&!isDialogShown && isActiveTask()){
+            else if (acceleration > shakeThreshold && !isDialogShown && isActiveTask()){
+                updateAllTasks()
                 isDialogShown = true
+                analyzedGesture = gestureRecognizer.analyzeGesture()
+                if (analyzedGesture == GestureType.DOWN){
+                    playPipeFallingEasterEgg()
+                }
                 createExistingTaskDialog()
+                Toast.makeText(applicationContext, analyzedGesture.name, Toast.LENGTH_SHORT).show()
             }
         }
         override fun onAccuracyChanged(sensor: Sensor, accuracy: Int) {}
@@ -443,9 +713,9 @@ class DashboardActivity : AppCompatActivity() {
 
     private fun isActiveTask(): Boolean{
         try {
-             if(getActiveTask(this.allTasks) != null){
-                 return true
-             }
+            if(getActiveTask(this.allTasks) != null){
+                return true
+            }
         }
         catch (e: Exception){
             e.printStackTrace()
@@ -513,7 +783,22 @@ class DashboardActivity : AppCompatActivity() {
 
         // Mark task as completed
         completeButton?.setOnClickListener {
-            markTaskAsCompleted(currentTaskId)
+            val activeId = getIdOfActiveTask()
+            //This dbmanager activity completes the task
+            databaseManager.getTask(activeId.toLong()) { task ->
+                if (task != null && !task.isCompleted) {
+                    task.isCompleted = true
+                    task.endTime = LocalDateTime.now()
+
+                    databaseManager.updateTask(task) {
+                        // Reset notification count when task is completed
+                        notificationManager.resetNotificationCount(task.id)
+                    }
+                } else {
+                    Toast.makeText(this, "Could not find the task", Toast.LENGTH_SHORT).show()
+                }
+            }
+
             isDialogShown = false
             dialog.dismiss()
             updateAllTasks()
@@ -521,9 +806,15 @@ class DashboardActivity : AppCompatActivity() {
 
         // Delete the task
         deleteButton?.setOnClickListener {
-            deleteTask(currentTaskId)
+            val activeID = getIdOfActiveTask()
+            deleteTask(activeID.toLong())
             isDialogShown = false
             dialog.dismiss()
+            updateAllTasks()
+        }
+
+        dialog.setOnCancelListener {
+            isDialogShown = false
             updateAllTasks()
         }
 
@@ -565,6 +856,11 @@ class DashboardActivity : AppCompatActivity() {
             updateAllTasks()
         }
 
+        dialog.setOnCancelListener {
+            isDialogShown = false
+            updateAllTasks()
+        }
+
         dialog.show()
     }
 
@@ -578,7 +874,7 @@ class DashboardActivity : AppCompatActivity() {
         val cancelButton = dialog.findViewById<Button>(R.id.Cancel)
 
         continueButton.setOnClickListener{
-            val taskDate = LocalDate.of(datePicker.year, datePicker.month, datePicker.dayOfMonth)
+            var taskDate = LocalDate.of(datePicker.year, datePicker.month + 1, datePicker.dayOfMonth)
 
             dialog.dismiss()
             setStartTimeDialog(name, taskDate)
@@ -587,6 +883,11 @@ class DashboardActivity : AppCompatActivity() {
         cancelButton.setOnClickListener{
             isDialogShown = false
             dialog.dismiss()
+            updateAllTasks()
+        }
+
+        dialog.setOnCancelListener {
+            isDialogShown = false
             updateAllTasks()
         }
 
@@ -609,7 +910,7 @@ class DashboardActivity : AppCompatActivity() {
 
             isDialogShown = false
             dialog.dismiss()
-            setEndTimeDialog(name, dateTime)
+            setEndTimeDialog(name, dateTime, true)
             updateAllTasks()
         }
 
@@ -619,10 +920,15 @@ class DashboardActivity : AppCompatActivity() {
             updateAllTasks()
         }
 
+        dialog.setOnCancelListener {
+            isDialogShown = false
+            updateAllTasks()
+        }
+
         dialog.show()
     }
 
-    private fun setEndTimeDialog(name: String, dateTime: LocalDateTime){//Last dialog in chain
+    private fun setEndTimeDialog(name: String, dateTime: LocalDateTime, isPreplanned: Boolean = false){//Last dialog in chain
         val dialog = Dialog(this)
         dialog.setContentView(R.layout.gesture_dialog_new_task_step_4)
         dialog.setCancelable(true)
@@ -634,10 +940,19 @@ class DashboardActivity : AppCompatActivity() {
         val minutes = dialog.findViewById<EditText>(R.id.MinutesInput)
 
         submitTask.setOnClickListener{
-            val hoursSubmitted = (hours.text.toString()).toLong()
-            val minutesSubmitted = (minutes.text.toString()).toLong()
+            var hoursSubmitted: Long = 3 //Possibly expand it in the settings
+            var minutesSubmitted: Long = 0
+
+            if (hours.text.isNotEmpty()){
+                hoursSubmitted = (hours.text.toString()).toLong()
+            }
+
+            if (minutes.text.isNotEmpty()){
+                minutesSubmitted = (minutes.text.toString()).toLong()
+            }
+
             var estimatedCompletion = dateTime
-            val startTime = dateTime
+            var startTime = dateTime
 
             if (hoursSubmitted >= 0){
                 estimatedCompletion = estimatedCompletion.plusHours(hoursSubmitted)
@@ -649,17 +964,23 @@ class DashboardActivity : AppCompatActivity() {
                 estimatedCompletion = estimatedCompletion.plusHours(3)
             }
 
-            val newTask = Task(name, startTime, estimatedCompletion)
+            // Determine task timing status
+            val timingStatus = when {
+                LocalDateTime.now().isBefore(estimatedCompletion) -> TimingStatus.EARLY
+                LocalDateTime.now().isAfter(estimatedCompletion) -> TimingStatus.LATE
+                else -> TimingStatus.ON_TIME
+            }
+
+            val newTask = Task(
+                name,
+                startTime,
+                estimatedCompletion,
+                CreationMethod.Gesture,
+                timingStatus, isPreplanned)
 
             databaseManager.createAppTask(newTask) { taskId ->
-                Toast.makeText(this, "Task saved to database with ID: $taskId", Toast.LENGTH_SHORT).show()
-                
-                if (startTime == LocalDateTime.now()) {
-                    currentTaskName = name
-                    currentTaskId = taskId
-                    timeTracker.startTracking()
-                    updateCurrentTaskDisplay()
-                }
+                Toast.makeText(this, "Task '$name' created.", Toast.LENGTH_SHORT).show()
+                updateCurrentTaskDisplay()
             }
 
             isDialogShown = false
@@ -670,6 +991,11 @@ class DashboardActivity : AppCompatActivity() {
         cancelButton.setOnClickListener{
             isDialogShown = false
             dialog.dismiss()
+            updateAllTasks()
+        }
+
+        dialog.setOnCancelListener {
+            isDialogShown = false
             updateAllTasks()
         }
         dialog.show()
@@ -703,36 +1029,138 @@ class DashboardActivity : AppCompatActivity() {
         return listOf(convertedDays, convertedHours, convertedMinutes, convertedSeconds)
     }
 
-    /**
-     * Mark a task as completed in the database
-     */
-    private fun markTaskAsCompleted(taskId: Long) {
-        databaseManager.getTask(taskId) { task ->
-            if (task != null) {
-                // Update the task
-                task.isCompleted = true
-
-                // Save the updated task
-                databaseManager.updateTask(task) {
-                    Toast.makeText(this, "Task marked as completed", Toast.LENGTH_SHORT).show()
-                }
-            }
-        }
-    }
-
-    /**
-     * Delete a task from the database
-     */
     private fun deleteTask(taskId: Long) {
         databaseManager.deleteTask(taskId) {
             Toast.makeText(this, "Task deleted", Toast.LENGTH_SHORT).show()
         }
     }
-        
+
     private fun handleSneeze() {
         //Implement sneeze logic here
         lastSneezeTime = System.currentTimeMillis()
 
         voiceRecognizerManager.sayBlessYou(this)
+    }
+
+    private fun startTaskChecker() {
+        val handler = Handler(Looper.getMainLooper())
+        val checkInterval = 900000L // Check every 15 minutes (15 * 60 * 1000)
+
+        val taskChecker = object : Runnable {
+            override fun run() {
+                checkTasks()
+                handler.postDelayed(this, checkInterval)
+            }
+        }
+
+        handler.post(taskChecker)
+    }
+
+    private fun checkTasks() {
+        databaseManager.getAllTasks { tasks ->
+            tasks.forEach { task ->
+                notificationManager.checkAndNotify(task)
+            }
+        }
+    }
+
+    private fun checkNotificationPermission() {
+        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.TIRAMISU) {
+            if (ContextCompat.checkSelfPermission(
+                    this,
+                    Manifest.permission.POST_NOTIFICATIONS
+                ) != PackageManager.PERMISSION_GRANTED
+            ) {
+                requestNotificationPermissionLauncher.launch(Manifest.permission.POST_NOTIFICATIONS)
+            }
+        }
+    }
+
+    fun showTimesheetPage() {
+        val intent = Intent(this, TimesheetActivity::class.java)
+        startActivity(intent)
+    }
+
+    fun exportCSV() {
+        android.util.Log.d("DashboardActivity", "exportCSV() called - setting format to 'csv'")
+        val intent = Intent(this, ExportPage::class.java)
+        intent.putExtra("export_format", "csv")
+        startActivity(intent)
+    }
+    
+    fun exportJSON() {
+        android.util.Log.d("DashboardActivity", "exportJSON() called - setting format to 'json'")
+        val intent = Intent(this, ExportPage::class.java)
+        intent.putExtra("export_format", "json")
+        startActivity(intent)
+    }
+    
+    fun exportHTML() {
+        android.util.Log.d("DashboardActivity", "exportHTML() called - setting format to 'html'")
+        val intent = Intent(this, ExportPage::class.java)
+        intent.putExtra("export_format", "html")
+        startActivity(intent)
+    }
+    
+    fun exportMarkdown() {
+        android.util.Log.d("DashboardActivity", "exportMarkdown() called - setting format to 'markdown'")
+        val intent = Intent(this, ExportPage::class.java)
+        intent.putExtra("export_format", "markdown")
+        startActivity(intent)
+    }
+    
+    fun exportXML() {
+        android.util.Log.d("DashboardActivity", "exportXML() called - setting format to 'xml'")
+        val intent = Intent(this, ExportPage::class.java)
+        intent.putExtra("export_format", "xml")
+        startActivity(intent)
+    }
+    
+    fun exportText() {
+        android.util.Log.d("DashboardActivity", "exportText() called - setting format to 'text'")
+        val intent = Intent(this, ExportPage::class.java)
+        intent.putExtra("export_format", "text")
+        startActivity(intent)
+    }
+
+    fun deleteTaskByName(taskName: String) {
+        databaseManager.getAllTasks { tasks ->
+            // Enhanced task matching: tries exact, partial, reverse partial, and word-by-word matching
+            var task = tasks.find { it.taskName.equals(taskName, ignoreCase = true) }
+            
+            if (task == null) {
+                task = tasks.find { it.taskName.contains(taskName, ignoreCase = true) }
+            }
+            
+            if (task == null) {
+                task = tasks.find { taskName.contains(it.taskName, ignoreCase = true) }
+            }
+            
+            if (task == null) {
+                val spokenWords = taskName.split(" ").filter { it.length > 2 }
+                task = tasks.find { t ->
+                    spokenWords.any { word -> t.taskName.contains(word, ignoreCase = true) }
+                }
+            }
+            
+            if (task != null) {
+                databaseManager.deleteTask(task) {
+                    Toast.makeText(this, "Task '${task.taskName}' deleted", Toast.LENGTH_SHORT).show()
+                }
+            } else {
+                Toast.makeText(this, "Could not find task with name '$taskName'. Available tasks: ${tasks.map { it.taskName }.joinToString(", ")}", Toast.LENGTH_LONG).show()
+            }
+        }
+    }
+
+    private fun triggerEasterEgg() {
+        // Launch the Doodle Jump game
+        val intent = Intent(applicationContext, DoodleJumpActivity::class.java)
+        applicationContext.startActivity(intent)
+    }
+
+    private fun playPipeFallingEasterEgg(){
+        val mediaPlayer = MediaPlayer.create(applicationContext, R.raw.pipes)
+        mediaPlayer.start()
     }
 }

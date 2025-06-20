@@ -1,0 +1,454 @@
+<resources>
+    <string name="app_name">B1gBr0ther</string>
+    
+    <!-- Status strings -->
+    <string name="status_working">En cours de travail</string>
+    <string name="status_on_break">En pause</string>
+    <string name="status_not_tracking">Pas occupé avec une tâche</string>
+    <string name="tracking_started">Suivi démarré</string>
+    <string name="tracking_stopped">Suivi arrêté</string>
+    
+    <!-- Settings Activity -->
+    <string name="settings_title">Paramètres</string>
+    <string name="appearance_language">Apparence &amp; Langue</string>
+    <string name="theme_light_mode">Thème: Mode clair (Violet)</string>
+    <string name="theme_dark_mode">Thème: Mode sombre (Gris)</string>
+    <string name="language_label">Langue: %1$s</string>
+    <string name="language_english">Anglais</string>
+    <string name="language_dutch">Néerlandais</string>
+    <string name="choose_language">Choisir la langue</string>
+    <string name="voice_recognition">Reconnaissance vocale</string>
+    <string name="audio_off">Désactivé</string>
+    <string name="enable_voice_commands">Activer les commandes vocales</string>
+    <string name="notifications">Notifications</string>
+    <string name="enable_task_notifications">Activer les notifications de tâches</string>
+    <string name="motion_gesture_detection">Détection de mouvement &amp; geste</string>
+    <string name="enable_accelerometer_detection">Activer la détection accéléromètre</string>
+    <string name="enable_blow_detection">Activer la détection de souffle</string>
+    <string name="enable_sneeze_detection">Activer la détection d\'éternuement</string>
+    <string name="audio_settings">Paramètres audio</string>
+    <string name="microphone_volume">Volume du microphone</string>
+    <string name="detection_sensitivity">Sensibilité de détection</string>
+    <string name="back">Retour</string>
+    <string name="reset">Réinitialiser</string>
+    <string name="save">Sauvegarder</string>
+    
+    <!-- Permission dialogs -->
+    <string name="microphone_permission_message">La reconnaissance vocale nécessite l\'accès au microphone pour fonctionner. Souhaitez-vous accorder cette permission?</string>
+    <string name="microphone_permission_denied_message">La reconnaissance vocale ne peut pas fonctionner sans accès au microphone. Souhaitez-vous ouvrir les paramètres pour accorder la permission?</string>
+    <string name="notification_permission_required">Permission de notification requise</string>
+    <string name="notification_permission_message">Cette application a besoin de la permission de notification pour envoyer des rappels et alertes de tâches.</string>
+    <string name="notification_permission_denied_message">La permission de notification a été refusée. Vous pouvez l\'activer manuellement dans Paramètres > Applications > B1gBr0ther > Notifications.</string>
+    <string name="open_settings">Ouvrir les paramètres</string>
+    <string name="yes">Oui</string>
+    <string name="no">Non</string>
+    <string name="cancel">Annuler</string>
+    <string name="ok">OK</string>
+    <string name="continue_text">Continuer</string>
+    <string name="start">Démarrer</string>
+    
+    <!-- Toast messages -->
+    <string name="voice_recognition_enabled">Reconnaissance vocale activée</string>
+    <string name="voice_recognition_disabled_permission_denied">Reconnaissance vocale désactivée: Permission refusée</string>
+    <string name="push_notifications_enabled">Notifications push activées</string>
+    <string name="push_notifications_disabled_permission">Notifications push désactivées: Permission refusée</string>
+    <string name="settings_reset_to_defaults">Paramètres réinitialisés aux valeurs par défaut</string>
+    <string name="settings_saved_successfully">Paramètres sauvegardés avec succès</string>
+    <string name="microphone_permission_required_for_voice">La permission microphone est requise pour les commandes vocales</string>
+    <string name="notifications_disabled_warning">Les notifications sont désactivées. Vous ne recevrez pas de rappels de tâches.</string>
+    <string name="notifications_disabled">Notifications désactivées</string>
+    <string name="task_saved_to_database">Tâche sauvegardée dans la base de données avec ID: %1$d</string>
+    <string name="task_marked_completed">Tâche marquée comme terminée</string>
+    <string name="task_deleted">Tâche supprimée</string>
+    <string name="task_name_deleted">Tâche \'%1$s\' supprimée</string>
+    <string name="could_not_find_task_with_name">Impossible de trouver la tâche avec le nom \'%1$s\'. Tâches disponibles: %2$s</string>
+    
+    <!-- Voice recognition messages -->
+    <string name="enjoy_smoke_break">Profitez de votre pause cigarette!</string>
+    <string name="bless_you">À vos souhaits!</string>
+    <string name="urination_detected">Miction détectée!</string>
+    
+    <!-- Export messages -->
+    <string name="please_select_tasks_to_export">Veuillez sélectionner les tâches à exporter</string>
+    <string name="exported_tasks">%1$d tâches exportées en %2$s</string>
+    <string name="export_failed">L\'export a échoué: %1$s</string>
+    <string name="creating_sample_tasks">Création d\'exemples de tâches pour les tests...</string>
+    <string name="created_sample_tasks">%1$d exemples de tâches créées</string>
+    <string name="error_saving_export">Erreur lors de la sauvegarde de l\'export: %1$s</string>
+    <string name="file_saved_to">Fichier sauvegardé vers: %1$s</string>
+    <string name="choose_export_format">Choisir le format d\'export</string>
+    <string name="select_all">Tout sélectionner</string>
+    <string name="deselect_all">Tout désélectionner</string>
+    <string name="no_tasks_to_export">Aucune tâche disponible à exporter</string>
+    <string name="export_format_not_supported">Format d\'export \'%1$s\' non supporté</string>
+    
+    <!-- Dashboard -->
+    <string name="dashboard">Tableau de bord</string>
+    <string name="test_db">Manuel</string>
+    <string name="go_to_gestures">Aller aux gestes</string>
+    <string name="test_database">Test Base de données</string>
+    
+    <!-- Days of week -->
+    <string name="monday_short">Lun</string>
+    <string name="tuesday_short">Mar</string>
+    <string name="wednesday_short">Mer</string>
+    <string name="thursday_short">Jeu</string>
+    <string name="friday_short">Ven</string>
+    <string name="saturday_short">Sam</string>
+    <string name="sunday_short">Dim</string>
+    
+    <!-- Timesheet -->
+    <string name="select_year">Sélectionner une année</string>
+    <string name="pick_month">Choisir un mois</string>
+    <string name="you_picked_year">Vous avez choisi %1$s</string>
+    <string name="you_picked_month">Vous avez choisi %1$s</string>
+    <string name="tasks_on_date">Tâches du %1$s</string>
+    
+    <!-- Manual -->
+    <string name="manual_how_to">Manuel / Comment faire</string>
+    <string name="manual_content">📱 B1gBr0ther - Manuel Utilisateur Complet\n\n
+🎯 APERÇU\n
+B1gBr0ther est une application complète de suivi du temps et de gestion des tâches qui utilise des commandes vocales, la reconnaissance de gestes et la détection audio intelligente pour vous aider à suivre votre travail efficacement.\n\n
+
+⏰ SUIVI DU TEMPS\n
+• Créer et gérer des tâches avec heures de début/fin\n
+• Suivre le temps passé sur différentes activités\n
+• Prendre des pauses et surveiller le temps de pause\n
+• Voir votre progression avec des minuteurs visuels\n
+• Tâches sauvegardées automatiquement en base de données\n\n
+
+🗣️ COMMANDES VOCALES\n
+Activer dans Paramètres → Paramètres Audio → Commandes Vocales\n\n
+Contrôle des tâches:\n
+• \"Commencer suivi [nom tâche]\" - Commencer le chronométrage d\'une tâche\n
+• \"Arrêter suivi\" / \"J\'ai terminé\" - Terminer la tâche actuelle\n
+• \"Prendre une pause\" / \"Commencer pause\" - Débuter temps de pause\n
+• \"Arrêter pause\" / \"Retour au travail\" - Terminer la pause\n
+• \"Supprimer tâche [nom]\" - Supprimer une tâche\n\n
+Navigation:\n
+• \"Afficher export\" / \"Exporter données\" - Ouvrir page d\'export\n
+• \"Afficher manuel\" / \"Afficher aide\" - Ouvrir ce manuel\n
+• \"Afficher feuille temps\" / \"Voir mes heures\" - Voir calendrier\n
+• \"Afficher statistiques\" / \"Afficher stats\" - Voir analyses\n\n
+Commandes d\'export:\n
+• \"Exporter CSV\" / \"Exporter JSON\" / \"Exporter HTML\"\n
+• \"Exporter Markdown\" / \"Exporter XML\" / \"Exporter texte\"\n\n
+
+🎵 DÉTECTION AUDIO INTELLIGENTE\n
+Activer dans Paramètres → Paramètres Audio → Détection Sonore\n\n
+• Détection de souffle: Détecte quand vous soufflez (propose pause cigarette)\n
+• Détection d\'éternuement: Dit \"À vos souhaits!\" quand vous éternuez\n
+• Détection pause toilette: Reconnaît les sons d\'urination\n
+• Paramètres de sensibilité ajustables\n\n
+
+👋 RECONNAISSANCE DE GESTES\n
+Activer dans Paramètres → Détection Mouvement &amp; Gestes\n\n
+• Détection de secousse: Secouer l\'appareil pour déclencher actions\n
+• Gestes directionnels: Mouvements gauche, droite, haut, bas\n
+• Basé sur accéléromètre: Utilise capteurs de mouvement de l\'appareil\n
+• Créer tâches via dialogues de gestes\n\n
+
+📊 TABLEAU DE BORD\n
+Votre centre de contrôle principal:\n
+• Affichage minuteur en temps réel\n
+• Statut de la tâche actuelle\n
+• Grille de visualisation temps hebdomadaire\n
+• Accès rapide à toutes les fonctionnalités\n
+• Indicateur statut reconnaissance vocale\n\n
+
+📅 FEUILLE DE TEMPS\n
+Vue calendrier mensuel:\n
+• Carte thermique montre intensité travail par jour\n
+• Cliquer sur un jour pour voir détail des tâches\n
+• Naviguer entre mois et années\n
+• Codé couleur basé sur heures travaillées\n\n
+
+📈 STATISTIQUES\n
+Analyses complètes:\n
+• Graphiques circulaires achèvement tâches\n
+• Analyse timing (en avance/à l\'heure/en retard)\n
+• Répartition méthode création (voix vs geste)\n
+• Stats rapides: total tâches, taux d\'achèvement\n\n
+
+📤 FONCTIONNALITÉS D\'EXPORT\n
+Exportez vos données en plusieurs formats:\n
+• CSV - Compatible tableur\n
+• JSON - Convivial développeur\n
+• HTML - Visualisable web\n
+• Markdown - Format documentation\n
+• XML - Données structurées\n
+• Texte Brut - Format simple\n\n
+Options de filtrage:\n
+• Sélection plage de dates\n
+• Filtrer par statut d\'achèvement\n
+• Inclure/exclure pauses\n
+• Filtre tâches pré-planifiées\n\n
+
+⚙️ PARAMÈTRES\n
+Personnalisez votre expérience:\n\n
+Thèmes:\n
+• Mode Clair (Thème violet)\n
+• Mode Sombre (Thème gris)\n\n
+Langues:\n
+• Anglais, Néerlandais, Français supportés\n
+• Traduction UI automatique\n\n
+Paramètres Audio:\n
+• Désactivé - Aucune fonctionnalité audio\n
+• Commandes Vocales - Reconnaissance vocale\n
+• Détection Sonore - Reconnaissance motifs audio\n
+• Permission microphone requise\n\n
+Notifications:\n
+• Rappels et alertes de tâche\n
+• Notifications d\'achèvement\n
+• Paramètres basés permissions\n\n
+
+🎮 EASTER EGG\n
+Jeu Doodle Jump caché:\n
+• Incliner appareil pour contrôler personnage\n
+• Sauter sur plateformes pour marquer points\n
+• Suivi meilleurs scores\n
+• Fonctionnalité pause et reprise\n
+• Accès via combinaison gestes secrète\n\n
+
+🔧 FONCTIONNALITÉS BASE DE DONNÉES\n
+• Stockage base données Room locale\n
+• Préservation historique tâches\n
+• Capacités sauvegarde et restauration\n
+• Requêtes optimisées performance\n\n
+
+📱 NAVIGATION\n
+Barre menu inférieure offre accès rapide:\n
+• Export (index 0)\n
+• Manuel (index 1)\n
+• Tableau de bord (index 2)\n
+• Feuille temps (index 3)\n
+• Statistiques (index 4)\n\n
+
+💡 CONSEILS\n
+• Parlez naturellement - l\'app comprend les variations\n
+• Utilisez gestes quand voix pas pratique\n
+• Activez notifications pour meilleur suivi tâches\n
+• Exportez données régulièrement pour sauvegarde\n
+• Vérifiez statistiques pour améliorer productivité\n
+• Ajustez sensibilité audio dans environnements bruyants\n\n
+
+🔒 PERMISSIONS\n
+Permissions requises:\n
+• Microphone - Commandes vocales et détection sonore\n
+• Notifications - Alertes et rappels de tâche\n
+• Stockage - Sauvegarde fichiers d\'export\n\n
+
+❓ DÉPANNAGE\n
+• Voix ne fonctionne pas? Vérifiez permission microphone\n
+• Gestes non détectés? Activez accéléromètre\n
+• Export échoue? Vérifiez permission stockage\n
+• App plante? Essayez réinitialiser paramètres par défaut\n\n
+Pour meilleure expérience, activez toutes fonctionnalités et accordez permissions requises!</string>
+    
+    <!-- Export Page -->
+    <string name="start_date">Date de début</string>
+    <string name="end_date">Date de fin</string>
+    <string name="completed">Terminé</string>
+    <string name="breaks">Pauses</string>
+    <string name="preplanned">Préplanifié</string>
+    <string name="export_selected_recordings">Exporter les enregistrements sélectionnés</string>
+    <string name="task_name">Nom de la tâche</string>
+    <string name="time_range">Plage horaire</string>
+    <string name="status">Statut</string>
+    
+    <!-- Database Test -->
+    <string name="database_test">Test Base de données</string>
+    <string name="insert_task">Insérer une tâche</string>
+    <string name="update_task">Mettre à jour la tâche</string>
+    <string name="delete_task">Supprimer la tâche</string>
+    <string name="get_all_tasks">Obtenir toutes les tâches</string>
+    <string name="error_initializing">Erreur d\'initialisation: %1$s</string>
+    
+    <!-- Gesture Dialogs -->
+    <string name="input_time_required">Veuillez saisir le temps requis pour la tâche</string>
+    <string name="input_start_time">Veuillez saisir l\'heure de début</string>
+    <string name="input_start_date">Veuillez saisir la date de début</string>
+    <string name="planning_ahead">Planifiez-vous à l\'avance?</string>
+    <string name="task_in_progress">Une tâche est en cours</string>
+    <string name="time_left_completion">Temps restant jusqu\'à l\'achèvement</string>
+    <string name="placeholder">Espace réservé</string>
+    <string name="complete">Terminer</string>
+    <string name="delete">Supprimer</string>
+    
+    <!-- Bathroom Break Dialog -->
+    <string name="bathroom_break_detected">Pause toilette détectée</string>
+    <string name="start_bathroom_break_question">Souhaitez-vous commencer une pause toilette?</string>
+    <string name="start_break">Commencer la pause</string>
+    
+    <!-- Month names -->
+    <string name="january">Janvier</string>
+    <string name="february">Février</string>
+    <string name="march">Mars</string>
+    <string name="april">Avril</string>
+    <string name="may">Mai</string>
+    <string name="june">Juin</string>
+    <string name="july">Juillet</string>
+    <string name="august">Août</string>
+    <string name="september">Septembre</string>
+    <string name="october">Octobre</string>
+    <string name="november">Novembre</string>
+    <string name="december">Décembre</string>
+    
+    <!-- Day letters -->
+    <string name="monday_letter">L</string>
+    <string name="tuesday_letter">M</string>  
+    <string name="wednesday_letter">M</string>
+    <string name="thursday_letter">J</string>
+    <string name="friday_letter">V</string>
+    <string name="saturday_letter">S</string>
+    <string name="sunday_letter">D</string>
+    
+    <!-- Additional strings -->
+    <string name="default_timer">00:00</string>
+    <string name="default_year">2025</string>
+    <string name="percent_50">50%</string>
+    <string name="percent_75">75%</string>
+    <string name="manual_yes_test">• Oui Test</string>
+    
+    <!-- Hour labels -->
+    <string name="hour_00">00</string>
+    <string name="hour_02">02</string>
+    <string name="hour_04">04</string>
+    <string name="hour_06">06</string>
+    <string name="hour_08">08</string>
+    <string name="hour_10">10</string>
+    <string name="hour_12">12</string>
+    <string name="hour_14">14</string>
+    <string name="hour_16">16</string>
+    <string name="hour_18">18</string>
+    <string name="hour_20">20</string>
+    <string name="hour_22">22</string>
+    
+    <!-- Voice recognition -->
+    <string name="start_voice_recognition">Démarrer la reconnaissance vocale</string>
+    
+    <!-- Timesheet component placeholders -->
+    <string name="day_number_placeholder">1</string>
+    <string name="hours_worked_placeholder">4h</string>
+    
+    <!-- Statistics -->
+    <string name="statistics_title">Statistiques</string>
+    <string name="task_completion">Achèvement des tâches</string>
+    <string name="task_timing">Timing des tâches</string>
+    <string name="creation_methods">Méthodes de création</string>
+    <string name="quick_stats">Statistiques rapides</string>
+    <string name="total_tasks">Total des tâches</string>
+    <string name="tasks_completed">Tâches terminées</string>
+    <string name="completion_rate">Taux d\'achèvement</string>
+    <string name="uncompleted">Non terminées</string>
+    <string name="on_time">À l\'heure</string>
+    <string name="late">En retard</string>
+    <string name="early">En avance</string>
+    <string name="voice">Voix</string>
+    <string name="gesture">Geste</string>
+    <string name="no_data_available">Aucune donnée disponible</string>
+    <string name="completion_stats_format">Terminé: %1$s / Non terminé: %2$s</string>
+    
+    <!-- Additional export strings -->
+    <string name="export_selected_format">Exporter sélectionné (%1$d/%2$d)</string>
+    <string name="format_suffix">Format %1$s</string>
+    <string name="task_export_subject">Export de tâche</string>
+    <string name="share_export_file">Partager le fichier d\'export</string>
+    
+    <!-- Dashboard tracking messages -->
+    <string name="on_break">En pause</string>
+    <string name="currently_tracking">Actuellement suivi: %1$s</string>
+    <string name="not_tracking_any_task">Aucune tâche en cours de suivi</string>
+    
+    <!-- Dashboard audio status messages -->
+    <string name="audio_features_disabled">Audio désactivé - sélectionnez un mode</string>
+    <string name="start_audio">Démarrer l\'audio</string>
+    <string name="voice_commands">Commandes vocales</string>
+    <string name="sound_detection">Détection sonore</string>
+    <string name="audio">Audio</string>
+    <string name="permission_required">Permission %1$s requise</string>
+    <string name="press_button_start_voice_commands">Appuyez sur le bouton pour démarrer les commandes vocales</string>
+    <string name="start_voice_commands">Démarrer les commandes vocales</string>
+    <string name="press_button_start_sound_detection">Appuyez sur le bouton pour démarrer la détection sonore</string>
+    <string name="start_sound_detection">Démarrer la détection sonore</string>
+    <string name="audio_mode_not_configured">Mode audio non configuré</string>
+    <string name="stop_voice_commands">Arrêter les commandes vocales</string>
+    <string name="stop_sound_detection">Arrêter la détection sonore</string>
+    <string name="stop_audio">Arrêter l\'audio</string>
+    <string name="voice_recognition_stopped">Reconnaissance vocale arrêtée</string>
+    
+    <!-- Dashboard tracking action messages -->
+    <string name="task_completed_time_tracked">Tâche \'%1$s\' terminée. Temps suivi: %2$dh %3$dm</string>
+    <string name="currently_busy_with_task">Actuellement occupé avec une tâche</string>
+    <string name="command_not_recognized">Commande non reconnue: %1$s</string>
+    <string name="tracking_started_for">Suivi commencé pour: %1$s</string>
+    <string name="no_tasks_available_to_track">Aucune tâche disponible à suivre</string>
+    <string name="already_tracking_a_task">Déjà en train de suivre une tâche</string>
+    <string name="task_already_completed">Tâche \'%1$s\' déjà terminée</string>
+    <string name="cannot_track_completed_task">Impossible de commencer le suivi de la tâche \'%1$s\' - elle est déjà terminée</string>
+    <string name="task_not_found_available">Tâche \'%1$s\' introuvable. Tâches disponibles : %2$s</string>
+    <string name="no_active_tracking_session">Aucune session de suivi active</string>
+    <string name="no_task_was_being_tracked">Aucune tâche n\'était suivie</string>
+    <string name="could_not_find_tracked_task">Impossible de trouver la tâche suivie</string>
+    <string name="start_tracking_first">Commencez le suivi d\'abord</string>
+    <string name="already_on_a_break">Déjà en pause</string>
+    <string name="break_started">Pause commencée</string>
+    <string name="no_active_break">Aucune pause active</string>
+    <string name="break_ended">Pause terminée</string>
+    
+    <!-- Voice recognition status messages -->
+    <string name="audio_permission_required">Permission audio requise</string>
+    <string name="microphone_permission_required">Permission microphone requise</string>
+    <string name="voice_recognition_disabled_settings">La reconnaissance vocale est désactivée dans les paramètres</string>
+    <string name="voice_recognition_ready">Reconnaissance vocale prête</string>
+    <string name="sound_detection_ready">Détection sonore prête</string>
+    <string name="audio_ready">Audio prêt</string>
+    <string name="listening_say_command">Écoute... (dites votre commande)</string>
+    <string name="listening_for_sounds">Écoute des sons...</string>
+    <string name="listening">Écoute...</string>
+    <string name="ready_for_speech">Prêt pour la parole</string>
+    <string name="voice_recognition_timeout_stopping">Timeout de reconnaissance vocale - arrêt</string>
+    <string name="speech_recognition_not_available">Reconnaissance vocale non disponible sur cet appareil</string>
+    <string name="voice_recognition_disabled_permission">La reconnaissance vocale est désactivée ou permission non accordée</string>
+    
+    <!-- Voice recognition error messages -->
+    <string name="audio_recording_error">Erreur d\'enregistrement audio</string>
+    <string name="insufficient_permissions">Permissions insuffisantes</string>
+    <string name="network_error">Erreur réseau</string>
+    <string name="network_timeout">Timeout réseau</string>
+    <string name="recognizer_busy">Reconnaisseur occupé</string>
+    <string name="server_error">Erreur serveur</string>
+    <string name="language_not_supported">Langue non supportée</string>
+    <string name="unknown_error">Erreur inconnue: %1$d</string>
+    <string name="voice_recognition_stopped_error">Reconnaissance vocale arrêtée: %1$s</string>
+    <string name="speech_started">Parole commencée</string>
+    <string name="processing_speech">Traitement de la parole...</string>
+    <string name="partial_result">Partiel: %1$s</string>
+    
+    <!-- Timesheet activity messages -->
+    <string name="start_date_format">Début: %1$s</string>
+    <string name="end_date_format">Fin: %1$s</string>
+    
+    <!-- Statistics chart labels -->
+    <string name="no_task_data_available">Aucune donnée de tâche disponible</string>
+    <string name="no_timing_data_available">Aucune donnée de timing disponible</string>
+    <string name="no_task_creation_data_available">Aucune donnée de création de tâche disponible</string>
+    
+    <!-- Doodle Jump Game -->
+    <string name="game_background">Arrière-plan</string>
+    <string name="game_score">Score: %1$d</string>
+    <string name="game_player">Joueur</string>
+    <string name="game_over">JEU TERMINÉ</string>
+    <string name="game_your_score">Votre Score: %1$d</string>
+    <string name="game_high_scores">MEILLEURS SCORES</string>
+    <string name="game_no_scores">Aucun score enregistré</string>
+    <string name="game_play_again">REJOUER</string>
+    <string name="game_exit">SORTIR</string>
+    <string name="game_pause">| |</string>
+    
+    <!-- Task input dialog strings -->
+    <string name="input_task_name_hint">Veuillez saisir le nom de la tâche</string>
+    <string name="hours_hint">Heures</string>
+    <string name="minutes_hint">Minutes</string>
+
+</resources> 

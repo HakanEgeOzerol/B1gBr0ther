@@ -1,0 +1,72 @@
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:orientation="vertical"
+    android:layout_width="wrap_content"
+    android:layout_height="wrap_content"
+    android:background="#FFFFBB33"
+    android:padding="4dp">
+
+    <EditText
+        android:id="@+id/TaskInput"
+        android:inputType="text"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_margin="4dp"
+        android:fontFamily="sans-serif"
+        android:hint="@string/input_task_name_hint"/>
+
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:weightSum="2">
+
+        <EditText
+            android:id="@+id/HourInput"
+            android:inputType="number"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:layout_margin="4dp"
+            android:fontFamily="sans-serif"
+            android:layout_weight="1"
+            android:hint="@string/hours_hint"/>
+
+        <EditText
+            android:id="@+id/MinuteInput"
+            android:inputType="number"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:layout_margin="4dp"
+            android:fontFamily="sans-serif"
+            android:layout_weight="1"
+            android:hint="@string/minutes_hint"/>
+
+    </LinearLayout>
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:weightSum="2">
+
+        <Button
+            android:id="@+id/Cancel"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:background="@drawable/rounded_corners"
+            android:layout_margin="4dp"
+            android:layout_weight="1"
+            android:textAlignment="center"
+            android:text="@string/cancel">
+        </Button>
+        <Button
+            android:id="@+id/SubmitTask"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:background="@drawable/rounded_corners"
+            android:padding="4dp"
+            android:layout_margin="4dp"
+            android:layout_weight="1"
+            android:textAlignment="center"
+            android:text="@string/start">
+        </Button>
+    </LinearLayout>
+</LinearLayout>

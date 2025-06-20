@@ -5,8 +5,6 @@
     android:layout_width="39dp"
     android:layout_height="52dp"
     android:layout_margin="4dp"
-    android:background="@drawable/circle"
-    android:backgroundTint="#6C5A77"
     android:clickable="true"
     android:focusable="true"
     android:foreground="?attr/selectableItemBackground"
@@ -24,7 +22,7 @@
             android:id="@+id/dayNumberText"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:text="1"
+            android:text="@string/day_number_placeholder"
             android:textColor="#000000"
             android:textSize="14sp"
             android:textStyle="bold" />
@@ -33,7 +31,7 @@
             android:id="@+id/hoursWorkedText"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:text="4h"
+            android:text="@string/hours_worked_placeholder"
             android:textColor="#000000"
             android:textSize="14sp" />
     </LinearLayout>

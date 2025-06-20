@@ -3,6 +3,8 @@ package com.b1gbr0ther.data.database.entities
 import androidx.room.Entity
 import androidx.room.PrimaryKey
 import androidx.room.TypeConverters
+import com.b1gbr0ther.CreationMethod
+import com.b1gbr0ther.TimingStatus
 import com.b1gbr0ther.data.database.converters.LocalDateTimeConverter
 import java.time.LocalDateTime
 
@@ -18,9 +20,11 @@ data class Task(
     var taskName: String = "",
     var startTime: LocalDateTime = LocalDateTime.now(),
     var endTime: LocalDateTime = LocalDateTime.now(),
+    var creationMethod: CreationMethod,
     var isPreplanned: Boolean = false,
     var isCompleted: Boolean = false,
-    var isBreak: Boolean = false
+    var isBreak: Boolean = false,
+    var timingStatus: TimingStatus = TimingStatus.ON_TIME
 ) {
     // Empty constructor required by Room
     constructor() : this(
@@ -28,9 +32,24 @@ data class Task(
         "",
         LocalDateTime.now(),
         LocalDateTime.now(),
+        CreationMethod.Gesture,  // Default value for creationMethod
         false,
         false,
-        false
+        false,
+        TimingStatus.ON_TIME
+    )
+    
+    // Copy constructor for updates
+    constructor(other: Task) : this(
+        other.id,
+        other.taskName,
+        other.startTime,
+        other.endTime,
+        other.creationMethod,
+        other.isPreplanned,
+        other.isCompleted,
+        other.isBreak,
+        other.timingStatus
     )
     
     /**
@@ -41,6 +60,8 @@ data class Task(
             taskName,
             startTime,
             endTime,
+            creationMethod,
+            timingStatus,
             isPreplanned,
             isCompleted,
             isBreak
@@ -51,11 +72,14 @@ data class Task(
         /**
          * Create a Room Task entity from the app's Task model
          */
-        fun fromAppTask(appTask: com.b1gbr0ther.Task): Task {
+        fun fromAppTask(appTask: com.b1gbr0ther.Task, id: Long? = null): Task {
             return Task(
+                id = id ?: 0,
                 taskName = appTask.getName(),
                 startTime = appTask.getStartTime(),
                 endTime = appTask.getEndTime(),
+                creationMethod = appTask.getCreationMethod(),
+                timingStatus = appTask.getTimingStatus(),
                 isPreplanned = appTask.getIsPreplanned() ?: false,
                 isCompleted = appTask.getIsCompleted() ?: false,
                 isBreak = appTask.getIsBreak() ?: false

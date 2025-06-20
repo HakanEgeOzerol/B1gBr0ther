@@ -8,7 +8,7 @@
     <TextView
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:text="Database Test"
+        android:text="@string/database_test"
         android:textSize="24sp"
         android:textStyle="bold"
         android:gravity="center"
@@ -25,7 +25,7 @@
             android:layout_width="0dp"
             android:layout_height="wrap_content"
             android:layout_weight="1"
-            android:text="Insert Task"
+            android:text="@string/insert_task"
             android:layout_marginEnd="4dp"/>
 
         <Button
@@ -33,7 +33,7 @@
             android:layout_width="0dp"
             android:layout_height="wrap_content"
             android:layout_weight="1"
-            android:text="Update Task"
+            android:text="@string/update_task"
             android:layout_marginStart="4dp"
             android:layout_marginEnd="4dp"/>
 
@@ -42,7 +42,7 @@
             android:layout_width="0dp"
             android:layout_height="wrap_content"
             android:layout_weight="1"
-            android:text="Delete Task"
+            android:text="@string/delete_task"
             android:layout_marginStart="4dp"/>
     </LinearLayout>
 
@@ -50,7 +50,7 @@
         android:id="@+id/btn_get_all_tasks"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:text="Get All Tasks"
+        android:text="@string/get_all_tasks"
         android:layout_marginBottom="16dp"/>
 
     <ScrollView

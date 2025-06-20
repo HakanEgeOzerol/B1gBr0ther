@@ -1,0 +1,453 @@
+<resources>
+    <string name="app_name">B1gBr0ther</string>
+    
+    <!-- Status strings -->
+    <string name="status_working">Aan het werken</string>
+    <string name="status_on_break">Op pauze</string>
+    <string name="status_not_tracking">Niet bezig met een taak</string>
+    <string name="tracking_started">Tracking gestart</string>
+    <string name="tracking_stopped">Tracking gestopt</string>
+    
+    <!-- Settings Activity -->
+    <string name="settings_title">Instellingen</string>
+    <string name="appearance_language">Uiterlijk &amp; Taal</string>
+    <string name="theme_light_mode">Thema: Lichte modus (Paars)</string>
+    <string name="theme_dark_mode">Thema: Donkere modus (Grijs)</string>
+    <string name="language_label">Taal: %1$s</string>
+    <string name="language_english">Engels</string>
+    <string name="language_dutch">Nederlands</string>
+    <string name="choose_language">Taal kiezen</string>
+    <string name="voice_recognition">Spraakherkenning</string>
+    <string name="audio_off">Uit</string>
+    <string name="enable_voice_commands">Spraakopdrachten inschakelen</string>
+    <string name="notifications">Meldingen</string>
+    <string name="enable_task_notifications">Taak meldingen inschakelen</string>
+    <string name="motion_gesture_detection">Bewegings- &amp; gebaardetectie</string>
+    <string name="enable_accelerometer_detection">Accelerometer detectie inschakelen</string>
+    <string name="enable_blow_detection">Blaas detectie inschakelen</string>
+    <string name="enable_sneeze_detection">Nies detectie inschakelen</string>
+    <string name="audio_settings">Audio instellingen</string>
+    <string name="microphone_volume">Microfoon volume</string>
+    <string name="detection_sensitivity">Detectie gevoeligheid</string>
+    <string name="back">Terug</string>
+    <string name="reset">Herstel</string>
+    <string name="save">Opslaan</string>
+    
+    <!-- Permission dialogs -->
+    <string name="microphone_permission_message">Spraakherkenning heeft microfoon toegang nodig om te werken. Wilt u deze toestemming verlenen?</string>
+    <string name="microphone_permission_denied_message">Spraakherkenning kan niet werken zonder microfoon toegang. Wilt u instellingen openen om de toestemming te verlenen?</string>
+    <string name="notification_permission_required">Notificatie toestemming vereist</string>
+    <string name="notification_permission_message">Deze app heeft notificatie toestemming nodig om taak herinneringen en waarschuwingen te verzenden.</string>
+    <string name="notification_permission_denied_message">Notificatie toestemming werd geweigerd. Je kunt het handmatig inschakelen in Instellingen > Apps > B1gBr0ther > Notificaties.</string>
+    <string name="open_settings">Instellingen openen</string>
+    <string name="yes">Ja</string>
+    <string name="no">Nee</string>
+    <string name="cancel">Annuleren</string>
+    <string name="ok">Oké</string>
+    <string name="continue_text">Doorgaan</string>
+    <string name="start">Start</string>
+    
+    <!-- Toast messages -->
+    <string name="voice_recognition_enabled">Spraakherkenning ingeschakeld</string>
+    <string name="voice_recognition_disabled_permission_denied">Spraakherkenning uitgeschakeld: Toestemming geweigerd</string>
+    <string name="push_notifications_enabled">Push meldingen ingeschakeld</string>
+    <string name="push_notifications_disabled_permission">Push meldingen uitgeschakeld: Toestemming geweigerd</string>
+    <string name="settings_reset_to_defaults">Instellingen hersteld naar standaardwaarden</string>
+    <string name="settings_saved_successfully">Instellingen succesvol opgeslagen</string>
+    <string name="microphone_permission_required_for_voice">Microfoon toestemming is vereist voor spraakopdrachten</string>
+    <string name="notifications_disabled_warning">Notificaties zijn uitgeschakeld. Je ontvangt geen taak herinneringen.</string>
+    <string name="notifications_disabled">Notificaties uitgeschakeld</string>
+    <string name="task_saved_to_database">Taak opgeslagen in database met ID: %1$d</string>
+    <string name="task_marked_completed">Taak gemarkeerd als voltooid</string>
+    <string name="task_deleted">Taak verwijderd</string>
+    <string name="task_name_deleted">Taak \"%1$s\" verwijderd</string>
+    <string name="could_not_find_task_with_name">Kon taak met naam \"%1$s\" niet vinden. Beschikbare taken: %2$s</string>
+    
+    <!-- Voice recognition messages -->
+    <string name="enjoy_smoke_break">Geniet van je rookpauze!</string>
+    <string name="bless_you">Gezondheid!</string>
+    <string name="urination_detected">Urinatie gedetecteerd!</string>
+    
+    <!-- Export messages -->
+    <string name="please_select_tasks_to_export">Selecteer taken om te exporteren</string>
+    <string name="exported_tasks">%1$d taken geëxporteerd als %2$s</string>
+    <string name="export_failed">Export mislukt: %1$s</string>
+    <string name="creating_sample_tasks">Voorbeeldtaken maken voor testen...</string>
+    <string name="created_sample_tasks">%1$d voorbeeldtaken gemaakt</string>
+    <string name="error_saving_export">Fout bij opslaan export: %1$s</string>
+    <string name="file_saved_to">Bestand opgeslagen naar: %1$s</string>
+    <string name="choose_export_format">Kies export formaat</string>
+    <string name="select_all">Alles selecteren</string>
+    <string name="deselect_all">Alles deselecteren</string>
+    <string name="no_tasks_to_export">Geen taken beschikbaar om te exporteren</string>
+    <string name="export_format_not_supported">Export formaat \'%1$s\' niet ondersteund</string>
+    
+    <!-- Dashboard -->
+    <string name="dashboard">Dashboard</string>
+    <string name="test_db">Manuaal</string>
+    <string name="go_to_gestures">Ga naar gebaren</string>
+    <string name="test_database">Test Database</string>
+    
+    <!-- Days of week -->
+    <string name="monday_short">Maa</string>
+    <string name="tuesday_short">Din</string>
+    <string name="wednesday_short">Woe</string>
+    <string name="thursday_short">Don</string>
+    <string name="friday_short">Vri</string>
+    <string name="saturday_short">Zat</string>
+    <string name="sunday_short">Zon</string>
+    
+    <!-- Timesheet -->
+    <string name="select_year">Selecteer een jaar</string>
+    <string name="pick_month">Kies een maand</string>
+    <string name="you_picked_year">Je koos %1$s</string>
+    <string name="you_picked_month">Je koos %1$s</string>
+    <string name="tasks_on_date">Taken op %1$s</string>
+    
+    <!-- Manual -->
+    <string name="manual_how_to">Handleiding / Hoe te</string>
+    <string name="manual_content">📱 B1gBr0ther - Volledige Gebruikershandleiding\n\n
+🎯 OVERZICHT\n
+B1gBr0ther is een uitgebreide tijdregistratie- en taakbeheerapp die spraakcommando\'s, bewegingsherkenning en slimme audiodetectie gebruikt om u te helpen uw werk efficiënt bij te houden.\n\n
+
+⏰ TIJDREGISTRATIE\n
+• Taken maken en beheren met start-/eindtijden\n
+• Tijd bijhouden die aan verschillende activiteiten wordt besteed\n
+• Pauzes nemen en pauzetijd monitoren\n
+• Voortgang bekijken met visuele timers\n
+• Taken worden automatisch opgeslagen in database\n\n
+
+🗣️ SPRAAKCOMMANDO\'S\n
+Inschakelen via Instellingen → Audio-instellingen → Spraakcommando\'s\n\n
+Taakbeheer:\n
+• \"Start tracking [taaknaam]\" - Begin met het timen van een taak\n
+• \"Stop tracking\" / \"Ik ben klaar\" - Beëindig huidige taak\n
+• \"Neem een pauze\" / \"Start pauze\" - Begin pauzetijd\n
+• \"Stop pauze\" / \"Terug naar werk\" - Beëindig pauze\n
+• \"Verwijder taak [naam]\" - Verwijder een taak\n\n
+Navigatie:\n
+• \"Toon export\" / \"Exporteer data\" - Open exportpagina\n
+• \"Toon handleiding\" / \"Toon hulp\" - Open deze handleiding\n
+• \"Toon timesheet\" / \"Bekijk mijn uren\" - Bekijk kalender\n
+• \"Toon statistieken\" / \"Toon stats\" - Bekijk analyses\n\n
+Export Commando\'s:\n
+• \"Exporteer CSV\" / \"Exporteer JSON\" / \"Exporteer HTML\"\n
+• \"Exporteer Markdown\" / \"Exporteer XML\" / \"Exporteer tekst\"\n\n
+
+🎵 SLIMME AUDIODETECTIE\n
+Inschakelen via Instellingen → Audio-instellingen → Geluidsdetectie\n\n
+• Blaasdetectie: Detecteert wanneer u blaast (biedt rookpauze aan)\n
+• Niesdetectie: Zegt \"Gezondheid!\" wanneer u niest\n
+• Toiletpauze Detectie: Herkent urineergeluiden\n
+• Verstelbare gevoeligheidsinstellingen\n\n
+
+👋 BEWEGINGSHERKENNING\n
+Inschakelen via Instellingen → Bewegings- &amp; Bewegingsdetectie\n\n
+• Schuddetectie: Schud apparaat om acties te activeren\n
+• Richtingsbewegingen: Links, rechts, omhoog, omlaag bewegingen\n
+• Accelerometer-gebaseerd: Gebruikt bewegingssensoren van apparaat\n
+• Taken maken via bewegingsdialogen\n\n
+
+📊 DASHBOARD\n
+Uw hoofdbesturingscentrum:\n
+• Real-time timer weergave\n
+• Huidige taakstatus\n
+• Wekelijkse tijd visualisatieraster\n
+• Snelle toegang tot alle functies\n
+• Spraakherkenning status indicator\n\n
+
+📅 TIMESHEET\n
+Maandelijkse kalenderweergave:\n
+• Heatmap toont werkintensiteit per dag\n
+• Klik op elke dag voor gedetailleerde taakoverzicht\n
+• Navigeer tussen maanden en jaren\n
+• Kleurgecodeerd op basis van gewerkte uren\n\n
+
+📈 STATISTIEKEN\n
+Uitgebreide analyses:\n
+• Taakvoltooing taartdiagrammen\n
+• Timing analyse (vroeg/op tijd/laat)\n
+• Aanmaakmethode overzicht (spraak vs beweging)\n
+• Snelle stats: totaal taken, voltooiingspercentage\n\n
+
+📤 EXPORT FUNCTIES\n
+Exporteer uw data in meerdere formaten:\n
+• CSV - Spreadsheet compatibel\n
+• JSON - Ontwikkelaar vriendelijk\n
+• HTML - Web bekijkbaar\n
+• Markdown - Documentatie formaat\n
+• XML - Gestructureerde data\n
+• Platte Tekst - Eenvoudig formaat\n\n
+Filter Opties:\n
+• Datumbereik selectie\n
+• Filter op voltooiingsstatus\n
+• Pauzes in-/uitsluiten\n
+• Vooraf geplande taken filter\n\n
+
+⚙️ INSTELLINGEN\n
+Pas uw ervaring aan:\n\n
+Thema\'s:\n
+• Lichte Modus (Paars thema)\n
+• Donkere Modus (Grijs thema)\n\n
+Talen:\n
+• Engels, Nederlands, Frans ondersteund\n
+• Automatische UI vertaling\n\n
+Audio Instellingen:\n
+• Uit - Geen audiofuncties\n
+• Spraakcommando\'s - Spraakherkenning\n
+• Geluidsdetectie - Audio patroonherkenning\n
+• Microfoon toestemming vereist\n\n
+Meldingen:\n
+• Taakherinneringen en waarschuwingen\n
+• Voltooiingsmeldingen\n
+• Toestemming-gebaseerde instellingen\n\n
+
+🎮 EASTER EGG\n
+Verborgen Doodle Jump spel:\n
+• Kantel apparaat om karakter te besturen\n
+• Spring op platforms om punten te scoren\n
+• Hoge score bijhouden\n
+• Pauzeer en hervat functionaliteit\n
+• Toegang via geheime bewegingscombinatie\n\n
+
+🔧 DATABASE FUNCTIES\n
+• Locale Room database opslag\n
+• Taakgeschiedenis behoud\n
+• Backup en herstel mogelijkheden\n
+• Prestatie geoptimaliseerde queries\n\n
+
+📱 NAVIGATIE\n
+Onderste menubalk biedt snelle toegang:\n
+• Export (index 0)\n
+• Handleiding (index 1)\n
+• Dashboard (index 2)\n
+• Timesheet (index 3)\n
+• Statistieken (index 4)\n\n
+
+💡 TIPS\n
+• Spreek natuurlijk - de app begrijpt variaties\n
+• Gebruik bewegingen wanneer spraak niet praktisch is\n
+• Schakel meldingen in voor betere taakregistratie\n
+• Exporteer data regelmatig voor backup\n
+• Bekijk statistieken om productiviteit te verbeteren\n
+• Pas audiogevoeligheid aan in lawaaiige omgevingen\n\n
+
+🔒 TOESTEMMINGEN\n
+Vereiste toestemmingen:\n
+• Microfoon - Spraakcommando\'s en geluidsdetectie\n
+• Meldingen - Taakwaarschuwingen en herinneringen\n
+• Opslag - Export bestand opslaan\n\n
+
+❓ PROBLEEMOPLOSSING\n
+• Spraak werkt niet? Controleer microfoon toestemming\n
+• Bewegingen niet gedetecteerd? Schakel accelerometer in\n
+• Export mislukt? Controleer opslag toestemming\n
+• App crasht? Probeer instellingen resetten naar standaard\n\n
+Voor beste ervaring, schakel alle functies in en verleen vereiste toestemmingen!</string>
+    
+    <!-- Export Page -->
+    <string name="start_date">Startdatum</string>
+    <string name="end_date">Einddatum</string>
+    <string name="completed">Voltooid</string>
+    <string name="breaks">Pauzes</string>
+    <string name="preplanned">Vooraf gepland</string>
+    <string name="export_selected_recordings">Geselecteerde opnames exporteren</string>
+    <string name="task_name">Taaknaam</string>
+    <string name="time_range">Tijdsbereik</string>
+    <string name="status">Status</string>
+    
+    <!-- Database Test -->
+    <string name="database_test">Database Test</string>
+    <string name="insert_task">Taak invoegen</string>
+    <string name="update_task">Taak bijwerken</string>
+    <string name="delete_task">Taak verwijderen</string>
+    <string name="get_all_tasks">Alle taken ophalen</string>
+    <string name="error_initializing">Fout bij initialiseren: %1$s</string>
+    
+    <!-- Gesture Dialogs -->
+    <string name="input_time_required">Voer de benodigde tijd voor de taak in</string>
+    <string name="input_start_time">Voer starttijd in</string>
+    <string name="input_start_date">Voer startdatum in</string>
+    <string name="planning_ahead">Plan je vooruit?</string>
+    <string name="task_in_progress">Er is een taak gaande</string>
+    <string name="time_left_completion">Tijd over tot voltooiing</string>
+    <string name="placeholder">Plaatshouder</string>
+    <string name="complete">Voltooien</string>
+    <string name="delete">Verwijderen</string>
+    
+    <!-- Bathroom Break Dialog -->
+    <string name="bathroom_break_detected">Toiletpauze gedetecteerd</string>
+    <string name="start_bathroom_break_question">Wilt u een toiletpauze starten?</string>
+    <string name="start_break">Pauze starten</string>
+    
+    <!-- Month names -->
+    <string name="january">Januari</string>
+    <string name="february">Februari</string>
+    <string name="march">Maart</string>
+    <string name="april">April</string>
+    <string name="may">Mei</string>
+    <string name="june">Juni</string>
+    <string name="july">Juli</string>
+    <string name="august">Augustus</string>
+    <string name="september">September</string>
+    <string name="october">Oktober</string>
+    <string name="november">November</string>
+    <string name="december">December</string>
+    
+    <!-- Day letters -->
+    <string name="monday_letter">M</string>
+    <string name="tuesday_letter">D</string>  
+    <string name="wednesday_letter">W</string>
+    <string name="thursday_letter">D</string>
+    <string name="friday_letter">V</string>
+    <string name="saturday_letter">Z</string>
+    <string name="sunday_letter">Z</string>
+    
+    <!-- Additional strings -->
+    <string name="default_timer">00:00</string>
+    <string name="default_year">2025</string>
+    <string name="percent_50">50%</string>
+    <string name="percent_75">75%</string>
+    <string name="manual_yes_test">• Ja Test</string>
+    
+    <!-- Hour labels -->
+    <string name="hour_00">00</string>
+    <string name="hour_02">02</string>
+    <string name="hour_04">04</string>
+    <string name="hour_06">06</string>
+    <string name="hour_08">08</string>
+    <string name="hour_10">10</string>
+    <string name="hour_12">12</string>
+    <string name="hour_14">14</string>
+    <string name="hour_16">16</string>
+    <string name="hour_18">18</string>
+    <string name="hour_20">20</string>
+    <string name="hour_22">22</string>
+    
+    <!-- Voice recognition -->
+    <string name="start_voice_recognition">Spraakherkenning starten</string>
+    
+    <!-- Timesheet component placeholders -->
+    <string name="day_number_placeholder">1</string>
+    <string name="hours_worked_placeholder">4u</string>
+    
+    <!-- Statistics -->
+    <string name="statistics_title">Statistieken</string>
+    <string name="task_completion">Taak voltooiing</string>
+    <string name="task_timing">Taak timing</string>
+    <string name="creation_methods">Aanmaakmethodes</string>
+    <string name="quick_stats">Snelle statistieken</string>
+    <string name="total_tasks">Totaal taken</string>
+    <string name="tasks_completed">Taken voltooid</string>
+    <string name="completion_rate">Voltooiingspercentage</string>
+    <string name="uncompleted">Niet voltooid</string>
+    <string name="on_time">Op tijd</string>
+    <string name="late">Laat</string>
+    <string name="early">Vroeg</string>
+    <string name="voice">Spraak</string>
+    <string name="gesture">Gebaar</string>
+    <string name="no_data_available">Geen gegevens beschikbaar</string>
+    <string name="completion_stats_format">Voltooid: %1$s / Niet voltooid: %2$s</string>
+    
+    <!-- Additional export strings -->
+    <string name="export_selected_format">Geselecteerde exporteren (%1$d/%2$d)</string>
+    <string name="format_suffix">%1$s Formaat</string>
+    <string name="task_export_subject">Taak Export</string>
+    <string name="share_export_file">Export bestand delen</string>
+    
+    <!-- Dashboard tracking messages -->
+    <string name="on_break">Op pauze</string>
+    <string name="currently_tracking">Momenteel aan het volgen: %1$s</string>
+    <string name="not_tracking_any_task">Geen taak aan het volgen</string>
+    
+    <!-- Dashboard audio status messages -->
+    <string name="audio_features_disabled">Audio uitgeschakeld - selecteer een modus</string>
+    <string name="start_audio">Audio starten</string>
+    <string name="voice_commands">Spraakopdrachten</string>
+    <string name="sound_detection">Geluidsdetectie</string>
+    <string name="audio">Audio</string>
+    <string name="permission_required">%1$s toestemming vereist</string>
+    <string name="press_button_start_voice_commands">Druk op knop om spraakopdrachten te starten</string>
+    <string name="start_voice_commands">Spraakopdrachten starten</string>
+    <string name="press_button_start_sound_detection">Druk op knop om geluidsdetectie te starten</string>
+    <string name="start_sound_detection">Geluidsdetectie starten</string>
+    <string name="audio_mode_not_configured">Audio modus niet geconfigureerd</string>
+    <string name="stop_voice_commands">Spraakopdrachten stoppen</string>
+    <string name="stop_sound_detection">Geluidsdetectie stoppen</string>
+    <string name="stop_audio">Audio stoppen</string>
+    <string name="voice_recognition_stopped">Spraakherkenning gestopt</string>
+    
+    <!-- Dashboard tracking action messages -->
+    <string name="task_completed_time_tracked">Taak \'%1$s\' voltooid. Tijd gevolgd: %2$du %3$dm</string>
+    <string name="currently_busy_with_task">Momenteel bezig met een taak</string>
+    <string name="command_not_recognized">Commando niet herkend: %1$s</string>
+    <string name="tracking_started_for">Tijdregistratie gestart voor: %1$s</string>
+    <string name="no_tasks_available_to_track">Geen taken beschikbaar om te volgen</string>
+    <string name="already_tracking_a_task">Al bezig met het volgen van een taak</string>
+    <string name="task_already_completed">Taak \'%1$s\' is al voltooid</string>
+    <string name="cannot_track_completed_task">Kan taak \'%1$s\' niet starten - deze is al voltooid</string>
+    <string name="task_not_found_available">Taak \'%1$s\' niet gevonden. Beschikbare taken: %2$s</string>
+    <string name="no_active_tracking_session">Geen actieve volgsessie</string>
+    <string name="no_task_was_being_tracked">Er werd geen taak gevolgd</string>
+    <string name="could_not_find_tracked_task">Kon de gevolgde taak niet vinden</string>
+    <string name="start_tracking_first">Start eerst met volgen</string>
+    <string name="already_on_a_break">Al met pauze</string>
+    <string name="break_started">Pauze gestart</string>
+    <string name="no_active_break">Geen actieve pauze</string>
+    <string name="break_ended">Pauze beëindigd</string>
+    
+    <!-- Voice recognition status messages -->
+    <string name="audio_permission_required">Audio toestemming vereist</string>
+    <string name="microphone_permission_required">Microfoon toestemming vereist</string>
+    <string name="voice_recognition_disabled_settings">Spraakherkenning is uitgeschakeld in instellingen</string>
+    <string name="voice_recognition_ready">Spraakherkenning gereed</string>
+    <string name="sound_detection_ready">Geluidsdetectie gereed</string>
+    <string name="audio_ready">Audio gereed</string>
+    <string name="listening_say_command">Luisteren... (zeg je commando)</string>
+    <string name="listening_for_sounds">Luisteren naar geluiden...</string>
+    <string name="listening">Luisteren...</string>
+    <string name="ready_for_speech">Klaar voor spraak</string>
+    <string name="voice_recognition_timeout_stopping">Spraakherkenning timeout - stoppen</string>
+    <string name="speech_recognition_not_available">Spraakherkenning niet beschikbaar op dit apparaat</string>
+    <string name="voice_recognition_disabled_permission">Spraakherkenning is uitgeschakeld of toestemming niet verleend</string>
+    
+    <!-- Voice recognition error messages -->
+    <string name="audio_recording_error">Audio opname fout</string>
+    <string name="insufficient_permissions">Onvoldoende toestemmingen</string>
+    <string name="network_error">Netwerkfout</string>
+    <string name="network_timeout">Netwerk timeout</string>
+    <string name="recognizer_busy">Herkenner bezet</string>
+    <string name="server_error">Serverfout</string>
+    <string name="language_not_supported">Taal niet ondersteund</string>
+    <string name="unknown_error">Onbekende fout: %1$d</string>
+    <string name="voice_recognition_stopped_error">Spraakherkenning gestopt: %1$s</string>
+    <string name="speech_started">Spraak gestart</string>
+    <string name="processing_speech">Spraak verwerken...</string>
+    <string name="partial_result">Gedeeltelijk: %1$s</string>
+    
+    <!-- Timesheet activity messages -->
+    <string name="start_date_format">Start: %1$s</string>
+    <string name="end_date_format">Eind: %1$s</string>
+    
+    <!-- Statistics chart labels -->
+    <string name="no_task_data_available">Geen taakgegevens beschikbaar</string>
+    <string name="no_timing_data_available">Geen tijdgegevens beschikbaar</string>
+    <string name="no_task_creation_data_available">Geen taakcreatiegegevens beschikbaar</string>
+    
+    <!-- Doodle Jump Game -->
+    <string name="game_background">Achtergrond</string>
+    <string name="game_score">Score: %1$d</string>
+    <string name="game_player">Speler</string>
+    <string name="game_over">SPEL VOORBIJ</string>
+    <string name="game_your_score">Jouw Score: %1$d</string>
+    <string name="game_high_scores">HOOGSTE SCORES</string>
+    <string name="game_no_scores">Geen scores opgeslagen</string>
+    <string name="game_play_again">OPNIEUW SPELEN</string>
+    <string name="game_exit">VERLATEN</string>
+    <string name="game_pause">| |</string>
+    
+    <!-- Task input dialog strings -->
+    <string name="input_task_name_hint">Voer taaknaam in</string>
+    <string name="hours_hint">Uren</string>
+    <string name="minutes_hint">Minuten</string>
+</resources> 

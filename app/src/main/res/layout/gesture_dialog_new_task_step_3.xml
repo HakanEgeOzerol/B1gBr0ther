@@ -6,7 +6,7 @@
     android:padding="4dp">
 
     <TextView
-        android:text="Please input start time"
+        android:text="@string/input_start_time"
         android:layout_width="match_parent"
         android:layout_height="0dp"
         android:layout_weight="1"
@@ -40,7 +40,7 @@
             android:layout_margin="4dp"
             android:layout_weight="1"
             android:textAlignment="center"
-            android:text="Cancel">
+            android:text="@string/cancel">
         </Button>
         <Button
             android:id="@+id/ContinueTaskCreationStep3"
@@ -51,7 +51,7 @@
             android:layout_margin="4dp"
             android:layout_weight="1"
             android:textAlignment="center"
-            android:text="Continue">
+            android:text="@string/continue_text">
         </Button>
     </LinearLayout>
 </LinearLayout>

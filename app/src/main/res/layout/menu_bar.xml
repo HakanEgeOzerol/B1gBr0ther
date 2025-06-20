@@ -1,83 +1,100 @@
 <?xml version="1.0" encoding="utf-8"?>
 <androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
-    xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="wrap_content"
     android:background="@drawable/rounded_corners"
     android:backgroundTint="#5F4B66"
     android:padding="8dp">
 
+    <!-- Export Button (Index 0) -->
     <FrameLayout
         android:id="@+id/exportPageMenuButton"
         android:layout_width="43dp"
         android:layout_height="43dp"
         android:clickable="true"
+        android:foreground="?attr/selectableItemBackground"
         app:layout_constraintBottom_toBottomOf="parent"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintHorizontal_bias="0.135"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toTopOf="parent"
-        app:layout_constraintVertical_bias="0.5">
+        app:layout_constraintEnd_toStartOf="@id/dashboardPageMenuButton"
+        app:layout_constraintTop_toTopOf="parent">
 
         <ImageView
-            android:id="@+id/imageView3"
+            android:id="@+id/exportIcon"
             android:layout_width="match_parent"
             android:layout_height="match_parent"
             android:padding="8dp"
             android:tint="#FFFFFF"
-            app:srcCompat="@drawable/export_icon"
-            app:tint="#FFFFFF" />
-
+            app:srcCompat="@drawable/export_icon" />
     </FrameLayout>
 
+    <!-- Dashboard Button (Index 1) -->
     <FrameLayout
         android:id="@+id/dashboardPageMenuButton"
         android:layout_width="43dp"
         android:layout_height="43dp"
         android:clickable="true"
+        android:foreground="?attr/selectableItemBackground"
         app:layout_constraintBottom_toBottomOf="parent"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintHorizontal_bias="0.5"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toTopOf="parent"
-        app:layout_constraintVertical_bias="0.5">
+        app:layout_constraintStart_toEndOf="@id/exportPageMenuButton"
+        app:layout_constraintEnd_toStartOf="@id/timesheetPageMenuButton"
+        app:layout_constraintTop_toTopOf="parent">
 
         <ImageView
-            android:id="@+id/imageView2"
+            android:id="@+id/dashboardIcon"
             android:layout_width="30dp"
             android:layout_height="35dp"
             android:layout_gravity="center"
             android:padding="8dp"
             android:tint="#FFFFFF"
-            app:srcCompat="@drawable/dasboard_icon"
-            app:tint="#FFFFFF" />
-
+            app:srcCompat="@drawable/dasboard_icon" />
     </FrameLayout>
 
+    <!-- Timesheet Button (Index 2) -->
     <FrameLayout
         android:id="@+id/timesheetPageMenuButton"
         android:layout_width="43dp"
         android:layout_height="43dp"
         android:clickable="true"
+        android:foreground="?attr/selectableItemBackground"
         app:layout_constraintBottom_toBottomOf="parent"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintHorizontal_bias="0.865"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toTopOf="parent"
-        app:layout_constraintVertical_bias="0.5">
+        app:layout_constraintStart_toEndOf="@id/dashboardPageMenuButton"
+        app:layout_constraintEnd_toStartOf="@id/statisticsPageMenuButton"
+        app:layout_constraintTop_toTopOf="parent">
 
         <ImageView
-            android:id="@+id/imageView4"
-            android:layout_width="match_parent"
+            android:id="@+id/timesheetIcon"
+            android:layout_width="40dp"
             android:layout_height="match_parent"
             android:layout_gravity="center"
             android:padding="8dp"
             android:tint="#FFFFFF"
-            app:srcCompat="@drawable/timesheet_icon"
-            app:tint="#FFFFFF" />
+            app:srcCompat="@drawable/timesheet_icon" />
     </FrameLayout>
 
+    <!-- Statistics Button (Index 3) -->
+    <FrameLayout
+        android:id="@+id/statisticsPageMenuButton"
+        android:layout_width="43dp"
+        android:layout_height="43dp"
+        android:clickable="true"
+        android:foreground="?attr/selectableItemBackground"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintStart_toEndOf="@id/timesheetPageMenuButton"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintTop_toTopOf="parent">
+
+        <ImageView
+            android:id="@+id/statisticsIcon"
+            android:layout_width="40dp"
+            android:layout_height="match_parent"
+            android:layout_gravity="center"
+            android:padding="8dp"
+            android:tint="#FFFFFF"
+            app:srcCompat="@android:drawable/ic_menu_recent_history" />
+    </FrameLayout>
+
+    <!-- Selection Highlight -->
     <View
         android:id="@+id/selectedPage"
         android:layout_width="43dp"
@@ -87,4 +104,5 @@
         android:translationZ="-1dp"
         app:layout_constraintStart_toStartOf="@id/exportPageMenuButton"
         app:layout_constraintTop_toTopOf="@id/exportPageMenuButton" />
+
 </androidx.constraintlayout.widget.ConstraintLayout>

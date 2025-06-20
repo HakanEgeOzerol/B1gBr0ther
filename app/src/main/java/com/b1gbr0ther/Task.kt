@@ -1,63 +1,106 @@
 package com.b1gbr0ther
 
 import java.time.LocalDateTime
+import com.b1gbr0ther.TimingStatus
 
-class Task constructor(private var taskName: String,
-                       private var startTime: LocalDateTime,
-                       private var endTime: LocalDateTime,
-                       private var isPreplanned: Boolean? = false,
-                       private var isCompleted: Boolean? = false,
-                       private var isBreak: Boolean? = false){
+enum class CreationMethod
+{
+    Voice,
+    Gesture,
+}
 
-    fun setName(name: String){
-        this.taskName = name
+class Task constructor(
+    private var taskName: String,
+    private var startTime: LocalDateTime,
+    private var endTime: LocalDateTime,
+    private var creationMethod: CreationMethod,
+    private var timingStatus: TimingStatus,
+    private var isPreplanned: Boolean? = false,
+    private var isCompleted: Boolean? = false,
+    private var isBreak: Boolean? = false,
+    )
+{
+
+    fun setName(name: String)
+    {
+        this.taskName = name 
     }
 
-    fun getName(): String{
+    fun getName(): String
+    {
         return this.taskName
     }
 
-    fun setStartTime(startTime: LocalDateTime){
+    fun setStartTime(startTime: LocalDateTime)
+    {
         this.startTime = startTime
     }
 
-    fun getStartTime():LocalDateTime{
+    fun getStartTime():LocalDateTime
+    {
         return this.startTime
     }
 
-    fun setEndTime(endTime: LocalDateTime){
+    fun setEndTime(endTime: LocalDateTime)
+    {
         this.endTime = endTime
     }
 
-    fun getEndTime():LocalDateTime{
+    fun getEndTime():LocalDateTime
+    {
         return this.endTime
     }
 
-    fun setIsPreplanned(isPreplanned: Boolean){
+    fun getTimingStatus(): TimingStatus {
+        return this.timingStatus
+    }
+
+    fun setTimingStatus(status: TimingStatus) {
+        this.timingStatus = status
+    }
+
+    fun setCreationMethod(creationMethod: CreationMethod)
+    {
+        this.creationMethod = creationMethod
+    }
+
+    fun getCreationMethod(): CreationMethod
+    {
+        return this.creationMethod
+    }
+
+    fun setIsPreplanned(isPreplanned: Boolean)
+    {
         this.isPreplanned = isPreplanned
     }
 
-    fun getIsPreplanned(): Boolean?{
+    fun getIsPreplanned(): Boolean?
+    {
         return this.isPreplanned
     }
 
-    fun setIsCompleted(isCompleted: Boolean){
+    fun setIsCompleted(isCompleted: Boolean)
+    {
         this.isCompleted = isCompleted
     }
 
-    fun getIsCompleted(): Boolean? {
+    fun getIsCompleted(): Boolean?
+    {
         return this.isCompleted
     }
 
-    fun setIsBreak(isBreak: Boolean){
+    fun setIsBreak(isBreak: Boolean)
+    {
         this.isBreak = isBreak
     }
 
-    fun getIsBreak(): Boolean? {
+    fun getIsBreak(): Boolean?
+    {
         return this.isBreak
     }
 
-    fun getTimeDif(){
+    fun getTimeDif()
+    {
 //        TO DO
     }
 }

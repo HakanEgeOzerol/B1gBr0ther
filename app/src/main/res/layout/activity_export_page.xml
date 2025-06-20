@@ -5,7 +5,7 @@
     android:id="@+id/main"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    android:background="#A7ADC6"
+    android:background="?android:colorBackground"
     tools:context=".ExportPage">
 
     <!-- Filter Section -->
@@ -15,7 +15,7 @@
         android:layout_height="wrap_content"
         android:layout_margin="16dp"
         app:cardCornerRadius="8dp"
-        app:cardBackgroundColor="#8797AF"
+        app:cardBackgroundColor="?attr/cardBackgroundColor"
         app:layout_constraintTop_toTopOf="parent">
         
         <LinearLayout
@@ -35,7 +35,7 @@
                     android:layout_width="0dp"
                     android:layout_height="wrap_content"
                     android:layout_weight="1"
-                    android:text="Start Date"
+                    android:text="@string/start_date"
                     android:layout_marginEnd="4dp"/>
                     
                 <Button
@@ -43,7 +43,7 @@
                     android:layout_width="0dp"
                     android:layout_height="wrap_content"
                     android:layout_weight="1"
-                    android:text="End Date"
+                    android:text="@string/end_date"
                     android:layout_marginStart="4dp"/>
             </LinearLayout>
             
@@ -59,21 +59,21 @@
                     android:layout_width="0dp"
                     android:layout_height="wrap_content"
                     android:layout_weight="1"
-                    android:text="Completed"/>
+                    android:text="@string/completed"/>
                     
                 <CheckBox
                     android:id="@+id/breaksCheckbox"
                     android:layout_width="0dp"
                     android:layout_height="wrap_content"
                     android:layout_weight="1"
-                    android:text="Breaks"/>
+                    android:text="@string/breaks"/>
                     
                 <CheckBox
                     android:id="@+id/preplannedCheckbox"
                     android:layout_width="0dp"
                     android:layout_height="wrap_content"
                     android:layout_weight="1"
-                    android:text="Preplanned"/>
+                    android:text="@string/preplanned"/>
             </LinearLayout>
         </LinearLayout>
     </androidx.cardview.widget.CardView>
@@ -86,29 +86,53 @@
         android:padding="16dp"
         android:clipToPadding="false"
         android:background="@drawable/less_rounded_corners"
-        android:backgroundTint="#8797AF"
+        android:backgroundTint="?attr/cardBackgroundColor"
         app:layout_constraintTop_toBottomOf="@id/filterCard"
-        app:layout_constraintBottom_toTopOf="@id/exportButton"
+        app:layout_constraintBottom_toTopOf="@id/buttonContainer"
         android:layout_marginStart="24dp"
         android:layout_marginEnd="24dp"
         android:layout_marginBottom="16dp" />
 
-    <Button
-        android:id="@+id/exportButton"
+    <!-- Button Container -->
+    <LinearLayout
+        android:id="@+id/buttonContainer"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:layout_marginStart="24dp"
         android:layout_marginEnd="24dp"
         android:layout_marginBottom="16dp"
-        android:background="@drawable/rounded_corners"
-        android:backgroundTint="#5F4B66"
-        android:text="Export Selected Recordings"
-        android:textAllCaps="false"
-        android:textColor="#C1A8B5"
-        android:textSize="16sp"
+        android:orientation="horizontal"
         app:layout_constraintBottom_toTopOf="@id/menuBar"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintEnd_toEndOf="parent" />
+        app:layout_constraintEnd_toEndOf="parent">
+
+        <Button
+            android:id="@+id/selectAllButton"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:layout_weight="1"
+            android:layout_marginEnd="8dp"
+            android:background="@drawable/rounded_corners"
+            android:backgroundTint="?colorAccent"
+            android:text="@string/select_all"
+            android:textAllCaps="false"
+            android:textColor="?attr/buttonTextColor"
+            android:textSize="16sp" />
+
+        <Button
+            android:id="@+id/exportButton"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:layout_weight="2"
+            android:layout_marginStart="8dp"
+            android:background="@drawable/rounded_corners"
+            android:backgroundTint="?colorPrimary"
+            android:text="@string/export_selected_recordings"
+            android:textAllCaps="false"
+            android:textColor="?attr/buttonTextColor"
+            android:textSize="16sp" />
+
+    </LinearLayout>
 
     <com.b1gbr0ther.MenuBar
         android:id="@+id/menuBar"

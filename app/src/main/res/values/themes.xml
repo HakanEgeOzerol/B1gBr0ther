@@ -1,5 +1,35 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
+    <!-- Light Theme (Original Purple Theme) -->
+    <style name="Theme.B1gBr0ther.Light" parent="Theme.AppCompat.Light.NoActionBar">
+        <item name="colorPrimary">#5F4B66</item>
+        <item name="colorPrimaryDark">#4A3D52</item>
+        <item name="colorAccent">#5F4B66</item>
+        <item name="android:colorBackground">#A7ADC6</item>
+        <item name="android:textColor">#000000</item>
+        <item name="android:textColorPrimary">#000000</item>
+        <item name="android:textColorSecondary">#757575</item>
+        <item name="cardBackgroundColor">#8797AF</item>
+        <item name="buttonTextColor">#C1A8B5</item>
+    </style>
 
-    <style name="Theme.B1gBr0ther" parent="android:Theme.Material.Light.NoActionBar" />
+    <style name="Theme.B1gBr0ther" parent="android:Theme.Material.Light.NoActionBar">
+        <!-- System bar colors -->
+        <item name="android:statusBarColor">@color/dashboard_background</item>
+        <item name="android:navigationBarColor">@color/dashboard_background</item>
+        <item name="android:windowLightStatusBar">false</item>
+        <item name="android:windowLightNavigationBar">false</item>
+    </style>
+    <!-- Dark Theme (Dark Purple/Gray Theme) -->
+    <style name="Theme.B1gBr0ther.Dark" parent="Theme.AppCompat.NoActionBar">
+        <item name="colorPrimary">#6C6C6C</item>
+        <item name="colorPrimaryDark">#424242</item>
+        <item name="colorAccent">#6C6C6C</item>
+        <item name="android:colorBackground">#2D2D30</item>
+        <item name="android:textColor">#FFFFFF</item>
+        <item name="android:textColorPrimary">#FFFFFF</item>
+        <item name="android:textColorSecondary">#AAAAAA</item>
+        <item name="cardBackgroundColor">#3E3E42</item>
+        <item name="buttonTextColor">#AAAAAA</item>
+    </style>
 </resources>

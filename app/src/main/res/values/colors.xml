@@ -1,5 +1,6 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
+    <color name="purple_100">#FFE1BEE7</color>
     <color name="purple_200">#FFBB86FC</color>
     <color name="purple_500">#FF6200EE</color>
     <color name="purple_700">#FF3700B3</color>
@@ -7,4 +8,38 @@
     <color name="teal_700">#FF018786</color>
     <color name="black">#FF000000</color>
     <color name="white">#FFFFFFFF</color>
+    
+    <!-- Dashboard colors -->
+    <color name="dashboard_background">#A7ADC6</color>
+    <color name="dashboard_card_background">#8797AF</color>
+    <color name="dashboard_button_background">#5F4B66</color>
+    <color name="dashboard_button_text">#C1A8B5</color>
+    <!-- Light Theme Colors -->
+    <color name="primary_color">#FF6200EE</color>
+    <color name="primary_variant_color">#FF3700B3</color>
+    <color name="on_primary_color">#FFFFFFFF</color>
+    <color name="secondary_color">#FF03DAC5</color>
+    <color name="secondary_variant_color">#FF018786</color>
+    <color name="on_secondary_color">#FF000000</color>
+    <color name="background_color">#FFFFFFFF</color>
+    <color name="surface_color">#FFFFFFFF</color>
+    <color name="on_surface_color">#FF000000</color>
+    <color name="text_color">#FF000000</color>
+    <color name="text_primary_color">#FF000000</color>
+    <color name="text_secondary_color">#FF757575</color>
+    
+    <!-- Game Colors - Light Theme -->
+    <color name="game_score_color">#5F4B66</color>
+    <color name="game_pause_button">#5F4B66</color>
+    <color name="game_pause_text">#FFFFFF</color>
+    <color name="game_over_text">#FF6200EE</color>
+    <color name="game_score_display">#FFFFFF</color>
+    <color name="game_high_scores_title">#FFD700</color>
+    <color name="game_no_scores_text">#757575</color>
+    <color name="game_current_score_highlight">#FF6200EE</color>
+    <color name="game_other_scores">#FFFFFF</color>
+    <color name="game_play_again_button">#5F4B66</color>
+    <color name="game_exit_button">#8E4EC6</color>
+    <color name="game_button_text">#FFFFFF</color>
+    <color name="game_overlay_background">#B3000000</color>
 </resources>
