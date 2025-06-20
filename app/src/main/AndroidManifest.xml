@@ -75,7 +75,6 @@
             android:name=".easteregg.DoodleJumpActivity"
             android:label="Doodle Jump"
             android:exported="false"
-            android:screenOrientation="portrait"
             android:theme="@style/Theme.B1gBr0ther">
         </activity>
         

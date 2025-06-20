@@ -33,8 +33,8 @@ class WeekTimeGridView(context: Context, attrs: AttributeSet?) : View(context, a
     // Easter egg variables
     private var clickCount = 0
     private var lastClickTime = 0L
-    private val easterEggClickThreshold = 5 // Number of clicks needed
-    private val clickTimeWindow = 3000L // 3 seconds
+    private val easterEggClickThreshold = 3 // Reduced to 3 clicks for easier access
+    private val clickTimeWindow = 2000L // 2 seconds
 
     fun setWorkData(newData: List<WorkBlock>) {
         dataBlocks = newData
@@ -93,10 +93,16 @@ class WeekTimeGridView(context: Context, attrs: AttributeSet?) : View(context, a
         when (event.action) {
             MotionEvent.ACTION_DOWN -> {
                 handleEasterEggClick()
+                performClick() // For accessibility
                 return true
             }
         }
         return super.onTouchEvent(event)
+    }
+
+    override fun performClick(): Boolean {
+        super.performClick()
+        return true
     }
 
     private fun handleEasterEggClick() {

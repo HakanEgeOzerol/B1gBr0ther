@@ -198,7 +198,7 @@
     <string name="total_tasks">Total des tâches</string>
     <string name="tasks_completed">Tâches terminées</string>
     <string name="completion_rate">Taux d\'achèvement</string>
-    <string name="uncompleted">Non terminé</string>
+    <string name="uncompleted">Non terminées</string>
     <string name="on_time">À l\'heure</string>
     <string name="late">En retard</string>
     <string name="early">En avance</string>
@@ -290,5 +290,17 @@
     <string name="no_task_data_available">Aucune donnée de tâche disponible</string>
     <string name="no_timing_data_available">Aucune donnée de timing disponible</string>
     <string name="no_task_creation_data_available">Aucune donnée de création de tâche disponible</string>
+    
+    <!-- Doodle Jump Game -->
+    <string name="game_background">Arrière-plan</string>
+    <string name="game_score">Score: %1$d</string>
+    <string name="game_player">Joueur</string>
+    <string name="game_over">JEU TERMINÉ</string>
+    <string name="game_your_score">Votre Score: %1$d</string>
+    <string name="game_high_scores">MEILLEURS SCORES</string>
+    <string name="game_no_scores">Aucun score enregistré</string>
+    <string name="game_play_again">REJOUER</string>
+    <string name="game_exit">SORTIR</string>
+    <string name="game_pause">| |</string>
 
 </resources> 

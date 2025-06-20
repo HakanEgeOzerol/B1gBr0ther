@@ -27,4 +27,19 @@
     <color name="text_color">#FF000000</color>
     <color name="text_primary_color">#FF000000</color>
     <color name="text_secondary_color">#FF757575</color>
+    
+    <!-- Game Colors - Light Theme -->
+    <color name="game_score_color">#5F4B66</color>
+    <color name="game_pause_button">#5F4B66</color>
+    <color name="game_pause_text">#FFFFFF</color>
+    <color name="game_over_text">#FF6200EE</color>
+    <color name="game_score_display">#FFFFFF</color>
+    <color name="game_high_scores_title">#FFD700</color>
+    <color name="game_no_scores_text">#757575</color>
+    <color name="game_current_score_highlight">#FF6200EE</color>
+    <color name="game_other_scores">#FFFFFF</color>
+    <color name="game_play_again_button">#5F4B66</color>
+    <color name="game_exit_button">#8E4EC6</color>
+    <color name="game_button_text">#FFFFFF</color>
+    <color name="game_overlay_background">#B3000000</color>
 </resources>

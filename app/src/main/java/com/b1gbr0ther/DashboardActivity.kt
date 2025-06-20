@@ -37,6 +37,7 @@ import com.b1gbr0ther.gestureRecognition.GestureType
 import com.b1gbr0ther.notifications.TaskNotificationManager
 import java.time.LocalDate
 import java.time.LocalTime
+import com.b1gbr0ther.easteregg.DoodleJumpActivity
 
 class DashboardActivity : AppCompatActivity() {
     private lateinit var databaseManager: DatabaseManager
@@ -330,6 +331,11 @@ class DashboardActivity : AppCompatActivity() {
 
         voiceRecognizerManager.setOnBlowDetected {
             runOnUiThread {
+                // Skip blow detection if Doodle Jump game is running
+                if (DoodleJumpActivity.isGameRunning()) {
+                    return@runOnUiThread
+                }
+                
                 if (timeTracker.isTracking() && !timeTracker.isOnBreak()) {
                     voiceRecognizerManager.showSmokeBreakDialog(this) {
                         startBreak()
@@ -343,6 +349,10 @@ class DashboardActivity : AppCompatActivity() {
 
         voiceRecognizerManager.setOnSneezeDetected {
             runOnUiThread {
+                // Skip sneeze detection if Doodle Jump game is running
+                if (DoodleJumpActivity.isGameRunning()) {
+                    return@runOnUiThread
+                }
                 handleSneeze()
             }
         }
@@ -409,6 +419,11 @@ class DashboardActivity : AppCompatActivity() {
 
     private fun handleVoiceResult(result: String) {
         runOnUiThread {
+            // Skip voice command processing if Doodle Jump game is running
+            if (DoodleJumpActivity.isGameRunning()) {
+                return@runOnUiThread
+            }
+            
             val recognized = commandHandler.handleCommand(result)
             if (!recognized) {
                 Toast.makeText(this, getString(R.string.command_not_recognized, result), Toast.LENGTH_SHORT).show()
@@ -666,6 +681,11 @@ class DashboardActivity : AppCompatActivity() {
 
             var analyzedGesture = GestureType.UNIDENTIFIED
 
+            // Skip gesture detection if Doodle Jump game is running
+            if (DoodleJumpActivity.isGameRunning()) {
+                return
+            }
+            
             if (acceleration > shakeThreshold && !isDialogShown && !isActiveTask()) {
                 updateAllTasks()
                 isDialogShown = true
