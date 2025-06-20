@@ -476,43 +476,45 @@ class DashboardActivity : AppCompatActivity() {
                 // Enhanced task matching: tries exact, partial, reverse partial, and word-by-word matching
                 android.util.Log.d("VoiceCommand", "Looking for task: '$taskName'")
                 android.util.Log.d("VoiceCommand", "Available tasks: ${tasks.map { "${it.taskName} (completed: ${it.isCompleted})" }}")
-                
-                var matchingTask = tasks.find { it.taskName.equals(taskName, ignoreCase = true) && !it.isCompleted }
-                
-                if (matchingTask == null) {
-                    matchingTask = tasks.find { 
-                        it.taskName.contains(taskName, ignoreCase = true) && !it.isCompleted 
+
+                var anyMatchingTask = tasks.find { it.taskName.equals(taskName, ignoreCase = true) }
+
+                if (anyMatchingTask == null) {
+                    anyMatchingTask = tasks.find {
+                        it.taskName.contains(taskName, ignoreCase = true)
                     }
                 }
-                
-                if (matchingTask == null) {
-                    matchingTask = tasks.find { task ->
-                        !task.isCompleted && taskName.contains(task.taskName, ignoreCase = true)
+
+                if (anyMatchingTask == null) {
+                    anyMatchingTask = tasks.find { task ->
+                        taskName.contains(task.taskName, ignoreCase = true)
                     }
                 }
-                
-                if (matchingTask == null) {
+
+                if (anyMatchingTask == null) {
                     val spokenWords = taskName.split(" ").filter { it.length > 2 }
-                    matchingTask = tasks.find { task ->
-                        !task.isCompleted && spokenWords.any { word -> 
-                            task.taskName.contains(word, ignoreCase = true) 
+                    anyMatchingTask = tasks.find { task ->
+                        spokenWords.any { word ->
+                            task.taskName.contains(word, ignoreCase = true)
                         }
                     }
                 }
-                
-                if (matchingTask != null && !matchingTask.isCompleted) {
-                    matchingTask.startTime = LocalDateTime.now()
 
-                    databaseManager.updateTask(matchingTask) {
-                        timeTracker.startTracking()
-                        currentTaskName = matchingTask.taskName
-                        currentTaskId = matchingTask.id
-                        timeTracker.setCurrentTask(matchingTask.id, matchingTask.taskName)
-                        Toast.makeText(this, getString(R.string.tracking_started_for, matchingTask.taskName), Toast.LENGTH_SHORT).show()
-                        updateCurrentTask(getString(R.string.currently_tracking, matchingTask.taskName))
+                if (anyMatchingTask != null) {
+                    if (anyMatchingTask.isCompleted) {
+                        Toast.makeText(this, getString(R.string.cannot_track_completed_task, anyMatchingTask.taskName), Toast.LENGTH_SHORT).show()
+                    } else {
+                        anyMatchingTask.startTime = LocalDateTime.now()
+
+                        databaseManager.updateTask(anyMatchingTask) {
+                            timeTracker.startTracking()
+                            currentTaskName = anyMatchingTask.taskName
+                            currentTaskId = anyMatchingTask.id
+                            timeTracker.setCurrentTask(anyMatchingTask.id, anyMatchingTask.taskName)
+                            Toast.makeText(this, getString(R.string.tracking_started_for, anyMatchingTask.taskName), Toast.LENGTH_SHORT).show()
+                            updateCurrentTask(getString(R.string.currently_tracking, anyMatchingTask.taskName))
+                        }
                     }
-                } else if (matchingTask != null && matchingTask.isCompleted) {
-                    Toast.makeText(this, getString(R.string.task_already_completed, matchingTask.taskName), Toast.LENGTH_SHORT).show()
                 } else {
                     val availableTasks = tasks.filter { !it.isCompleted }.map { it.taskName }.joinToString(", ")
                     Toast.makeText(this, getString(R.string.task_not_found_available, taskName, availableTasks), Toast.LENGTH_LONG).show()
@@ -1091,6 +1093,42 @@ class DashboardActivity : AppCompatActivity() {
 
     fun showTimesheetPage() {
         val intent = Intent(this, TimesheetActivity::class.java)
+        startActivity(intent)
+    }
+
+    fun exportCSV() {
+        val intent = Intent(this, ExportPage::class.java)
+        intent.putExtra("export_format", "csv")
+        startActivity(intent)
+    }
+    
+    fun exportJSON() {
+        val intent = Intent(this, ExportPage::class.java)
+        intent.putExtra("export_format", "json")
+        startActivity(intent)
+    }
+    
+    fun exportHTML() {
+        val intent = Intent(this, ExportPage::class.java)
+        intent.putExtra("export_format", "html")
+        startActivity(intent)
+    }
+    
+    fun exportMarkdown() {
+        val intent = Intent(this, ExportPage::class.java)
+        intent.putExtra("export_format", "markdown")
+        startActivity(intent)
+    }
+    
+    fun exportXML() {
+        val intent = Intent(this, ExportPage::class.java)
+        intent.putExtra("export_format", "xml")
+        startActivity(intent)
+    }
+    
+    fun exportText() {
+        val intent = Intent(this, ExportPage::class.java)
+        intent.putExtra("export_format", "text")
         startActivity(intent)
     }
 

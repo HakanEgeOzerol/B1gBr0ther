@@ -76,6 +76,10 @@
     <string name="error_saving_export">Error saving export: %1$s</string>
     <string name="file_saved_to">File saved to: %1$s</string>
     <string name="choose_export_format">Choose Export Format</string>
+    <string name="select_all">Select All</string>
+    <string name="deselect_all">Deselect All</string>
+    <string name="no_tasks_to_export">No tasks available to export</string>
+    <string name="export_format_not_supported">Export format \'%1$s\' not supported</string>
     
     <!-- Dashboard -->
     <string name="dashboard">Dashboard</string>
@@ -269,6 +273,7 @@ Note: The app recognizes various similar phrases for each command. Feel free to 
     <string name="no_tasks_available_to_track">No tasks available to track</string>
     <string name="already_tracking_a_task">Already tracking a task</string>
     <string name="task_already_completed">Task \'%1$s\' is already completed</string>
+    <string name="cannot_track_completed_task">Cannot start tracking task \'%1$s\' - it has already been completed</string>
     <string name="task_not_found_available">Task \'%1$s\' not found. Available tasks: %2$s</string>
     <string name="no_active_tracking_session">No active tracking session</string>
     <string name="no_task_was_being_tracked">No task was being tracked</string>

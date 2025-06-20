@@ -76,6 +76,10 @@
     <string name="error_saving_export">Erreur lors de la sauvegarde de l\'export: %1$s</string>
     <string name="file_saved_to">Fichier sauvegardé vers: %1$s</string>
     <string name="choose_export_format">Choisir le format d\'export</string>
+    <string name="select_all">Tout sélectionner</string>
+    <string name="deselect_all">Tout désélectionner</string>
+    <string name="no_tasks_to_export">Aucune tâche disponible à exporter</string>
+    <string name="export_format_not_supported">Format d\'export \'%1$s\' non supporté</string>
     
     <!-- Dashboard -->
     <string name="dashboard">Tableau de bord</string>
@@ -243,7 +247,8 @@
     <string name="no_tasks_available_to_track">Aucune tâche disponible à suivre</string>
     <string name="already_tracking_a_task">Déjà en train de suivre une tâche</string>
     <string name="task_already_completed">Tâche \'%1$s\' déjà terminée</string>
-    <string name="task_not_found_available">Tâche \'%1$s\' introuvable. Tâches disponibles: %2$s</string>
+    <string name="cannot_track_completed_task">Impossible de commencer le suivi de la tâche \'%1$s\' - elle est déjà terminée</string>
+    <string name="task_not_found_available">Tâche \'%1$s\' introuvable. Tâches disponibles : %2$s</string>
     <string name="no_active_tracking_session">Aucune session de suivi active</string>
     <string name="no_task_was_being_tracked">Aucune tâche n\'était suivie</string>
     <string name="could_not_find_tracked_task">Impossible de trouver la tâche suivie</string>

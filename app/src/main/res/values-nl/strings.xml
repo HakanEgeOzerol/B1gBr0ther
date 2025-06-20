@@ -76,6 +76,10 @@
     <string name="error_saving_export">Fout bij opslaan export: %1$s</string>
     <string name="file_saved_to">Bestand opgeslagen naar: %1$s</string>
     <string name="choose_export_format">Kies export formaat</string>
+    <string name="select_all">Alles selecteren</string>
+    <string name="deselect_all">Alles deselecteren</string>
+    <string name="no_tasks_to_export">Geen taken beschikbaar om te exporteren</string>
+    <string name="export_format_not_supported">Export formaat \'%1$s\' niet ondersteund</string>
     
     <!-- Dashboard -->
     <string name="dashboard">Dashboard</string>
@@ -243,6 +247,7 @@
     <string name="no_tasks_available_to_track">Geen taken beschikbaar om te volgen</string>
     <string name="already_tracking_a_task">Al bezig met het volgen van een taak</string>
     <string name="task_already_completed">Taak \'%1$s\' is al voltooid</string>
+    <string name="cannot_track_completed_task">Kan taak \'%1$s\' niet starten - deze is al voltooid</string>
     <string name="task_not_found_available">Taak \'%1$s\' niet gevonden. Beschikbare taken: %2$s</string>
     <string name="no_active_tracking_session">Geen actieve volgsessie</string>
     <string name="no_task_was_being_tracked">Er werd geen taak gevolgd</string>
