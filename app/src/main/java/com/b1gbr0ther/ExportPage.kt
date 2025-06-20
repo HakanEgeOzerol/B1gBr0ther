@@ -17,6 +17,9 @@ import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
 import com.b1gbr0ther.data.database.DatabaseManager
 import com.b1gbr0ther.models.export.ExportTemplateManager
+import com.b1gbr0ther.models.export.templates.ExportTemplate
+import com.b1gbr0ther.CreationMethod
+import com.b1gbr0ther.TimingStatus
 import android.view.LayoutInflater
 import android.widget.TextView
 import com.b1gbr0ther.data.database.entities.Task
@@ -252,13 +255,28 @@ class ExportPage : AppCompatActivity() {
             return
         }
         
+        // Debug logging
+        android.util.Log.d("ExportPage", "selectAllAndExport called with format: '$format'")
+        
         // Find the template for the requested format
         val templates = templateManager.getAllTemplates()
-        val template = templates.find { it.getFileExtension().equals(format, ignoreCase = true) }
+        android.util.Log.d("ExportPage", "Available templates: ${templates.map { "${it.javaClass.simpleName}(${it.getFileExtension()})" }}")
+        
+        val template = templates.find { template ->
+            val directMatch = template.getFileExtension().equals(format, ignoreCase = true)
+            val markdownMatch = format.equals("markdown", ignoreCase = true) && template.getFileExtension().equals("md", ignoreCase = true)
+            val textMatch = format.equals("text", ignoreCase = true) && template.getFileExtension().equals("txt", ignoreCase = true)
+            
+            android.util.Log.d("ExportPage", "Checking template ${template.javaClass.simpleName}(${template.getFileExtension()}) against format '$format': directMatch=$directMatch, markdownMatch=$markdownMatch, textMatch=$textMatch")
+            
+            directMatch || markdownMatch || textMatch
+        }
         
         if (template != null) {
+            android.util.Log.d("ExportPage", "Selected template: ${template.javaClass.simpleName}(${template.getFileExtension()})")
             exportTasks(selectedTasks, template)
         } else {
+            android.util.Log.e("ExportPage", "No template found for format: '$format'")
             Toast.makeText(this, getString(R.string.export_format_not_supported, format), Toast.LENGTH_SHORT).show()
         }
     }
@@ -288,7 +306,7 @@ class ExportPage : AppCompatActivity() {
             .show()
     }
     
-    private fun exportTasks(tasks: List<Task>, template: com.b1gbr0ther.models.export.templates.ExportTemplate) {
+    private fun exportTasks(tasks: List<Task>, template: ExportTemplate) {
         try {
             val exportedData = template.format(tasks)
             saveExportedData(exportedData, tasks, template.getFileExtension(), template.getMimeType())

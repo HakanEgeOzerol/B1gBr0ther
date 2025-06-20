@@ -1082,36 +1082,42 @@ class DashboardActivity : AppCompatActivity() {
     }
 
     fun exportCSV() {
+        android.util.Log.d("DashboardActivity", "exportCSV() called - setting format to 'csv'")
         val intent = Intent(this, ExportPage::class.java)
         intent.putExtra("export_format", "csv")
         startActivity(intent)
     }
     
     fun exportJSON() {
+        android.util.Log.d("DashboardActivity", "exportJSON() called - setting format to 'json'")
         val intent = Intent(this, ExportPage::class.java)
         intent.putExtra("export_format", "json")
         startActivity(intent)
     }
     
     fun exportHTML() {
+        android.util.Log.d("DashboardActivity", "exportHTML() called - setting format to 'html'")
         val intent = Intent(this, ExportPage::class.java)
         intent.putExtra("export_format", "html")
         startActivity(intent)
     }
     
     fun exportMarkdown() {
+        android.util.Log.d("DashboardActivity", "exportMarkdown() called - setting format to 'markdown'")
         val intent = Intent(this, ExportPage::class.java)
         intent.putExtra("export_format", "markdown")
         startActivity(intent)
     }
     
     fun exportXML() {
+        android.util.Log.d("DashboardActivity", "exportXML() called - setting format to 'xml'")
         val intent = Intent(this, ExportPage::class.java)
         intent.putExtra("export_format", "xml")
         startActivity(intent)
     }
     
     fun exportText() {
+        android.util.Log.d("DashboardActivity", "exportText() called - setting format to 'text'")
         val intent = Intent(this, ExportPage::class.java)
         intent.putExtra("export_format", "text")
         startActivity(intent)

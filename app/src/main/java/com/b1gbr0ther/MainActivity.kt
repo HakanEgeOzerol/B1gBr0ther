@@ -29,19 +29,12 @@ class MainActivity : AppCompatActivity() {
         val btnDatabaseTest = findViewById<Button>(R.id.btnDatabaseTest)
         val btnStatistics = findViewById<Button>(R.id.btnStatistics)
 
-        goToButton.setOnClickListener {
-//            Used to send to handGesture activity. Not anymore. The entire class needs to go
-        }
 
         btnDashboard.setOnClickListener {
             val intent = Intent(this, DashboardActivity::class.java)
             startActivity(intent)
         }
 
-        btnDatabaseTest.setOnClickListener {
-            val intent = Intent(this, DatabaseTesterActivity::class.java)
-            startActivity(intent)
-        }
         
         btnStatistics.setOnClickListener {
             val intent = Intent(this, StatisticsActivity::class.java)

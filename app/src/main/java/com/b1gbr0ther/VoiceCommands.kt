@@ -108,7 +108,9 @@ object VoiceCommandAliases {
             "save data csv",
             "download data csv",
             "export tasks csv",
-            "save tasks csv"
+            "save tasks csv",
+            "export task csv",
+            "save task csv"
         ),
         "export json" to listOf(
             "export json",
@@ -120,7 +122,9 @@ object VoiceCommandAliases {
             "save data json",
             "download data json",
             "export tasks json",
-            "save tasks json"
+            "save tasks json",
+            "export task json",
+            "save task json"
         ),
         "export html" to listOf(
             "export html",
@@ -132,7 +136,9 @@ object VoiceCommandAliases {
             "save data html",
             "download data html",
             "export tasks html",
-            "save tasks html"
+            "save tasks html",
+            "export task html",
+            "save task html"
         ),
         "export markdown" to listOf(
             "export markdown",
@@ -145,9 +151,13 @@ object VoiceCommandAliases {
             "download data markdown",
             "export tasks markdown",
             "save tasks markdown",
+            "export task markdown",
+            "save task markdown",
             "export md",
             "export to md",
-            "save as md"
+            "save as md",
+            "export task md",
+            "save task md"
         ),
         "export xml" to listOf(
             "export xml",
@@ -159,7 +169,9 @@ object VoiceCommandAliases {
             "save data xml",
             "download data xml",
             "export tasks xml",
-            "save tasks xml"
+            "save tasks xml",
+            "export task xml",
+            "save task xml"
         ),
         "export text" to listOf(
             "export text",
@@ -172,6 +184,8 @@ object VoiceCommandAliases {
             "download data text",
             "export tasks text",
             "save tasks text",
+            "export task text",
+            "save task text",
             "export plain text",
             "export to plain text",
             "save as plain text"

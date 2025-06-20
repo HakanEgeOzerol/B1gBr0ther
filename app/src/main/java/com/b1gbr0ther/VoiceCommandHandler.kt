@@ -12,18 +12,37 @@ class VoiceCommandHandler(private val activity: DashboardActivity) {
         "show manual" to { activity.showManualPage() },
         "show timesheet" to { activity.showTimesheetPage() },
         "show statistics" to { activity.showStatisticsPage() },
-        "export csv" to { activity.exportCSV() },
-        "export json" to { activity.exportJSON() },
-        "export html" to { activity.exportHTML() },
-        "export markdown" to { activity.exportMarkdown() },
-        "export xml" to { activity.exportXML() },
-        "export text" to { activity.exportText() }
+        "export csv" to { 
+            android.util.Log.d("VoiceCommandHandler", "Executing export csv command")
+            activity.exportCSV() 
+        },
+        "export json" to { 
+            android.util.Log.d("VoiceCommandHandler", "Executing export json command")
+            activity.exportJSON() 
+        },
+        "export html" to { 
+            android.util.Log.d("VoiceCommandHandler", "Executing export html command")
+            activity.exportHTML() 
+        },
+        "export markdown" to { 
+            android.util.Log.d("VoiceCommandHandler", "Executing export markdown command")
+            activity.exportMarkdown() 
+        },
+        "export xml" to { 
+            android.util.Log.d("VoiceCommandHandler", "Executing export xml command")
+            activity.exportXML() 
+        },
+        "export text" to { 
+            android.util.Log.d("VoiceCommandHandler", "Executing export text command")
+            activity.exportText() 
+        }
     )
 
     private var lastSpokenCommand: String? = null
 
     fun handleCommand(spoken: String): Boolean {
         val normalizedInput = spoken.trim().lowercase()
+        android.util.Log.d("VoiceCommandHandler", "handleCommand called with spoken: '$spoken', normalized: '$normalizedInput'")
         
         if (commandAliases["cancel command"]?.any { alias -> 
             normalizedInput == alias || 
@@ -34,6 +53,30 @@ class VoiceCommandHandler(private val activity: DashboardActivity) {
         }
 
         lastSpokenCommand = normalizedInput
+
+        // Special handling for export commands - check for format keywords first
+        if (normalizedInput.contains("export") && (normalizedInput.contains("task") || normalizedInput.contains("data"))) {
+            val formatKeywords = mapOf(
+                "csv" to "export csv",
+                "json" to "export json", 
+                "jason" to "export json",  // Common mispronunciation
+                "html" to "export html",
+                "markdown" to "export markdown",
+                "md" to "export markdown",  // Short form
+                "xml" to "export xml",
+                "text" to "export text",
+                "txt" to "export text",    // File extension form
+                "plain text" to "export text"
+            )
+            
+            for ((keyword, command) in formatKeywords) {
+                if (normalizedInput.contains(keyword)) {
+                    android.util.Log.d("VoiceCommandHandler", "Format keyword match: '$normalizedInput' contains '$keyword' -> '$command'")
+                    commandMap[command]?.invoke()
+                    return true
+                }
+            }
+        }
 
         if (normalizedInput.startsWith("delete task ") || normalizedInput.startsWith("remove task ")) {
             val taskName = normalizedInput.substringAfter(" task ").trim()
@@ -72,26 +115,31 @@ class VoiceCommandHandler(private val activity: DashboardActivity) {
         }
 
         commandMap[normalizedInput]?.let {
+            android.util.Log.d("VoiceCommandHandler", "Direct command match found: '$normalizedInput'")
             it.invoke()
             return true
         }
 
         for ((mainCommand, aliases) in commandAliases) {
             if (aliases.any { alias -> normalizedInput == alias }) {
+                android.util.Log.d("VoiceCommandHandler", "Exact alias match found: '$normalizedInput' -> '$mainCommand'")
                 commandMap[mainCommand]?.invoke()
                 return true
             }
         }
 
         for ((mainCommand, aliases) in commandAliases) {
-            if (aliases.any { alias -> 
-                    isSimilar(normalizedInput, alias) || 
-                    isSimilarWords(normalizedInput, alias)
-                }) {
-                commandMap[mainCommand]?.invoke()
-                return true
+            for (alias in aliases) {
+                val isSim = isSimilar(normalizedInput, alias)
+                val isSimWords = isSimilarWords(normalizedInput, alias)
+                if (isSim || isSimWords) {
+                    android.util.Log.d("VoiceCommandHandler", "Similar match: '$normalizedInput' matched alias '$alias' for command '$mainCommand' (similar=$isSim, similarWords=$isSimWords)")
+                    commandMap[mainCommand]?.invoke()
+                    return true
+                }
             }
         }
+        android.util.Log.d("VoiceCommandHandler", "No command match found for: '$normalizedInput'")
         return false
     }
 
