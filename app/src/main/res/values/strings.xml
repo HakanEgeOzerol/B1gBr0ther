@@ -37,8 +37,10 @@
     <string name="microphone_permission_message">Voice recognition requires microphone access to work. Would you like to grant this permission?</string>
     <string name="microphone_permission_denied_message">Voice recognition cannot work without microphone access. Would you like to open settings to grant the permission?</string>
     <string name="notification_permission_required">Notification Permission Required</string>
-    <string name="notification_permission_message">Push notifications require notification permission to work. Would you like to grant this permission?</string>
-    <string name="notification_permission_denied_message">Push notifications cannot work without notification permission. Would you like to open settings to grant the permission?</string>
+    <string name="notification_permission_message">This app needs notification permission to send task reminders and alerts.</string>
+    <string name="notification_permission_denied_message">Notification permission was denied. You can enable it manually in Settings > Apps > B1gBr0ther > Notifications.</string>
+    <string name="notifications_disabled_warning">Notifications are disabled. You won\'t receive task reminders.</string>
+    <string name="notifications_disabled">Notifications disabled</string>
     <string name="open_settings">Open Settings</string>
     <string name="yes">Yes</string>
     <string name="no">No</string>
@@ -55,7 +57,6 @@
     <string name="settings_reset_to_defaults">Settings reset to defaults</string>
     <string name="settings_saved_successfully">Settings saved successfully</string>
     <string name="microphone_permission_required_for_voice">Microphone permission is required for voice commands</string>
-    <string name="notifications_disabled_warning">Notifications are disabled. Some features may not work properly.</string>
     <string name="task_saved_to_database">Task saved to database with ID: %1$d</string>
     <string name="task_marked_completed">Task marked as completed</string>
     <string name="task_deleted">Task deleted</string>
@@ -76,6 +77,10 @@
     <string name="error_saving_export">Error saving export: %1$s</string>
     <string name="file_saved_to">File saved to: %1$s</string>
     <string name="choose_export_format">Choose Export Format</string>
+    <string name="select_all">Select All</string>
+    <string name="deselect_all">Deselect All</string>
+    <string name="no_tasks_to_export">No tasks available to export</string>
+    <string name="export_format_not_supported">Export format \'%1$s\' not supported</string>
     
     <!-- Dashboard -->
     <string name="dashboard">Dashboard</string>
@@ -209,14 +214,29 @@ Note: The app recognizes various similar phrases for each command. Feel free to 
     
     <!-- Statistics -->
     <string name="statistics_title">Statistics</string>
-    <string name="task_completion">Task completion</string>
-    <string name="task_timing">Task timing</string>
-    <string name="creation_methods">Creation methods</string>
-    <string name="quick_stats">Quick stats</string>
-    <string name="total_tasks">Total tasks</string>
-    <string name="tasks_completed">Tasks completed</string>
-    <string name="completion_rate">Completion rate</string>
+    <string name="task_completion">Task Completion</string>
+    <string name="task_timing">Task Timing</string>
+    <string name="creation_methods">Creation Methods</string>
+    <string name="quick_stats">Quick Stats</string>
+    <string name="total_tasks">Total Tasks</string>
+    <string name="tasks_completed">Tasks Completed</string>
+    <string name="completion_rate">Completion Rate</string>
     <string name="uncompleted">Uncompleted</string>
+    
+    <!-- Doodle Jump Game -->
+    <string name="game_background">Background</string>
+    <string name="game_score">Score: %1$d</string>
+    <string name="game_player">Player</string>
+    <string name="game_over">GAME OVER</string>
+    <string name="game_your_score">Your Score: %1$d</string>
+    <string name="game_high_scores">HIGH SCORES</string>
+    <string name="game_no_scores">No scores recorded</string>
+    <string name="game_play_again">PLAY AGAIN</string>
+    <string name="game_exit">EXIT</string>
+    <string name="game_pause">| |</string>
+    <string name="game_paused_title">Game Paused</string>
+    <string name="game_resume">Resume</string>
+    <string name="game_exit_to_app">Exit to App</string>
     
     <!-- Additional export strings -->
     <string name="export_selected_format">Export Selected (%1$d/%2$d)</string>
@@ -254,6 +274,7 @@ Note: The app recognizes various similar phrases for each command. Feel free to 
     <string name="no_tasks_available_to_track">No tasks available to track</string>
     <string name="already_tracking_a_task">Already tracking a task</string>
     <string name="task_already_completed">Task \'%1$s\' is already completed</string>
+    <string name="cannot_track_completed_task">Cannot start tracking task \'%1$s\' - it has already been completed</string>
     <string name="task_not_found_available">Task \'%1$s\' not found. Available tasks: %2$s</string>
     <string name="no_active_tracking_session">No active tracking session</string>
     <string name="no_task_was_being_tracked">No task was being tracked</string>
@@ -308,5 +329,10 @@ Note: The app recognizes various similar phrases for each command. Feel free to 
     <string name="gesture">Gesture</string>
     <string name="no_data_available">No data available</string>
     <string name="completion_stats_format">Completed: %1$s / Uncompleted: %2$s</string>
+    
+    <!-- Task input dialog strings -->
+    <string name="input_task_name_hint">Please input task name</string>
+    <string name="hours_hint">Hours</string>
+    <string name="minutes_hint">Minutes</string>
     
 </resources>

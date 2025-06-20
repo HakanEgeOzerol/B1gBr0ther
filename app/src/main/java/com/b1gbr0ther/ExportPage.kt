@@ -24,10 +24,13 @@ import com.b1gbr0ther.ui.TaskAdapter
 import java.time.LocalDate
 import java.time.LocalDateTime
 import java.util.Calendar
+import android.os.Handler
+import android.os.Looper
 
 class ExportPage : AppCompatActivity() {
     private lateinit var menuBar: MenuBar
     private lateinit var exportButton: Button
+    private lateinit var selectAllButton: Button
     private lateinit var startDateButton: Button
     private lateinit var endDateButton: Button
     private lateinit var completedCheckbox: CheckBox
@@ -42,6 +45,8 @@ class ExportPage : AppCompatActivity() {
     private var endDate: LocalDate? = null
     private var allTasks: List<Task> = emptyList()
     private var appliedTheme: Int = -1
+
+    private lateinit var handler: Handler
 
     override fun attachBaseContext(newBase: Context) {
         super.attachBaseContext(LocaleHelper.onAttach(newBase))
@@ -59,6 +64,7 @@ class ExportPage : AppCompatActivity() {
 
         menuBar = findViewById(R.id.menuBar)
         exportButton = findViewById(R.id.exportButton)
+        selectAllButton = findViewById(R.id.selectAllButton)
         startDateButton = findViewById(R.id.startDateButton)
         endDateButton = findViewById(R.id.endDateButton)
         completedCheckbox = findViewById(R.id.completedCheckbox)
@@ -76,11 +82,14 @@ class ExportPage : AppCompatActivity() {
         }
         
         databaseManager = DatabaseManager(this)
+        
+        handler = Handler(Looper.getMainLooper())
 
         recordingsRecyclerView.layoutManager = LinearLayoutManager(this)
         taskAdapter = TaskAdapter(emptyList())
         taskAdapter.setOnSelectionChangedListener {
             updateExportButtonText()
+            updateSelectAllButtonText()
         }
         recordingsRecyclerView.adapter = taskAdapter
 
@@ -88,10 +97,27 @@ class ExportPage : AppCompatActivity() {
             handleExport()
         }
         
+        selectAllButton.setOnClickListener {
+            handleSelectAll()
+        }
+        
+        // Initialize button texts
+        updateExportButtonText()
+        updateSelectAllButtonText()
+        
         setupFilterButtons()
 
         templateManager = ExportTemplateManager()
         fetchAndDisplayTasks()
+        
+        // Check if we should auto-export based on voice command
+        val exportFormat = intent.getStringExtra("export_format")
+        if (exportFormat != null) {
+            // Wait a bit for tasks to load, then trigger the export
+            handler.postDelayed({
+                selectAllAndExport(exportFormat)
+            }, 500)
+        }
     }
     
     private fun setupFilterButtons() {
@@ -161,6 +187,80 @@ class ExportPage : AppCompatActivity() {
         val selectedCount = taskAdapter.getSelectedCount()
         val totalCount = taskAdapter.itemCount
         exportButton.text = getString(R.string.export_selected_format, selectedCount, totalCount)
+    }
+    
+    private fun updateSelectAllButtonText() {
+        val selectedCount = taskAdapter.getSelectedCount()
+        val totalCount = taskAdapter.itemCount
+        selectAllButton.text = if (selectedCount == totalCount && totalCount > 0) {
+            getString(R.string.deselect_all)
+        } else {
+            getString(R.string.select_all)
+        }
+    }
+    
+    private fun handleSelectAll() {
+        val selectedCount = taskAdapter.getSelectedCount()
+        val totalCount = taskAdapter.itemCount
+        
+        if (selectedCount == totalCount && totalCount > 0) {
+            // Deselect all
+            taskAdapter.deselectAll()
+        } else {
+            // Select all
+            taskAdapter.selectAll()
+        }
+        updateExportButtonText()
+        updateSelectAllButtonText()
+    }
+
+    // Voice command export methods
+    fun exportCSV() {
+        selectAllAndExport("csv")
+    }
+    
+    fun exportJSON() {
+        selectAllAndExport("json")
+    }
+    
+    fun exportHTML() {
+        selectAllAndExport("html")
+    }
+    
+    fun exportMarkdown() {
+        selectAllAndExport("markdown")
+    }
+    
+    fun exportXML() {
+        selectAllAndExport("xml")
+    }
+    
+    fun exportText() {
+        selectAllAndExport("text")
+    }
+    
+    private fun selectAllAndExport(format: String) {
+        // Select all tasks first
+        taskAdapter.selectAll()
+        updateExportButtonText()
+        updateSelectAllButtonText()
+        
+        val selectedTasks = taskAdapter.getSelectedTasks()
+        
+        if (selectedTasks.isEmpty()) {
+            Toast.makeText(this, getString(R.string.no_tasks_to_export), Toast.LENGTH_SHORT).show()
+            return
+        }
+        
+        // Find the template for the requested format
+        val templates = templateManager.getAllTemplates()
+        val template = templates.find { it.getFileExtension().equals(format, ignoreCase = true) }
+        
+        if (template != null) {
+            exportTasks(selectedTasks, template)
+        } else {
+            Toast.makeText(this, getString(R.string.export_format_not_supported, format), Toast.LENGTH_SHORT).show()
+        }
     }
 
     private fun handleExport() {

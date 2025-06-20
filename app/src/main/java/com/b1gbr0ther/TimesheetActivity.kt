@@ -121,7 +121,7 @@ class TimesheetActivity : AppCompatActivity() {
       block.findViewById<TextView>(R.id.dayNumberText).text = day.toString()
       val date = currentYearMonth.atDay(day)
       val hrs = dailyHoursMap[date] ?: 0f
-      block.findViewById<TextView>(R.id.hoursWorkedText).text = if (hrs > 0f) String.format("%.1fh", hrs) else "-"
+      block.findViewById<TextView>(R.id.hoursWorkedText).text = if (hrs > 0f) String.format("%.2fh", hrs) else "-"
 
       // set heat-map background intensity
       val ratio = if (maxHours > 0) (hrs / maxHours).coerceIn(0f, 1f) else 0f

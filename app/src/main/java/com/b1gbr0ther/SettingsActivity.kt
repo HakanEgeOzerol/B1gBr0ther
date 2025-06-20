@@ -226,6 +226,10 @@ class SettingsActivity : AppCompatActivity() {
         notificationsSwitch.setOnCheckedChangeListener { _, isChecked ->
             if (isChecked) {
                 requestNotificationPermission()
+            } else {
+                // Save the disabled state immediately
+                saveNotificationSetting(false)
+                Toast.makeText(this, getString(R.string.notifications_disabled), Toast.LENGTH_SHORT).show()
             }
         }
         
@@ -306,7 +310,6 @@ class SettingsActivity : AppCompatActivity() {
         } else {
             // Permission already granted
             sharedPreferences.edit().putInt("audio_mode", AUDIO_MODE_VOICE_COMMANDS).apply()
-            Toast.makeText(this, "Voice Commands enabled", Toast.LENGTH_SHORT).show()
         }
     }
 
@@ -331,7 +334,6 @@ class SettingsActivity : AppCompatActivity() {
         } else {
             // Permission already granted
             sharedPreferences.edit().putInt("audio_mode", AUDIO_MODE_SOUND_DETECTION).apply()
-            Toast.makeText(this, "Sound Detection enabled", Toast.LENGTH_SHORT).show()
         }
     }
 
@@ -430,11 +432,9 @@ class SettingsActivity : AppCompatActivity() {
                     when {
                         radioVoiceCommands.isChecked -> {
                             sharedPreferences.edit().putInt("audio_mode", AUDIO_MODE_VOICE_COMMANDS).apply()
-                            Toast.makeText(this, "Voice Commands enabled", Toast.LENGTH_SHORT).show()
                         }
                         radioSoundDetection.isChecked -> {
                             sharedPreferences.edit().putInt("audio_mode", AUDIO_MODE_SOUND_DETECTION).apply()
-                            Toast.makeText(this, "Sound Detection enabled", Toast.LENGTH_SHORT).show()
                         }
                         else -> {
                             // Shouldn't happen, but fail safely

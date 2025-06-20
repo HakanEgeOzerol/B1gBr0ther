@@ -15,11 +15,13 @@ import com.b1gbr0ther.R
 import com.b1gbr0ther.data.database.entities.Task
 import java.time.LocalDateTime
 import java.time.temporal.ChronoUnit
+import java.time.LocalDate
 
 class TaskNotificationManager(private val context: Context) {
     private val channelId = "task_notifications"
     private val notificationMap = mutableMapOf<Long, Int>()
     private val sharedPreferences: SharedPreferences = context.getSharedPreferences("B1gBr0therSettings", Context.MODE_PRIVATE)
+    private val notificationPrefs: SharedPreferences = context.getSharedPreferences("TaskNotifications", Context.MODE_PRIVATE)
 
     init {
         createNotificationChannel()
@@ -40,41 +42,61 @@ class TaskNotificationManager(private val context: Context) {
         }
     }
 
+    private fun canSendNotificationToday(taskId: Long, notificationType: String): Boolean {
+        val today = LocalDate.now().toString()
+        val lastNotificationDate = notificationPrefs.getString("${taskId}_${notificationType}_last_date", "")
+        return lastNotificationDate != today
+    }
+
+    private fun markNotificationSentToday(taskId: Long, notificationType: String) {
+        val today = LocalDate.now().toString()
+        notificationPrefs.edit()
+            .putString("${taskId}_${notificationType}_last_date", today)
+            .apply()
+    }
+
     fun checkAndNotify(task: Task) {
         if (!SettingsActivity.isNotificationsEnabled(sharedPreferences)) {
             return
         }
-
-        if (notificationMap.getOrDefault(task.id, 0) >= 3) return
 
         val now = LocalDateTime.now()
         val minutesToStart = ChronoUnit.MINUTES.between(now, task.startTime)
         val minutesToEnd = ChronoUnit.MINUTES.between(now, task.endTime)
 
         when {
-            minutesToStart == 15L && now.isBefore(task.startTime) -> {
-                showNotification(
-                    task,
-                    "Task Starting Soon",
-                    "Task '${task.taskName}' is due to begin in 15 minutes",
-                    NotificationCompat.PRIORITY_HIGH
-                )
+            minutesToStart in 10L..20L && now.isBefore(task.startTime) -> {
+                if (canSendNotificationToday(task.id, "start_reminder")) {
+                    showNotification(
+                        task,
+                        "Task Starting Soon",
+                        "Task '${task.taskName}' is due to begin in 15 minutes",
+                        NotificationCompat.PRIORITY_HIGH
+                    )
+                    markNotificationSentToday(task.id, "start_reminder")
+                }
             }
-            minutesToEnd == 15L && !task.isCompleted && now.isAfter(task.startTime) && now.isBefore(task.endTime) -> {
-                showNotification(
-                    task,
-                    "Task Ending Soon",
-                    "Task '${task.taskName}' is due to end in 15 minutes",
-                    NotificationCompat.PRIORITY_HIGH
-                )
+            minutesToEnd in 10L..20L && !task.isCompleted && now.isAfter(task.startTime) && now.isBefore(task.endTime) -> {
+                if (canSendNotificationToday(task.id, "end_reminder")) {
+                    showNotification(
+                        task,
+                        "Task Ending Soon",
+                        "Task '${task.taskName}' is due to end in 15 minutes",
+                        NotificationCompat.PRIORITY_HIGH
+                    )
+                    markNotificationSentToday(task.id, "end_reminder")
+                }
             }
             !task.isCompleted && now.isAfter(task.endTime) && minutesToEnd <= -1L -> {
-                showNotification(
-                    task,
-                    "Task Overdue",
-                    "Task '${task.taskName}' is overdue!",
-                    NotificationCompat.PRIORITY_HIGH
-                )
+                if (canSendNotificationToday(task.id, "overdue")) {
+                    showNotification(
+                        task,
+                        "Task Overdue",
+                        "Task '${task.taskName}' is overdue!",
+                        NotificationCompat.PRIORITY_HIGH
+                    )
+                    markNotificationSentToday(task.id, "overdue")
+                }
             }
         }
     }
@@ -85,10 +107,6 @@ class TaskNotificationManager(private val context: Context) {
         }
 
         try {
-            val currentCount = notificationMap.getOrDefault(task.id, 0)
-            if (currentCount >= 3) return
-            notificationMap[task.id] = currentCount + 1
-
             val intent = Intent(context, DashboardActivity::class.java).apply {
                 flags = Intent.FLAG_ACTIVITY_NEW_TASK or Intent.FLAG_ACTIVITY_CLEAR_TASK
             }
@@ -121,5 +139,12 @@ class TaskNotificationManager(private val context: Context) {
 
     fun resetNotificationCount(taskId: Long) {
         notificationMap.remove(taskId)
+        // Also clear the daily notification tracking for this task
+        val today = LocalDate.now().toString()
+        notificationPrefs.edit()
+            .remove("${taskId}_start_reminder_last_date")
+            .remove("${taskId}_end_reminder_last_date")
+            .remove("${taskId}_overdue_last_date")
+            .apply()
     }
 } 

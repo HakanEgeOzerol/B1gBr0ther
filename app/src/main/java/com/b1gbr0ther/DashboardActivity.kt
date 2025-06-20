@@ -9,6 +9,7 @@ import android.hardware.Sensor
 import android.hardware.SensorEvent
 import android.hardware.SensorEventListener
 import android.hardware.SensorManager
+import android.media.MediaPlayer
 import android.os.Build
 import android.os.Bundle
 import android.os.Handler
@@ -39,6 +40,7 @@ import java.time.LocalDate
 import java.time.LocalTime
 import com.b1gbr0ther.TimingStatus
 import java.time.DayOfWeek
+import com.b1gbr0ther.easteregg.DoodleJumpActivity
 
 class DashboardActivity : AppCompatActivity() {
     private lateinit var databaseManager: DatabaseManager
@@ -74,6 +76,7 @@ class DashboardActivity : AppCompatActivity() {
     private var allTasks: List<Task> = emptyList()
     private var allTasksId: List<Int> = emptyList()
     private var activeTaskId: Int = -1
+//    private val mediaPlayer = MediaPlayer.create(applicationContext, R.raw.pipes)
 
     private var mockStartTime = 0L
 
@@ -116,7 +119,7 @@ class DashboardActivity : AppCompatActivity() {
     private fun loadWeeklyWorkBlocks(chart: WeekTimeGridView) {
         val weekStart = LocalDate.now().with(DayOfWeek.MONDAY)
         databaseManager.getWorkBlocksForWeek(weekStart) { workBlocks ->
-            chart.setWorkData(workBlocks)
+            chart.setWorkData(workBlocks, weekStart)
         }
     }
 
@@ -347,6 +350,11 @@ class DashboardActivity : AppCompatActivity() {
 
         voiceRecognizerManager.setOnBlowDetected {
             runOnUiThread {
+                // Skip blow detection if Doodle Jump game is running
+                if (DoodleJumpActivity.isGameRunning()) {
+                    return@runOnUiThread
+                }
+                
                 if (timeTracker.isTracking() && !timeTracker.isOnBreak()) {
                     voiceRecognizerManager.showSmokeBreakDialog(this) {
                         startBreak()
@@ -360,6 +368,10 @@ class DashboardActivity : AppCompatActivity() {
 
         voiceRecognizerManager.setOnSneezeDetected {
             runOnUiThread {
+                // Skip sneeze detection if Doodle Jump game is running
+                if (DoodleJumpActivity.isGameRunning()) {
+                    return@runOnUiThread
+                }
                 handleSneeze()
             }
         }
@@ -426,6 +438,11 @@ class DashboardActivity : AppCompatActivity() {
 
     private fun handleVoiceResult(result: String) {
         runOnUiThread {
+            // Skip voice command processing if Doodle Jump game is running
+            if (DoodleJumpActivity.isGameRunning()) {
+                return@runOnUiThread
+            }
+            
             val recognized = commandHandler.handleCommand(result)
             if (!recognized) {
                 Toast.makeText(this, getString(R.string.command_not_recognized, result), Toast.LENGTH_SHORT).show()
@@ -459,43 +476,45 @@ class DashboardActivity : AppCompatActivity() {
                 // Enhanced task matching: tries exact, partial, reverse partial, and word-by-word matching
                 android.util.Log.d("VoiceCommand", "Looking for task: '$taskName'")
                 android.util.Log.d("VoiceCommand", "Available tasks: ${tasks.map { "${it.taskName} (completed: ${it.isCompleted})" }}")
-                
-                var matchingTask = tasks.find { it.taskName.equals(taskName, ignoreCase = true) && !it.isCompleted }
-                
-                if (matchingTask == null) {
-                    matchingTask = tasks.find { 
-                        it.taskName.contains(taskName, ignoreCase = true) && !it.isCompleted 
+
+                var anyMatchingTask = tasks.find { it.taskName.equals(taskName, ignoreCase = true) }
+
+                if (anyMatchingTask == null) {
+                    anyMatchingTask = tasks.find {
+                        it.taskName.contains(taskName, ignoreCase = true)
                     }
                 }
-                
-                if (matchingTask == null) {
-                    matchingTask = tasks.find { task ->
-                        !task.isCompleted && taskName.contains(task.taskName, ignoreCase = true)
+
+                if (anyMatchingTask == null) {
+                    anyMatchingTask = tasks.find { task ->
+                        taskName.contains(task.taskName, ignoreCase = true)
                     }
                 }
-                
-                if (matchingTask == null) {
+
+                if (anyMatchingTask == null) {
                     val spokenWords = taskName.split(" ").filter { it.length > 2 }
-                    matchingTask = tasks.find { task ->
-                        !task.isCompleted && spokenWords.any { word -> 
-                            task.taskName.contains(word, ignoreCase = true) 
+                    anyMatchingTask = tasks.find { task ->
+                        spokenWords.any { word ->
+                            task.taskName.contains(word, ignoreCase = true)
                         }
                     }
                 }
-                
-                if (matchingTask != null && !matchingTask.isCompleted) {
-                    matchingTask.startTime = LocalDateTime.now()
 
-                    databaseManager.updateTask(matchingTask) {
-                        timeTracker.startTracking()
-                        currentTaskName = matchingTask.taskName
-                        currentTaskId = matchingTask.id
-                        timeTracker.setCurrentTask(matchingTask.id, matchingTask.taskName)
-                        Toast.makeText(this, getString(R.string.tracking_started_for, matchingTask.taskName), Toast.LENGTH_SHORT).show()
-                        updateCurrentTask(getString(R.string.currently_tracking, matchingTask.taskName))
+                if (anyMatchingTask != null) {
+                    if (anyMatchingTask.isCompleted) {
+                        Toast.makeText(this, getString(R.string.cannot_track_completed_task, anyMatchingTask.taskName), Toast.LENGTH_SHORT).show()
+                    } else {
+                        anyMatchingTask.startTime = LocalDateTime.now()
+
+                        databaseManager.updateTask(anyMatchingTask) {
+                            timeTracker.startTracking()
+                            currentTaskName = anyMatchingTask.taskName
+                            currentTaskId = anyMatchingTask.id
+                            timeTracker.setCurrentTask(anyMatchingTask.id, anyMatchingTask.taskName)
+                            Toast.makeText(this, getString(R.string.tracking_started_for, anyMatchingTask.taskName), Toast.LENGTH_SHORT).show()
+                            updateCurrentTask(getString(R.string.currently_tracking, anyMatchingTask.taskName))
+                        }
                     }
-                } else if (matchingTask != null && matchingTask.isCompleted) {
-                    Toast.makeText(this, getString(R.string.task_already_completed, matchingTask.taskName), Toast.LENGTH_SHORT).show()
                 } else {
                     val availableTasks = tasks.filter { !it.isCompleted }.map { it.taskName }.joinToString(", ")
                     Toast.makeText(this, getString(R.string.task_not_found_available, taskName, availableTasks), Toast.LENGTH_LONG).show()
@@ -683,11 +702,17 @@ class DashboardActivity : AppCompatActivity() {
 
             var analyzedGesture = GestureType.UNIDENTIFIED
 
+            // Skip gesture detection if Doodle Jump game is running
+            if (DoodleJumpActivity.isGameRunning()) {
+                return
+            }
+            
             if (acceleration > shakeThreshold && !isDialogShown && !isActiveTask()) {
                 updateAllTasks()
                 isDialogShown = true
                 analyzedGesture = gestureRecognizer.analyzeGesture()
                 Toast.makeText(applicationContext, analyzedGesture.name, Toast.LENGTH_SHORT).show()
+//                gestureAction(analyzedGesture, acceleration, isDialogShown, isActiveTask())
                 createInputTaskDialog()
             }
             else if (acceleration > shakeThreshold && !isDialogShown && isActiveTask()){
@@ -969,14 +994,8 @@ class DashboardActivity : AppCompatActivity() {
                 timingStatus, isPreplanned)
 
             databaseManager.createAppTask(newTask) { taskId ->
-                Toast.makeText(this, "Task saved to database with ID: $taskId", Toast.LENGTH_SHORT).show()
-
-                if (!isPreplanned) {
-                    currentTaskName = name
-                    currentTaskId = taskId
-                    timeTracker.startTracking()
-                    updateCurrentTaskDisplay()
-                }
+                Toast.makeText(this, "Task '$name' created.", Toast.LENGTH_SHORT).show()
+                updateCurrentTaskDisplay()
             }
 
             isDialogShown = false
@@ -1040,7 +1059,7 @@ class DashboardActivity : AppCompatActivity() {
 
     private fun startTaskChecker() {
         val handler = Handler(Looper.getMainLooper())
-        val checkInterval = 60000L // Check every minute
+        val checkInterval = 900000L // Check every 15 minutes (15 * 60 * 1000)
 
         val taskChecker = object : Runnable {
             override fun run() {
@@ -1077,6 +1096,42 @@ class DashboardActivity : AppCompatActivity() {
         startActivity(intent)
     }
 
+    fun exportCSV() {
+        val intent = Intent(this, ExportPage::class.java)
+        intent.putExtra("export_format", "csv")
+        startActivity(intent)
+    }
+    
+    fun exportJSON() {
+        val intent = Intent(this, ExportPage::class.java)
+        intent.putExtra("export_format", "json")
+        startActivity(intent)
+    }
+    
+    fun exportHTML() {
+        val intent = Intent(this, ExportPage::class.java)
+        intent.putExtra("export_format", "html")
+        startActivity(intent)
+    }
+    
+    fun exportMarkdown() {
+        val intent = Intent(this, ExportPage::class.java)
+        intent.putExtra("export_format", "markdown")
+        startActivity(intent)
+    }
+    
+    fun exportXML() {
+        val intent = Intent(this, ExportPage::class.java)
+        intent.putExtra("export_format", "xml")
+        startActivity(intent)
+    }
+    
+    fun exportText() {
+        val intent = Intent(this, ExportPage::class.java)
+        intent.putExtra("export_format", "text")
+        startActivity(intent)
+    }
+
     fun deleteTaskByName(taskName: String) {
         databaseManager.getAllTasks { tasks ->
             // Enhanced task matching: tries exact, partial, reverse partial, and word-by-word matching
@@ -1105,5 +1160,50 @@ class DashboardActivity : AppCompatActivity() {
                 Toast.makeText(this, "Could not find task with name '$taskName'. Available tasks: ${tasks.map { it.taskName }.joinToString(", ")}", Toast.LENGTH_LONG).show()
             }
         }
+    }
+
+    private fun triggerEasterEgg() {
+        // Launch the Doodle Jump game
+        val intent = Intent(applicationContext, DoodleJumpActivity::class.java)
+        applicationContext.startActivity(intent)
+    }
+
+    private fun gestureAction(gesture: GestureType, acceleration: Float, isDialogShown: Boolean, isActiveTask: Boolean){
+        when (gesture){
+            GestureType.UP -> triggerEasterEgg()
+            GestureType.SHAKE -> showCorrectDialog(acceleration, isDialogShown, isActiveTask)
+            GestureType.DOWN -> playPipeFallingEasterEgg() //Pipe falling sound as an easter egg
+            GestureType.LEFT -> TODO() //Start audio rec
+            GestureType.RIGHT -> TODO() //Start audio rec
+            GestureType.CIRCLE -> return //Identification for squares and circles is not done. Possible extension in the future
+            GestureType.SQUARE -> return //Identification for squares and circles is not done. Possible extension in the future
+            else -> {
+                Toast.makeText(applicationContext, "Something went wrong, try again", Toast.LENGTH_SHORT).show()
+                return
+            }
+        }
+    }
+
+    private fun showCorrectDialog(acceleration: Float, isDialogShown: Boolean, isActiveTask: Boolean){
+        var analyzedGesture = GestureType.UNIDENTIFIED
+
+        if (acceleration > shakeThreshold && !isDialogShown && !isActiveTask()) {
+            updateAllTasks()
+            this.isDialogShown = true
+//            analyzedGesture = gestureRecognizer.analyzeGesture()
+//            Toast.makeText(applicationContext, analyzedGesture.name, Toast.LENGTH_SHORT).show()
+            createInputTaskDialog()
+        }
+        else if (acceleration > shakeThreshold && !isDialogShown && isActiveTask()){
+            updateAllTasks()
+            this.isDialogShown = true
+            createExistingTaskDialog()
+//            analyzedGesture = gestureRecognizer.analyzeGesture()
+//            Toast.makeText(applicationContext, analyzedGesture.name, Toast.LENGTH_SHORT).show()
+        }
+    }
+
+    private fun playPipeFallingEasterEgg(){
+//        mediaPlayer.start()
     }
 }

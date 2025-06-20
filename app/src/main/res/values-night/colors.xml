@@ -1,0 +1,17 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <!-- Game Colors - Dark Theme -->
+    <color name="game_score_color">#CCCCCC</color>
+    <color name="game_pause_button">#6C6C6C</color>
+    <color name="game_pause_text">#FFFFFF</color>
+    <color name="game_over_text">#AAAAAA</color>
+    <color name="game_score_display">#FFFFFF</color>
+    <color name="game_high_scores_title">#FFD700</color>
+    <color name="game_no_scores_text">#AAAAAA</color>
+    <color name="game_current_score_highlight">#CCCCCC</color>
+    <color name="game_other_scores">#FFFFFF</color>
+    <color name="game_play_again_button">#6C6C6C</color>
+    <color name="game_exit_button">#8C8C8C</color>
+    <color name="game_button_text">#FFFFFF</color>
+    <color name="game_overlay_background">#E6000000</color>
+</resources> 

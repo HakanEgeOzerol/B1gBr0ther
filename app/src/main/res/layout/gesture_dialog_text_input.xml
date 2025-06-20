@@ -12,7 +12,7 @@
         android:layout_height="wrap_content"
         android:layout_margin="4dp"
         android:fontFamily="sans-serif"
-        android:hint="Please input task name"/>
+        android:hint="@string/input_task_name_hint"/>
 
 
     <LinearLayout
@@ -28,7 +28,7 @@
             android:layout_margin="4dp"
             android:fontFamily="sans-serif"
             android:layout_weight="1"
-            android:hint="Hours"/>
+            android:hint="@string/hours_hint"/>
 
         <EditText
             android:id="@+id/MinuteInput"
@@ -38,7 +38,7 @@
             android:layout_margin="4dp"
             android:fontFamily="sans-serif"
             android:layout_weight="1"
-            android:hint="Minutes"/>
+            android:hint="@string/minutes_hint"/>
 
     </LinearLayout>
 
@@ -55,7 +55,7 @@
             android:layout_margin="4dp"
             android:layout_weight="1"
             android:textAlignment="center"
-            android:text="Cancel">
+            android:text="@string/cancel">
         </Button>
         <Button
             android:id="@+id/SubmitTask"
@@ -66,7 +66,7 @@
             android:layout_margin="4dp"
             android:layout_weight="1"
             android:textAlignment="center"
-            android:text="Start">
+            android:text="@string/start">
         </Button>
     </LinearLayout>
 </LinearLayout>

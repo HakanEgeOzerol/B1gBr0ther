@@ -37,8 +37,8 @@
     <string name="microphone_permission_message">La reconnaissance vocale nécessite l\'accès au microphone pour fonctionner. Souhaitez-vous accorder cette permission?</string>
     <string name="microphone_permission_denied_message">La reconnaissance vocale ne peut pas fonctionner sans accès au microphone. Souhaitez-vous ouvrir les paramètres pour accorder la permission?</string>
     <string name="notification_permission_required">Permission de notification requise</string>
-    <string name="notification_permission_message">Les notifications push nécessitent une permission de notification pour fonctionner. Souhaitez-vous accorder cette permission?</string>
-    <string name="notification_permission_denied_message">Les notifications push ne peuvent pas fonctionner sans permission de notification. Souhaitez-vous ouvrir les paramètres pour accorder la permission?</string>
+    <string name="notification_permission_message">Cette application a besoin de la permission de notification pour envoyer des rappels et alertes de tâches.</string>
+    <string name="notification_permission_denied_message">La permission de notification a été refusée. Vous pouvez l\'activer manuellement dans Paramètres > Applications > B1gBr0ther > Notifications.</string>
     <string name="open_settings">Ouvrir les paramètres</string>
     <string name="yes">Oui</string>
     <string name="no">Non</string>
@@ -55,7 +55,8 @@
     <string name="settings_reset_to_defaults">Paramètres réinitialisés aux valeurs par défaut</string>
     <string name="settings_saved_successfully">Paramètres sauvegardés avec succès</string>
     <string name="microphone_permission_required_for_voice">La permission microphone est requise pour les commandes vocales</string>
-    <string name="notifications_disabled_warning">Les notifications sont désactivées. Certaines fonctionnalités peuvent ne pas fonctionner correctement.</string>
+    <string name="notifications_disabled_warning">Les notifications sont désactivées. Vous ne recevrez pas de rappels de tâches.</string>
+    <string name="notifications_disabled">Notifications désactivées</string>
     <string name="task_saved_to_database">Tâche sauvegardée dans la base de données avec ID: %1$d</string>
     <string name="task_marked_completed">Tâche marquée comme terminée</string>
     <string name="task_deleted">Tâche supprimée</string>
@@ -76,6 +77,10 @@
     <string name="error_saving_export">Erreur lors de la sauvegarde de l\'export: %1$s</string>
     <string name="file_saved_to">Fichier sauvegardé vers: %1$s</string>
     <string name="choose_export_format">Choisir le format d\'export</string>
+    <string name="select_all">Tout sélectionner</string>
+    <string name="deselect_all">Tout désélectionner</string>
+    <string name="no_tasks_to_export">Aucune tâche disponible à exporter</string>
+    <string name="export_format_not_supported">Format d\'export \'%1$s\' non supporté</string>
     
     <!-- Dashboard -->
     <string name="dashboard">Tableau de bord</string>
@@ -198,7 +203,7 @@
     <string name="total_tasks">Total des tâches</string>
     <string name="tasks_completed">Tâches terminées</string>
     <string name="completion_rate">Taux d\'achèvement</string>
-    <string name="uncompleted">Non terminé</string>
+    <string name="uncompleted">Non terminées</string>
     <string name="on_time">À l\'heure</string>
     <string name="late">En retard</string>
     <string name="early">En avance</string>
@@ -243,7 +248,8 @@
     <string name="no_tasks_available_to_track">Aucune tâche disponible à suivre</string>
     <string name="already_tracking_a_task">Déjà en train de suivre une tâche</string>
     <string name="task_already_completed">Tâche \'%1$s\' déjà terminée</string>
-    <string name="task_not_found_available">Tâche \'%1$s\' introuvable. Tâches disponibles: %2$s</string>
+    <string name="cannot_track_completed_task">Impossible de commencer le suivi de la tâche \'%1$s\' - elle est déjà terminée</string>
+    <string name="task_not_found_available">Tâche \'%1$s\' introuvable. Tâches disponibles : %2$s</string>
     <string name="no_active_tracking_session">Aucune session de suivi active</string>
     <string name="no_task_was_being_tracked">Aucune tâche n\'était suivie</string>
     <string name="could_not_find_tracked_task">Impossible de trouver la tâche suivie</string>
@@ -290,5 +296,22 @@
     <string name="no_task_data_available">Aucune donnée de tâche disponible</string>
     <string name="no_timing_data_available">Aucune donnée de timing disponible</string>
     <string name="no_task_creation_data_available">Aucune donnée de création de tâche disponible</string>
+    
+    <!-- Doodle Jump Game -->
+    <string name="game_background">Arrière-plan</string>
+    <string name="game_score">Score: %1$d</string>
+    <string name="game_player">Joueur</string>
+    <string name="game_over">JEU TERMINÉ</string>
+    <string name="game_your_score">Votre Score: %1$d</string>
+    <string name="game_high_scores">MEILLEURS SCORES</string>
+    <string name="game_no_scores">Aucun score enregistré</string>
+    <string name="game_play_again">REJOUER</string>
+    <string name="game_exit">SORTIR</string>
+    <string name="game_pause">| |</string>
+    
+    <!-- Task input dialog strings -->
+    <string name="input_task_name_hint">Veuillez saisir le nom de la tâche</string>
+    <string name="hours_hint">Heures</string>
+    <string name="minutes_hint">Minutes</string>
 
 </resources> 

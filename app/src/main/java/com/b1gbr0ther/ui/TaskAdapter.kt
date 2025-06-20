@@ -83,5 +83,9 @@ class TaskAdapter(private var tasks: List<Task>) : RecyclerView.Adapter<TaskAdap
         onSelectionChangedListener?.invoke()
     }
     
+    fun deselectAll() {
+        clearSelection()
+    }
+    
     fun getSelectedCount(): Int = selectedTasks.size
 } 
