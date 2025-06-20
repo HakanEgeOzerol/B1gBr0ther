@@ -92,7 +92,11 @@ class MenuBar @JvmOverloads constructor(
         if (currentActivity::class.java != target) {
             val intent = android.content.Intent(context, target)
             context.startActivity(intent)
-            currentActivity.overridePendingTransition(0, 0)
+            currentActivity.overrideActivityTransition(
+                android.app.Activity.OVERRIDE_TRANSITION_OPEN,
+                0,
+                0
+            )
         }
     }
     

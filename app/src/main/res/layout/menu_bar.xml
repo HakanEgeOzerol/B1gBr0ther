@@ -1,7 +1,6 @@
 <?xml version="1.0" encoding="utf-8"?>
 <androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
-    xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="wrap_content"
     android:background="@drawable/rounded_corners"
@@ -16,9 +15,8 @@
         android:clickable="true"
         android:foreground="?attr/selectableItemBackground"
         app:layout_constraintBottom_toBottomOf="parent"
-        app:layout_constraintEnd_toStartOf="@+id/dashboardPageMenuButton"
-        app:layout_constraintHorizontal_bias="0.5"
         app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintEnd_toStartOf="@id/dashboardPageMenuButton"
         app:layout_constraintTop_toTopOf="parent">
 
         <ImageView
@@ -27,8 +25,7 @@
             android:layout_height="match_parent"
             android:padding="8dp"
             android:tint="#FFFFFF"
-            app:srcCompat="@drawable/export_icon"
-            app:tint="#FFFFFF" />
+            app:srcCompat="@drawable/export_icon" />
     </FrameLayout>
 
     <!-- Dashboard Button (Index 1) -->
@@ -39,9 +36,8 @@
         android:clickable="true"
         android:foreground="?attr/selectableItemBackground"
         app:layout_constraintBottom_toBottomOf="parent"
-        app:layout_constraintEnd_toStartOf="@+id/timesheetPageMenuButton"
-        app:layout_constraintHorizontal_bias="0.5"
-        app:layout_constraintStart_toEndOf="@+id/exportPageMenuButton"
+        app:layout_constraintStart_toEndOf="@id/exportPageMenuButton"
+        app:layout_constraintEnd_toStartOf="@id/timesheetPageMenuButton"
         app:layout_constraintTop_toTopOf="parent">
 
         <ImageView
@@ -51,8 +47,7 @@
             android:layout_gravity="center"
             android:padding="8dp"
             android:tint="#FFFFFF"
-            app:srcCompat="@drawable/dasboard_icon"
-            app:tint="#FFFFFF" />
+            app:srcCompat="@drawable/dasboard_icon" />
     </FrameLayout>
 
     <!-- Timesheet Button (Index 2) -->
@@ -63,9 +58,8 @@
         android:clickable="true"
         android:foreground="?attr/selectableItemBackground"
         app:layout_constraintBottom_toBottomOf="parent"
-        app:layout_constraintEnd_toStartOf="@+id/statisticsPageMenuButton"
-        app:layout_constraintHorizontal_bias="0.5"
-        app:layout_constraintStart_toEndOf="@+id/dashboardPageMenuButton"
+        app:layout_constraintStart_toEndOf="@id/dashboardPageMenuButton"
+        app:layout_constraintEnd_toStartOf="@id/statisticsPageMenuButton"
         app:layout_constraintTop_toTopOf="parent">
 
         <ImageView
@@ -75,10 +69,9 @@
             android:layout_gravity="center"
             android:padding="8dp"
             android:tint="#FFFFFF"
-            app:srcCompat="@drawable/timesheet_icon"
-            app:tint="#FFFFFF" />
+            app:srcCompat="@drawable/timesheet_icon" />
     </FrameLayout>
-    
+
     <!-- Statistics Button (Index 3) -->
     <FrameLayout
         android:id="@+id/statisticsPageMenuButton"
@@ -87,9 +80,8 @@
         android:clickable="true"
         android:foreground="?attr/selectableItemBackground"
         app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintStart_toEndOf="@id/timesheetPageMenuButton"
         app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintHorizontal_bias="0.5"
-        app:layout_constraintStart_toEndOf="@+id/timesheetPageMenuButton"
         app:layout_constraintTop_toTopOf="parent">
 
         <ImageView
@@ -99,8 +91,7 @@
             android:layout_gravity="center"
             android:padding="8dp"
             android:tint="#FFFFFF"
-            app:srcCompat="@android:drawable/ic_menu_recent_history"
-            app:tint="#FFFFFF" />
+            app:srcCompat="@android:drawable/ic_menu_recent_history" />
     </FrameLayout>
 
     <!-- Selection Highlight -->
@@ -113,32 +104,5 @@
         android:translationZ="-1dp"
         app:layout_constraintStart_toStartOf="@id/exportPageMenuButton"
         app:layout_constraintTop_toTopOf="@id/exportPageMenuButton" />
-
-    <!-- Language Switch Button (Future Implementation) -->
-    <!-- This space is reserved for the language switch button -->
-    <!-- It can be positioned above or to the side of the navigation bar -->
-    <!-- 
-    <FrameLayout
-        android:id="@+id/languageSwitchButton"
-        android:layout_width="30dp"
-        android:layout_height="30dp"
-        android:layout_marginTop="8dp"
-        android:clickable="true"
-        android:foreground="?attr/selectableItemBackground"
-        android:visibility="gone"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintTop_toTopOf="parent">
-        
-        <TextView
-            android:id="@+id/languageText"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_gravity="center"
-            android:text="EN"
-            android:textColor="#FFFFFF"
-            android:textSize="12sp"
-            android:textStyle="bold" />
-    </FrameLayout>
-    -->
 
 </androidx.constraintlayout.widget.ConstraintLayout>

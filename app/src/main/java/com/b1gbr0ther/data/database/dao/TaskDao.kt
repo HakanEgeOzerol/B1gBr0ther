@@ -82,21 +82,21 @@ interface TaskDao {
      * Get count of tasks completed late (endTime > startTime + expected duration).
      * @return Number of late completed tasks
      */
-    @Query("SELECT COUNT(*) FROM tasks WHERE isCompleted = 1 AND endTime > startTime")
+    @Query("SELECT COUNT(*) FROM tasks WHERE timingStatus = 'LATE' AND isCompleted = 1")
     suspend fun getLateCompletedTasksCount(): Int
     
     /**
      * Get count of tasks completed on time (endTime <= startTime + expected duration).
      * @return Number of on-time completed tasks
      */
-    @Query("SELECT COUNT(*) FROM tasks WHERE isCompleted = 1 AND endTime <= startTime")
+    @Query("SELECT COUNT(*) FROM tasks WHERE timingStatus = 'ON_TIME' AND isCompleted = 1")
     suspend fun getOnTimeCompletedTasksCount(): Int
     
     /**
      * Get count of tasks completed early (endTime < startTime).
      * @return Number of early completed tasks
      */
-    @Query("SELECT COUNT(*) FROM tasks WHERE isCompleted = 1 AND endTime < startTime")
+    @Query("SELECT COUNT(*) FROM tasks WHERE timingStatus = 'EARLY' AND isCompleted = 1")
     suspend fun getEarlyCompletedTasksCount(): Int
     
     /**

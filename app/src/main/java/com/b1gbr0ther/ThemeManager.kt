@@ -24,12 +24,10 @@ object ThemeManager {
             else -> R.style.Theme_B1gBr0ther_Light
         }
         
-        android.util.Log.d("ThemeManager", "Applying theme: ${getThemeName(themeMode)} (${themeRes}) to ${activity.javaClass.simpleName}")
         activity.setTheme(themeRes)
     }
     
     fun setTheme(context: Context, themeMode: Int) {
-        android.util.Log.d("ThemeManager", "Setting theme to: ${getThemeName(themeMode)} ($themeMode)")
         val sharedPreferences = context.getSharedPreferences(PREFS_NAME, Context.MODE_PRIVATE)
         sharedPreferences.edit().putInt(THEME_KEY, themeMode).apply()
     }

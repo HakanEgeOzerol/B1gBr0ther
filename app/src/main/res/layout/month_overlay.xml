@@ -4,18 +4,21 @@
     android:layout_width="wrap_content"
     android:layout_height="wrap_content"
     android:background="@drawable/rounded_year_month"
-    android:backgroundTint="#A7ADC6"
+    android:backgroundTint="?attr/cardBackgroundColor"
     android:orientation="vertical"
-    android:padding="12dp">
+    android:padding="16dp">
 
   <TextView
       android:id="@+id/monthChosenText"
       android:layout_width="wrap_content"
       android:layout_height="wrap_content"
-      android:layout_marginBottom="8dp"
+      android:layout_marginBottom="12dp"
       android:text="@string/pick_month"
-      android:textColor="#FFFFFF"
-      android:textSize="16sp" />
+      android:textColor="?android:attr/textColorPrimary"
+      android:textSize="18sp"
+      android:textStyle="bold"
+      android:gravity="center"
+      android:layout_gravity="center" />
 
   <LinearLayout
       android:id="@+id/monthButtonContainer"

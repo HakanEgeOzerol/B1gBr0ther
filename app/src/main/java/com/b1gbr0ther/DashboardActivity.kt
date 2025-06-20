@@ -37,6 +37,8 @@ import com.b1gbr0ther.gestureRecognition.GestureType
 import com.b1gbr0ther.notifications.TaskNotificationManager
 import java.time.LocalDate
 import java.time.LocalTime
+import com.b1gbr0ther.TimingStatus
+import java.time.DayOfWeek
 
 class DashboardActivity : AppCompatActivity() {
     private lateinit var databaseManager: DatabaseManager
@@ -111,6 +113,13 @@ class DashboardActivity : AppCompatActivity() {
         currentTaskText.text = name
     }
 
+    private fun loadWeeklyWorkBlocks(chart: WeekTimeGridView) {
+        val weekStart = LocalDate.now().with(DayOfWeek.MONDAY)
+        databaseManager.getWorkBlocksForWeek(weekStart) { workBlocks ->
+            chart.setWorkData(workBlocks)
+        }
+    }
+
     private fun updateCurrentTaskDisplay() {
         if (timeTracker.isTracking()) {
             if (timeTracker.isOnBreak()) {
@@ -174,10 +183,13 @@ class DashboardActivity : AppCompatActivity() {
         mockStartTime = System.currentTimeMillis()
 
         currentTaskText = findViewById(R.id.currentTaskText)
+
         statusTextView = findViewById(R.id.statusTextView)
         simulateWakeWordButton = findViewById(R.id.simulateWakeWordButton)
 
         initializeVoiceRecognition()
+
+        menu.setActivePage(1)
         ViewCompat.setOnApplyWindowInsetsListener(findViewById(R.id.main)) { v, insets ->
             val systemBars = insets.getInsets(WindowInsetsCompat.Type.systemBars())
             v.setPadding(systemBars.left, systemBars.top, systemBars.right, systemBars.bottom)
@@ -187,6 +199,9 @@ class DashboardActivity : AppCompatActivity() {
         val chart = findViewById<WeekTimeGridView>(R.id.weekGrid)
 
         //0f = 24:00, 11f = 11:00, 23 = 23:00
+        // Load work blocks for the current week from the database
+        loadWeeklyWorkBlocks(chart)
+        /*
         val myWorkData = listOf(
             WorkBlock(0, 8f, 12f, false),
             WorkBlock(0, 12f, 13.5f, true),
@@ -198,9 +213,11 @@ class DashboardActivity : AppCompatActivity() {
             WorkBlock(6, 9f, 13.5f, false),
             WorkBlock(6, 23f, 23.99f, false),
         )
-        //^^this is dummy data, replace this with data gathered from the database once the connection is there
+        // Data now loaded dynamically from database
 
-        chart.setWorkData(myWorkData)
+        */
+        // chart.setWorkData(myWorkData) -- retained for reference
+
 
         timerText = findViewById(R.id.timer)
 
@@ -847,7 +864,7 @@ class DashboardActivity : AppCompatActivity() {
         val cancelButton = dialog.findViewById<Button>(R.id.Cancel)
 
         continueButton.setOnClickListener{
-            var taskDate = LocalDate.of(datePicker.year, datePicker.month, datePicker.dayOfMonth)
+            var taskDate = LocalDate.of(datePicker.year, datePicker.month + 1, datePicker.dayOfMonth)
 
             dialog.dismiss()
             setStartTimeDialog(name, taskDate)
@@ -937,17 +954,24 @@ class DashboardActivity : AppCompatActivity() {
                 estimatedCompletion = estimatedCompletion.plusHours(3)
             }
 
-            if (startTime.isAfter(LocalDateTime.now())){//Defaults to 3 hours
-                estimatedCompletion = LocalDateTime.now().plusHours(3)
-                startTime = LocalDateTime.now()
+            // Determine task timing status
+            val timingStatus = when {
+                LocalDateTime.now().isBefore(estimatedCompletion) -> TimingStatus.EARLY
+                LocalDateTime.now().isAfter(estimatedCompletion) -> TimingStatus.LATE
+                else -> TimingStatus.ON_TIME
             }
 
-            val newTask = Task(name, startTime, estimatedCompletion, CreationMethod.Gesture, isPreplanned)
+            val newTask = Task(
+                name,
+                startTime,
+                estimatedCompletion,
+                CreationMethod.Gesture,
+                timingStatus, isPreplanned)
 
             databaseManager.createAppTask(newTask) { taskId ->
                 Toast.makeText(this, "Task saved to database with ID: $taskId", Toast.LENGTH_SHORT).show()
 
-                if (startTime == LocalDateTime.now()) {
+                if (!isPreplanned) {
                     currentTaskName = name
                     currentTaskId = taskId
                     timeTracker.startTracking()
