@@ -4,7 +4,7 @@ import kotlin.math.abs
 
 class GestureRecognizer {
     private val motionWindow = mutableListOf<Motion>()
-    private val windowDuration = 500L // milliseconds
+    private val windowDuration = 200L // milliseconds
 
     fun addSensorData(x: Float, y: Float, z: Float, timestamp: Long) {//Continuously adding sensor data, up to a window
         motionWindow.add(Motion(x, y, z, timestamp))

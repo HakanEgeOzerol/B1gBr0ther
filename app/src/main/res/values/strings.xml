@@ -124,7 +124,14 @@
    • Show Statistics: \"Show statistics\" or \"Show stats\"\n\n
 5. Task Management:\n
    • Delete Task: \"Delete task [task name]\" or \"Remove task [task name]\"\n\n
-Note: The app recognizes various similar phrases for each command. Feel free to speak naturally!</string>
+Note: The app recognizes various similar phrases for each command. Feel free to speak naturally!\n\n
+6. Task Creation:\n
+    • In order to create a task you have to shake your phone at the dashboard page\n
+    • After shaking you would be prompted to input necessary information for the task to be created\n
+    • This process may last several steps, depending on if you are planning ahead\n
+7. Existing task\n
+    • If a task exists when the phone is shaken you would be prompted to manage it\n
+    • Either complete it or delete it</string>
     
     <!-- Export Page -->
     <string name="start_date">Start Date</string>
