@@ -126,7 +126,7 @@ class TimesheetActivity : AppCompatActivity() {
       // set heat-map background intensity
       val ratio = if (maxHours > 0) (hrs / maxHours).coerceIn(0f, 1f) else 0f
       val alpha = (40 + ratio * 215).toInt() // 40 (very light) to 255 (opaque)
-      val heatColor = android.graphics.Color.argb(alpha, 76, 175, 80) // material green 500 with variable alpha
+      val heatColor = android.graphics.Color.argb(alpha, 95, 75, 102) // purple
       block.setBackgroundColor(heatColor)
 
       block.setOnClickListener {
