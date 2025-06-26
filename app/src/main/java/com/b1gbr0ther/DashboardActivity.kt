@@ -430,6 +430,54 @@ class DashboardActivity : AppCompatActivity() {
         }
     }
 
+    fun createTaskByVoice(taskName: String? = null) {
+        runOnUiThread {
+            val dialog = Dialog(this)
+            dialog.setContentView(R.layout.gesture_dialog_new_task_step_1)
+            dialog.setCancelable(true)
+
+            val textInput = dialog.findViewById<EditText>(R.id.TaskInput)
+            val cancelButton = dialog.findViewById<Button>(R.id.Cancel)
+            val startTaskCreation = dialog.findViewById<Button>(R.id.StartTaskCreation)
+            val checkBox = dialog.findViewById<CheckBox>(R.id.checkBoxNewTask)
+
+            if (taskName != null) {
+                textInput.setText(taskName)
+            }
+
+            startTaskCreation.setOnClickListener{
+                var name = textInput.text.toString()
+                if (name.isEmpty()){
+                    name = "Default task name"
+                }
+                val isPlannedAhead = checkBox.isChecked
+
+                if (isPlannedAhead){
+                    dialog.dismiss()
+                    setDateDialog(name)
+                }
+                else{
+                    dialog.dismiss()
+                    setEndTimeDialog(name, LocalDateTime.now())
+                }
+                updateAllTasks()
+            }
+
+            cancelButton.setOnClickListener{
+                isDialogShown = false
+                dialog.dismiss()
+                updateAllTasks()
+            }
+
+            dialog.setOnCancelListener {
+                isDialogShown = false
+                updateAllTasks()
+            }
+
+            dialog.show()
+        }
+    }
+
     fun startTracking() {
         if (!timeTracker.isTracking()) {
             databaseManager.getAllTasks { tasks ->

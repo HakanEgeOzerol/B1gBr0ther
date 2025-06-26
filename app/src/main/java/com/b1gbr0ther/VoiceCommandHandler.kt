@@ -12,6 +12,7 @@ class VoiceCommandHandler(private val activity: DashboardActivity) {
         "show manual" to { activity.showManualPage() },
         "show timesheet" to { activity.showTimesheetPage() },
         "show statistics" to { activity.showStatisticsPage() },
+        "create task" to { activity.createTaskByVoice() },
         "export csv" to { 
             android.util.Log.d("VoiceCommandHandler", "Executing export csv command")
             activity.exportCSV() 
@@ -53,6 +54,22 @@ class VoiceCommandHandler(private val activity: DashboardActivity) {
         }
 
         lastSpokenCommand = normalizedInput
+
+        if (normalizedInput.startsWith("create task ") || 
+            normalizedInput.startsWith("add task ") || 
+            normalizedInput.startsWith("new task ")) {
+            val taskName = when {
+                normalizedInput.startsWith("create task ") -> normalizedInput.substringAfter("create task ")
+                normalizedInput.startsWith("add task ") -> normalizedInput.substringAfter("add task ")
+                normalizedInput.startsWith("new task ") -> normalizedInput.substringAfter("new task ")
+                else -> ""
+            }.trim()
+            
+            if (taskName.isNotEmpty()) {
+                activity.createTaskByVoice(taskName)
+                return true
+            }
+        }
 
         // Special handling for export commands - check for format keywords first
         if (normalizedInput.contains("export") && (normalizedInput.contains("task") || normalizedInput.contains("data"))) {
