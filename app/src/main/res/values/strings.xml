@@ -78,6 +78,7 @@
     <string name="file_saved_to">File saved to: %1$s</string>
     <string name="choose_export_format">Choose Export Format</string>
     <string name="select_all">Select All</string>
+    <string name="import_tasks">Import</string>
     <string name="deselect_all">Deselect All</string>
     <string name="no_tasks_to_export">No tasks available to export</string>
     <string name="export_format_not_supported">Export format \'%1$s\' not supported</string>

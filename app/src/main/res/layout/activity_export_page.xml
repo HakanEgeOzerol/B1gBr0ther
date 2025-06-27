@@ -120,6 +120,20 @@
             android:textSize="16sp" />
 
         <Button
+            android:id="@+id/importButton"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:layout_weight="1"
+            android:layout_marginStart="8dp"
+            android:layout_marginEnd="8dp"
+            android:background="@drawable/rounded_corners"
+            android:backgroundTint="?colorAccent"
+            android:text="@string/import_tasks"
+            android:textAllCaps="false"
+            android:textColor="?attr/buttonTextColor"
+            android:textSize="16sp" />
+
+        <Button
             android:id="@+id/exportButton"
             android:layout_width="0dp"
             android:layout_height="wrap_content"

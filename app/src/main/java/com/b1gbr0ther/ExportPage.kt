@@ -29,6 +29,8 @@ import java.time.LocalDateTime
 import java.util.Calendar
 import android.os.Handler
 import android.os.Looper
+import android.content.Intent
+import android.net.Uri
 
 class ExportPage : AppCompatActivity() {
     private lateinit var menuBar: MenuBar
@@ -50,6 +52,7 @@ class ExportPage : AppCompatActivity() {
     private var appliedTheme: Int = -1
 
     private lateinit var handler: Handler
+    private lateinit var importButton: Button
 
     override fun attachBaseContext(newBase: Context) {
         super.attachBaseContext(LocaleHelper.onAttach(newBase))
@@ -74,6 +77,7 @@ class ExportPage : AppCompatActivity() {
         breaksCheckbox = findViewById(R.id.breaksCheckbox)
         preplannedCheckbox = findViewById(R.id.preplannedCheckbox)
         recordingsRecyclerView = findViewById(R.id.recordingsRecyclerView)
+        importButton = findViewById(R.id.importButton)
 
         menuBar.setActivePage(0)
         menuBar.bringToFront()
@@ -102,6 +106,10 @@ class ExportPage : AppCompatActivity() {
         
         selectAllButton.setOnClickListener {
             handleSelectAll()
+        }
+        
+        importButton.setOnClickListener {
+            openFilePicker()
         }
         
         // Initialize button texts
@@ -413,6 +421,14 @@ class ExportPage : AppCompatActivity() {
         }
     }
 
+    private fun openFilePicker() {
+        val intent = Intent(Intent.ACTION_GET_CONTENT).apply {
+            type = "*/*"  // allow every file type for now, change this to the allowed file types later
+            addCategory(Intent.CATEGORY_OPENABLE)
+        }
+        startActivityForResult(Intent.createChooser(intent, "Select a file"), PICK_FILE_REQUEST_CODE)
+    }
+
     override fun onResume() {
         super.onResume()
         
@@ -427,5 +443,19 @@ class ExportPage : AppCompatActivity() {
         
         menuBar.setActivePage(0)
         updateExportButtonText()
+    }
+
+    override fun onActivityResult(requestCode: Int, resultCode: Int, data: Intent?) {
+        super.onActivityResult(requestCode, resultCode, data)
+        if (requestCode == PICK_FILE_REQUEST_CODE && resultCode == RESULT_OK) {
+            data?.data?.let { uri ->
+                // for now just shows a toast with file name, change this later on with improt functionality
+                Toast.makeText(this, "File selected: ${uri.lastPathSegment}", Toast.LENGTH_SHORT).show()
+            }
+        }
+    }
+
+    companion object {
+        private const val PICK_FILE_REQUEST_CODE = 123
     }
 }
