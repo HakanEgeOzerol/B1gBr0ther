@@ -532,15 +532,63 @@ class DashboardActivity : AppCompatActivity() {
                     if (anyMatchingTask.isCompleted) {
                         Toast.makeText(this, getString(R.string.cannot_track_completed_task, anyMatchingTask.taskName), Toast.LENGTH_SHORT).show()
                     } else {
-                        anyMatchingTask.startTime = LocalDateTime.now()
+                        // check if the task needs preplanned hours (task is preplanned and endTime is same as startTime)
+                        if (anyMatchingTask.isPreplanned && anyMatchingTask.endTime == anyMatchingTask.startTime) {
+                            // only show the set expectedhours dialog
+                            val dialog = Dialog(this)
+                            dialog.setContentView(R.layout.gesture_dialog_new_task_step_4)
+                            dialog.setCancelable(true)
 
-                        databaseManager.updateTask(anyMatchingTask) {
-                            timeTracker.startTracking()
-                            currentTaskName = anyMatchingTask.taskName
-                            currentTaskId = anyMatchingTask.id
-                            timeTracker.setCurrentTask(anyMatchingTask.id, anyMatchingTask.taskName)
-                            Toast.makeText(this, getString(R.string.tracking_started_for, anyMatchingTask.taskName), Toast.LENGTH_SHORT).show()
-                            updateCurrentTask(getString(R.string.currently_tracking, anyMatchingTask.taskName))
+                            val cancelButton = dialog.findViewById<Button>(R.id.Cancel)
+                            val submitTask = dialog.findViewById<Button>(R.id.EndTaskCreation)
+                            val hours = dialog.findViewById<EditText>(R.id.HoursInput)
+                            val minutes = dialog.findViewById<EditText>(R.id.MinutesInput)
+
+                            submitTask.setOnClickListener {
+                                var hoursSubmitted: Long? = null
+                                var minutesSubmitted: Long = 0
+
+                                if (hours.text.isNotEmpty()) {
+                                    hoursSubmitted = hours.text.toString().toLong()
+                                }
+                                if (minutes.text.isNotEmpty()) {
+                                    minutesSubmitted = minutes.text.toString().toLong()
+                                }
+
+                                // update the task with the new start and end times
+                                anyMatchingTask.startTime = LocalDateTime.now()
+                                if (hoursSubmitted != null && hoursSubmitted >= 0) {
+                                    anyMatchingTask.endTime = anyMatchingTask.startTime.plusHours(hoursSubmitted).plusMinutes(minutesSubmitted)
+
+                                }
+
+                                // start tracking right after setting the hours
+                                databaseManager.updateTask(anyMatchingTask) {
+                                    timeTracker.startTracking()
+                                    currentTaskName = anyMatchingTask.taskName
+                                    currentTaskId = anyMatchingTask.id
+                                    timeTracker.setCurrentTask(anyMatchingTask.id, anyMatchingTask.taskName)
+                                    Toast.makeText(this, getString(R.string.tracking_started_for, anyMatchingTask.taskName), Toast.LENGTH_SHORT).show()
+                                    updateCurrentTask(getString(R.string.currently_tracking, anyMatchingTask.taskName))
+                                }
+                                dialog.dismiss()
+                            }
+
+                            cancelButton.setOnClickListener {
+                                dialog.dismiss()
+                            }
+
+                            dialog.show()
+                        } else {
+                            // start normal tracking
+                            databaseManager.updateTask(anyMatchingTask) {
+                                timeTracker.startTracking()
+                                currentTaskName = anyMatchingTask.taskName
+                                currentTaskId = anyMatchingTask.id
+                                timeTracker.setCurrentTask(anyMatchingTask.id, anyMatchingTask.taskName)
+                                Toast.makeText(this, getString(R.string.tracking_started_for, anyMatchingTask.taskName), Toast.LENGTH_SHORT).show()
+                                updateCurrentTask(getString(R.string.currently_tracking, anyMatchingTask.taskName))
+                            }
                         }
                     }
                 } else {
@@ -988,7 +1036,7 @@ class DashboardActivity : AppCompatActivity() {
         val minutes = dialog.findViewById<EditText>(R.id.MinutesInput)
 
         submitTask.setOnClickListener{
-            var hoursSubmitted: Long = 3 //Possibly expand it in the settings
+            var hoursSubmitted: Long? = null
             var minutesSubmitted: Long = 0
 
             if (hours.text.isNotEmpty()){
@@ -1002,13 +1050,13 @@ class DashboardActivity : AppCompatActivity() {
             var estimatedCompletion = dateTime
             var startTime = dateTime
 
-            if (hoursSubmitted >= 0){
+            if (hoursSubmitted != null && hoursSubmitted >= 0) {
                 estimatedCompletion = estimatedCompletion.plusHours(hoursSubmitted)
                 if (minutesSubmitted >= 0){
                     estimatedCompletion = estimatedCompletion.plusMinutes(minutesSubmitted)
                 }
             }
-            else{
+            else if (!isPreplanned) {
                 estimatedCompletion = estimatedCompletion.plusHours(3)
             }
 
