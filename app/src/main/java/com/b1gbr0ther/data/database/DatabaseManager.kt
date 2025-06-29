@@ -12,6 +12,7 @@ import java.time.LocalDate
 import java.time.YearMonth
 import java.time.Duration
 import com.b1gbr0ther.WorkBlock
+import com.b1gbr0ther.TaskCategory
 
 /**
  * Database manager class that handles CRUD operations for Tasks in the B1gBr0ther app.
@@ -367,6 +368,47 @@ class DatabaseManager(context: Context) {
                 withContext(Dispatchers.Main) {
                     it()
                 }
+            }
+        }
+    }
+    
+    /**
+     * Get count of tasks for a specific category.
+     * @param category The category to count tasks for
+     * @param callback Callback with the count of tasks in the category
+     */
+    fun getTaskCountByCategory(category: TaskCategory, callback: (Int) -> Unit) {
+        coroutineScope.launch {
+            val count = taskRepository.getTaskCountByCategory(category)
+            withContext(Dispatchers.Main) {
+                callback(count)
+            }
+        }
+    }
+    
+    /**
+     * Get count of completed tasks for a specific category.
+     * @param category The category to count completed tasks for
+     * @param callback Callback with the count of completed tasks in the category
+     */
+    fun getCompletedTaskCountByCategory(category: TaskCategory, callback: (Int) -> Unit) {
+        coroutineScope.launch {
+            val count = taskRepository.getCompletedTaskCountByCategory(category)
+            withContext(Dispatchers.Main) {
+                callback(count)
+            }
+        }
+    }
+    
+    /**
+     * Get all distinct categories used in tasks.
+     * @param callback Callback with list of all categories
+     */
+    fun getAllCategories(callback: (List<String>) -> Unit) {
+        coroutineScope.launch {
+            val categories = taskRepository.getAllCategories()
+            withContext(Dispatchers.Main) {
+                callback(categories)
             }
         }
     }

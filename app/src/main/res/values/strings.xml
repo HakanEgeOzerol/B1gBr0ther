@@ -451,8 +451,19 @@ For best experience, enable all features and grant required permissions!</string
     <string name="completion_stats_format">Completed: %1$s / Uncompleted: %2$s</string>
     
     <!-- Task input dialog strings -->
-    <string name="input_task_name_hint">Please input task name</string>
+    <string name="input_task_name_hint">Enter task name</string>
+    <string name="task_category">Category</string>
     <string name="hours_hint">Hours</string>
     <string name="minutes_hint">Minutes</string>
     
+    <!-- Task Categories -->
+    <string-array name="task_categories">
+        <item>WORK</item>
+        <item>STUDY</item>
+        <item>PERSONAL</item>
+        <item>HEALTH</item>
+        <item>FAMILY</item>
+        <item>HOBBY</item>
+        <item>OTHER</item>
+    </string-array>
 </resources>

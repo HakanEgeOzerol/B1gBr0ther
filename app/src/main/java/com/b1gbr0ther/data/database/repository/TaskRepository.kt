@@ -2,6 +2,7 @@ package com.b1gbr0ther.data.database.repository
 
 import com.b1gbr0ther.data.database.dao.TaskDao
 import com.b1gbr0ther.data.database.entities.Task
+import com.b1gbr0ther.TaskCategory
 import java.time.LocalDateTime
 
 /**
@@ -132,5 +133,31 @@ class TaskRepository(private val taskDao: TaskDao) {
      */
     suspend fun getPreplannedTasks(): List<Task> {
         return taskDao.getPreplannedTasks()
+    }
+    
+    /**
+     * Get count of tasks by category.
+     * @param category The category to count tasks for
+     * @return Number of tasks in the specified category
+     */
+    suspend fun getTaskCountByCategory(category: TaskCategory): Int {
+        return taskDao.getTaskCountByCategory(category)
+    }
+    
+    /**
+     * Get count of completed tasks by category.
+     * @param category The category to count tasks for
+     * @return Number of completed tasks in the specified category
+     */
+    suspend fun getCompletedTaskCountByCategory(category: TaskCategory): Int {
+        return taskDao.getCompletedTaskCountByCategory(category)
+    }
+    
+    /**
+     * Get all categories used in existing tasks.
+     * @return A list of distinct categories used in tasks
+     */
+    suspend fun getAllCategories(): List<String> {
+        return taskDao.getAllCategories()
     }
 }

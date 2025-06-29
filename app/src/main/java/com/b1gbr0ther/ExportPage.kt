@@ -3,6 +3,7 @@ package com.b1gbr0ther
 import android.app.DatePickerDialog
 import android.content.Context
 import android.content.DialogInterface
+import android.content.Intent
 import android.os.Bundle
 import android.view.View
 import android.widget.Button
@@ -29,8 +30,9 @@ import java.time.LocalDateTime
 import java.util.Calendar
 import android.os.Handler
 import android.os.Looper
-import android.content.Intent
 import android.net.Uri
+import android.widget.Spinner
+import android.widget.ArrayAdapter
 
 class ExportPage : AppCompatActivity() {
     private lateinit var menuBar: MenuBar
@@ -41,6 +43,7 @@ class ExportPage : AppCompatActivity() {
     private lateinit var completedCheckbox: CheckBox
     private lateinit var breaksCheckbox: CheckBox
     private lateinit var preplannedCheckbox: CheckBox
+    private lateinit var categoryFilterSpinner: Spinner
     private lateinit var recordingsRecyclerView: RecyclerView
     private lateinit var databaseManager: DatabaseManager
     private lateinit var templateManager: ExportTemplateManager
@@ -76,6 +79,7 @@ class ExportPage : AppCompatActivity() {
         completedCheckbox = findViewById(R.id.completedCheckbox)
         breaksCheckbox = findViewById(R.id.breaksCheckbox)
         preplannedCheckbox = findViewById(R.id.preplannedCheckbox)
+        categoryFilterSpinner = findViewById(R.id.categoryFilterSpinner)
         recordingsRecyclerView = findViewById(R.id.recordingsRecyclerView)
         importButton = findViewById(R.id.importButton)
 
@@ -91,6 +95,9 @@ class ExportPage : AppCompatActivity() {
         databaseManager = DatabaseManager(this)
         
         handler = Handler(Looper.getMainLooper())
+        
+        // Setup category filter spinner
+        setupCategoryFilterSpinner()
 
         recordingsRecyclerView.layoutManager = LinearLayoutManager(this)
         taskAdapter = TaskAdapter(emptyList())
@@ -166,28 +173,72 @@ class ExportPage : AppCompatActivity() {
         datePickerDialog.show()
     }
     
+    private fun setupCategoryFilterSpinner() {
+        // Create list with 'All Categories' + all task categories
+        val categories = mutableListOf("All Categories")
+        categories.addAll(TaskCategory.values().map { it.name })
+        
+        // Create adapter for spinner
+        val adapter = ArrayAdapter(this, android.R.layout.simple_spinner_item, categories)
+        adapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item)
+        categoryFilterSpinner.adapter = adapter
+        
+        // Set default selection to 'All Categories'
+        categoryFilterSpinner.setSelection(0)
+        
+        // Add listener to apply filter when selection changes
+        categoryFilterSpinner.onItemSelectedListener = object : android.widget.AdapterView.OnItemSelectedListener {
+            override fun onItemSelected(parent: android.widget.AdapterView<*>?, view: View?, position: Int, id: Long) {
+                filterTasks()
+            }
+            
+            override fun onNothingSelected(parent: android.widget.AdapterView<*>?) {
+                // Do nothing
+            }
+        }
+    }
+
+    private fun filterTasks() {
+        applyFilters()
+    }
+    
     private fun applyFilters() {
-        var filteredTasks = allTasks
+        val showCompleted = completedCheckbox.isChecked
+        val showBreaks = breaksCheckbox.isChecked
+        val showPreplanned = preplannedCheckbox.isChecked
         
-        if (startDate != null) {
-            filteredTasks = filteredTasks.filter { 
-                it.startTime.toLocalDate().isAfter(startDate!!.minusDays(1))
+        // Get selected category (null if "All Categories" is selected)
+        val selectedCategoryPosition = categoryFilterSpinner.selectedItemPosition
+        val selectedCategory = if (selectedCategoryPosition > 0) {
+            val categoryName = categoryFilterSpinner.selectedItem.toString()
+            try {
+                TaskCategory.valueOf(categoryName)
+            } catch (e: IllegalArgumentException) {
+                null
             }
-        }
-        if (endDate != null) {
-            filteredTasks = filteredTasks.filter { 
-                it.endTime.toLocalDate().isBefore(endDate!!.plusDays(1))
-            }
+        } else {
+            null // "All Categories" selected
         }
         
-        if (completedCheckbox.isChecked) {
-            filteredTasks = filteredTasks.filter { it.isCompleted }
-        }
-        if (breaksCheckbox.isChecked) {
-            filteredTasks = filteredTasks.filter { it.isBreak }
-        }
-        if (preplannedCheckbox.isChecked) {
-            filteredTasks = filteredTasks.filter { it.isPreplanned }
+        val filteredTasks = allTasks.filter { task ->
+            // Filter by date range if set
+            val withinDateRange = if (startDate != null && endDate != null) {
+                val taskDate = task.startTime?.toLocalDate()
+                taskDate != null && !taskDate.isBefore(startDate) && !taskDate.isAfter(endDate)
+            } else {
+                true // No date filter
+            }
+            
+            // Apply task type filters
+            val passesCompletedFilter = showCompleted || !task.isCompleted
+            val passesBreakFilter = showBreaks || !task.isBreak
+            val passesPreplannedFilter = showPreplanned || !task.isPreplanned
+            
+            // Apply category filter if a specific category is selected
+            val passesCategoryFilter = selectedCategory == null || task.category == selectedCategory
+            
+            withinDateRange && passesCompletedFilter && passesBreakFilter && 
+                passesPreplannedFilter && passesCategoryFilter
         }
         
         taskAdapter.updateTasks(filteredTasks)

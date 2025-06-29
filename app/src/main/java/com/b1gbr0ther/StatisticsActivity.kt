@@ -8,6 +8,7 @@ import androidx.activity.enableEdgeToEdge
 import androidx.appcompat.app.AppCompatActivity
 import com.b1gbr0ther.data.database.DatabaseManager
 import com.b1gbr0ther.MenuBar
+import com.b1gbr0ther.TaskCategory
 import com.github.mikephil.charting.animation.Easing
 import com.github.mikephil.charting.charts.BarChart
 import com.github.mikephil.charting.charts.PieChart
@@ -24,10 +25,12 @@ class StatisticsActivity : AppCompatActivity() {
     private lateinit var completionChart: PieChart
     private lateinit var timingChart: BarChart
     private lateinit var creationMethodChart: PieChart
+    private lateinit var categoryChart: PieChart
     private lateinit var totalTasksText: TextView
     private lateinit var completedTasksText: TextView
     private lateinit var completionRateText: TextView
     private lateinit var completionStatsText: TextView
+    private lateinit var categoriesStatsText: TextView
     
     private lateinit var databaseManager: DatabaseManager
     private val numberFormat = NumberFormat.getNumberInstance(Locale.getDefault())
@@ -62,10 +65,12 @@ class StatisticsActivity : AppCompatActivity() {
         completionChart = findViewById(R.id.completionChart)
         timingChart = findViewById(R.id.timingChart)
         creationMethodChart = findViewById(R.id.creationMethodChart)
+        categoryChart = findViewById(R.id.categoryChart)
         totalTasksText = findViewById(R.id.totalTasksText)
         completedTasksText = findViewById(R.id.completedTasksText)
         completionRateText = findViewById(R.id.completionRateText)
         completionStatsText = findViewById(R.id.completionStatsText)
+        categoriesStatsText = findViewById(R.id.categoriesStatsText)
         
         // Set up the MenuBar with Statistics as the active page (index 3)
         val menu = findViewById<MenuBar>(R.id.menuBar)
@@ -141,10 +146,29 @@ class StatisticsActivity : AppCompatActivity() {
             setNoDataText(getString(R.string.no_task_creation_data_available))
             setNoDataTextColor(getCurrentTextColor())
         }
+        
+        // Set up category chart
+        categoryChart.apply {
+            description.isEnabled = false
+            setUsePercentValues(true)
+            setEntryLabelTextSize(12f)
+            setEntryLabelColor(getCurrentTextColor())
+            centerText = "Task Categories"
+            setCenterTextSize(14f)
+            legend.isEnabled = false
+            setHoleColor(Color.TRANSPARENT)
+            setTransparentCircleAlpha(0)
+            animateY(1400, Easing.EaseInOutQuad)
+            setNoDataText("No category data available")
+            setNoDataTextColor(getCurrentTextColor())
+        }
     }
 
     private fun loadStatistics() {
         mainScope.launch {
+            // Load category statistics
+            loadCategoryStatistics()
+            
             // Load completion stats
             databaseManager.getCompletedTasksCount { completedCount ->
                 databaseManager.getUncompletedTasksCount { uncompletedCount ->
@@ -258,6 +282,97 @@ class StatisticsActivity : AppCompatActivity() {
                     }
                 }
             }
+        }
+    }
+    
+    /**
+     * Load task category statistics and populate the chart
+     */
+    private fun loadCategoryStatistics() {
+        // Define all categories to show in chart
+        val categories = TaskCategory.values()
+        
+        // List to store chart entries and category counts
+        val categoryEntries = mutableListOf<PieEntry>()
+        val categoryColors = mutableListOf<Int>()
+        var totalTasks = 0
+        
+        // Counter for tracking how many categories have been processed
+        var processedCategories = 0
+        
+        // Map to store category counts for summary text
+        val categoryCounts = mutableMapOf<String, Int>()
+        
+        // For each category, get task count
+        categories.forEach { category ->
+            databaseManager.getTaskCountByCategory(category) { count ->
+                if (count > 0) {
+                    // Add entry for chart
+                    categoryEntries.add(PieEntry(count.toFloat(), category.name))
+                    
+                    // Add color based on category
+                    val colorResId = when (category) {
+                        TaskCategory.WORK -> R.color.category_work
+                        TaskCategory.STUDY -> R.color.category_study
+                        TaskCategory.PERSONAL -> R.color.category_personal
+                        TaskCategory.HEALTH -> R.color.category_health
+                        TaskCategory.FAMILY -> R.color.category_family
+                        TaskCategory.HOBBY -> R.color.category_hobby
+                        TaskCategory.OTHER -> R.color.category_other
+                        else -> R.color.category_other
+                    }
+                    categoryColors.add(getColor(colorResId))
+                    
+                    // Store count for summary
+                    categoryCounts[category.name] = count
+                    totalTasks += count
+                }
+                
+                // Increment processed count
+                processedCategories++
+                
+                // If all categories processed, update chart
+                if (processedCategories == categories.size) {
+                    updateCategoryChart(categoryEntries, categoryColors, categoryCounts, totalTasks)
+                }
+            }
+        }
+    }
+    
+    /**
+     * Updates the category chart with entries and sets the summary text
+     */
+    private fun updateCategoryChart(
+        categoryEntries: List<PieEntry>, 
+        colors: List<Int>, 
+        categoryCounts: Map<String, Int>,
+        totalTasks: Int
+    ) {
+        if (categoryEntries.isNotEmpty()) {
+            val categoryDataSet = PieDataSet(categoryEntries, "").apply {
+                this.colors = colors
+                valueTextSize = 12f
+                valueTextColor = Color.WHITE
+            }
+            
+            categoryChart.data = PieData(categoryDataSet).apply {
+                setDrawValues(false)  // Don't draw values on the chart
+            }
+            categoryChart.invalidate()
+            
+            // Generate stats summary text
+            val statsBuilder = StringBuilder()
+            categoryCounts.entries.sortedByDescending { it.value }.forEach { (category, count) ->
+                val percentage = (count * 100f / totalTasks).toInt()
+                statsBuilder.append("$category: $count ($percentage%)\n")
+            }
+            
+            categoriesStatsText.text = statsBuilder.toString().trimEnd()
+        } else {
+            // Clear any previous data
+            categoryChart.clear()
+            categoryChart.invalidate()
+            categoriesStatsText.text = "No category data available"
         }
     }
 }

@@ -2,6 +2,7 @@ package com.b1gbr0ther
 
 import java.time.LocalDateTime
 import com.b1gbr0ther.TimingStatus
+import com.b1gbr0ther.TaskCategory
 
 enum class CreationMethod
 {
@@ -15,6 +16,7 @@ class Task constructor(
     private var endTime: LocalDateTime,
     private var creationMethod: CreationMethod,
     private var timingStatus: TimingStatus,
+    private var category: TaskCategory = TaskCategory.getDefault(),
     private var isPreplanned: Boolean? = false,
     private var isCompleted: Boolean? = false,
     private var isBreak: Boolean? = false,
@@ -97,6 +99,16 @@ class Task constructor(
     fun getIsBreak(): Boolean?
     {
         return this.isBreak
+    }
+
+    fun setCategory(category: TaskCategory)
+    {
+        this.category = category
+    }
+    
+    fun getCategory(): TaskCategory
+    {
+        return this.category
     }
 
     fun getTimeDif()

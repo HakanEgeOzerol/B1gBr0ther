@@ -8,6 +8,7 @@ import android.widget.TextView
 import androidx.recyclerview.widget.RecyclerView
 import com.b1gbr0ther.R
 import com.b1gbr0ther.data.database.entities.Task
+import com.b1gbr0ther.TaskCategory
 
 /**
  * Adapter for displaying Task entities in a RecyclerView.
@@ -42,6 +43,7 @@ class TaskAdapter(
         private val tvTaskId: TextView = itemView.findViewById(R.id.tvTaskId)
         private val tvTaskName: TextView = itemView.findViewById(R.id.tvTaskName)
         private val tvCreationMethod: TextView = itemView.findViewById(R.id.tvCreationMethod)
+        private val tvCategory: TextView = itemView.findViewById(R.id.tvCategory)
         private val tvPreplanned: TextView = itemView.findViewById(R.id.tvPreplanned)
         private val tvCompleted: TextView = itemView.findViewById(R.id.tvCompleted)
         private val tvBreak: TextView = itemView.findViewById(R.id.tvBreak)
@@ -51,6 +53,22 @@ class TaskAdapter(
             tvTaskId.text = task.id.toString()
             tvTaskName.text = task.taskName
             tvCreationMethod.text = task.creationMethod.toString()
+            
+            // Display task category with color coding
+            tvCategory.text = task.category.name
+            
+            // Apply color based on category
+            val categoryColorResId = when (task.category) {
+                TaskCategory.WORK -> R.color.category_work
+                TaskCategory.STUDY -> R.color.category_study
+                TaskCategory.PERSONAL -> R.color.category_personal
+                TaskCategory.HEALTH -> R.color.category_health
+                TaskCategory.FAMILY -> R.color.category_family
+                TaskCategory.HOBBY -> R.color.category_hobby
+                TaskCategory.OTHER -> R.color.category_other
+                else -> R.color.category_other
+            }
+            tvCategory.setTextColor(itemView.context.getColor(categoryColorResId))
             
             // Show/hide status indicators
             tvPreplanned.visibility = if (task.isPreplanned) View.VISIBLE else View.GONE
