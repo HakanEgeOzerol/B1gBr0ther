@@ -200,6 +200,20 @@ object VoiceCommandAliases {
             "export plain text",
             "export to plain text",
             "save as plain text"
+        ),
+         "import file" to listOf(
+            "import",
+            "import file",
+            "import the file",
+            "import data",
+            "import data from",
+            "import from",
+            "load file",
+            "load the file",
+            "load data",
+            "load data from",
+            "open file",
+            "open the file"
         )
     )
 }
