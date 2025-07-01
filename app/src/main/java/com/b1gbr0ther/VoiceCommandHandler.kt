@@ -55,6 +55,22 @@ class VoiceCommandHandler(private val activity: DashboardActivity) {
 
         lastSpokenCommand = normalizedInput
 
+        if (normalizedInput.startsWith("import ") || 
+            normalizedInput.startsWith("load ") || 
+            normalizedInput.startsWith("open ")) {
+            val fileName = when {
+                normalizedInput.startsWith("import ") -> normalizedInput.substringAfter("import ")
+                normalizedInput.startsWith("load ") -> normalizedInput.substringAfter("load ")
+                normalizedInput.startsWith("open ") -> normalizedInput.substringAfter("open ")
+                else -> ""
+            }.trim()
+            
+            if (fileName.isNotEmpty()) {
+                activity.importFile(fileName)
+                return true
+            }
+        }
+
         if (normalizedInput.startsWith("create task ") || 
             normalizedInput.startsWith("add task ") || 
             normalizedInput.startsWith("new task ")) {
