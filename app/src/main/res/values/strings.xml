@@ -256,6 +256,11 @@ For best experience, enable all features and grant required permissions!</string
     <string name="task_name">Task Name</string>
     <string name="time_range">Time Range</string>
     <string name="status">Status</string>
+    <string name="task_category">Category</string>
+    <string name="export_category_all">Export All From Category</string>
+    <string name="export_category_selected">Export Selected From Category</string>
+    <string name="export_category_options">Category Export Options</string>
+    <string name="category_export">Category Export</string>
     
     <!-- Database Test -->
     <string name="database_test">Database Test</string>
@@ -336,7 +341,7 @@ For best experience, enable all features and grant required permissions!</string
     <string name="statistics_title">Statistics</string>
     <string name="task_completion">Task Completion</string>
     <string name="task_timing">Task Timing</string>
-    <string name="creation_methods">Creation Methods</string>
+    <!-- Creation methods string removed -->
     <string name="quick_stats">Quick Stats</string>
     <string name="total_tasks">Total Tasks</string>
     <string name="tasks_completed">Tasks Completed</string>
@@ -444,7 +449,7 @@ For best experience, enable all features and grant required permissions!</string
     <string name="on_time">On time</string>
     <string name="late">Late</string>
     <string name="no_timing_data_available">No timing data available</string>
-    <string name="no_task_creation_data_available">No task creation data available</string>
+    <!-- No task creation data string removed -->
     <string name="voice">Voice</string>
     <string name="gesture">Gesture</string>
     <string name="no_data_available">No data available</string>
@@ -452,18 +457,15 @@ For best experience, enable all features and grant required permissions!</string
     
     <!-- Task input dialog strings -->
     <string name="input_task_name_hint">Enter task name</string>
-    <string name="task_category">Category</string>
     <string name="hours_hint">Hours</string>
     <string name="minutes_hint">Minutes</string>
     
     <!-- Task Categories -->
     <string-array name="task_categories">
-        <item>WORK</item>
-        <item>STUDY</item>
-        <item>PERSONAL</item>
-        <item>HEALTH</item>
-        <item>FAMILY</item>
-        <item>HOBBY</item>
-        <item>OTHER</item>
+        <item>Professional</item>
+        <item>Personal</item>
+        <item>Family</item>
+        <item>Leisure</item>
+        <item>Other</item>
     </string-array>
 </resources>

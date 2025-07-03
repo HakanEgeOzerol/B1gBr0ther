@@ -10,24 +10,14 @@ package com.b1gbr0ther
  */
 enum class TaskCategory(val displayName: String, val colorResourceId: Int) {
     /**
-     * Work-related tasks and professional activities
+     * Work and study-related tasks, including professional activities and educational pursuits
      */
-    WORK("Work", R.color.category_work),
+    PROFESSIONAL("Professional", R.color.category_work),
     
     /**
-     * Educational tasks and study sessions
-     */
-    STUDY("Study", R.color.category_study),
-    
-    /**
-     * Personal tasks and errands
+     * Personal tasks, errands, and health-related activities
      */
     PERSONAL("Personal", R.color.category_personal),
-    
-    /**
-     * Health-related activities and wellness tasks
-     */
-    HEALTH("Health", R.color.category_health),
     
     /**
      * Family-related responsibilities and activities
@@ -35,9 +25,9 @@ enum class TaskCategory(val displayName: String, val colorResourceId: Int) {
     FAMILY("Family", R.color.category_family),
     
     /**
-     * Leisure and hobby activities
+     * Leisure activities including hobbies, entertainment, and recreation
      */
-    HOBBY("Hobby", R.color.category_hobby),
+    LEISURE("Leisure", R.color.category_hobby),
     
     /**
      * Tasks that don't fit into other categories
@@ -54,7 +44,7 @@ enum class TaskCategory(val displayName: String, val colorResourceId: Int) {
          * Get the default category to use when no category is specified.
          * @return The default TaskCategory
          */
-        fun getDefault(): TaskCategory = WORK
+        fun getDefault(): TaskCategory = PROFESSIONAL
         
         /**
          * Get a TaskCategory by its display name.

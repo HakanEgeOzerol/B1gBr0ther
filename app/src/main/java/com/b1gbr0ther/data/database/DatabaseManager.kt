@@ -151,31 +151,7 @@ class DatabaseManager(context: Context) {
         }
     }
     
-    /**
-     * Get count of tasks created via voice command.
-     * @param callback Callback with the count of voice-created tasks
-     */
-    fun getVoiceCreatedTasksCount(callback: (Int) -> Unit) {
-        coroutineScope.launch {
-            val count = taskRepository.getVoiceCreatedTasksCount()
-            withContext(Dispatchers.Main) {
-                callback(count)
-            }
-        }
-    }
-    
-    /**
-     * Get count of tasks created via gesture.
-     * @param callback Callback with the count of gesture-created tasks
-     */
-    fun getGestureCreatedTasksCount(callback: (Int) -> Unit) {
-        coroutineScope.launch {
-            val count = taskRepository.getGestureCreatedTasksCount()
-            withContext(Dispatchers.Main) {
-                callback(count)
-            }
-        }
-    }
+    // Creation method related functions removed
     
     // ============================== Task CRUD Operations ==============================
     

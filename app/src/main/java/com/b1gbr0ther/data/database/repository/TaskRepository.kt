@@ -115,9 +115,7 @@ class TaskRepository(private val taskDao: TaskDao) {
     
     suspend fun getUncompletedTasksCount(): Int = taskDao.getUncompletedTasksCount()
     
-    suspend fun getVoiceCreatedTasksCount(): Int = taskDao.getVoiceCreatedTasksCount()
-    
-    suspend fun getGestureCreatedTasksCount(): Int = taskDao.getGestureCreatedTasksCount()
+    // Creation method related functions removed
     
     /**
      * Get tasks that are breaks.

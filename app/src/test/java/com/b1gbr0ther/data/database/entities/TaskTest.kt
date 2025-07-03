@@ -11,7 +11,7 @@ class TaskTest {
     fun testTaskCreationWithCategory() {
         val now = LocalDateTime.now()
         val taskName = "Test Task"
-        val category = TaskCategory.WORK
+        val category = TaskCategory.PROFESSIONAL
         
         val task = Task(
             taskName = taskName,

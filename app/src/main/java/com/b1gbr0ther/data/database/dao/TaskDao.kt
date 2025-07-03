@@ -107,19 +107,7 @@ interface TaskDao {
     @Query("SELECT COUNT(*) FROM tasks WHERE isCompleted = 0")
     suspend fun getUncompletedTasksCount(): Int
     
-    /**
-     * Get count of tasks created via voice command.
-     * @return Number of voice-created tasks
-     */
-    @Query("SELECT COUNT(*) FROM tasks WHERE creationMethod = 'Voice'")
-    suspend fun getVoiceCreatedTasksCount(): Int
-    
-    /**
-     * Get count of tasks created via gesture.
-     * @return Number of gesture-created tasks
-     */
-    @Query("SELECT COUNT(*) FROM tasks WHERE creationMethod = 'Gesture'")
-    suspend fun getGestureCreatedTasksCount(): Int
+    // Creation method related functions removed
     
     /**
      * Get tasks that are breaks.

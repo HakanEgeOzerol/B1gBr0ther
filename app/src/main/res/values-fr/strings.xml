@@ -78,6 +78,7 @@
     <string name="file_saved_to">Fichier sauvegardé vers: %1$s</string>
     <string name="choose_export_format">Choisir le format d\'export</string>
     <string name="select_all">Tout sélectionner</string>
+    <string name="import_tasks">Importer</string>
     <string name="deselect_all">Tout désélectionner</string>
     <string name="no_tasks_to_export">Aucune tâche disponible à exporter</string>
     <string name="export_format_not_supported">Format d\'export \'%1$s\' non supporté</string>
@@ -257,6 +258,7 @@ Pour meilleure expérience, activez toutes fonctionnalités et accordez permissi
     <string name="status">Statut</string>
     
     <!-- Database Test -->
+    <string name="category_export">Catégorie Exportation</string>
     <string name="database_test">Test Base de données</string>
     <string name="insert_task">Insérer une tâche</string>
     <string name="update_task">Mettre à jour la tâche</string>
@@ -350,6 +352,7 @@ Pour meilleure expérience, activez toutes fonctionnalités et accordez permissi
     <string name="completion_stats_format">Terminé: %1$s / Non terminé: %2$s</string>
     
     <!-- Additional export strings -->
+    <string name="game_exit_to_app">Quitter vers l\'application</string>
     <string name="export_selected_format">Exporter sélectionné (%1$d/%2$d)</string>
     <string name="format_suffix">Format %1$s</string>
     <string name="task_export_subject">Export de tâche</string>
@@ -450,5 +453,11 @@ Pour meilleure expérience, activez toutes fonctionnalités et accordez permissi
     <string name="input_task_name_hint">Veuillez saisir le nom de la tâche</string>
     <string name="hours_hint">Heures</string>
     <string name="minutes_hint">Minutes</string>
+    <string name="task_category">Catégorie</string>
+    <string name="export_category_all">Exporter tout de la catégorie</string>
+    <string name="export_category_selected">Exporter la sélection à partir de la catégorie</string>
+    <string name="export_category_options">Options d\'exportation de catégorie</string>
+    <string name="game_paused_title">Jeu en pause</string>
+    <string name="game_resume">Reprendre</string>
 
 </resources> 

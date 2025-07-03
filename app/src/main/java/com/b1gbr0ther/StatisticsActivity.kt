@@ -24,7 +24,6 @@ import java.util.*
 class StatisticsActivity : AppCompatActivity() {
     private lateinit var completionChart: PieChart
     private lateinit var timingChart: BarChart
-    private lateinit var creationMethodChart: PieChart
     private lateinit var categoryChart: PieChart
     private lateinit var totalTasksText: TextView
     private lateinit var completedTasksText: TextView
@@ -64,7 +63,6 @@ class StatisticsActivity : AppCompatActivity() {
         // Initialize views
         completionChart = findViewById(R.id.completionChart)
         timingChart = findViewById(R.id.timingChart)
-        creationMethodChart = findViewById(R.id.creationMethodChart)
         categoryChart = findViewById(R.id.categoryChart)
         totalTasksText = findViewById(R.id.totalTasksText)
         completedTasksText = findViewById(R.id.completedTasksText)
@@ -131,21 +129,7 @@ class StatisticsActivity : AppCompatActivity() {
             setNoDataTextColor(getCurrentTextColor())
         }
         
-        // Set up creation method chart
-        creationMethodChart.apply {
-            description.isEnabled = false
-            setUsePercentValues(true)
-            setEntryLabelTextSize(12f)
-            setEntryLabelColor(getCurrentTextColor())
-            centerText = getString(R.string.creation_methods)
-            setCenterTextSize(14f)
-            legend.isEnabled = false
-            setHoleColor(Color.TRANSPARENT)
-            setTransparentCircleAlpha(0)
-            animateY(1400, Easing.EaseInOutQuad)
-            setNoDataText(getString(R.string.no_task_creation_data_available))
-            setNoDataTextColor(getCurrentTextColor())
-        }
+        // Creation method chart removed
         
         // Set up category chart
         categoryChart.apply {
@@ -252,36 +236,7 @@ class StatisticsActivity : AppCompatActivity() {
                 }
             }
             
-            // Load creation method stats
-            databaseManager.getVoiceCreatedTasksCount { voiceCount ->
-                databaseManager.getGestureCreatedTasksCount { gestureCount ->
-                    if (voiceCount + gestureCount > 0) {
-                        val creationEntries = listOf(
-                            PieEntry(voiceCount.toFloat(), getString(R.string.voice)),
-                            PieEntry(gestureCount.toFloat(), getString(R.string.gesture))
-                        )
-                        
-                        val creationDataSet = PieDataSet(creationEntries, "").apply {
-                            colors = listOf(
-                                Color.parseColor("#9C27B0"),  // Purple
-                                Color.parseColor("#FF9800")    // Orange
-                            )
-                            valueTextSize = 12f
-                            valueTextColor = Color.WHITE
-                        }
-                        
-                        creationMethodChart.data = PieData(creationDataSet).apply {
-                            setValueTextSize(12f)
-                            setValueTextColor(Color.WHITE)
-                        }
-                        creationMethodChart.invalidate()
-                    } else {
-                        // Clear any previous data
-                        creationMethodChart.clear()
-                        creationMethodChart.invalidate()
-                    }
-                }
-            }
+            // Creation method stats loading removed
         }
     }
     
@@ -308,23 +263,21 @@ class StatisticsActivity : AppCompatActivity() {
             databaseManager.getTaskCountByCategory(category) { count ->
                 if (count > 0) {
                     // Add entry for chart
-                    categoryEntries.add(PieEntry(count.toFloat(), category.name))
+                    categoryEntries.add(PieEntry(count.toFloat(), category.displayName))
                     
                     // Add color based on category
                     val colorResId = when (category) {
-                        TaskCategory.WORK -> R.color.category_work
-                        TaskCategory.STUDY -> R.color.category_study
+                        TaskCategory.PROFESSIONAL -> R.color.category_work
                         TaskCategory.PERSONAL -> R.color.category_personal
-                        TaskCategory.HEALTH -> R.color.category_health
                         TaskCategory.FAMILY -> R.color.category_family
-                        TaskCategory.HOBBY -> R.color.category_hobby
+                        TaskCategory.LEISURE -> R.color.category_hobby
                         TaskCategory.OTHER -> R.color.category_other
                         else -> R.color.category_other
                     }
                     categoryColors.add(getColor(colorResId))
                     
                     // Store count for summary
-                    categoryCounts[category.name] = count
+                    categoryCounts[category.displayName] = count
                     totalTasks += count
                 }
                 

@@ -24,7 +24,7 @@ import com.b1gbr0ther.TimingStatus
 import android.view.LayoutInflater
 import android.widget.TextView
 import com.b1gbr0ther.data.database.entities.Task
-import com.b1gbr0ther.ui.TaskAdapter
+import com.b1gbr0ther.adapters.TaskAdapter
 import java.time.LocalDate
 import java.time.LocalDateTime
 import java.util.Calendar
@@ -56,6 +56,7 @@ class ExportPage : AppCompatActivity() {
 
     private lateinit var handler: Handler
     private lateinit var importButton: Button
+    private var selectedCategory: TaskCategory? = null
 
     override fun attachBaseContext(newBase: Context) {
         super.attachBaseContext(LocaleHelper.onAttach(newBase))
@@ -97,7 +98,7 @@ class ExportPage : AppCompatActivity() {
         handler = Handler(Looper.getMainLooper())
         
         // Setup category filter spinner
-        setupCategoryFilterSpinner()
+        setupCategoryFilter()
 
         recordingsRecyclerView.layoutManager = LinearLayoutManager(this)
         taskAdapter = TaskAdapter(emptyList())
@@ -173,28 +174,36 @@ class ExportPage : AppCompatActivity() {
         datePickerDialog.show()
     }
     
-    private fun setupCategoryFilterSpinner() {
-        // Create list with 'All Categories' + all task categories
-        val categories = mutableListOf("All Categories")
-        categories.addAll(TaskCategory.values().map { it.name })
-        
-        // Create adapter for spinner
-        val adapter = ArrayAdapter(this, android.R.layout.simple_spinner_item, categories)
-        adapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item)
-        categoryFilterSpinner.adapter = adapter
-        
-        // Set default selection to 'All Categories'
-        categoryFilterSpinner.setSelection(0)
-        
-        // Add listener to apply filter when selection changes
+    private fun setupCategoryFilter() {
+        val categories = TaskCategory.values().toList()
+        val categoryAdapter = ArrayAdapter(
+            this,
+            android.R.layout.simple_spinner_item,
+            categories.map { it.displayName }.toMutableList().apply { add(0, "All Categories") }
+        )
+        categoryAdapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item)
+        categoryFilterSpinner.adapter = categoryAdapter
+
         categoryFilterSpinner.onItemSelectedListener = object : android.widget.AdapterView.OnItemSelectedListener {
             override fun onItemSelected(parent: android.widget.AdapterView<*>?, view: View?, position: Int, id: Long) {
-                filterTasks()
+                selectedCategory = if (position == 0) null else categories[position - 1]
+                applyFilters()
             }
-            
+
             override fun onNothingSelected(parent: android.widget.AdapterView<*>?) {
-                // Do nothing
+                selectedCategory = null
+                applyFilters()
             }
+        }
+        
+        // Add long click listener to category spinner for quick category export
+        categoryFilterSpinner.setOnLongClickListener {
+            if (selectedCategory != null) {
+                showCategoryExportOptionsDialog()
+            } else {
+                Toast.makeText(this, getString(R.string.task_category) + " not selected", Toast.LENGTH_SHORT).show()
+            }
+            true
         }
     }
 
@@ -207,19 +216,10 @@ class ExportPage : AppCompatActivity() {
         val showBreaks = breaksCheckbox.isChecked
         val showPreplanned = preplannedCheckbox.isChecked
         
-        // Get selected category (null if "All Categories" is selected)
-        val selectedCategoryPosition = categoryFilterSpinner.selectedItemPosition
-        val selectedCategory = if (selectedCategoryPosition > 0) {
-            val categoryName = categoryFilterSpinner.selectedItem.toString()
-            try {
-                TaskCategory.valueOf(categoryName)
-            } catch (e: IllegalArgumentException) {
-                null
-            }
-        } else {
-            null // "All Categories" selected
-        }
+        // Check if any task type filter is active
+        val anyTaskTypeFilterActive = showCompleted || showBreaks || showPreplanned
         
+        // Get selected category (null if "All Categories" is selected)
         val filteredTasks = allTasks.filter { task ->
             // Filter by date range if set
             val withinDateRange = if (startDate != null && endDate != null) {
@@ -229,10 +229,24 @@ class ExportPage : AppCompatActivity() {
                 true // No date filter
             }
             
-            // Apply task type filters
-            val passesCompletedFilter = showCompleted || !task.isCompleted
-            val passesBreakFilter = showBreaks || !task.isBreak
-            val passesPreplannedFilter = showPreplanned || !task.isPreplanned
+            // Apply task type filters only if at least one filter is active
+            val passesCompletedFilter = if (anyTaskTypeFilterActive) {
+                showCompleted && task.isCompleted || !showCompleted && !task.isCompleted
+            } else {
+                true // Show all if no filter is active
+            }
+            
+            val passesBreakFilter = if (anyTaskTypeFilterActive) {
+                showBreaks && task.isBreak || !showBreaks && !task.isBreak
+            } else {
+                true // Show all if no filter is active
+            }
+            
+            val passesPreplannedFilter = if (anyTaskTypeFilterActive) {
+                showPreplanned && task.isPreplanned || !showPreplanned && !task.isPreplanned
+            } else {
+                true // Show all if no filter is active
+            }
             
             // Apply category filter if a specific category is selected
             val passesCategoryFilter = selectedCategory == null || task.category == selectedCategory
@@ -333,7 +347,7 @@ class ExportPage : AppCompatActivity() {
         
         if (template != null) {
             android.util.Log.d("ExportPage", "Selected template: ${template.javaClass.simpleName}(${template.getFileExtension()})")
-            exportTasks(selectedTasks, template)
+            exportTasks(selectedTasks, template.getFileExtension())
         } else {
             android.util.Log.e("ExportPage", "No template found for format: '$format'")
             Toast.makeText(this, getString(R.string.export_format_not_supported, format), Toast.LENGTH_SHORT).show()
@@ -348,28 +362,146 @@ class ExportPage : AppCompatActivity() {
             return
         }
         
-        showTemplateSelectionDialog(selectedTasks)
+        showExportFormatDialog(selectedTasks)
     }
     
-    private fun showTemplateSelectionDialog(tasksToExport: List<Task>) {
-        val templates = templateManager.getAllTemplates()
-        val templateNames = templates.map { getString(R.string.format_suffix, it.getFileExtension().uppercase()) }.toTypedArray()
+    private fun setupExportButton() {
+        exportButton.setOnClickListener {
+            val selectedTasks = taskAdapter.getSelectedTasks()
+            if (selectedTasks.isEmpty()) {
+                Toast.makeText(this, getString(R.string.please_select_tasks_to_export), Toast.LENGTH_SHORT).show()
+                return@setOnClickListener
+            }
+            showExportFormatDialog(selectedTasks)
+        }
+        
+        // Add long click listener for category export options
+        exportButton.setOnLongClickListener {
+            showCategoryExportOptionsDialog()
+            true
+        }
+    }
+    
+    /**
+     * Shows a dialog with category export options
+     */
+    private fun showCategoryExportOptionsDialog() {
+        if (selectedCategory == null) {
+            // If no category is selected, show category selection dialog first
+            showCategorySelectionDialog { selectedCat ->
+                selectedCategory = selectedCat
+                categoryFilterSpinner.setSelection(TaskCategory.values().indexOf(selectedCat) + 1)
+                applyFilters() // Apply filters to update the task list
+                showCategoryExportTypeDialog()
+            }
+        } else {
+            showCategoryExportTypeDialog()
+        }
+    }
+    
+    /**
+     * Shows a dialog to select a category for export
+     */
+    private fun showCategorySelectionDialog(onCategorySelected: (TaskCategory) -> Unit) {
+        val categories = TaskCategory.values()
+        val categoryNames = categories.map { it.displayName }.toTypedArray()
         
         AlertDialog.Builder(this)
-            .setTitle(getString(R.string.choose_export_format))
-            .setItems(templateNames) { _, which ->
-                val selectedTemplate = templates[which]
-                exportTasks(tasksToExport, selectedTemplate)
+            .setTitle(getString(R.string.task_category))
+            .setItems(categoryNames) { _, which ->
+                onCategorySelected(categories[which])
             }
             .setNegativeButton(getString(R.string.cancel), null)
             .show()
     }
     
-    private fun exportTasks(tasks: List<Task>, template: ExportTemplate) {
+    /**
+     * Shows a dialog to choose between exporting all tasks or selected tasks from the current category
+     */
+    private fun showCategoryExportTypeDialog() {
+        val options = arrayOf(
+            getString(R.string.export_category_all),
+            getString(R.string.export_category_selected)
+        )
+        
+        AlertDialog.Builder(this)
+            .setTitle(getString(R.string.export_category_options))
+            .setItems(options) { _, which ->
+                when (which) {
+                    0 -> exportAllTasksFromCategory()
+                    1 -> exportSelectedTasksFromCategory()
+                }
+            }
+            .setNegativeButton(getString(R.string.cancel), null)
+            .show()
+    }
+    
+    /**
+     * Exports all tasks from the currently selected category
+     */
+    private fun exportAllTasksFromCategory() {
+        if (selectedCategory == null) return
+        
+        val tasksInCategory = allTasks.filter { it.category == selectedCategory }
+        if (tasksInCategory.isEmpty()) {
+            Toast.makeText(this, getString(R.string.no_tasks_to_export), Toast.LENGTH_SHORT).show()
+            return
+        }
+        
+        // Select all tasks in this category
+        taskAdapter.selectAll() // Select all tasks first
+        
+        // Show export format dialog with only tasks from the selected category
+        showExportFormatDialog(tasksInCategory)
+    }
+    
+    /**
+     * Exports only selected tasks from the currently selected category
+     */
+    private fun exportSelectedTasksFromCategory() {
+        if (selectedCategory == null) return
+        
+        val selectedTasksInCategory = taskAdapter.getSelectedTasks().filter { it.category == selectedCategory }
+        if (selectedTasksInCategory.isEmpty()) {
+            Toast.makeText(this, getString(R.string.please_select_tasks_to_export), Toast.LENGTH_SHORT).show()
+            return
+        }
+        
+        // Show export format dialog
+        showExportFormatDialog(selectedTasksInCategory)
+    }
+    
+    private fun showExportFormatDialog(tasks: List<Task>) {
+        val formats = arrayOf("CSV", "JSON", "HTML", "Markdown", "XML", "Text")
+        val builder = AlertDialog.Builder(this)
+        builder.setTitle(getString(R.string.choose_export_format))
+        builder.setItems(formats) { _, which ->
+            val format = formats[which]
+            exportTasks(tasks, format)
+        }
+        builder.show()
+    }
+    
+    private fun exportTasks(tasks: List<Task>, format: String) {
         try {
-            val exportedData = template.format(tasks)
-            saveExportedData(exportedData, tasks, template.getFileExtension(), template.getMimeType())
-            Toast.makeText(this, getString(R.string.exported_tasks, tasks.size, template.getFileExtension().uppercase()), Toast.LENGTH_SHORT).show()
+            // Find the template for the requested format
+            val templates = templateManager.getAllTemplates()
+            val template = templates.find { template ->
+                val directMatch = template.getFileExtension().equals(format.toLowerCase(), ignoreCase = true)
+                val markdownMatch = format.equals("Markdown", ignoreCase = true) && template.getFileExtension().equals("md", ignoreCase = true)
+                val textMatch = format.equals("Text", ignoreCase = true) && template.getFileExtension().equals("txt", ignoreCase = true)
+                
+                directMatch || markdownMatch || textMatch
+            }
+            
+            if (template != null) {
+                val exportedData = template.format(tasks)
+                saveExportedData(exportedData, tasks, template.getFileExtension(), template.getMimeType())
+                Toast.makeText(this, getString(R.string.exported_tasks, tasks.size, template.getFileExtension().uppercase()), Toast.LENGTH_SHORT).show()
+            } else {
+                android.util.Log.e("ExportPage", "No template found for format: '$format'")
+                Toast.makeText(this, getString(R.string.export_format_not_supported, format), Toast.LENGTH_SHORT).show()
+            }
         } catch (e: Exception) {
             Toast.makeText(this, getString(R.string.export_failed, e.message), Toast.LENGTH_LONG).show()
         }
@@ -466,7 +598,11 @@ class ExportPage : AppCompatActivity() {
         databaseManager.getAllTasks { tasks ->
             runOnUiThread {
                 allTasks = tasks
-                taskAdapter.updateTasks(tasks)
+                // Make sure all checkboxes are unchecked by default
+                completedCheckbox.isChecked = false
+                breaksCheckbox.isChecked = false
+                preplannedCheckbox.isChecked = false
+                applyFilters() // Apply filters to show all tasks
                 updateExportButtonText()
             }
         }

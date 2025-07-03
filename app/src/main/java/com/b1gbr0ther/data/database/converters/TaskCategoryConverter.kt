@@ -17,15 +17,23 @@ class TaskCategoryConverter {
 
     /**
      * Convert String from database back to TaskCategory enum
+     * Includes backward compatibility for old category names
      */
     @TypeConverter
-    fun toTaskCategory(categoryName: String): TaskCategory {
-        return try {
-            TaskCategory.valueOf(categoryName)
-        } catch (e: IllegalArgumentException) {
-            // Fallback to default category if the stored name doesn't match any enum value
-            // (This could happen if enum values change)
-            TaskCategory.getDefault()
+    fun toTaskCategory(categoryName: String?): TaskCategory {
+        if (categoryName == null) return TaskCategory.OTHER
+        
+        // Handle legacy category names for backward compatibility
+        return when (categoryName) {
+            "WORK", "STUDY", "WORK_STUDY" -> TaskCategory.PROFESSIONAL
+            "HEALTH" -> TaskCategory.PERSONAL
+            "HOBBY" -> TaskCategory.LEISURE
+            else -> try {
+                TaskCategory.valueOf(categoryName)
+            } catch (e: IllegalArgumentException) {
+                // Fallback to default category if the stored name doesn't match any enum value
+                TaskCategory.OTHER
+            }
         }
     }
 }

@@ -117,7 +117,7 @@ class DashboardActivity : AppCompatActivity() {
         currentTaskText.text = name
     }
 
-    private fun loadWeeklyWorkBlocks(chart: WeekTimeGridView) {
+    private fun loadWeeklyWorkBlocks(chart: WeeklyHoursView) {
         val weekStart = LocalDate.now().with(DayOfWeek.MONDAY)
         databaseManager.getWorkBlocksForWeek(weekStart) { workBlocks ->
             chart.setWorkData(workBlocks, weekStart)
@@ -200,7 +200,7 @@ class DashboardActivity : AppCompatActivity() {
             insets
         }
 
-        val chart = findViewById<WeekTimeGridView>(R.id.weekGrid)
+        val chart = findViewById<WeeklyHoursView>(R.id.weekGrid)
 
         loadWeeklyWorkBlocks(chart)
 
@@ -910,11 +910,11 @@ class DashboardActivity : AppCompatActivity() {
             
             // Get the selected category
             val selectedCategoryName = categorySpinner.selectedItem.toString()
-            val selectedCategory = TaskCategory.valueOf(selectedCategoryName)
+            val selectedCategory = TaskCategory.fromDisplayName(selectedCategoryName)
             
             // Store the selected category for use in subsequent dialogs
             val preferences = getSharedPreferences("TaskPreferences", Context.MODE_PRIVATE)
-            preferences.edit().putString("lastSelectedCategory", selectedCategoryName).apply()
+            preferences.edit().putString("lastSelectedCategory", selectedCategory.name).apply()
 
             if (isPlannedAhead){
                 dialog.dismiss()

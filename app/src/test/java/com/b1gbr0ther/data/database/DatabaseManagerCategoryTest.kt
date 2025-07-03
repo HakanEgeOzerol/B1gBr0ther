@@ -76,7 +76,7 @@ class DatabaseManagerCategoryTest {
             isBreak = false,
             isPreplanned = false,
             creationMethod = "Test",
-            category = TaskCategory.STUDY
+            category = TaskCategory.LEISURE
         )
         
         // Insert tasks
@@ -91,20 +91,20 @@ class DatabaseManagerCategoryTest {
         var workCount = 0
         var studyCount = 0
         
-        databaseManager.getTaskCountByCategory(TaskCategory.WORK) { count ->
+        databaseManager.getTaskCountByCategory(TaskCategory.PROFESSIONAL) { count ->
             workCount = count
             latch2.countDown()
         }
         
-        databaseManager.getTaskCountByCategory(TaskCategory.STUDY) { count ->
+        databaseManager.getTaskCountByCategory(TaskCategory.LEISURE) { count ->
             studyCount = count
             latch2.countDown()
         }
         
         latch2.await(5, TimeUnit.SECONDS)
         
-        assertEquals(2, workCount, "Should have 2 work tasks")
-        assertEquals(1, studyCount, "Should have 1 study task")
+        assertEquals(2, workCount, "Should have 2 work/study tasks")
+        assertEquals(1, studyCount, "Should have 1 leisure task")
     }
     
     @Test
@@ -143,13 +143,13 @@ class DatabaseManagerCategoryTest {
         val latch2 = CountDownLatch(1)
         var completedWorkCount = 0
         
-        databaseManager.getCompletedTaskCountByCategory(TaskCategory.WORK) { count ->
+        databaseManager.getCompletedTaskCountByCategory(TaskCategory.PROFESSIONAL) { count ->
             completedWorkCount = count
             latch2.countDown()
         }
         
         latch2.await(5, TimeUnit.SECONDS)
         
-        assertEquals(1, completedWorkCount, "Should have 1 completed work task")
+        assertEquals(1, completedWorkCount, "Should have 1 completed work/study task")
     }
 }

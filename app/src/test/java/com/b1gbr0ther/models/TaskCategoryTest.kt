@@ -1,5 +1,6 @@
 package com.b1gbr0ther.models
 
+import com.b1gbr0ther.TaskCategory
 import org.junit.Assert.*
 import org.junit.Test
 
@@ -8,14 +9,12 @@ class TaskCategoryTest {
     fun testEnumValues() {
         // Test that all expected categories are defined
         val categories = TaskCategory.values()
-        assertEquals(7, categories.size)
+        assertEquals(5, categories.size)
         
-        assertTrue(categories.any { it.name == "WORK" })
-        assertTrue(categories.any { it.name == "STUDY" })
+        assertTrue(categories.any { it.name == "PROFESSIONAL" })
         assertTrue(categories.any { it.name == "PERSONAL" })
-        assertTrue(categories.any { it.name == "HEALTH" })
         assertTrue(categories.any { it.name == "FAMILY" })
-        assertTrue(categories.any { it.name == "HOBBY" })
+        assertTrue(categories.any { it.name == "LEISURE" })
         assertTrue(categories.any { it.name == "OTHER" })
     }
     

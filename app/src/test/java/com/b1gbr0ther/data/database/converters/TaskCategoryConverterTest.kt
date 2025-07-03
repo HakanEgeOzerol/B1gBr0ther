@@ -11,32 +11,37 @@ class TaskCategoryConverterTest {
     @Test
     fun testFromTaskCategory() {
         // Test conversion from TaskCategory enum to String
-        assertEquals("WORK", converter.fromTaskCategory(TaskCategory.WORK))
-        assertEquals("STUDY", converter.fromTaskCategory(TaskCategory.STUDY))
+        assertEquals("WORK_STUDY", converter.fromTaskCategory(TaskCategory.WORK_STUDY))
         assertEquals("PERSONAL", converter.fromTaskCategory(TaskCategory.PERSONAL))
-        assertEquals("HEALTH", converter.fromTaskCategory(TaskCategory.HEALTH))
         assertEquals("FAMILY", converter.fromTaskCategory(TaskCategory.FAMILY))
-        assertEquals("HOBBY", converter.fromTaskCategory(TaskCategory.HOBBY))
+        assertEquals("LEISURE", converter.fromTaskCategory(TaskCategory.LEISURE))
         assertEquals("OTHER", converter.fromTaskCategory(TaskCategory.OTHER))
     }
 
     @Test
     fun testToTaskCategory() {
         // Test conversion from String to TaskCategory enum
-        assertEquals(TaskCategory.WORK, converter.toTaskCategory("WORK"))
-        assertEquals(TaskCategory.STUDY, converter.toTaskCategory("STUDY"))
+        assertEquals(TaskCategory.WORK_STUDY, converter.toTaskCategory("WORK_STUDY"))
         assertEquals(TaskCategory.PERSONAL, converter.toTaskCategory("PERSONAL"))
-        assertEquals(TaskCategory.HEALTH, converter.toTaskCategory("HEALTH"))
         assertEquals(TaskCategory.FAMILY, converter.toTaskCategory("FAMILY"))
-        assertEquals(TaskCategory.HOBBY, converter.toTaskCategory("HOBBY"))
+        assertEquals(TaskCategory.LEISURE, converter.toTaskCategory("LEISURE"))
         assertEquals(TaskCategory.OTHER, converter.toTaskCategory("OTHER"))
     }
 
     @Test
     fun testToTaskCategoryWithInvalidValue() {
-        // Test that invalid values are handled gracefully
+        // Test handling of invalid category names
         assertEquals(TaskCategory.OTHER, converter.toTaskCategory("INVALID_CATEGORY"))
         assertEquals(TaskCategory.OTHER, converter.toTaskCategory(""))
         assertEquals(TaskCategory.OTHER, converter.toTaskCategory(null))
+    }
+    
+    @Test
+    fun testBackwardCompatibility() {
+        // Test backward compatibility with old category names
+        assertEquals(TaskCategory.WORK_STUDY, converter.toTaskCategory("WORK"))
+        assertEquals(TaskCategory.WORK_STUDY, converter.toTaskCategory("STUDY"))
+        assertEquals(TaskCategory.PERSONAL, converter.toTaskCategory("HEALTH"))
+        assertEquals(TaskCategory.LEISURE, converter.toTaskCategory("HOBBY"))
     }
 }
