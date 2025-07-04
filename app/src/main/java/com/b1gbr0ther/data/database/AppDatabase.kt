@@ -27,7 +27,16 @@ abstract class AppDatabase : RoomDatabase() {
     companion object {
         @Volatile
         private var INSTANCE: AppDatabase? = null
-        
+
+        /**
+         * Set a test instance of the database for unit testing
+         * @param testDatabase The test database instance
+         */
+        @JvmStatic
+        fun setTestInstance(testDatabase: AppDatabase) {
+            INSTANCE = testDatabase
+        }
+
         /**
          * Migration from version 4 to version 5: Add category field to tasks table
          */
@@ -50,11 +59,11 @@ abstract class AppDatabase : RoomDatabase() {
                     AppDatabase::class.java,
                     "b1gbr0ther_database"
                 )
-                // Add migration from version 4 to 5 (adding category field)
-                .addMigrations(MIGRATION_4_5)
-                // Add fallback migration strategy as a safety net
-                .fallbackToDestructiveMigration()
-                .build()
+                    // Add migration from version 4 to 5 (adding category field)
+                    .addMigrations(MIGRATION_4_5)
+                    // Add fallback migration strategy as a safety net
+                    .fallbackToDestructiveMigration()
+                    .build()
                 INSTANCE = instance
                 instance
             }

@@ -48,9 +48,25 @@ android {
     buildFeatures {
         compose = true
     }
-    
+
+    // Lint configuration for CI/CD pipeline
     lint {
+        abortOnError = true
+        checkReleaseBuilds = true
+        checkDependencies = true
+        checkAllWarnings = true
+        warningsAsErrors = false
+        // Use our custom lint configuration
+        lintConfig = file("lint.xml")
+        // Use baseline for existing issues
         baseline = file("lint-baseline.xml")
+        // Generate HTML and XML reports for CI integration
+        textReport = false
+        htmlReport = true
+        xmlReport = true
+        // Specify the output directory for reports
+        htmlOutput = file("${project.buildDir}/reports/lint-results.html")
+        xmlOutput = file("${project.buildDir}/reports/lint-results.xml")
     }
 }
 
@@ -73,21 +89,26 @@ dependencies {
     // Room Database dependencies
     implementation(libs.androidx.room.runtime)
     implementation(libs.androidx.room.ktx)
+    implementation(libs.core.ktx)
     kapt(libs.androidx.room.compiler)
     // Coroutines
     implementation(libs.kotlinx.coroutines.android)
 
     // FFT implementation
     implementation("edu.emory.mathcs:JTransforms:2.4")
-    
+
     // MP3 decoding for sample file processing
     implementation("com.googlecode.soundlibs:mp3spi:1.9.5.4")
-    
+
     // Navigation Component
     implementation("androidx.navigation:navigation-fragment-ktx:2.7.7")
     implementation("androidx.navigation:navigation-ui-ktx:2.7.7")
-    
+
     testImplementation(libs.junit)
+    testImplementation("org.robolectric:robolectric:4.11.1")
+    testImplementation("org.mockito:mockito-core:5.3.1")
+    testImplementation("org.mockito.kotlin:mockito-kotlin:5.1.0")
+    testImplementation(libs.kotlinx.coroutines.test)
     androidTestImplementation(libs.androidx.junit)
     androidTestImplementation(libs.androidx.espresso.core)
     androidTestImplementation(platform(libs.androidx.compose.bom))

@@ -1,6 +1,7 @@
 package com.b1gbr0ther.data.database.entities
 
 import com.b1gbr0ther.TaskCategory
+import com.b1gbr0ther.CreationMethod
 import org.junit.Assert.*
 import org.junit.Test
 import java.time.LocalDateTime
@@ -20,7 +21,7 @@ class TaskTest {
             isCompleted = true,
             isBreak = false,
             isPreplanned = false,
-            creationMethod = "Test",
+            creationMethod = CreationMethod.Gesture,
             category = category
         )
         
@@ -38,15 +39,14 @@ class TaskTest {
             isCompleted = true,
             isBreak = false,
             isPreplanned = false,
-            creationMethod = "Test",
-            // If no category is provided, it should default to OTHER
-            category = null // This should be replaced with default in constructor if null handling is implemented
+            creationMethod = CreationMethod.Gesture
+            // Not specifying category - it should use the default
         )
         
-        // Should not be null even if initialized with null
+        // Category should never be null
         assertNotNull(task.category)
         
-        // The default should be OTHER
-        assertEquals(TaskCategory.OTHER, task.category)
+        // The default should be PROFESSIONAL (as defined in TaskCategory.getDefault())
+        assertEquals(TaskCategory.PROFESSIONAL, task.category)
     }
 }
