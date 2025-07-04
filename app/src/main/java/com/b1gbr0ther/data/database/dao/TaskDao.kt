@@ -1,6 +1,7 @@
 package com.b1gbr0ther.data.database.dao
 
 import androidx.room.*
+import com.b1gbr0ther.TaskCategory
 import com.b1gbr0ther.data.database.entities.Task
 import java.time.LocalDateTime
 
@@ -106,19 +107,7 @@ interface TaskDao {
     @Query("SELECT COUNT(*) FROM tasks WHERE isCompleted = 0")
     suspend fun getUncompletedTasksCount(): Int
     
-    /**
-     * Get count of tasks created via voice command.
-     * @return Number of voice-created tasks
-     */
-    @Query("SELECT COUNT(*) FROM tasks WHERE creationMethod = 'Voice'")
-    suspend fun getVoiceCreatedTasksCount(): Int
-    
-    /**
-     * Get count of tasks created via gesture.
-     * @return Number of gesture-created tasks
-     */
-    @Query("SELECT COUNT(*) FROM tasks WHERE creationMethod = 'Gesture'")
-    suspend fun getGestureCreatedTasksCount(): Int
+    // Creation method related functions removed
     
     /**
      * Get tasks that are breaks.
@@ -133,6 +122,44 @@ interface TaskDao {
      */
     @Query("SELECT * FROM tasks WHERE isPreplanned = 1")
     suspend fun getPreplannedTasks(): List<Task>
-
-
+    
+    /**
+     * Get tasks by category.
+     * @param category The category to filter tasks by
+     * @return A list of tasks with the specified category
+     */
+    @Query("SELECT * FROM tasks WHERE category = :category")
+    suspend fun getTasksByCategory(category: TaskCategory): List<Task>
+    
+    /**
+     * Get tasks that are completed by category.
+     * @param category The category to filter tasks by
+     * @param isCompleted Whether the tasks are completed or not
+     * @return A list of tasks with the specified category and completion status
+     */
+    @Query("SELECT * FROM tasks WHERE category = :category AND isCompleted = :isCompleted")
+    suspend fun getTasksByCategoryAndCompletionStatus(category: TaskCategory, isCompleted: Boolean): List<Task>
+    
+    /**
+     * Get count of tasks by category.
+     * @param category The category to count tasks for
+     * @return Number of tasks in the specified category
+     */
+    @Query("SELECT COUNT(*) FROM tasks WHERE category = :category")
+    suspend fun getTaskCountByCategory(category: TaskCategory): Int
+    
+    /**
+     * Get count of completed tasks by category.
+     * @param category The category to count tasks for
+     * @return Number of completed tasks in the specified category
+     */
+    @Query("SELECT COUNT(*) FROM tasks WHERE category = :category AND isCompleted = 1")
+    suspend fun getCompletedTaskCountByCategory(category: TaskCategory): Int
+    
+    /**
+     * Get all categories used in existing tasks.
+     * @return A list of distinct categories used in tasks
+     */
+    @Query("SELECT DISTINCT category FROM tasks")
+    suspend fun getAllCategories(): List<String>
 }

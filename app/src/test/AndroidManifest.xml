@@ -1,0 +1,14 @@
+<?xml version="1.0" encoding="utf-8"?>
+<manifest xmlns:android="http://schemas.android.com/apk/res/android"
+    package="com.b1gbr0ther">
+    <application
+        android:name=".TestApplication"
+        android:allowBackup="true"
+        android:theme="@style/Theme.AppCompat.Light"
+        android:label="B1gBr0ther Test">
+        <activity android:name=".MainActivity" />
+        <activity 
+            android:name=".ExportPage"
+            android:theme="@style/Theme.AppCompat.Light.NoActionBar" />
+    </application>
+</manifest>

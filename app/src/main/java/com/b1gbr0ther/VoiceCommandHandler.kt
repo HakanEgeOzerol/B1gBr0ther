@@ -12,6 +12,8 @@ class VoiceCommandHandler(private val activity: DashboardActivity) {
         "show manual" to { activity.showManualPage() },
         "show timesheet" to { activity.showTimesheetPage() },
         "show statistics" to { activity.showStatisticsPage() },
+        "create task" to { activity.createTaskByVoice() },
+        "import" to { activity.importFile("") },  // Empty string will trigger just the file picker
         "export csv" to { 
             android.util.Log.d("VoiceCommandHandler", "Executing export csv command")
             activity.exportCSV() 
@@ -53,6 +55,47 @@ class VoiceCommandHandler(private val activity: DashboardActivity) {
         }
 
         lastSpokenCommand = normalizedInput
+
+        // Handle simple import command first
+        if (commandAliases["import"]?.any { alias ->
+            normalizedInput == alias || normalizedInput.contains(alias)
+        } == true) {
+            activity.importFile("")  // Empty string will trigger just the file picker
+            return true
+        }
+
+        // Handle import with filename
+        if (normalizedInput.startsWith("import ") || 
+            normalizedInput.startsWith("load ") || 
+            normalizedInput.startsWith("open ")) {
+            val fileName = when {
+                normalizedInput.startsWith("import ") -> normalizedInput.substringAfter("import ")
+                normalizedInput.startsWith("load ") -> normalizedInput.substringAfter("load ")
+                normalizedInput.startsWith("open ") -> normalizedInput.substringAfter("open ")
+                else -> ""
+            }.trim()
+            
+            if (fileName.isNotEmpty()) {
+                activity.importFile(fileName)
+                return true
+            }
+        }
+
+        if (normalizedInput.startsWith("create task ") || 
+            normalizedInput.startsWith("add task ") || 
+            normalizedInput.startsWith("new task ")) {
+            val taskName = when {
+                normalizedInput.startsWith("create task ") -> normalizedInput.substringAfter("create task ")
+                normalizedInput.startsWith("add task ") -> normalizedInput.substringAfter("add task ")
+                normalizedInput.startsWith("new task ") -> normalizedInput.substringAfter("new task ")
+                else -> ""
+            }.trim()
+            
+            if (taskName.isNotEmpty()) {
+                activity.createTaskByVoice(taskName)
+                return true
+            }
+        }
 
         // Special handling for export commands - check for format keywords first
         if (normalizedInput.contains("export") && (normalizedInput.contains("task") || normalizedInput.contains("data"))) {

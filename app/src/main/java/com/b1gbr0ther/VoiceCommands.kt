@@ -48,6 +48,17 @@ object VoiceCommandAliases {
             "back to work",
             "resume work"
         ),
+        "create task" to listOf(
+            "create task",
+            "add task",
+            "new task",
+            "make task",
+            "create a new task",
+            "add a new task",
+            "create new task",
+            "make a new task",
+            "start new task"
+        ),
         "show export" to listOf(
             "show export",
             "export data",
@@ -189,6 +200,29 @@ object VoiceCommandAliases {
             "export plain text",
             "export to plain text",
             "save as plain text"
+        ),
+        "import file" to listOf(
+            "import",
+            "import file",
+            "import the file",
+            "import data",
+            "import data from",
+            "import from",
+            "load file",
+            "load the file",
+            "load data",
+            "load data from",
+            "open file",
+            "open the file"
+        ),
+        "import" to listOf(
+            "show import",
+            "import something",
+            "import files",
+            "import tasks",
+            "open import",
+            "show import",
+            "start import"
         )
     )
 }

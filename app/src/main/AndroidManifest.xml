@@ -4,6 +4,8 @@
 
     <uses-permission android:name="android.permission.RECORD_AUDIO" />
     <uses-permission android:name="android.permission.POST_NOTIFICATIONS" />
+    <uses-permission android:name="android.permission.WRITE_EXTERNAL_STORAGE" android:maxSdkVersion="28" />
+    <uses-permission android:name="android.permission.READ_EXTERNAL_STORAGE" android:maxSdkVersion="32" />
 
     <application
         android:name=".B1gBr0therApplication"
@@ -66,6 +68,12 @@
         <activity
             android:name=".easteregg.DoodleJumpActivity"
             android:label="Doodle Jump"
+            android:exported="false"
+            android:theme="@style/Theme.B1gBr0ther">
+        </activity>
+        <activity
+            android:name=".easteregg.SnakeGameActivity"
+            android:label="Snake Game"
             android:exported="false"
             android:theme="@style/Theme.B1gBr0ther">
         </activity>

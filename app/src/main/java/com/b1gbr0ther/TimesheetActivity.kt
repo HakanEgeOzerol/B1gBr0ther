@@ -126,7 +126,7 @@ class TimesheetActivity : AppCompatActivity() {
       // set heat-map background intensity
       val ratio = if (maxHours > 0) (hrs / maxHours).coerceIn(0f, 1f) else 0f
       val alpha = (40 + ratio * 215).toInt() // 40 (very light) to 255 (opaque)
-      val heatColor = android.graphics.Color.argb(alpha, 76, 175, 80) // material green 500 with variable alpha
+      val heatColor = android.graphics.Color.argb(alpha, 95, 75, 102) // purple
       block.setBackgroundColor(heatColor)
 
       block.setOnClickListener {
@@ -167,7 +167,7 @@ class TimesheetActivity : AppCompatActivity() {
 
     //force custom width and position, cus for some reason doing it in the xml doesn't work??
     val window = dialog.window
-    window?.setLayout(ViewGroup.LayoutParams.WRAP_CONTENT, ViewGroup.LayoutParams.WRAP_CONTENT)
+    window?.setLayout(400, ViewGroup.LayoutParams.WRAP_CONTENT)
     window?.setGravity(Gravity.TOP or Gravity.START)
     window?.attributes = window?.attributes?.apply {
       x = 40 //change position x axis
@@ -210,11 +210,11 @@ class TimesheetActivity : AppCompatActivity() {
 
     //force custom width and position, cus for some reason doing it in the xml doesn't work??
     val window = dialog.window
-    window?.setLayout(ViewGroup.LayoutParams.WRAP_CONTENT, ViewGroup.LayoutParams.WRAP_CONTENT)
+    window?.setLayout(400, ViewGroup.LayoutParams.WRAP_CONTENT)
     window?.setGravity(Gravity.TOP or Gravity.START)
     window?.attributes = window?.attributes?.apply {
-      x = 690
-      y = 230
+      x = 640
+      y = 240
     }
   }
 

@@ -1,36 +1,49 @@
 package com.b1gbr0ther
 
 import android.app.DatePickerDialog
+import android.app.ProgressDialog
 import android.content.Context
-import android.content.DialogInterface
+import android.content.Intent
+import android.net.Uri
 import android.os.Bundle
+import android.os.Handler
+import android.os.Looper
+import android.os.Environment
+import android.util.Log
 import android.view.View
+import android.widget.ArrayAdapter
 import android.widget.Button
 import android.widget.CheckBox
+import android.widget.Spinner
+import android.widget.TextView
 import android.widget.Toast
 import androidx.activity.enableEdgeToEdge
 import androidx.appcompat.app.AlertDialog
 import androidx.appcompat.app.AppCompatActivity
+import androidx.cardview.widget.CardView
 import androidx.core.view.ViewCompat
 import androidx.core.view.WindowInsetsCompat
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
+import com.b1gbr0ther.adapters.TaskAdapter
+import com.b1gbr0ther.data.database.AppDatabase
 import com.b1gbr0ther.data.database.DatabaseManager
-import com.b1gbr0ther.models.export.ExportTemplateManager
-import com.b1gbr0ther.models.export.templates.ExportTemplate
-import com.b1gbr0ther.CreationMethod
-import com.b1gbr0ther.TimingStatus
-import android.view.LayoutInflater
-import android.widget.TextView
 import com.b1gbr0ther.data.database.entities.Task
-import com.b1gbr0ther.ui.TaskAdapter
+import com.b1gbr0ther.model.export.ExportManager
+import com.b1gbr0ther.model.export.TaskFilterManager
+import com.b1gbr0ther.model.import.ImportFileParser
+import com.b1gbr0ther.model.import.UnsupportedFileTypeException
+import java.io.File
 import java.time.LocalDate
-import java.time.LocalDateTime
+import java.time.format.DateTimeFormatter
 import java.util.Calendar
-import android.os.Handler
-import android.os.Looper
 
+/**
+ * Activity for exporting tasks
+ * UI layer that delegates business logic to manager classes
+ */
 class ExportPage : AppCompatActivity() {
+    // UI components
     private lateinit var menuBar: MenuBar
     private lateinit var exportButton: Button
     private lateinit var selectAllButton: Button
@@ -39,17 +52,19 @@ class ExportPage : AppCompatActivity() {
     private lateinit var completedCheckbox: CheckBox
     private lateinit var breaksCheckbox: CheckBox
     private lateinit var preplannedCheckbox: CheckBox
+    private lateinit var categoryFilterSpinner: Spinner
     private lateinit var recordingsRecyclerView: RecyclerView
-    private lateinit var databaseManager: DatabaseManager
-    private lateinit var templateManager: ExportTemplateManager
-    private lateinit var taskAdapter: TaskAdapter
+    private lateinit var importButton: Button
     
-    private var startDate: LocalDate? = null
-    private var endDate: LocalDate? = null
+    // Data and managers
+    private lateinit var databaseManager: DatabaseManager
+    private lateinit var exportManager: ExportManager
+    private lateinit var taskAdapter: TaskAdapter
+    private lateinit var handler: Handler
+    
     private var allTasks: List<Task> = emptyList()
     private var appliedTheme: Int = -1
-
-    private lateinit var handler: Handler
+    private var selectedCategory: TaskCategory? = null
 
     override fun attachBaseContext(newBase: Context) {
         super.attachBaseContext(LocaleHelper.onAttach(newBase))
@@ -65,6 +80,31 @@ class ExportPage : AppCompatActivity() {
         enableEdgeToEdge()
         setContentView(R.layout.activity_export_page)
 
+        // Initialize UI components
+        initializeUIComponents()
+        
+        // Initialize managers
+        databaseManager = DatabaseManager(this)
+        exportManager = ExportManager(this)
+        handler = Handler(Looper.getMainLooper())
+        
+        // Setup UI interactions
+        setupUIInteractions()
+        
+        // Load data
+        fetchAndDisplayTasks()
+        
+        // Check if we should auto-export based on voice command
+        handleVoiceCommandExport()
+
+        // Check if we should handle import from voice command
+        handleVoiceCommandImport()
+    }
+    
+    /**
+     * Initialize all UI components
+     */
+    private fun initializeUIComponents() {
         menuBar = findViewById(R.id.menuBar)
         exportButton = findViewById(R.id.exportButton)
         selectAllButton = findViewById(R.id.selectAllButton)
@@ -73,7 +113,9 @@ class ExportPage : AppCompatActivity() {
         completedCheckbox = findViewById(R.id.completedCheckbox)
         breaksCheckbox = findViewById(R.id.breaksCheckbox)
         preplannedCheckbox = findViewById(R.id.preplannedCheckbox)
+        categoryFilterSpinner = findViewById(R.id.categoryFilterSpinner)
         recordingsRecyclerView = findViewById(R.id.recordingsRecyclerView)
+        importButton = findViewById(R.id.importButton)
 
         menuBar.setActivePage(0)
         menuBar.bringToFront()
@@ -84,58 +126,54 @@ class ExportPage : AppCompatActivity() {
             insets
         }
         
-        databaseManager = DatabaseManager(this)
-        
-        handler = Handler(Looper.getMainLooper())
-
+        // Setup RecyclerView
         recordingsRecyclerView.layoutManager = LinearLayoutManager(this)
-        taskAdapter = TaskAdapter(emptyList())
+        taskAdapter = TaskAdapter(
+            emptyList(),
+            onDeleteClick = { task -> handleTaskDelete(task) }
+        )
         taskAdapter.setOnSelectionChangedListener {
             updateExportButtonText()
             updateSelectAllButtonText()
         }
         recordingsRecyclerView.adapter = taskAdapter
-
-        exportButton.setOnClickListener {
-            handleExport()
-        }
+    }
+    
+    /**
+     * Setup all UI interaction listeners
+     */
+    private fun setupUIInteractions() {
+        // Setup category filter spinner
+        setupCategoryFilter()
         
-        selectAllButton.setOnClickListener {
-            handleSelectAll()
-        }
+        // Setup buttons
+        exportButton.setOnClickListener { handleExport() }
+        selectAllButton.setOnClickListener { handleSelectAll() }
+        importButton.setOnClickListener { openFilePicker() }
         
         // Initialize button texts
         updateExportButtonText()
         updateSelectAllButtonText()
         
+        // Setup filter buttons
         setupFilterButtons()
-
-        templateManager = ExportTemplateManager()
-        fetchAndDisplayTasks()
-        
-        // Check if we should auto-export based on voice command
-        val exportFormat = intent.getStringExtra("export_format")
-        if (exportFormat != null) {
-            // Wait a bit for tasks to load, then trigger the export
-            handler.postDelayed({
-                selectAllAndExport(exportFormat)
-            }, 500)
-        }
     }
     
+    /**
+     * Setup filter buttons and their listeners
+     */
     private fun setupFilterButtons() {
         startDateButton.setOnClickListener { showDatePicker(true) }
         endDateButton.setOnClickListener { showDatePicker(false) }
-        
-        val filterListener = { _: Any ->
-            applyFilters()
-        }
         
         completedCheckbox.setOnCheckedChangeListener { _, _ -> applyFilters() }
         breaksCheckbox.setOnCheckedChangeListener { _, _ -> applyFilters() }
         preplannedCheckbox.setOnCheckedChangeListener { _, _ -> applyFilters() }
     }
     
+    /**
+     * Show date picker dialog for start or end date
+     */
     private fun showDatePicker(isStartDate: Boolean) {
         val calendar = Calendar.getInstance()
         val datePickerDialog = DatePickerDialog(
@@ -143,10 +181,10 @@ class ExportPage : AppCompatActivity() {
             { _, year, month, dayOfMonth ->
                 val selectedDate = LocalDate.of(year, month + 1, dayOfMonth)
                 if (isStartDate) {
-                    startDate = selectedDate
+                    exportManager.getFilterManager().setDateRange(selectedDate, exportManager.getFilterManager().getEndDate())
                     startDateButton.text = "Start: ${selectedDate}"
                 } else {
-                    endDate = selectedDate
+                    exportManager.getFilterManager().setDateRange(exportManager.getFilterManager().getStartDate(), selectedDate)
                     endDateButton.text = "End: ${selectedDate}"
                 }
                 applyFilters()
@@ -158,40 +196,73 @@ class ExportPage : AppCompatActivity() {
         datePickerDialog.show()
     }
     
+    /**
+     * Setup category filter spinner
+     */
+    private fun setupCategoryFilter() {
+        val categories = TaskCategory.values().toList()
+        val categoryAdapter = ArrayAdapter(
+            this,
+            android.R.layout.simple_spinner_item,
+            categories.map { it.displayName }.toMutableList().apply { add(0, "All Categories") }
+        )
+        categoryAdapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item)
+        categoryFilterSpinner.adapter = categoryAdapter
+
+        categoryFilterSpinner.onItemSelectedListener = object : android.widget.AdapterView.OnItemSelectedListener {
+            override fun onItemSelected(parent: android.widget.AdapterView<*>?, view: View?, position: Int, id: Long) {
+                selectedCategory = if (position == 0) null else categories[position - 1]
+                exportManager.getFilterManager().setCategory(selectedCategory)
+                applyFilters()
+            }
+
+            override fun onNothingSelected(parent: android.widget.AdapterView<*>?) {
+                selectedCategory = null
+                exportManager.getFilterManager().setCategory(null)
+                applyFilters()
+            }
+        }
+        
+        // Add long click listener to category spinner for quick category export
+        categoryFilterSpinner.setOnLongClickListener {
+            if (selectedCategory != null) {
+                showCategoryExportOptionsDialog()
+            } else {
+                Toast.makeText(this, getString(R.string.task_category) + " not selected", Toast.LENGTH_SHORT).show()
+            }
+            true
+        }
+    }
+    
+    /**
+     * Apply filters to the task list
+     */
     private fun applyFilters() {
-        var filteredTasks = allTasks
+        // Update filter manager with current UI state
+        exportManager.getFilterManager().setTaskTypeFilters(
+            completedCheckbox.isChecked,
+            breaksCheckbox.isChecked,
+            preplannedCheckbox.isChecked
+        )
         
-        if (startDate != null) {
-            filteredTasks = filteredTasks.filter { 
-                it.startTime.toLocalDate().isAfter(startDate!!.minusDays(1))
-            }
-        }
-        if (endDate != null) {
-            filteredTasks = filteredTasks.filter { 
-                it.endTime.toLocalDate().isBefore(endDate!!.plusDays(1))
-            }
-        }
-        
-        if (completedCheckbox.isChecked) {
-            filteredTasks = filteredTasks.filter { it.isCompleted }
-        }
-        if (breaksCheckbox.isChecked) {
-            filteredTasks = filteredTasks.filter { it.isBreak }
-        }
-        if (preplannedCheckbox.isChecked) {
-            filteredTasks = filteredTasks.filter { it.isPreplanned }
-        }
-        
+        // Apply filters
+        val filteredTasks = exportManager.getFilterManager().applyFilters(allTasks)
         taskAdapter.updateTasks(filteredTasks)
         updateExportButtonText()
     }
     
+    /**
+     * Update export button text based on selection
+     */
     private fun updateExportButtonText() {
         val selectedCount = taskAdapter.getSelectedCount()
         val totalCount = taskAdapter.itemCount
         exportButton.text = getString(R.string.export_selected_format, selectedCount, totalCount)
     }
     
+    /**
+     * Update select all button text based on selection state
+     */
     private fun updateSelectAllButtonText() {
         val selectedCount = taskAdapter.getSelectedCount()
         val totalCount = taskAdapter.itemCount
@@ -202,6 +273,9 @@ class ExportPage : AppCompatActivity() {
         }
     }
     
+    /**
+     * Handle select all button click
+     */
     private fun handleSelectAll() {
         val selectedCount = taskAdapter.getSelectedCount()
         val totalCount = taskAdapter.itemCount
@@ -215,6 +289,26 @@ class ExportPage : AppCompatActivity() {
         }
         updateExportButtonText()
         updateSelectAllButtonText()
+    }
+    
+    /**
+     * Handle task deletion
+     */
+    private fun handleTaskDelete(task: Task) {
+        // Show confirmation dialog before deleting
+        AlertDialog.Builder(this)
+            .setTitle(getString(R.string.confirm_delete))
+            .setMessage(getString(R.string.confirm_delete_task_message, task.taskName))
+            .setPositiveButton(getString(R.string.delete)) { _, _ ->
+                // Delete the task from database
+                databaseManager.deleteTask(task.id) {
+                    // Refresh the task list after deletion
+                    fetchAndDisplayTasks()
+                    Toast.makeText(this, getString(R.string.task_deleted), Toast.LENGTH_SHORT).show()
+                }
+            }
+            .setNegativeButton(getString(R.string.cancel), null)
+            .show()
     }
 
     // Voice command export methods
@@ -242,6 +336,22 @@ class ExportPage : AppCompatActivity() {
         selectAllAndExport("text")
     }
     
+    /**
+     * Handle voice command export
+     */
+    private fun handleVoiceCommandExport() {
+        val exportFormat = intent.getStringExtra("export_format")
+        if (exportFormat != null) {
+            // Wait a bit for tasks to load, then trigger the export
+            handler.postDelayed({
+                selectAllAndExport(exportFormat)
+            }, 500)
+        }
+    }
+    
+    /**
+     * Select all tasks and export in specified format
+     */
     private fun selectAllAndExport(format: String) {
         // Select all tasks first
         taskAdapter.selectAll()
@@ -255,32 +365,13 @@ class ExportPage : AppCompatActivity() {
             return
         }
         
-        // Debug logging
-        android.util.Log.d("ExportPage", "selectAllAndExport called with format: '$format'")
-        
-        // Find the template for the requested format
-        val templates = templateManager.getAllTemplates()
-        android.util.Log.d("ExportPage", "Available templates: ${templates.map { "${it.javaClass.simpleName}(${it.getFileExtension()})" }}")
-        
-        val template = templates.find { template ->
-            val directMatch = template.getFileExtension().equals(format, ignoreCase = true)
-            val markdownMatch = format.equals("markdown", ignoreCase = true) && template.getFileExtension().equals("md", ignoreCase = true)
-            val textMatch = format.equals("text", ignoreCase = true) && template.getFileExtension().equals("txt", ignoreCase = true)
-            
-            android.util.Log.d("ExportPage", "Checking template ${template.javaClass.simpleName}(${template.getFileExtension()}) against format '$format': directMatch=$directMatch, markdownMatch=$markdownMatch, textMatch=$textMatch")
-            
-            directMatch || markdownMatch || textMatch
-        }
-        
-        if (template != null) {
-            android.util.Log.d("ExportPage", "Selected template: ${template.javaClass.simpleName}(${template.getFileExtension()})")
-            exportTasks(selectedTasks, template)
-        } else {
-            android.util.Log.e("ExportPage", "No template found for format: '$format'")
-            Toast.makeText(this, getString(R.string.export_format_not_supported, format), Toast.LENGTH_SHORT).show()
-        }
+        // Export tasks using the export manager
+        exportManager.exportTasks(selectedTasks, format)
     }
 
+    /**
+     * Handle export button click
+     */
     private fun handleExport() {
         val selectedTasks = taskAdapter.getSelectedTasks()
         
@@ -289,128 +380,138 @@ class ExportPage : AppCompatActivity() {
             return
         }
         
-        showTemplateSelectionDialog(selectedTasks)
+        showExportFormatDialog(selectedTasks)
     }
     
-    private fun showTemplateSelectionDialog(tasksToExport: List<Task>) {
-        val templates = templateManager.getAllTemplates()
-        val templateNames = templates.map { getString(R.string.format_suffix, it.getFileExtension().uppercase()) }.toTypedArray()
+    /**
+     * Show dialog with category export options
+     */
+    private fun showCategoryExportOptionsDialog() {
+        if (selectedCategory == null) {
+            // If no category is selected, show category selection dialog first
+            showCategorySelectionDialog { selectedCat ->
+                selectedCategory = selectedCat
+                categoryFilterSpinner.setSelection(TaskCategory.values().indexOf(selectedCat) + 1)
+                exportManager.getFilterManager().setCategory(selectedCategory)
+                applyFilters() // Apply filters to update the task list
+                showCategoryExportTypeDialog()
+            }
+        } else {
+            showCategoryExportTypeDialog()
+        }
+    }
+    
+    /**
+     * Show dialog to select a category for export
+     */
+    private fun showCategorySelectionDialog(onCategorySelected: (TaskCategory) -> Unit) {
+        val categories = TaskCategory.values()
+        val categoryNames = categories.map { it.displayName }.toTypedArray()
         
         AlertDialog.Builder(this)
-            .setTitle(getString(R.string.choose_export_format))
-            .setItems(templateNames) { _, which ->
-                val selectedTemplate = templates[which]
-                exportTasks(tasksToExport, selectedTemplate)
+            .setTitle(getString(R.string.task_category))
+            .setItems(categoryNames) { _, which ->
+                onCategorySelected(categories[which])
             }
             .setNegativeButton(getString(R.string.cancel), null)
             .show()
     }
     
-    private fun exportTasks(tasks: List<Task>, template: ExportTemplate) {
-        try {
-            val exportedData = template.format(tasks)
-            saveExportedData(exportedData, tasks, template.getFileExtension(), template.getMimeType())
-            Toast.makeText(this, getString(R.string.exported_tasks, tasks.size, template.getFileExtension().uppercase()), Toast.LENGTH_SHORT).show()
-        } catch (e: Exception) {
-            Toast.makeText(this, getString(R.string.export_failed, e.message), Toast.LENGTH_LONG).show()
-        }
-    }
-
-    private fun createSampleTasks(onComplete: () -> Unit) {
-        Toast.makeText(this, getString(R.string.creating_sample_tasks), Toast.LENGTH_SHORT).show()
-        
-        val sampleTasks = listOf(
-            com.b1gbr0ther.data.database.entities.Task(
-                taskName = "Morning Planning",
-                startTime = java.time.LocalDateTime.now().minusHours(2),
-                endTime = java.time.LocalDateTime.now().minusHours(1).minusMinutes(30),
-                creationMethod = CreationMethod.Voice,
-                isPreplanned = true,
-                isCompleted = true,
-                isBreak = false
-            ),
-            com.b1gbr0ther.data.database.entities.Task(
-                taskName = "Coffee Break",
-                startTime = java.time.LocalDateTime.now().minusHours(1).minusMinutes(30),
-                endTime = java.time.LocalDateTime.now().minusHours(1),
-                creationMethod = CreationMethod.Voice,
-                isPreplanned = false,
-                isCompleted = true,
-                isBreak = true,
-                 timingStatus = com.b1gbr0ther.TimingStatus.ON_TIME
-            ),
-            com.b1gbr0ther.data.database.entities.Task(
-                taskName = "Development Work",
-                startTime = java.time.LocalDateTime.now().minusHours(1),
-                endTime = java.time.LocalDateTime.now(),
-                creationMethod = CreationMethod.Gesture,
-                isPreplanned = true,
-                isCompleted = false,
-                isBreak = false
-            )
+    /**
+     * Show dialog to choose between exporting all tasks or selected tasks from the current category
+     */
+    private fun showCategoryExportTypeDialog() {
+        val options = arrayOf(
+            getString(R.string.export_category_all),
+            getString(R.string.export_category_selected)
         )
         
-        var tasksCreated = 0
-        sampleTasks.forEach { task ->
-            databaseManager.createTask(task) {
-                tasksCreated++
-                if (tasksCreated == sampleTasks.size) {
-                    Toast.makeText(this, getString(R.string.created_sample_tasks, sampleTasks.size), Toast.LENGTH_SHORT).show()
-                    onComplete()
+        AlertDialog.Builder(this)
+            .setTitle(getString(R.string.export_category_options))
+            .setItems(options) { _, which ->
+                when (which) {
+                    0 -> exportAllTasksFromCategory()
+                    1 -> exportSelectedTasksFromCategory()
                 }
             }
-        }
+            .setNegativeButton(getString(R.string.cancel), null)
+            .show()
     }
     
-    private fun saveExportedData(data: String, tasks: List<Task>, fileExtension: String, mimeType: String) {
-        try {
-            val taskCount = tasks.size
-            val dateFormatter = java.text.SimpleDateFormat("MMM_dd_yyyy", java.util.Locale.getDefault())
-            val currentDate = dateFormatter.format(java.util.Date())
-            val filename = "${taskCount}_tasks_$currentDate.$fileExtension"
-            
-            val exportDir = getExternalFilesDir(null)
-            val exportFile = java.io.File(exportDir, filename)
-            
-            exportFile.writeText(data)
-            
-            shareExportedFile(exportFile, mimeType)
-            
-        } catch (e: Exception) {
-            Toast.makeText(this, getString(R.string.error_saving_export, e.message), Toast.LENGTH_LONG).show()
+    /**
+     * Export all tasks from the currently selected category
+     */
+    private fun exportAllTasksFromCategory() {
+        if (selectedCategory == null) return
+        
+        val tasksInCategory = allTasks.filter { it.category == selectedCategory }
+        if (tasksInCategory.isEmpty()) {
+            Toast.makeText(this, getString(R.string.no_tasks_to_export), Toast.LENGTH_SHORT).show()
+            return
         }
+        
+        // Show export format dialog with only tasks from the selected category
+        showExportFormatDialog(tasksInCategory)
     }
     
-    private fun shareExportedFile(file: java.io.File, mimeType: String) {
-        try {
-            val uri = androidx.core.content.FileProvider.getUriForFile(
-                this,
-                "${packageName}.fileprovider",
-                file
-            )
-            
-            val shareIntent = android.content.Intent(android.content.Intent.ACTION_SEND).apply {
-                type = mimeType
-                putExtra(android.content.Intent.EXTRA_STREAM, uri)
-                putExtra(android.content.Intent.EXTRA_SUBJECT, getString(R.string.task_export_subject))
-                addFlags(android.content.Intent.FLAG_GRANT_READ_URI_PERMISSION)
-            }
-            
-            startActivity(android.content.Intent.createChooser(shareIntent, getString(R.string.share_export_file)))
-            
-        } catch (e: Exception) {
-            Toast.makeText(this, getString(R.string.file_saved_to, file.absolutePath), Toast.LENGTH_LONG).show()
+    /**
+     * Export only selected tasks from the currently selected category
+     */
+    private fun exportSelectedTasksFromCategory() {
+        if (selectedCategory == null) return
+        
+        val selectedTasksInCategory = taskAdapter.getSelectedTasks().filter { it.category == selectedCategory }
+        if (selectedTasksInCategory.isEmpty()) {
+            Toast.makeText(this, getString(R.string.please_select_tasks_to_export), Toast.LENGTH_SHORT).show()
+            return
         }
+        
+        // Show export format dialog
+        showExportFormatDialog(selectedTasksInCategory)
+    }
+    
+    /**
+     * Show dialog to select export format
+     */
+    private fun showExportFormatDialog(tasks: List<Task>) {
+        val formats = exportManager.getAvailableFormats()
+        val builder = AlertDialog.Builder(this)
+        builder.setTitle(getString(R.string.choose_export_format))
+        builder.setItems(formats) { _, which ->
+            val format = formats[which]
+            exportManager.exportTasks(tasks, format)
+        }
+        builder.show()
     }
 
+    /**
+     * Fetch tasks from database and display them
+     */
     private fun fetchAndDisplayTasks() {
         databaseManager.getAllTasks { tasks ->
             runOnUiThread {
                 allTasks = tasks
-                taskAdapter.updateTasks(tasks)
+                // Reset filters
+                exportManager.getFilterManager().resetFilters()
+                // Make sure all checkboxes are unchecked by default
+                completedCheckbox.isChecked = false
+                breaksCheckbox.isChecked = false
+                preplannedCheckbox.isChecked = false
+                applyFilters() // Apply filters to show all tasks
                 updateExportButtonText()
             }
         }
+    }
+
+    /**
+     * Open file picker for importing tasks
+     */
+    private fun openFilePicker() {
+        val intent = Intent(Intent.ACTION_GET_CONTENT).apply {
+            type = "*/*"  // allow every file type for now, change this to the allowed file types later
+            addCategory(Intent.CATEGORY_OPENABLE)
+        }
+        startActivityForResult(Intent.createChooser(intent, "Select a file"), PICK_FILE_REQUEST_CODE)
     }
 
     override fun onResume() {
@@ -427,5 +528,263 @@ class ExportPage : AppCompatActivity() {
         
         menuBar.setActivePage(0)
         updateExportButtonText()
+    }
+
+    override fun onActivityResult(requestCode: Int, resultCode: Int, data: Intent?) {
+        super.onActivityResult(requestCode, resultCode, data)
+        if (requestCode == PICK_FILE_REQUEST_CODE && resultCode == RESULT_OK) {
+            data?.data?.let { uri ->
+                // Parse the file and show the confirmation dialog with parsed tasks
+                parseFileAndShowConfirmation(uri)
+            }
+        }
+    }
+    
+    private fun parseFileAndShowConfirmation(uri: Uri) {
+        // Show a loading indicator
+        val progressDialog = ProgressDialog(this).apply {
+            setMessage("Parsing file...")
+            setCancelable(false)
+            show()
+        }
+        
+        // Use a background thread for parsing to avoid blocking the UI
+        Thread {
+            try {
+                // Parse the file
+                val parser = ImportFileParser(this)
+                val parsedTasks = parser.parseFile(uri)
+                
+                // Update UI on the main thread
+                runOnUiThread {
+                    progressDialog.dismiss()
+                    showImportConfirmationDialog(uri, parsedTasks)
+                }
+            } catch (e: UnsupportedFileTypeException) {
+                // Handle unsupported file type exception specifically
+                Log.e(TAG, "Unsupported file type: ${e.message}", e)
+                runOnUiThread {
+                    progressDialog.dismiss()
+                    // Show a more specific message for unsupported file types
+                    Toast.makeText(this, "${e.message}", Toast.LENGTH_LONG).show()
+                }
+            } catch (e: Exception) {
+                Log.e(TAG, "Error parsing file: ${e.message}", e)
+                runOnUiThread {
+                    progressDialog.dismiss()
+                    Toast.makeText(this, "Error parsing file: ${e.message}", Toast.LENGTH_LONG).show()
+                }
+            }
+        }.start()
+    }
+
+    private fun showImportConfirmationDialog(uri: Uri, tasks: List<Task>) {
+        val dialogView = layoutInflater.inflate(R.layout.dialog_import_confirmation, null)
+        
+        // Get references to views
+        val fileNameTextView = dialogView.findViewById<TextView>(R.id.fileNameTextView)
+        val tasksCountTextView = dialogView.findViewById<TextView>(R.id.tasksCountTextView)
+        val taskNameTextView = dialogView.findViewById<TextView>(R.id.taskNameTextView)
+        val taskTimeTextView = dialogView.findViewById<TextView>(R.id.taskTimeTextView)
+        val taskDetailsTextView = dialogView.findViewById<TextView>(R.id.taskDetailsTextView)
+        val taskCounterTextView = dialogView.findViewById<TextView>(R.id.taskCounterTextView)
+        val previousButton = dialogView.findViewById<Button>(R.id.previousButton)
+        val nextButton = dialogView.findViewById<Button>(R.id.nextButton)
+        val taskCardView = dialogView.findViewById<CardView>(R.id.taskCardView)
+        
+        // Set the file name
+        fileNameTextView.text = uri.lastPathSegment
+        
+        // Set tasks count
+        tasksCountTextView.text = tasks.size.toString()
+        
+        // Create dialog builder
+        val dialogBuilder = AlertDialog.Builder(this)
+            .setTitle(R.string.import_confirmation)
+            .setView(dialogView)
+        
+        // If no tasks found, show a message and only a cancel button
+        if (tasks.isEmpty()) {
+            taskCardView.visibility = View.GONE
+            previousButton.visibility = View.GONE
+            nextButton.visibility = View.GONE
+            taskCounterTextView.visibility = View.GONE
+            
+            dialogBuilder.setMessage(R.string.no_tasks_found)
+                .setNegativeButton(android.R.string.cancel, null)
+        } else {
+            // For tasks display, we need to track the current task index
+            var currentTaskIndex = 0
+            
+            // Function to update the task display
+            fun updateTaskDisplay() {
+                val currentTask = tasks[currentTaskIndex]
+                
+                // Update task name
+                taskNameTextView.text = currentTask.taskName
+                
+                // Format and update time information
+                val dateTimeFormatter = DateTimeFormatter.ofPattern("yyyy-MM-dd HH:mm")
+                val startTimeStr = currentTask.startTime.format(dateTimeFormatter)
+                val endTimeStr = currentTask.endTime.format(dateTimeFormatter)
+                taskTimeTextView.text = "Start: $startTimeStr - End: $endTimeStr"
+                
+                // Format and update other details
+                val statusText = if (currentTask.isCompleted) "Completed" else "Not Completed"
+                val methodText = currentTask.creationMethod.toString()
+                val breakText = if (currentTask.isBreak) "Break" else "Task"
+                taskDetailsTextView.text = "Status: $statusText | Method: $methodText | Type: $breakText"
+                
+                // Update counter
+                taskCounterTextView.text = getString(R.string.task_counter, currentTaskIndex + 1, tasks.size)
+                
+                // Update button states
+                previousButton.isEnabled = currentTaskIndex > 0
+                nextButton.isEnabled = currentTaskIndex < tasks.size - 1
+            }
+            
+            // Set up button click listeners
+            previousButton.setOnClickListener {
+                if (currentTaskIndex > 0) {
+                    currentTaskIndex--
+                    updateTaskDisplay()
+                }
+            }
+            
+            nextButton.setOnClickListener {
+                if (currentTaskIndex < tasks.size - 1) {
+                    currentTaskIndex++
+                    updateTaskDisplay()
+                }
+            }
+            
+            // Initialize the display with the first task
+            updateTaskDisplay()
+            
+            // Add positive and negative buttons to the dialog
+            dialogBuilder.setPositiveButton(R.string.import_all) { _, _ ->
+                importTasks(tasks)
+            }
+            .setNegativeButton(android.R.string.cancel, null)
+        }
+
+        // Create and show the dialog
+        val dialog = dialogBuilder.create()
+        dialog.show()
+    }
+    
+    private fun importTasks(tasks: List<Task>) {
+        // Show a loading indicator
+        val progressDialog = ProgressDialog(this).apply {
+            setMessage("Importing tasks...")
+            setCancelable(false)
+            show()
+        }
+        
+        // Use a background thread for database operations
+        Thread {
+            try {
+                // Use the DatabaseManager to insert tasks
+                val insertedIds = mutableListOf<Long>()
+                
+                // Process each task
+                for (task in tasks) {
+                    // Reset the ID to 0 to let Room auto-generate a new one
+                    task.id = 0
+                    
+                    // Use the DatabaseManager to create the task
+                    // We need to use a callback since createTask is asynchronous
+                    val latch = java.util.concurrent.CountDownLatch(1)
+                    var newId: Long = 0
+                    
+                    databaseManager.createTask(task) { id ->
+                        newId = id
+                        insertedIds.add(id)
+                        latch.countDown()
+                    }
+                    
+                    // Wait for the task to be created before continuing
+                    latch.await()
+                }
+                
+                // Update UI on the main thread
+                runOnUiThread {
+                    progressDialog.dismiss()
+                    Toast.makeText(
+                        this,
+                        "Successfully imported ${insertedIds.size} tasks",
+                        Toast.LENGTH_LONG
+                    ).show()
+                }
+            } catch (e: Exception) {
+                Log.e(TAG, "Error importing tasks: ${e.message}", e)
+                
+                // Show error on the main thread
+                runOnUiThread {
+                    progressDialog.dismiss()
+                    Toast.makeText(
+                        this,
+                        "Error importing tasks: ${e.message}",
+                        Toast.LENGTH_LONG
+                    ).show()
+                }
+            }
+        }.start()
+    }
+
+    private fun handleVoiceCommandImport() {
+        val importFilename = intent.getStringExtra("import_filename")
+        if (importFilename != null) {
+            // If filename is empty, just open the file picker
+            if (importFilename.isEmpty()) {
+                openFilePicker()
+                return
+            }
+
+            val extensions = listOf("", ".txt", ".csv", ".json", ".xml", ".md", ".html")
+            val directories = listOf(
+                getExternalFilesDir(null),
+                Environment.getExternalStorageDirectory(),
+                Environment.getExternalStoragePublicDirectory(Environment.DIRECTORY_DOWNLOADS),
+                Environment.getExternalStoragePublicDirectory(Environment.DIRECTORY_DOCUMENTS)
+            )
+
+            var fileFound = false
+            var foundFile: File? = null
+
+            for (dir in directories) {
+                if (dir == null) continue
+                for (ext in extensions) {
+                    val file = File(dir, importFilename + ext)
+                    if (file.exists()) {
+                        fileFound = true
+                        foundFile = file
+                        break
+                    }
+                }
+                if (fileFound) break
+            }
+
+            if (fileFound && foundFile != null) {
+                parseFileAndShowConfirmation(Uri.fromFile(foundFile))
+            } else {
+                // file is not found, show message and open the file picker
+                Toast.makeText(
+                    this,
+                    "File '$importFilename' not found. Opening file picker...",
+                    Toast.LENGTH_LONG
+                ).show()
+                
+                // open the file picker after 1.5 seconds
+                handler.postDelayed({
+                    openFilePicker()
+                }, 1500)
+            }
+        }
+    }
+
+    companion object {
+        private const val PICK_FILE_REQUEST_CODE = 123
+        private const val TAG = "ExportPage"
     }
 }

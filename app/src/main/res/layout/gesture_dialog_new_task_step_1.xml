@@ -47,6 +47,34 @@
             android:minHeight="48dp"/>
 
     </LinearLayout>
+    
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:orientation="horizontal"
+        android:weightSum="2"
+        android:layout_marginTop="8dp"
+        android:layout_marginBottom="8dp">
+
+        <TextView
+            android:text="Category:"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:layout_weight="1"
+            android:layout_margin="8dp"
+            android:textColor="?android:attr/textColorPrimary"
+            android:minHeight="48dp"
+            android:gravity="center_vertical"/>
+
+        <Spinner
+            android:id="@+id/spinnerTaskCategory"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:layout_weight="1"
+            android:layout_margin="8dp"
+            android:minHeight="48dp"/>
+
+    </LinearLayout>
 
     <LinearLayout
         android:layout_width="match_parent"

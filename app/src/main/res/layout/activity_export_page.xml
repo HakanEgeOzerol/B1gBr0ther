@@ -75,6 +75,28 @@
                     android:layout_weight="1"
                     android:text="@string/preplanned"/>
             </LinearLayout>
+            
+            <!-- Category Filter -->
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:orientation="horizontal"
+                android:layout_marginTop="8dp"
+                android:gravity="center_vertical">
+                
+                <TextView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text="@string/task_category"
+                    android:layout_marginEnd="8dp"
+                    android:textStyle="bold" />
+                
+                <Spinner
+                    android:id="@+id/categoryFilterSpinner"
+                    android:layout_width="0dp"
+                    android:layout_height="wrap_content"
+                    android:layout_weight="1" />
+            </LinearLayout>
         </LinearLayout>
     </androidx.cardview.widget.CardView>
 
@@ -115,6 +137,20 @@
             android:background="@drawable/rounded_corners"
             android:backgroundTint="?colorAccent"
             android:text="@string/select_all"
+            android:textAllCaps="false"
+            android:textColor="?attr/buttonTextColor"
+            android:textSize="16sp" />
+
+        <Button
+            android:id="@+id/importButton"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:layout_weight="1"
+            android:layout_marginStart="8dp"
+            android:layout_marginEnd="8dp"
+            android:background="@drawable/rounded_corners"
+            android:backgroundTint="?colorAccent"
+            android:text="@string/import_tasks"
             android:textAllCaps="false"
             android:textColor="?attr/buttonTextColor"
             android:textSize="16sp" />
