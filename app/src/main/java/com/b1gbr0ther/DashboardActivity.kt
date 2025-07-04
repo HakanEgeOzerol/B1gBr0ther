@@ -1305,52 +1305,8 @@ class DashboardActivity : AppCompatActivity() {
 
     fun importFile(fileName: String) {
         android.util.Log.d("DashboardActivity", "importFile() called with fileName: $fileName")
-        
-        // list of file extensions that are supported and thus are searched for
-        val extensions = listOf("", ".txt", ".csv", ".json", ".xml", ".md", ".html")
-        
-        // list of directories to search in
-        val directories = listOf(
-            getExternalFilesDir(null),
-            android.os.Environment.getExternalStorageDirectory(),
-            android.os.Environment.getExternalStoragePublicDirectory(android.os.Environment.DIRECTORY_DOWNLOADS),
-            android.os.Environment.getExternalStoragePublicDirectory(android.os.Environment.DIRECTORY_DOCUMENTS)
-        )
-        
-        // search for the file with different extensions in the directories
-        var fileFound = false
-        var foundFile: java.io.File? = null
-        
-        for (dir in directories) {
-            if (dir == null) continue
-            for (ext in extensions) {
-                val file = java.io.File(dir, fileName + ext)
-                if (file.exists()) {
-                    fileFound = true
-                    foundFile = file
-                    break
-                }
-            }
-            if (fileFound) break
-        }
-        
-        if (fileFound && foundFile != null) {
-            // for now shows a toast with file name, put actual import logic here 
-            android.widget.Toast.makeText(this, "Found file: ${foundFile.absolutePath}", android.widget.Toast.LENGTH_LONG).show()
-        } else {
-            // file is not found, show a toast stating this and then open the explorer
-            android.widget.Toast.makeText(this, 
-                "File not found. Opening file explorer...", 
-                android.widget.Toast.LENGTH_LONG
-            ).show()
-            
-            // open the file explorer after 1.5 seconds
-            android.os.Handler(android.os.Looper.getMainLooper()).postDelayed({
-                val intent = Intent(Intent.ACTION_GET_CONTENT)
-                intent.type = "*/*"
-                intent.addCategory(Intent.CATEGORY_OPENABLE)
-                startActivity(Intent.createChooser(intent, "Select a file"))
-            }, 1500)
-        }
+        val intent = Intent(this, ExportPage::class.java)
+        intent.putExtra("import_filename", fileName)
+        startActivity(intent)
     }
 }

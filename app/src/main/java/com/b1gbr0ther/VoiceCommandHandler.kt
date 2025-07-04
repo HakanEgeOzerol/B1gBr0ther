@@ -13,6 +13,7 @@ class VoiceCommandHandler(private val activity: DashboardActivity) {
         "show timesheet" to { activity.showTimesheetPage() },
         "show statistics" to { activity.showStatisticsPage() },
         "create task" to { activity.createTaskByVoice() },
+        "import" to { activity.importFile("") },  // Empty string will trigger just the file picker
         "export csv" to { 
             android.util.Log.d("VoiceCommandHandler", "Executing export csv command")
             activity.exportCSV() 
@@ -55,6 +56,15 @@ class VoiceCommandHandler(private val activity: DashboardActivity) {
 
         lastSpokenCommand = normalizedInput
 
+        // Handle simple import command first
+        if (commandAliases["import"]?.any { alias ->
+            normalizedInput == alias || normalizedInput.contains(alias)
+        } == true) {
+            activity.importFile("")  // Empty string will trigger just the file picker
+            return true
+        }
+
+        // Handle import with filename
         if (normalizedInput.startsWith("import ") || 
             normalizedInput.startsWith("load ") || 
             normalizedInput.startsWith("open ")) {
