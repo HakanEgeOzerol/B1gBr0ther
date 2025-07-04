@@ -71,6 +71,12 @@
             android:exported="false"
             android:theme="@style/Theme.B1gBr0ther">
         </activity>
+        <activity
+            android:name=".easteregg.SnakeGameActivity"
+            android:label="Snake Game"
+            android:exported="false"
+            android:theme="@style/Theme.B1gBr0ther">
+        </activity>
         
         <provider
             android:name="androidx.core.content.FileProvider"

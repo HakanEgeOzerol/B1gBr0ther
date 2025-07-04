@@ -1,14 +1,21 @@
 package com.b1gbr0ther
 
 import android.content.Context
+import android.content.Intent
 import android.graphics.Color
 import android.os.Bundle
+import android.view.GestureDetector
+import android.view.MotionEvent
+import android.view.View
 import android.widget.TextView
+import android.widget.Toast
 import androidx.activity.enableEdgeToEdge
 import androidx.appcompat.app.AppCompatActivity
+import androidx.core.view.GestureDetectorCompat
 import com.b1gbr0ther.data.database.DatabaseManager
 import com.b1gbr0ther.MenuBar
 import com.b1gbr0ther.TaskCategory
+import com.b1gbr0ther.easteregg.SnakeGameActivity
 import com.github.mikephil.charting.animation.Easing
 import com.github.mikephil.charting.charts.BarChart
 import com.github.mikephil.charting.charts.PieChart
@@ -105,6 +112,9 @@ class StatisticsActivity : AppCompatActivity() {
             animateY(1400, Easing.EaseInOutQuad)
             setNoDataText(getString(R.string.no_task_data_available))
             setNoDataTextColor(getCurrentTextColor())
+            
+            // Add double-tap detection for Easter egg
+            setupChartGestureDetector(this)
         }
         
         // Set up timing chart
@@ -132,6 +142,9 @@ class StatisticsActivity : AppCompatActivity() {
             setScaleEnabled(false)
             setPinchZoom(false)
             setDoubleTapToZoomEnabled(false)
+            
+            // Add double-tap detection for Easter egg
+            setupChartGestureDetector(this)
         }
         
         // Creation method chart removed
@@ -150,6 +163,9 @@ class StatisticsActivity : AppCompatActivity() {
             animateY(1400, Easing.EaseInOutQuad)
             setNoDataText("No category data available")
             setNoDataTextColor(getCurrentTextColor())
+            
+            // Add double-tap detection for Easter egg
+            setupChartGestureDetector(this)
         }
     }
 
@@ -185,8 +201,8 @@ class StatisticsActivity : AppCompatActivity() {
                         
                         val completionDataSet = PieDataSet(completionEntries, "").apply {
                             colors = listOf(
-                                Color.parseColor("#4CAF50"),  // Green
-                                Color.parseColor("#F44336")    // Red
+                                Color.parseColor("#BB86FC"),  // Purple 200
+                                Color.parseColor("#E1BEE7")   // Purple 100
                             )
                             valueTextSize = 12f
                             valueTextColor = Color.WHITE
@@ -218,10 +234,11 @@ class StatisticsActivity : AppCompatActivity() {
                             )
                             
                             val barDataSet = BarDataSet(barEntries, "").apply {
+                                // Use the same purple color for all bars in the timing chart
                                 colors = listOf(
-                                    Color.parseColor("#4CAF50"),  // Green
-                                    Color.parseColor("#2196F3"),  // Blue
-                                    Color.parseColor("#F44336")   // Red
+                                    Color.parseColor("#6200EE"),  // Purple 500
+                                    Color.parseColor("#6200EE"),  // Purple 500
+                                    Color.parseColor("#6200EE")   // Purple 500
                                 )
                                 valueTextSize = 12f
                                 valueTextColor = getCurrentTextColor()
@@ -270,16 +287,16 @@ class StatisticsActivity : AppCompatActivity() {
                     // Add entry for chart
                     categoryEntries.add(PieEntry(count.toFloat(), category.displayName))
                     
-                    // Add color based on category
-                    val colorResId = when (category) {
-                        TaskCategory.PROFESSIONAL -> R.color.category_work
-                        TaskCategory.PERSONAL -> R.color.category_personal
-                        TaskCategory.FAMILY -> R.color.category_family
-                        TaskCategory.LEISURE -> R.color.category_hobby
-                        TaskCategory.OTHER -> R.color.category_other
-                        else -> R.color.category_other
+                    // Add color based on category using purple shades
+                    val color = when (category) {
+                        TaskCategory.PROFESSIONAL -> Color.parseColor("#6200EE")  // Purple 500
+                        TaskCategory.PERSONAL -> Color.parseColor("#BB86FC")    // Purple 200
+                        TaskCategory.FAMILY -> Color.parseColor("#3700B3")      // Purple 700
+                        TaskCategory.LEISURE -> Color.parseColor("#E1BEE7")     // Purple 100
+                        TaskCategory.OTHER -> Color.parseColor("#8E4EC6")       // Game exit button purple
+                        else -> Color.parseColor("#5F4B66")                     // Dashboard button background
                     }
-                    categoryColors.add(getColor(colorResId))
+                    categoryColors.add(color)
                     
                     // Store count for summary
                     categoryCounts[category.displayName] = count
@@ -332,5 +349,36 @@ class StatisticsActivity : AppCompatActivity() {
             categoryChart.invalidate()
             categoriesStatsText.text = "No category data available"
         }
+    }
+    
+    /**
+     * Sets up a gesture detector for double-tap on charts to launch the Snake game Easter egg
+     */
+    private fun setupChartGestureDetector(view: View) {
+        val gestureDetector = GestureDetectorCompat(this, object : GestureDetector.SimpleOnGestureListener() {
+            override fun onDoubleTap(e: MotionEvent): Boolean {
+                // Launch Snake game Easter egg
+                launchSnakeGame()
+                return true
+            }
+        })
+        
+        view.setOnTouchListener { v, event ->
+            gestureDetector.onTouchEvent(event)
+            // Return false to ensure the chart's touch events still work
+            false
+        }
+    }
+    
+    /**
+     * Launch the Snake game Easter egg
+     */
+    private fun launchSnakeGame() {
+        // Show a brief toast message
+        Toast.makeText(this, "Easter egg found! 🐍", Toast.LENGTH_SHORT).show()
+        
+        // Launch the Snake game activity
+        val intent = Intent(this, SnakeGameActivity::class.java)
+        startActivity(intent)
     }
 }

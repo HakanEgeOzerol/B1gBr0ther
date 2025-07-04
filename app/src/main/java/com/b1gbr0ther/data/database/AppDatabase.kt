@@ -38,6 +38,15 @@ abstract class AppDatabase : RoomDatabase() {
         }
 
         /**
+         * Set a test instance of the database for unit testing
+         * @param testDatabase The test database instance
+         */
+        @JvmStatic
+        fun setTestInstance(testDatabase: AppDatabase) {
+            INSTANCE = testDatabase
+        }
+        
+        /**
          * Migration from version 4 to version 5: Add category field to tasks table
          */
         private val MIGRATION_4_5 = object : Migration(4, 5) {

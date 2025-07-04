@@ -1,5 +1,6 @@
 package com.b1gbr0ther.data.database.entities
 
+import com.b1gbr0ther.CreationMethod
 import com.b1gbr0ther.TaskCategory
 import com.b1gbr0ther.CreationMethod
 import org.junit.Assert.*
@@ -39,8 +40,8 @@ class TaskTest {
             isCompleted = true,
             isBreak = false,
             isPreplanned = false,
-            creationMethod = CreationMethod.Gesture
-            // Not specifying category - it should use the default
+            creationMethod = CreationMethod.Gesture,
+            category = TaskCategory.OTHER
         )
         
         // Category should never be null

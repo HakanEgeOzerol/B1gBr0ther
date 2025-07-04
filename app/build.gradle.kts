@@ -48,7 +48,7 @@ android {
     buildFeatures {
         compose = true
     }
-
+    
     // Lint configuration for CI/CD pipeline
     lint {
         abortOnError = true

@@ -1,0 +1,30 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<lint>
+    <!-- Disable specific lint checks that might be too strict for this project -->
+    <issue id="ContentDescription" severity="warning" />
+    <issue id="HardcodedText" severity="warning" />
+    
+    <!-- Enforce stricter checks for important issues -->
+    <issue id="MissingTranslation" severity="error" />
+    <issue id="UnusedResources" severity="warning" />
+    <issue id="Overdraw" severity="warning" />
+    <issue id="UseCompoundDrawables" severity="warning" />
+    
+    <!-- Security-related checks -->
+    <issue id="ExportedContentProvider" severity="error" />
+    <issue id="ExportedReceiver" severity="error" />
+    <issue id="ExportedService" severity="error" />
+    <issue id="SetJavaScriptEnabled" severity="error" />
+    <issue id="AllowBackup" severity="warning" />
+    <issue id="SecureRandom" severity="error" />
+    
+    <!-- Performance checks -->
+    <issue id="ObsoleteLayoutParam" severity="warning" />
+    <issue id="InefficientWeight" severity="warning" />
+    <issue id="NestedWeights" severity="warning" />
+    <issue id="DisableBaselineAlignment" severity="warning" />
+    <issue id="UseValueOf" severity="warning" />
+    
+    <!-- Ignore specific files or patterns if needed -->
+    <!-- <ignore path="src/test/**" /> -->
+</lint>
