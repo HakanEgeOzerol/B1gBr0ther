@@ -42,4 +42,12 @@
     <color name="game_exit_button">#8E4EC6</color>
     <color name="game_button_text">#FFFFFF</color>
     <color name="game_overlay_background">#B3000000</color>
+    <!-- Task category colors -->
+    <color name="category_work">#FF5722</color> <!-- Orange -->
+    <color name="category_study">#2196F3</color> <!-- Blue -->
+    <color name="category_personal">#9C27B0</color> <!-- Purple -->
+    <color name="category_health">#4CAF50</color> <!-- Green -->
+    <color name="category_family">#E91E63</color> <!-- Pink -->
+    <color name="category_hobby">#FFEB3B</color> <!-- Yellow -->
+    <color name="category_other">#607D8B</color> <!-- Blue Grey -->
 </resources>

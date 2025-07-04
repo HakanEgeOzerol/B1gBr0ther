@@ -5,13 +5,16 @@
     android:layout_height="wrap_content"
     android:layout_marginBottom="8dp"
     app:cardCornerRadius="8dp"
-    app:cardElevation="4dp">
+    app:cardElevation="4dp"
+    app:cardBackgroundColor="@android:color/transparent">
 
     <LinearLayout
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:orientation="vertical"
-        android:padding="12dp">
+        android:padding="12dp"
+        android:background="@drawable/task_item_background"
+        android:duplicateParentState="true">
 
         <LinearLayout
             android:layout_width="match_parent"
@@ -61,6 +64,20 @@
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:text="Gesture" />
+
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginStart="16dp"
+                android:text="Category: "
+                android:textStyle="bold" />
+
+            <TextView
+                android:id="@+id/tvCategory"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="Work"
+                android:textStyle="italic" />
         </LinearLayout>
 
         <LinearLayout
@@ -92,6 +109,16 @@
                 android:layout_height="wrap_content"
                 android:text="Break"
                 android:textColor="@android:color/holo_orange_dark"
+                android:layout_marginStart="8dp"
+                android:visibility="gone" />
+                
+            <TextView
+                android:id="@+id/tvSelected"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="Selected for Export"
+                android:textColor="#009688"
+                android:textStyle="bold"
                 android:layout_marginStart="8dp"
                 android:visibility="gone" />
         </LinearLayout>

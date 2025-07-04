@@ -78,9 +78,10 @@
     <string name="file_saved_to">Bestand opgeslagen naar: %1$s</string>
     <string name="choose_export_format">Kies export formaat</string>
     <string name="select_all">Alles selecteren</string>
+    <string name="import_tasks">Importeren</string>
     <string name="deselect_all">Alles deselecteren</string>
     <string name="no_tasks_to_export">Geen taken beschikbaar om te exporteren</string>
-    <string name="export_format_not_supported">Export formaat \'%1$s\' niet ondersteund</string>
+    <string name="export_format_not_supported">Exportformaat \'%1$s\' wordt niet ondersteund</string>
     
     <!-- Dashboard -->
     <string name="dashboard">Dashboard</string>
@@ -257,6 +258,10 @@ Voor beste ervaring, schakel alle functies in en verleen vereiste toestemmingen!
     <string name="status">Status</string>
     
     <!-- Database Test -->
+    <string name="export_category_all">Alles exporteren uit categorie</string>
+    <string name="export_category_selected">Geselecteerde items uit categorie exporteren</string>
+    <string name="export_category_options">Categorie-exportopties</string>
+    <string name="category_export">Categorie Exporteren</string>
     <string name="database_test">Database Test</string>
     <string name="insert_task">Taak invoegen</string>
     <string name="update_task">Taak bijwerken</string>
@@ -350,6 +355,7 @@ Voor beste ervaring, schakel alle functies in en verleen vereiste toestemmingen!
     <string name="completion_stats_format">Voltooid: %1$s / Niet voltooid: %2$s</string>
     
     <!-- Additional export strings -->
+    <string name="game_exit_to_app">Afsluiten naar app</string>
     <string name="export_selected_format">Geselecteerde exporteren (%1$d/%2$d)</string>
     <string name="format_suffix">%1$s Formaat</string>
     <string name="task_export_subject">Taak Export</string>
@@ -450,4 +456,7 @@ Voor beste ervaring, schakel alle functies in en verleen vereiste toestemmingen!
     <string name="input_task_name_hint">Voer taaknaam in</string>
     <string name="hours_hint">Uren</string>
     <string name="minutes_hint">Minuten</string>
+    <string name="task_category">Categorie</string>
+    <string name="game_paused_title">Spel gepauzeerd</string>
+    <string name="game_resume">Hervatten</string>
 </resources> 

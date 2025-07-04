@@ -5,6 +5,7 @@ import android.app.Dialog
 import android.content.Context
 import android.content.Intent
 import android.content.pm.PackageManager
+import com.b1gbr0ther.TaskCategory
 import android.hardware.Sensor
 import android.hardware.SensorEvent
 import android.hardware.SensorEventListener
@@ -18,9 +19,11 @@ import android.widget.Button
 import android.widget.CheckBox
 import android.widget.DatePicker
 import android.widget.EditText
+import android.widget.Spinner
 import android.widget.TextView
 import android.widget.TimePicker
 import android.widget.Toast
+import android.widget.ArrayAdapter
 import androidx.activity.enableEdgeToEdge
 import androidx.activity.result.contract.ActivityResultContracts
 import androidx.appcompat.app.AppCompatActivity
@@ -114,7 +117,7 @@ class DashboardActivity : AppCompatActivity() {
         currentTaskText.text = name
     }
 
-    private fun loadWeeklyWorkBlocks(chart: WeekTimeGridView) {
+    private fun loadWeeklyWorkBlocks(chart: WeeklyHoursView) {
         val weekStart = LocalDate.now().with(DayOfWeek.MONDAY)
         databaseManager.getWorkBlocksForWeek(weekStart) { workBlocks ->
             chart.setWorkData(workBlocks, weekStart)
@@ -197,7 +200,7 @@ class DashboardActivity : AppCompatActivity() {
             insets
         }
 
-        val chart = findViewById<WeekTimeGridView>(R.id.weekGrid)
+        val chart = findViewById<WeeklyHoursView>(R.id.weekGrid)
 
         loadWeeklyWorkBlocks(chart)
 
@@ -927,6 +930,24 @@ class DashboardActivity : AppCompatActivity() {
         val cancelButton = dialog.findViewById<Button>(R.id.Cancel)
         val startTaskCreation = dialog.findViewById<Button>(R.id.StartTaskCreation)
         val checkBox = dialog.findViewById<CheckBox>(R.id.checkBoxNewTask)
+        val categorySpinner = dialog.findViewById<Spinner>(R.id.spinnerTaskCategory)
+        
+        // Setup category spinner with the string array resource
+        val categoryAdapter = ArrayAdapter.createFromResource(
+            this,
+            R.array.task_categories,
+            android.R.layout.simple_spinner_item
+        ).also { adapter ->
+            adapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item)
+            categorySpinner.adapter = adapter
+        }
+        
+        // Set default selection to WORK category
+        val defaultCategoryIndex = resources.getStringArray(R.array.task_categories)
+            .indexOf(TaskCategory.getDefault().name)
+        if (defaultCategoryIndex >= 0) {
+            categorySpinner.setSelection(defaultCategoryIndex)
+        }
 
         startTaskCreation.setOnClickListener{
             var name = textInput.text.toString()
@@ -934,6 +955,14 @@ class DashboardActivity : AppCompatActivity() {
                 name = "Default task name"
             }
             val isPlannedAhead = checkBox.isChecked
+            
+            // Get the selected category
+            val selectedCategoryName = categorySpinner.selectedItem.toString()
+            val selectedCategory = TaskCategory.fromDisplayName(selectedCategoryName)
+            
+            // Store the selected category for use in subsequent dialogs
+            val preferences = getSharedPreferences("TaskPreferences", Context.MODE_PRIVATE)
+            preferences.edit().putString("lastSelectedCategory", selectedCategory.name).apply()
 
             if (isPlannedAhead){
                 dialog.dismiss()
@@ -1066,15 +1095,29 @@ class DashboardActivity : AppCompatActivity() {
                 LocalDateTime.now().isAfter(estimatedCompletion) -> TimingStatus.LATE
                 else -> TimingStatus.ON_TIME
             }
+            
+            // Get the stored category preference or use default
+            val preferences = getSharedPreferences("TaskPreferences", Context.MODE_PRIVATE)
+            val categoryName = preferences.getString("lastSelectedCategory", TaskCategory.getDefault().name)
+            val category = try {
+                TaskCategory.valueOf(categoryName ?: TaskCategory.getDefault().name)
+            } catch (e: Exception) {
+                TaskCategory.getDefault()
+            }
 
             val newTask = Task(
-                name,
-                startTime,
-                estimatedCompletion,
-                CreationMethod.Gesture,
-                timingStatus, isPreplanned)
+                id = 0, // Auto-generated
+                taskName = name,
+                startTime = startTime,
+                endTime = estimatedCompletion,
+                creationMethod = CreationMethod.Gesture,
+                category = category,
+                isPreplanned = isPreplanned,
+                isCompleted = false,
+                isBreak = false,
+                timingStatus = timingStatus)
 
-            databaseManager.createAppTask(newTask) { taskId ->
+            databaseManager.createTask(newTask) { taskId ->
                 Toast.makeText(this, "Task '$name' created.", Toast.LENGTH_SHORT).show()
                 updateCurrentTaskDisplay()
             }
