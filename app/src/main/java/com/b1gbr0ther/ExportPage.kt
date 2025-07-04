@@ -8,6 +8,7 @@ import android.net.Uri
 import android.os.Bundle
 import android.os.Handler
 import android.os.Looper
+import android.os.Environment
 import android.util.Log
 import android.view.View
 import android.widget.ArrayAdapter
@@ -32,6 +33,7 @@ import com.b1gbr0ther.model.export.ExportManager
 import com.b1gbr0ther.model.export.TaskFilterManager
 import com.b1gbr0ther.model.import.ImportFileParser
 import com.b1gbr0ther.model.import.UnsupportedFileTypeException
+import java.io.File
 import java.time.LocalDate
 import java.time.format.DateTimeFormatter
 import java.util.Calendar
@@ -94,6 +96,9 @@ class ExportPage : AppCompatActivity() {
         
         // Check if we should auto-export based on voice command
         handleVoiceCommandExport()
+
+        // Check if we should handle import from voice command
+        handleVoiceCommandImport()
     }
     
     /**
@@ -725,6 +730,57 @@ class ExportPage : AppCompatActivity() {
                 }
             }
         }.start()
+    }
+
+    private fun handleVoiceCommandImport() {
+        val importFilename = intent.getStringExtra("import_filename")
+        if (importFilename != null) {
+            // If filename is empty, just open the file picker
+            if (importFilename.isEmpty()) {
+                openFilePicker()
+                return
+            }
+
+            val extensions = listOf("", ".txt", ".csv", ".json", ".xml", ".md", ".html")
+            val directories = listOf(
+                getExternalFilesDir(null),
+                Environment.getExternalStorageDirectory(),
+                Environment.getExternalStoragePublicDirectory(Environment.DIRECTORY_DOWNLOADS),
+                Environment.getExternalStoragePublicDirectory(Environment.DIRECTORY_DOCUMENTS)
+            )
+
+            var fileFound = false
+            var foundFile: File? = null
+
+            for (dir in directories) {
+                if (dir == null) continue
+                for (ext in extensions) {
+                    val file = File(dir, importFilename + ext)
+                    if (file.exists()) {
+                        fileFound = true
+                        foundFile = file
+                        break
+                    }
+                }
+                if (fileFound) break
+            }
+
+            if (fileFound && foundFile != null) {
+                parseFileAndShowConfirmation(Uri.fromFile(foundFile))
+            } else {
+                // file is not found, show message and open the file picker
+                Toast.makeText(
+                    this,
+                    "File '$importFilename' not found. Opening file picker...",
+                    Toast.LENGTH_LONG
+                ).show()
+                
+                // open the file picker after 1.5 seconds
+                handler.postDelayed({
+                    openFilePicker()
+                }, 1500)
+            }
+        }
     }
 
     companion object {

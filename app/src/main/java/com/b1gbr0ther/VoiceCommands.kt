@@ -201,7 +201,7 @@ object VoiceCommandAliases {
             "export to plain text",
             "save as plain text"
         ),
-         "import file" to listOf(
+        "import file" to listOf(
             "import",
             "import file",
             "import the file",
@@ -214,6 +214,15 @@ object VoiceCommandAliases {
             "load data from",
             "open file",
             "open the file"
+        ),
+        "import" to listOf(
+            "show import",
+            "import something",
+            "import files",
+            "import tasks",
+            "open import",
+            "show import",
+            "start import"
         )
     )
 }
