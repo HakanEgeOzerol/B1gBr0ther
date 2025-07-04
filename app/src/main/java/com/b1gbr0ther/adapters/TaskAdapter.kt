@@ -123,6 +123,7 @@ class TaskAdapter(
         private val tvPreplanned: TextView = itemView.findViewById(R.id.tvPreplanned)
         private val tvCompleted: TextView = itemView.findViewById(R.id.tvCompleted)
         private val tvBreak: TextView = itemView.findViewById(R.id.tvBreak)
+        private val tvSelected: TextView = itemView.findViewById(R.id.tvSelected)
         private val btnDeleteTask: Button? = itemView.findViewById(R.id.btnDeleteTask)
         // No checkbox in the layout, so we'll use item click instead
 
@@ -167,7 +168,11 @@ class TaskAdapter(
             }
             
             // Visual indication of selection state
-            itemView.isSelected = selectedTaskIds.contains(task.id)
+            val isSelected = selectedTaskIds.contains(task.id)
+            itemView.isSelected = isSelected
+            
+            // Show/hide the selection indicator
+            tvSelected.visibility = if (isSelected) View.VISIBLE else View.GONE
         }
     }
 }
