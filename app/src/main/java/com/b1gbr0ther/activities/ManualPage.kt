@@ -1,4 +1,4 @@
-package com.b1gbr0ther
+package com.b1gbr0ther.activities
 
 import android.content.Context
 import android.os.Bundle
@@ -6,6 +6,10 @@ import androidx.activity.enableEdgeToEdge
 import androidx.appcompat.app.AppCompatActivity
 import androidx.core.view.ViewCompat
 import androidx.core.view.WindowInsetsCompat
+import com.b1gbr0ther.util.LocaleHelper
+import com.b1gbr0ther.MenuBar
+import com.b1gbr0ther.R
+import com.b1gbr0ther.util.ThemeManager
 
 class ManualPage : AppCompatActivity() {
     private lateinit var menuBar: MenuBar

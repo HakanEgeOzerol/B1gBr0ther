@@ -1,8 +1,8 @@
-package com.b1gbr0ther
+package com.b1gbr0ther.util
 
 import android.app.Activity
 import android.content.Context
-import android.content.SharedPreferences
+import com.b1gbr0ther.R
 
 /**
  * Utility class to manage app themes (NOT system themes)

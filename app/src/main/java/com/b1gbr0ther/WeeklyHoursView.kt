@@ -8,8 +8,8 @@ import android.view.MotionEvent
 import android.view.View
 import androidx.core.graphics.toColorInt
 import com.b1gbr0ther.easteregg.DoodleJumpActivity
+import com.b1gbr0ther.timetracking.WorkBlock
 import java.time.LocalDate
-import java.time.format.DateTimeFormatter
 import java.time.format.TextStyle
 import java.util.Locale
 

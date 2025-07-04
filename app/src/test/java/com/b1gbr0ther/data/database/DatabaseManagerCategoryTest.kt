@@ -4,7 +4,7 @@ import android.content.Context
 import androidx.room.Room
 import androidx.test.core.app.ApplicationProvider
 import com.b1gbr0ther.data.database.entities.Task
-import com.b1gbr0ther.TaskCategory
+import com.b1gbr0ther.model.TaskCategory
 import kotlinx.coroutines.runBlocking
 import org.junit.After
 import org.junit.Before
@@ -16,7 +16,6 @@ import java.time.LocalDateTime
 import java.util.concurrent.CountDownLatch
 import java.util.concurrent.TimeUnit
 import kotlin.test.assertEquals
-import kotlin.test.assertTrue
 
 @RunWith(RobolectricTestRunner::class)
 class DatabaseManagerCategoryTest {

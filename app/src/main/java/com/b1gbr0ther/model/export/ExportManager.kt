@@ -4,7 +4,7 @@ import android.content.Context
 import android.util.Log
 import android.widget.Toast
 import com.b1gbr0ther.R
-import com.b1gbr0ther.TaskCategory
+import com.b1gbr0ther.model.TaskCategory
 import com.b1gbr0ther.data.database.entities.Task
 import com.b1gbr0ther.models.export.ExportTemplateManager
 import com.b1gbr0ther.models.export.templates.ExportTemplate

@@ -1,11 +1,8 @@
-package com.b1gbr0ther
+package com.b1gbr0ther.activities
 
 import android.content.Context
 import android.content.Intent
-import android.annotation.SuppressLint
-import com.b1gbr0ther.data.database.DatabaseManager
 import android.os.Bundle
-import android.view.LayoutInflater
 import android.widget.Toast
 import android.app.AlertDialog
 import android.view.Gravity
@@ -20,6 +17,10 @@ import androidx.appcompat.app.AppCompatActivity
 import androidx.core.content.edit
 import androidx.core.view.ViewCompat
 import androidx.core.view.WindowInsetsCompat
+import com.b1gbr0ther.util.LocaleHelper
+import com.b1gbr0ther.MenuBar
+import com.b1gbr0ther.R
+import com.b1gbr0ther.util.ThemeManager
 import java.time.YearMonth
 import java.time.format.TextStyle
 import java.util.Locale
@@ -185,9 +186,13 @@ class TimesheetActivity : AppCompatActivity() {
       .create()
 
     val months = listOf(
-      getString(R.string.january), getString(R.string.february), getString(R.string.march), getString(R.string.april), 
-      getString(R.string.may), getString(R.string.june), getString(R.string.july), getString(R.string.august), 
-      getString(R.string.september), getString(R.string.october), getString(R.string.november), getString(R.string.december)
+      getString(R.string.january), getString(R.string.february), getString(R.string.march), getString(
+        R.string.april
+      ),
+      getString(R.string.may), getString(R.string.june), getString(R.string.july), getString(R.string.august),
+      getString(R.string.september), getString(R.string.october), getString(R.string.november), getString(
+        R.string.december
+      )
     )
 
     for ((index, name) in months.withIndex()) {

@@ -1,4 +1,6 @@
-package com.b1gbr0ther
+package com.b1gbr0ther.model
+
+import com.b1gbr0ther.R
 
 /**
  * Enum class representing categories for tasks.

@@ -2,7 +2,7 @@ package com.b1gbr0ther.data.database.repository
 
 import com.b1gbr0ther.data.database.dao.TaskDao
 import com.b1gbr0ther.data.database.entities.Task
-import com.b1gbr0ther.TaskCategory
+import com.b1gbr0ther.model.TaskCategory
 import java.time.LocalDateTime
 
 /**
@@ -24,7 +24,7 @@ class TaskRepository(private val taskDao: TaskDao) {
      * @param appTask The app's Task model to insert
      * @return The ID of the inserted task
      */
-    suspend fun insertAppTask(appTask: com.b1gbr0ther.Task): Long {
+    suspend fun insertAppTask(appTask: com.b1gbr0ther.model.Task): Long {
         val task = Task.fromAppTask(appTask)
         return taskDao.insertTask(task)
     }
@@ -42,7 +42,7 @@ class TaskRepository(private val taskDao: TaskDao) {
      * @param appTask The app's Task model to update
      * @param id The ID of the task to update
      */
-    suspend fun updateAppTask(appTask: com.b1gbr0ther.Task, id: Long) {
+    suspend fun updateAppTask(appTask: com.b1gbr0ther.model.Task, id: Long) {
         // Get the existing task first to preserve any properties not being updated
         val existingTask = taskDao.getTaskById(id)
         if (existingTask != null) {

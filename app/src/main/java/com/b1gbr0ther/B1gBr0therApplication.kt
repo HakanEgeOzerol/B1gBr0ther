@@ -4,6 +4,7 @@ import android.app.Application
 import android.content.Context
 import com.b1gbr0ther.data.database.AppDatabase
 import com.b1gbr0ther.data.database.DatabaseManager
+import com.b1gbr0ther.util.LocaleHelper
 
 /**
  * Application class for the B1gBr0ther app.

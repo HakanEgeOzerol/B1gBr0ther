@@ -4,9 +4,11 @@ import android.content.Context
 import android.util.AttributeSet
 import android.view.LayoutInflater
 import android.view.View
-import android.widget.Toast
 import androidx.constraintlayout.widget.ConstraintLayout
-import com.b1gbr0ther.StatisticsActivity
+import com.b1gbr0ther.activities.DashboardActivity
+import com.b1gbr0ther.activities.ExportPage
+import com.b1gbr0ther.activities.StatisticsActivity
+import com.b1gbr0ther.activities.TimesheetActivity
 
 class MenuBar @JvmOverloads constructor(
     context: Context,

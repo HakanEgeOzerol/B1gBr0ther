@@ -1,7 +1,6 @@
-package com.b1gbr0ther
+package com.b1gbr0ther.util
 
 import android.content.Context
-import android.content.SharedPreferences
 import android.content.res.Configuration
 import android.os.Build
 import java.util.*

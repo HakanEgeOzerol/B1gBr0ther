@@ -1,4 +1,6 @@
-package com.b1gbr0ther
+package com.b1gbr0ther.voice
+
+import com.b1gbr0ther.activities.DashboardActivity
 
 class VoiceCommandHandler(private val activity: DashboardActivity) {
 

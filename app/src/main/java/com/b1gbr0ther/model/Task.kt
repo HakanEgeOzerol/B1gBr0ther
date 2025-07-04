@@ -1,8 +1,7 @@
-package com.b1gbr0ther
+package com.b1gbr0ther.model
 
 import java.time.LocalDateTime
-import com.b1gbr0ther.TimingStatus
-import com.b1gbr0ther.TaskCategory
+import com.b1gbr0ther.timetracking.TimingStatus
 
 enum class CreationMethod
 {

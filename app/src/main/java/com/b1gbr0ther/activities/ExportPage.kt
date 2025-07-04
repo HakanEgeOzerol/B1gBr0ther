@@ -1,4 +1,4 @@
-package com.b1gbr0ther
+package com.b1gbr0ther.activities
 
 import android.app.DatePickerDialog
 import android.app.ProgressDialog
@@ -25,12 +25,15 @@ import androidx.core.view.ViewCompat
 import androidx.core.view.WindowInsetsCompat
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
+import com.b1gbr0ther.util.LocaleHelper
+import com.b1gbr0ther.MenuBar
+import com.b1gbr0ther.R
+import com.b1gbr0ther.model.TaskCategory
+import com.b1gbr0ther.util.ThemeManager
 import com.b1gbr0ther.adapters.TaskAdapter
-import com.b1gbr0ther.data.database.AppDatabase
 import com.b1gbr0ther.data.database.DatabaseManager
 import com.b1gbr0ther.data.database.entities.Task
 import com.b1gbr0ther.model.export.ExportManager
-import com.b1gbr0ther.model.export.TaskFilterManager
 import com.b1gbr0ther.model.import.ImportFileParser
 import com.b1gbr0ther.model.import.UnsupportedFileTypeException
 import java.io.File

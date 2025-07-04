@@ -1,4 +1,4 @@
-package com.b1gbr0ther
+package com.b1gbr0ther.detection
 
 import android.util.Log
 

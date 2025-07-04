@@ -1,4 +1,4 @@
-package com.b1gbr0ther
+package com.b1gbr0ther.activities
 
 import android.content.Context
 import android.content.Intent
@@ -6,6 +6,9 @@ import android.os.Bundle
 import android.widget.Button
 import androidx.appcompat.app.AppCompatActivity
 import androidx.activity.enableEdgeToEdge
+import com.b1gbr0ther.util.LocaleHelper
+import com.b1gbr0ther.R
+import com.b1gbr0ther.util.ThemeManager
 
 class MainActivity : AppCompatActivity() {
     private var appliedTheme: Int = -1

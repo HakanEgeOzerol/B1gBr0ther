@@ -4,9 +4,9 @@ import android.content.Context
 import android.net.Uri
 import android.provider.OpenableColumns
 import android.util.Log
-import com.b1gbr0ther.CreationMethod
-import com.b1gbr0ther.TaskCategory
-import com.b1gbr0ther.TimingStatus
+import com.b1gbr0ther.model.CreationMethod
+import com.b1gbr0ther.model.TaskCategory
+import com.b1gbr0ther.timetracking.TimingStatus
 import com.b1gbr0ther.data.database.entities.Task
 import org.json.JSONArray
 import org.json.JSONObject

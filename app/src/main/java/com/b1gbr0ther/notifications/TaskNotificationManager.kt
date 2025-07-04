@@ -9,8 +9,8 @@ import android.content.SharedPreferences
 import android.os.Build
 import androidx.core.app.NotificationCompat
 import androidx.core.app.NotificationManagerCompat
-import com.b1gbr0ther.DashboardActivity
-import com.b1gbr0ther.SettingsActivity
+import com.b1gbr0ther.activities.DashboardActivity
+import com.b1gbr0ther.activities.SettingsActivity
 import com.b1gbr0ther.R
 import com.b1gbr0ther.data.database.entities.Task
 import java.time.LocalDateTime

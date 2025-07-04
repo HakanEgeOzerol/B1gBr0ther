@@ -1,11 +1,11 @@
-package com.b1gbr0ther
+package com.b1gbr0ther.activities
 
 import android.Manifest
 import android.app.Dialog
 import android.content.Context
 import android.content.Intent
 import android.content.pm.PackageManager
-import com.b1gbr0ther.TaskCategory
+import com.b1gbr0ther.model.TaskCategory
 import android.hardware.Sensor
 import android.hardware.SensorEvent
 import android.hardware.SensorEventListener
@@ -30,6 +30,17 @@ import androidx.appcompat.app.AppCompatActivity
 import androidx.core.content.ContextCompat
 import androidx.core.view.ViewCompat
 import androidx.core.view.WindowInsetsCompat
+import com.b1gbr0ther.model.CreationMethod
+import com.b1gbr0ther.util.LocaleHelper
+import com.b1gbr0ther.MenuBar
+import com.b1gbr0ther.R
+import com.b1gbr0ther.util.ThemeManager
+import com.b1gbr0ther.timetracking.TimeTracker
+import com.b1gbr0ther.timetracking.TimeTrackerInterface
+import com.b1gbr0ther.timetracking.TimingStatus
+import com.b1gbr0ther.voice.VoiceCommandHandler
+import com.b1gbr0ther.voice.VoiceRecognizerManager
+import com.b1gbr0ther.WeeklyHoursView
 import com.b1gbr0ther.data.database.DatabaseManager // Added DatabaseManager import
 import com.b1gbr0ther.data.database.entities.Task // Added Task entity import
 import java.time.LocalDateTime
@@ -88,7 +99,9 @@ class DashboardActivity : AppCompatActivity() {
                 val currentMode = SettingsActivity.getAudioMode(sharedPreferences)
                 
                 if (currentMode == SettingsActivity.AUDIO_MODE_OFF) {
-                    sharedPreferences.edit().putInt("audio_mode", SettingsActivity.AUDIO_MODE_VOICE_COMMANDS).apply()
+                    sharedPreferences.edit().putInt("audio_mode",
+                        SettingsActivity.AUDIO_MODE_VOICE_COMMANDS
+                    ).apply()
                     Toast.makeText(this, "Voice Commands enabled by default", Toast.LENGTH_SHORT).show()
                     updateVoiceRecognitionStatus()
                 } else {
@@ -160,7 +173,7 @@ class DashboardActivity : AppCompatActivity() {
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
-        
+
         ThemeManager.applyTheme(this)
         appliedTheme = ThemeManager.getCurrentTheme(this)
         appliedLanguage = LocaleHelper.getCurrentLanguage(this)

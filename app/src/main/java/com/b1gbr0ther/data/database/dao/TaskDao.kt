@@ -1,7 +1,7 @@
 package com.b1gbr0ther.data.database.dao
 
 import androidx.room.*
-import com.b1gbr0ther.TaskCategory
+import com.b1gbr0ther.model.TaskCategory
 import com.b1gbr0ther.data.database.entities.Task
 import java.time.LocalDateTime
 

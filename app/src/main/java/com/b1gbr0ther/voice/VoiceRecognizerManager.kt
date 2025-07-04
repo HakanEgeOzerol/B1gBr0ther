@@ -1,7 +1,6 @@
-package com.b1gbr0ther
+package com.b1gbr0ther.voice
 
 import android.Manifest
-import android.annotation.SuppressLint
 import android.app.Activity
 import android.content.Context
 import android.content.Intent
@@ -17,6 +16,10 @@ import android.widget.Toast
 import java.util.Locale
 import kotlinx.coroutines.*
 import android.util.Log
+import com.b1gbr0ther.detection.BlowDetector
+import com.b1gbr0ther.R
+import com.b1gbr0ther.detection.SneezeDetector
+import com.b1gbr0ther.activities.SettingsActivity
 import com.b1gbr0ther.easteregg.DoodleJumpActivity
 
 class VoiceRecognizerManager(
@@ -201,7 +204,7 @@ class VoiceRecognizerManager(
         val sharedPreferences = context.getSharedPreferences("B1gBr0therSettings", Context.MODE_PRIVATE)
         val audioMode = SettingsActivity.getAudioMode(sharedPreferences)
 
-        if (audioMode == SettingsActivity.AUDIO_MODE_SOUND_DETECTION && 
+        if (audioMode == SettingsActivity.AUDIO_MODE_SOUND_DETECTION &&
             (error == SpeechRecognizer.ERROR_NO_MATCH || error == SpeechRecognizer.ERROR_SPEECH_TIMEOUT)) {
             Log.d(TAG, "Sound Detection Mode - expected error: $error ($msg)")
         } else {
@@ -425,8 +428,12 @@ class VoiceRecognizerManager(
 
         when {
             audioMode == SettingsActivity.AUDIO_MODE_OFF -> onStatusUpdate(context.getString(R.string.audio_features_disabled))
-            audioMode == SettingsActivity.AUDIO_MODE_VOICE_COMMANDS -> onStatusUpdate(context.getString(R.string.press_button_start_voice_commands))
-            audioMode == SettingsActivity.AUDIO_MODE_SOUND_DETECTION -> onStatusUpdate(context.getString(R.string.press_button_start_sound_detection))
+            audioMode == SettingsActivity.AUDIO_MODE_VOICE_COMMANDS -> onStatusUpdate(context.getString(
+                R.string.press_button_start_voice_commands
+            ))
+            audioMode == SettingsActivity.AUDIO_MODE_SOUND_DETECTION -> onStatusUpdate(context.getString(
+                R.string.press_button_start_sound_detection
+            ))
             else -> onStatusUpdate(context.getString(R.string.start_voice_recognition))
         }
     }

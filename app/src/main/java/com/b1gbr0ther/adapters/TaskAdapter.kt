@@ -4,12 +4,11 @@ import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import android.widget.Button
-import android.widget.CheckBox
 import android.widget.TextView
 import androidx.recyclerview.widget.RecyclerView
 import com.b1gbr0ther.R
 import com.b1gbr0ther.data.database.entities.Task
-import com.b1gbr0ther.TaskCategory
+import com.b1gbr0ther.model.TaskCategory
 
 /**
  * Adapter for displaying Task entities in a RecyclerView.

@@ -11,8 +11,8 @@ import java.time.LocalDateTime
 import java.time.LocalDate
 import java.time.YearMonth
 import java.time.Duration
-import com.b1gbr0ther.WorkBlock
-import com.b1gbr0ther.TaskCategory
+import com.b1gbr0ther.timetracking.WorkBlock
+import com.b1gbr0ther.model.TaskCategory
 
 /**
  * Database manager class that handles CRUD operations for Tasks in the B1gBr0ther app.
@@ -176,7 +176,7 @@ class DatabaseManager(context: Context) {
      * @param appTask The app's Task model to create
      * @param callback Optional callback with the ID of the created task
      */
-    fun createAppTask(appTask: com.b1gbr0ther.Task, callback: ((Long) -> Unit)? = null) {
+    fun createAppTask(appTask: com.b1gbr0ther.model.Task, callback: ((Long) -> Unit)? = null) {
         coroutineScope.launch {
             val id = taskRepository.insertAppTask(appTask)
             callback?.let { 
@@ -305,7 +305,7 @@ class DatabaseManager(context: Context) {
      * @param id The ID of the task to update
      * @param callback Optional callback when the update is complete
      */
-    fun updateAppTask(appTask: com.b1gbr0ther.Task, id: Long, callback: (() -> Unit)? = null) {
+    fun updateAppTask(appTask: com.b1gbr0ther.model.Task, id: Long, callback: (() -> Unit)? = null) {
         coroutineScope.launch {
             taskRepository.updateAppTask(appTask, id)
             callback?.let { 

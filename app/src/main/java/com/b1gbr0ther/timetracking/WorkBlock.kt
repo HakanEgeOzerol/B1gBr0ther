@@ -1,4 +1,4 @@
-package com.b1gbr0ther
+package com.b1gbr0ther.timetracking
 
 data class WorkBlock(
     val dayIndex: Int,     // 0 = Mon, 6 = Sun

@@ -1,4 +1,4 @@
-package com.b1gbr0ther
+package com.b1gbr0ther.activities
 
 import android.content.Context
 import android.graphics.Color
@@ -6,9 +6,12 @@ import android.os.Bundle
 import android.widget.TextView
 import androidx.activity.enableEdgeToEdge
 import androidx.appcompat.app.AppCompatActivity
+import com.b1gbr0ther.util.LocaleHelper
 import com.b1gbr0ther.data.database.DatabaseManager
 import com.b1gbr0ther.MenuBar
-import com.b1gbr0ther.TaskCategory
+import com.b1gbr0ther.R
+import com.b1gbr0ther.model.TaskCategory
+import com.b1gbr0ther.util.ThemeManager
 import com.github.mikephil.charting.animation.Easing
 import com.github.mikephil.charting.charts.BarChart
 import com.github.mikephil.charting.charts.PieChart
@@ -111,7 +114,9 @@ class StatisticsActivity : AppCompatActivity() {
         timingChart.apply {
             description.isEnabled = false
             xAxis.apply {
-                valueFormatter = IndexAxisValueFormatter(arrayOf(getString(R.string.early), getString(R.string.on_time), getString(R.string.late)))
+                valueFormatter = IndexAxisValueFormatter(arrayOf(getString(R.string.early), getString(
+                    R.string.on_time
+                ), getString(R.string.late)))
                 position = XAxis.XAxisPosition.BOTTOM
                 granularity = 1f
                 setCenterAxisLabels(false)

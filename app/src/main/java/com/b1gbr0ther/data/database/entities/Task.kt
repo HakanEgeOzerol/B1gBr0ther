@@ -3,9 +3,9 @@ package com.b1gbr0ther.data.database.entities
 import androidx.room.Entity
 import androidx.room.PrimaryKey
 import androidx.room.TypeConverters
-import com.b1gbr0ther.CreationMethod
-import com.b1gbr0ther.TaskCategory
-import com.b1gbr0ther.TimingStatus
+import com.b1gbr0ther.model.CreationMethod
+import com.b1gbr0ther.model.TaskCategory
+import com.b1gbr0ther.timetracking.TimingStatus
 import com.b1gbr0ther.data.database.converters.LocalDateTimeConverter
 import com.b1gbr0ther.data.database.converters.TaskCategoryConverter
 import java.time.LocalDateTime
@@ -60,8 +60,8 @@ data class Task(
     /**
      * Convert this Room entity to the app's Task model
      */
-    fun toAppTask(): com.b1gbr0ther.Task {
-        return com.b1gbr0ther.Task(
+    fun toAppTask(): com.b1gbr0ther.model.Task {
+        return com.b1gbr0ther.model.Task(
             taskName,
             startTime,
             endTime,
@@ -78,7 +78,7 @@ data class Task(
         /**
          * Create a Room Task entity from the app's Task model
          */
-        fun fromAppTask(appTask: com.b1gbr0ther.Task, id: Long? = null): Task {
+        fun fromAppTask(appTask: com.b1gbr0ther.model.Task, id: Long? = null): Task {
             return Task(
                 id = id ?: 0,
                 taskName = appTask.getName(),

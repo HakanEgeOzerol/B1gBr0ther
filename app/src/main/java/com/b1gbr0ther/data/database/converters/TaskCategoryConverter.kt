@@ -1,7 +1,7 @@
 package com.b1gbr0ther.data.database.converters
 
 import androidx.room.TypeConverter
-import com.b1gbr0ther.TaskCategory
+import com.b1gbr0ther.model.TaskCategory
 
 /**
  * Type converter for Room database to convert TaskCategory enum to/from String

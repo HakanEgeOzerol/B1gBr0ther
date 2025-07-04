@@ -1,6 +1,6 @@
 package com.b1gbr0ther.data.database.entities
 
-import com.b1gbr0ther.TaskCategory
+import com.b1gbr0ther.model.TaskCategory
 import org.junit.Assert.*
 import org.junit.Test
 import java.time.LocalDateTime

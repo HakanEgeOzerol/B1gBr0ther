@@ -1,6 +1,4 @@
-package com.b1gbr0ther
-
-import kotlin.math.abs
+package com.b1gbr0ther.detection
 
 class BlowDetector {
     companion object {
@@ -37,8 +35,9 @@ class BlowDetector {
             highRMSCount = 0
             if (isBlowing) {
                 val duration = currentTimeMs - blowStartTime
-                if ((rms < COMPLETION_THRESHOLD || duration >= MIN_DURATION * 2) && 
-                    duration >= MIN_DURATION && duration <= MAX_DURATION) {
+                if ((rms < COMPLETION_THRESHOLD || duration >= MIN_DURATION * 2) &&
+                    duration >= MIN_DURATION && duration <= MAX_DURATION
+                ) {
                     android.util.Log.i("BlowDetector", "BLOW DETECTED! Duration: $duration ms, Peak: $maxRMSInBlow")
                     lastBlowTime = currentTimeMs
                     resetState()

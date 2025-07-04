@@ -1,4 +1,4 @@
-package com.b1gbr0ther
+package com.b1gbr0ther.activities
 
 import android.Manifest
 import android.content.Intent
@@ -10,20 +10,21 @@ import android.provider.Settings
 import android.widget.Button
 import android.widget.Switch
 import android.widget.TextView
-import android.widget.SeekBar
 import android.widget.Toast
 import android.widget.RadioGroup
 import android.widget.RadioButton
 import androidx.activity.enableEdgeToEdge
 import androidx.appcompat.app.AlertDialog
 import androidx.appcompat.app.AppCompatActivity
-import androidx.appcompat.app.AppCompatDelegate
 import androidx.core.app.ActivityCompat
 import androidx.core.content.ContextCompat
 import androidx.core.view.ViewCompat
 import androidx.core.view.WindowInsetsCompat
 import android.content.SharedPreferences
 import android.content.Context
+import com.b1gbr0ther.util.LocaleHelper
+import com.b1gbr0ther.R
+import com.b1gbr0ther.util.ThemeManager
 
 class SettingsActivity : AppCompatActivity() {
     
@@ -185,7 +186,11 @@ class SettingsActivity : AppCompatActivity() {
         
         // Load theme setting using ThemeManager (temporarily remove listener to prevent infinite loop)
         val currentTheme = ThemeManager.getCurrentTheme(this)
-        android.util.Log.d("SettingsActivity", "Loading settings - current theme: ${ThemeManager.getThemeName(currentTheme)} ($currentTheme)")
+        android.util.Log.d("SettingsActivity", "Loading settings - current theme: ${
+            ThemeManager.getThemeName(
+                currentTheme
+            )
+        } ($currentTheme)")
         darkThemeSwitch.setOnCheckedChangeListener(null)
         darkThemeSwitch.isChecked = (currentTheme == ThemeManager.THEME_DARK)
         updateThemeLabel()
