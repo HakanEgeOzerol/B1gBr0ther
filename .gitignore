@@ -72,8 +72,7 @@ Thumbs.db
 # Vs Code
 .vscode/
 
-# Gradle wrapper JAR (should be re-generated or downloaded by setup)
-gradle/wrapper/gradle-wrapper.jar
+# Gradle wrapper JAR should be included in version control for CI/CD
 
 # Vosk model files (large, downloaded by Gradle task)
 app/src/main/assets/model/
