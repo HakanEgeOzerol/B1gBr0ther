@@ -76,12 +76,26 @@
     <string name="created_sample_tasks">Created %1$d sample tasks</string>
     <string name="error_saving_export">Error saving export: %1$s</string>
     <string name="file_saved_to">File saved to: %1$s</string>
+    <string name="file_saved_to_downloads">File saved to Downloads: %1$s</string>
+    <string name="error_saving_to_downloads">Error saving file to Downloads</string>
+    <string name="error_sharing_file">Error sharing file: %1$s</string>
     <string name="choose_export_format">Choose Export Format</string>
     <string name="select_all">Select All</string>
     <string name="import_tasks">Import</string>
+    <string name="import_confirmation">Import Confirmation</string>
+    <string name="import_confirmation_message">Do you want to import the selected file?</string>
+    <string name="file_name">File name:</string>
+    <string name="tasks_found">Tasks found:</string>
+    <string name="previous">Previous</string>
+    <string name="next">Next</string>
+    <string name="import_all">Import All</string>
+    <string name="no_tasks_found">No tasks found in the selected file.</string>
+    <string name="task_counter">%1$d / %2$d</string>
     <string name="deselect_all">Deselect All</string>
     <string name="no_tasks_to_export">No tasks available to export</string>
-    <string name="export_format_not_supported">Export format \'%1$s\' not supported</string>
+    <string name="export_format_not_supported">Export format %1$s not supported</string>
+    <string name="task_export_subject">B1gBr0ther Task Export</string>
+    <string name="share_export_file">Share Export File</string>
     
     <!-- Dashboard -->
     <string name="dashboard">Dashboard</string>
@@ -269,6 +283,9 @@ For best experience, enable all features and grant required permissions!</string
     <string name="delete_task">Delete Task</string>
     <string name="get_all_tasks">Get All Tasks</string>
     <string name="error_initializing">Error initializing: %1$s</string>
+    <string name="confirm_delete">Confirm Delete</string>
+    <string name="confirm_delete_task_message">Are you sure you want to delete task "%1$s"?</string>
+    <string name="error_deleting_task">Error deleting task</string>
     
     <!-- Gesture Dialogs -->
     <string name="input_time_required">Please input time required for the task</string>
@@ -366,8 +383,6 @@ For best experience, enable all features and grant required permissions!</string
     <!-- Additional export strings -->
     <string name="export_selected_format">Export Selected (%1$d/%2$d)</string>
     <string name="format_suffix">%1$s Format</string>
-    <string name="task_export_subject">Task Export</string>
-    <string name="share_export_file">Share export file</string>
     
     <!-- Dashboard tracking messages -->
     <string name="on_break">On break</string>

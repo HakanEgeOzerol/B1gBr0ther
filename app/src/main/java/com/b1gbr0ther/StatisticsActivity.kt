@@ -127,6 +127,11 @@ class StatisticsActivity : AppCompatActivity() {
             animateY(1400)
             setNoDataText(getString(R.string.no_timing_data_available))
             setNoDataTextColor(getCurrentTextColor())
+            
+            // Disable double-tap zoom functionality
+            setScaleEnabled(false)
+            setPinchZoom(false)
+            setDoubleTapToZoomEnabled(false)
         }
         
         // Creation method chart removed
